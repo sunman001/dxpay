@@ -1,0 +1,148 @@
+﻿@{
+    ViewBag.Title = "修改应用";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var glptdt = ViewBag.glptdt as List<JMP.MDL.jmp_platform>;
+    var yylist = ViewBag.yylist as List<JMP.MDL.jmp_apptype>;
+    var list = ViewBag.list as List<JMP.MDL.jmp_paymode>;
+    var model = ViewBag.model as JMP.MDL.jmp_app;
+    string[] zffs = ViewBag.zffs;
+}
+@JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+<script src="~/mobile/js/App/app.js"></script>
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">修改应用</span>
+</header>
+<section class="real">
+    <input type="hidden" value="@ViewBag.auditstate" id="u_auditstate" />
+    <input type="hidden" id="a_apptype_id" value="@(string.IsNullOrEmpty(model.a_apptype_id.ToString()) ? 0 : model.a_apptype_id)" />
+    <input type="hidden" id="a_id" value="@(string.IsNullOrEmpty(model.a_id.ToString()) ? 0 : model.a_id)" />
+    <ul class="frm-ul">
+        <li class="tit">
+            <p class="tcnt">应用信息</p>
+        </li>
+       
+        <li>
+            <div class="dbor">
+
+                <p class="ptit"><span style="color: #ff0000">*</span>    应用名称</p>
+                <input type="text" class="txtipt" id="appname" placeholder="请输入应用名称"  @(model.a_auditstate == 1 ? "disabled=\"disabled\"" : "") value="@(string.IsNullOrEmpty(model.a_name) ? "" : model.a_name)" />
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit"> <span style="color: #ff0000">*</span> 请选择运行平台</p>
+                <div class="rule-singless-select" onclick="cjyz()">
+                    <select id="terrace" @(model.a_auditstate == 1 ? "disabled=\"disabled\"" : "")>
+                        <option value="0">--请选择--</option>
+                        @{
+                            foreach (var pt in glptdt)
+                            {
+                                <option value="@pt.p_id" @(model.a_platform_id == pt.p_id ? "selected=selected" : "")>@pt.p_name</option>
+                            }
+                        }
+                    </select>
+
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit"> <span style="color: #ff0000">*</span> 请选择应用类型</p>
+                <div class="rule-singless-select" onclick='xzyylx()'>
+                    @Html.Raw(ViewBag.yy)
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit"> <span style="color: #ff0000">*</span> 请选择应用子类</p>
+                <div class="rule-singless-select">
+                    <select id="zlyy" @(model.a_auditstate == 1 ? "disabled=\"disabled\"" : "")>
+                        <option value="0">--请选择--</option>
+                    </select>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit"> <span style="color: #ff0000">*</span>应用下载地址</p>
+                <input type="text" class="txtipt" id="yyaddress" placeholder="请输入应用地址"   value="@(string.IsNullOrEmpty(model.a_appurl) ? "" : model.a_appurl)" maxlength="200"/>
+            </div>
+        </li>
+    </ul>
+    <ul class="frm-ul">
+        <li class="tit">
+            <p class="tcnt">添加支付</p>
+        </li>
+        <li class="nstar frm-ck">
+
+            @{
+                for (int i = 0; i < list.Count; i++)
+                {
+                
+                    <div class="checkbox">
+
+                        @{
+                            if (zffs.Contains(list[i].p_id.ToString()))
+                            {
+                                <input type="checkbox" name="ck"  id="paytype_@list[i].p_id" data-stat="@list[i].p_islocked" value="@list[i].p_id" @(list[i].p_islocked == 0 ? "disabled=\"disabled\"" : "") checked="checked" />
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="ck" id="paytype_@list[i].p_id" data-stat="@list[i].p_islocked"  value="@list[i].p_id" @(list[i].p_islocked == 0 ? "disabled=\"disabled\"" : "") />
+                            }
+                        }
+                        <label></label>
+                        <span class="name">@list[i].p_name</span>
+                    </div>
+                
+                            }
+            }
+          
+        </li>
+    </ul>
+    <ul class="frm-ul">
+        <li class="tit">
+            <p class="tcnt">应用通知</p>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit"> <span style="color: #ff0000">*</span>异步通知地址</p>
+                <input type="text" id="appurl" class="txtipt" placeholder="请输入异步通知地址"  value="@(string.IsNullOrEmpty(model.a_notifyurl) ? "" : model.a_notifyurl)" maxlength="200" />
+            </div>
+        </li>
+        <li id="tbdzxs" style="display:none;">
+            <div class="dbor">
+                <p class="ptit"> <span style="color: #ff0000">*</span>同步通知地址</p>
+                <input type="text" id="showurl" class="txtipt" placeholder="请输入同步通知地址" value="@(string.IsNullOrEmpty(model.a_showurl) ? "" : model.a_showurl)" maxlength="200" />
+            </div>
+        </li>
+
+    </ul>
+    <ul class="frm-ul">
+        <li class="tit">
+            <p class="tcnt"> <span style="color: #ff0000">*</span>应用简介</p>
+        </li>
+        <li class="nstar">
+            <textarea class="tetaipt" id="a_appsynopsis"> @(string.IsNullOrEmpty(model.a_appsynopsis) ? "" : model.a_appsynopsis)</textarea>
+        </li>
+    </ul>
+    <div class="frm-btn">
+        <a class="btn" id="btnyy">提交审核</a>
+    </div>
+</section>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+        xzyylx();
+        var terrace = $("#terrace").val();
+        if (terrace == "3") {
+            document.getElementById("tbdzxs").style.display = "";
+            isH5("3");
+        } else {
+            IsSdk(terrace);
+            document.getElementById("tbdzxs").style.display = "none";
+        }
+    })
+</script>

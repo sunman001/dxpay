@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{53995DBB-9836-4647-AD22-865884FDEB9E}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>JMP.Model</AssemblyName>
+    <RootNamespace>JMP.Model</RootNamespace>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <Reference Include="ThoughtWorks.QRCode, Version=1.0.4778.30637, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ThoughtWorks.QRCode.1.1.0\lib\ThoughtWorks.QRCode.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CoAgent.cs" />
+    <Compile Include="CoBusinessPersonnel.cs" />
+    <Compile Include="CoCooperationApplication.cs" />
+    <Compile Include="CoOperationLog.cs" />
+    <Compile Include="CoServiceFeeRatioGrade.cs" />
+    <Compile Include="CoSettlementChannelCost.cs" />
+    <Compile Include="CoSettlementDeveloperAppDetails.cs" />
+    <Compile Include="CoSettlementDeveloperOverview.cs" />
+    <Compile Include="CsComplainArchive.cs" />
+    <Compile Include="CsComplainOrder.cs" />
+    <Compile Include="CsComplainType.cs" />
+    <Compile Include="CsCustomerServiceRecord.cs" />
+    <Compile Include="CsCustomerServiceRecordReprot.cs" />
+    <Compile Include="CsCustomerServiceHanderReprot.cs" />
+    <Compile Include="DxGlobalLogError.cs" />
+    <Compile Include="jmp_AppChannelReport.cs" />
+    <Compile Include="jmp_appcountminute.cs" />
+    <Compile Include="jmp_agentuserlog.cs" />
+    <Compile Include="jmp_apprate.cs" />
+    <Compile Include="jmp_BankPlaymoney.cs" />
+    <Compile Include="jmp_channel_amount_config.cs" />
+    <Compile Include="jmp_channel_app_mapping.cs" />
+    <Compile Include="jmp_channel_filter_config.cs" />
+    <Compile Include="jmp_channel_pool.cs" />
+    <Compile Include="jmp_exchange.cs" />
+    <Compile Include="jmp_Help_Classification.cs" />
+    <Compile Include="jmp_Help_Content.cs" />
+    <Compile Include="jmp_pays.cs" />
+    <Compile Include="jmp_risklevel.cs" />
+    <Compile Include="jmp_risklevelallocation.cs" />
+    <Compile Include="jmp_scheduling.cs" />
+    <Compile Include="jmp_businessuserlog.cs" />
+    <Compile Include="jmp_userbank.cs" />
+    <Compile Include="jmp_workorderReport.cs" />
+    <Compile Include="jmp_workorder.cs" />
+    <Compile Include="EntityTrackerAttribute.cs" />
+    <Compile Include="LogCoSettlement.cs" />
+    <Compile Include="LogForApi.cs" />
+    <Compile Include="MonitorChannel.cs" />
+    <Compile Include="JmpMonitorMinuteDetails.cs" />
+    <Compile Include="jmp_app_monitor_time_range.cs" />
+    <Compile Include="jmp_gwcomplaint.cs" />
+    <Compile Include="jmp_payment_type_config.cs" />
+    <Compile Include="jmp_province.cs" />
+    <Compile Include="jmp_query.cs" />
+    <Compile Include="jmp_rate.cs" />
+    <Compile Include="newsrelease.cs" />
+    <Compile Include="appmonitor.cs" />
+    <Compile Include="jmp_aes.cs" />
+    <Compile Include="jmp_app.cs" />
+    <Compile Include="jmp_appcount.cs" />
+    <Compile Include="jmp_appreport.cs" />
+    <Compile Include="jmp_appsdk.cs" />
+    <Compile Include="jmp_apptype.cs" />
+    <Compile Include="jmp_app_report.cs" />
+    <Compile Include="jmp_app_request_audit.cs" />
+    <Compile Include="jmp_bill.cs" />
+    <Compile Include="jmp_complaint.cs" />
+    <Compile Include="jmp_defect.cs" />
+    <Compile Include="jmp_dispatchorder.cs" />
+    <Compile Include="jmp_goods.cs" />
+    <Compile Include="jmp_interface.cs" />
+    <Compile Include="jmp_keep.cs" />
+    <Compile Include="jmp_limit.cs" />
+    <Compile Include="jmp_liveteral.cs" />
+    <Compile Include="jmp_locuser.cs" />
+    <Compile Include="jmp_locuserlog.cs" />
+    <Compile Include="jmp_logtype.cs" />
+    <Compile Include="jmp_merchant.cs" />
+    <Compile Include="jmp_merchantlog.cs" />
+    <Compile Include="jmp_message.cs" />
+    <Compile Include="jmp_modelnumbe.cs" />
+    <Compile Include="jmp_network.cs" />
+    <Compile Include="jmp_notice.cs" />
+    <Compile Include="jmp_notificaiton_group.cs" />
+    <Compile Include="jmp_operatingsystem.cs" />
+    <Compile Include="jmp_operator.cs" />
+    <Compile Include="jmp_order.cs" />
+    <Compile Include="jmp_order_audit.cs" />
+    <Compile Include="jmp_pay.cs" />
+    <Compile Include="jmp_paychannel.cs" />
+    <Compile Include="jmp_paymenttype.cs" />
+    <Compile Include="jmp_paymode.cs" />
+    <Compile Include="jmp_platform.cs" />
+    <Compile Include="jmp_poundage.cs" />
+    <Compile Include="jmp_queue.cs" />
+    <Compile Include="jmp_queuelist.cs" />
+    <Compile Include="jmp_refund.cs" />
+    <Compile Include="jmp_resolution.cs" />
+    <Compile Include="jmp_revenue_active.cs" />
+    <Compile Include="jmp_revenue_add.cs" />
+    <Compile Include="jmp_role.cs" />
+    <Compile Include="jmp_sales_app.cs" />
+    <Compile Include="jmp_sales_goods.cs" />
+    <Compile Include="jmp_sales_pay.cs" />
+    <Compile Include="jmp_sales_user.cs" />
+    <Compile Include="jmp_saletype.cs" />
+    <Compile Include="jmp_statistics.cs" />
+    <Compile Include="jmp_system.cs" />
+    <Compile Include="jmp_terminal.cs" />
+    <Compile Include="jmp_trends.cs" />
+    <Compile Include="jmp_user.cs" />
+    <Compile Include="jmp_userlog.cs" />
+    <Compile Include="jmp_user_report.cs" />
+    <Compile Include="PayChannel.cs" />
+    <Compile Include="PayForAnotherInfo.cs" />
+    <Compile Include="Query\AppPaySuccessAttenuation.cs" />
+    <Compile Include="Query\AppUserMerchant.cs" />
+    <Compile Include="Query\Doc\DocMenuQueryModel.cs" />
+    <Compile Include="Query\Help\ArticleWithTotalCountQueryModel.cs" />
+    <Compile Include="Query\OrderedInterface.cs" />
+    <Compile Include="Query\RolePermissionMappingQueryModel.cs" />
+    <Compile Include="Query\WorkOrder\WatcherQuerier.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DxPay.Dba\DxPay.Dba.csproj">
+      <Project>{0f6ede1e-c970-4afe-9220-cead19398027}</Project>
+      <Name>DxPay.Dba</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

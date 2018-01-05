@@ -1,0 +1,25 @@
+﻿<section id="large-header" class="help-header">
+    <div class="help-header-bg"></div>
+    <canvas id="canvas-header"></canvas>
+    <div class="container pt15 header-wrap">
+        <div class="header-nav">
+            <a href="http://dunxingpay.com"><img src="http://www.dunxingpay.com/images/logo.png" /></a>
+            <a class="dh-logo-help" href="~/help/index">帮助中心</a> • <a class="dh-logo-doc" style="margin-left: 0;" href="~/doc/index">开发者中心</a>
+            <div class="pull-right hidden-xs">
+                <a href="~/home/login">登录</a>
+                或者
+                <a href="~/user/register">注册</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-10 col-md-8 col-lg-push-1 col-md-push-2">
+                <div class="wrap center-block searchbox">
+                    <div class="input-group">
+                        <input id="kw" type="text" class="kw input-group-field" placeholder="遇到问题？键入关键词，寻找答案..." value="@Request.QueryString["q"]" />
+                        <a id="btn_search" class="search input-group-button">搜 索</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,205 @@
+﻿@{
+    ViewBag.Title = "留存用户";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var dt = ViewBag.dt as System.Data.DataTable;
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="mobile-container">
+    <div id="ToolBar" class="report-toolbar">
+        <ul class="report-toolbarul">
+            <li>留存用户</li>
+            <li>
+                <ul class="tools">
+                    <li name="rzy" id="day" class="selected" href="javascript:XzSelect('day')">日</li>
+                    <i class="none">/</i>
+                    <li name="rzy" id="week" href="javascript:XzSelect('week')">周</li>
+                </ul>
+            </li>
+        </ul>
+       
+    </div>
+    <div class="searchdiv">
+        <p id="btn-show-search" class="searchbtton" onclick="pop.showSearch('search-container')">查询条件</p>
+    </div>
+    <div class="plate-tab-ul-wrap">
+            <ul>
+                <li><a name="xzk" id="newyh" href="javascript:;" onclick="dialogTabJson('newyh');" class="selected">新增用户</a></li>
+                <li><a name="xzk" id="hyyh" href="javascript:;" onclick="dialogTabJson('hyyh');">活跃用户</a></li>
+            </ul>
+        </div>
+    <ul class="search-container ui form">
+        <li class="ui input fluid fluid-block field">
+            <select name="searchType" id="searchType" class="ui dropdown fluid fluid-block">
+                <option value="1" @(ViewBag.searchType == 1 ? "selected=selected" : "")>应用名称</option>
+                <option value="2" @(ViewBag.searchType == 2 ? "selected=selected" : "")>开发者邮箱</option>
+            </select>
+        </li>
+        <li class="ui input fluid fluid-block field">
+            <input name="searchname" type="text" id="searchname" placeholder="请输入关键字" value="@ViewBag.searchname" class="txtipt" />
+        </li>
+        <li class="ui input fluid fluid-block field">
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" onFocus="WdatePicker({ minDate: '@ViewBag.ksrq', maxDate: '#F{$dp.$D(\'etime\')||\'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")\'}' })" readonly="readonly" value="@ViewBag.stime" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" onFocus="WdatePicker({ minDate: '#F{$dp.$D(\'stime\')}', maxDate: '@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")' })" readonly="readonly" value="@ViewBag.etime" />
+        </li>
+        <li class="ui input fluid fluid-block field">
+            <a id="btn_search" class="ui button primary fluid fluid-block big" href="javascript:">查询</a>
+        </li>
+    </ul>
+    <div class="table-container table-responsive">
+        <table class="ui celled striped white" id="table">
+            <thead>
+                <tr>
+                    <td rowspan="2" class="borl">首次使用日</td>
+                    <td rowspan="2" class="borl">用户数</td>
+                    <td colspan="9" class="borb">第N周留存用户（%）</td>
+                </tr>
+                <tr>
+                    <td align="center" height="25px">+1日</td>
+                    <td align="center">+2日</td>
+                    <td align="center">+3日</td>
+                    <td align="center">+4日</td>
+                    <td align="center">+5日</td>
+                    <td align="center">+6日</td>
+                    <td align="center">+7日</td>
+                    <td align="center">+14日</td>
+                    <td align="center">+30日</td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (dt.Rows.Count > 0)
+                    {
+                        if (@ViewBag.selecttype == 0)
+                        {
+
+                            for (int i = 0; i < dt.Rows.Count; i++)
+                            {
+                                <tr>
+                                    <td>@DateTime.Parse(dt.Rows[i]["k_time"].ToString()).ToString("yyyy-MM-dd")</td>
+                                    <td>@(dt.Rows[i]["k_usercount"].ToString() == "1" ? "0" : dt.Rows[i]["k_usercount"])</td>
+                                    <td>@(dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day1"].ToString()) * 100)))%</td>
+                                    <td>@(dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day2"].ToString()) * 100)))%</td>
+                                    <td>@(dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day3"].ToString()) * 100)))%</td>
+                                    <td>@(dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day4"].ToString()) * 100)))%</td>
+                                    <td>@(dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day5"].ToString()) * 100)))%</td>
+                                    <td>@(dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day6"].ToString()) * 100)))%</td>
+                                    <td>@(dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day7"].ToString()) * 100)))%</td>
+                                    <td>@(dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day14"].ToString()) * 100)))%</td>
+                                    <td>@(dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day30"].ToString()) * 100)))%</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            List<JMP.MDL.jmp_keep> weeklist = new List<JMP.MDL.jmp_keep>();
+                            System.Collections.ArrayList kssjfw = JMP.TOOL.WeekDateTime.WeekMonday(DateTime.Parse(ViewBag.stime), DateTime.Parse(ViewBag.etime)); //根据时间返回获取每周周一
+                            System.Collections.ArrayList jssjfw = JMP.TOOL.WeekDateTime.WeekDay(DateTime.Parse(ViewBag.stime), DateTime.Parse(ViewBag.etime)); //根据时间返回获取每周星期天
+                            for (int k = 0; k < kssjfw.Count; k++)
+                            {
+                                System.Data.DataTable kwdt = JMP.TOOL.MdlList.TableSelect(dt, "k_time>='" + kssjfw[k] + " 00:00:00" + "' and k_time<='" + jssjfw[k] + " 23:59:59" + "'");
+                                if (kwdt != null)
+                                {
+                                    <tr>
+                                        <td>@(DateTime.Parse(kssjfw[k].ToString()).ToString("yy-MM-dd") + "~" + DateTime.Parse(jssjfw[k].ToString()).ToString("yy-MM-dd"))</td>
+                                        <td>@(dt.Rows[k]["k_usercount"].ToString() == "1" ? "0" : kwdt.Compute("sum(k_usercount)", "TRUE"))</td>
+                                        <td>@(dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day1)", "TRUE").ToString()) * 100)))%</td>
+                                        <td>@(dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day2)", "TRUE").ToString()) * 100)))%</td>
+                                        <td>@(dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day3)", "TRUE").ToString()) * 100)))%</td>
+                                        <td>@(dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day4)", "TRUE").ToString()) * 100)))%</td>
+                                        <td>@(dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day5)", "TRUE").ToString()) * 100)))%</td>
+                                        <td>@(dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day6)", "TRUE").ToString()) * 100)))%</td>
+                                        <td>@(dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day7)", "TRUE").ToString()) * 100)))%</td>
+                                        <td>@(dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day14)", "TRUE").ToString()) * 100)))%</td>
+                                        <td>@(dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day30)", "TRUE").ToString()) * 100)))%</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>@(DateTime.Parse(kssjfw[k].ToString()).ToString("yy-MM-dd") + "~" + DateTime.Parse(jssjfw[k].ToString()).ToString("yy-MM-dd"))</td>
+                                        <td>0</td>
+                                        <td>0.00%</td>
+                                        <td>0.00%</td>
+                                        <td>0.00%</td>
+                                        <td>0.00%</td>
+                                        <td>0.00%</td>
+                                        <td>0.00%</td>
+                                        <td>0.00%</td>
+                                        <td>0.00%</td>
+                                        <td>0.00%</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="11" align="center" class="nodata">暂无记录</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    if ('@ViewBag.setype' == 0) {
+        $("#newyh").removeClass("selected");
+        $("#hyyh").removeClass("selected");
+        $("#newyh").addClass("selected");
+    } else {
+        $("#newyh").removeClass("selected");
+        $("#hyyh").removeClass("selected");
+        $("#hyyh").addClass("selected");
+    }
+    if ('@ViewBag.selecttype' == 0) {
+        $("#day").removeClass("selected");
+        $("#week").removeClass("selected");
+        $("#day").addClass("selected");
+    } else {
+        $("#week").removeClass("selected");
+        $("#day").removeClass("selected");
+        $("#week").addClass("selected");
+    }
+    $(function () {
+        $("#btn_search").click(function () {
+            var stime = $.trim($("#stime").val());
+            var etime = $.trim($("#etime").val());
+            var searchType = $.trim($("#searchType").val());
+            var searchname = $.trim($("#searchname").val());
+            var setype = 0;
+            var type = $("a[name='xzk'][class='selected']").html();
+            if ($.trim(type) == "活跃用户") {
+                setype = 1;
+            } else {
+                setype = 0;
+            }
+            var selecttype = 0;
+            var weekordaytype = $("a[name='rzy'][class='selected']").html();
+            if ($.trim(weekordaytype) == "周") {
+                selecttype = 1;
+            } else {
+                selecttype = 0;
+            }
+            var url = "/UserReport/keep?stime=" + $.trim(stime) + "&etime=" + $.trim(etime) + "&searchType=" + $.trim(searchType) + "&searchname=" + $.trim(searchname) + "&setype=" + $.trim(setype) + "&selecttype=" + selecttype;
+            location.href = encodeURI(url);
+        })
+    });
+    function XzSelect(typeid) {
+        $("a[name='rzy']").removeClass("selected");
+        $("#" + typeid).addClass("selected");
+        $("#btn_search").click();
+    }
+    //Tab控制函数用于终端属性报表
+    function dialogTabJson(typeid) {
+        $("#newyh").removeClass("selected");
+        $("#hyyh").removeClass("selected");
+        //var tabNum = $(tabObj).parent().index("li")
+        //设置点击后的切换样式
+        //$(tabObj).parent().parent().find("li a").removeClass("selected");
+        $("#" + typeid).addClass("selected");
+        $("#btn_search").click();
+    }
+</script>

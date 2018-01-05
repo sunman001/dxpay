@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "流量走势报表";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+}
+
+<!--曲线图js-->
+@JMP.TOOL.UserHelper.js("highcharts/highcharts.js")
+@JMP.TOOL.UserHelper.js("plugin/my97datepicker/WdatePicker.js")
+
+<script src="~/mobile/js/special/tremds.js"></script>
+
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">流量走势报表</span>
+</header>
+<section>
+    <ul class="frm-ul-tit clearfix">
+        <li>
+            <a id="btn-show-search" onclick="pop.showSearch('search-container')" class="sle-btn">查询</a>
+        </li>
+    </ul>
+    <div class="search-container" style="display:none">
+        <div class="rule-single-select">
+            @{Html.RenderAction("UserAppList", "Home");}
+        </div>
+        <div class="date-tool-input-text">
+            <input name="stime" type="text" id="stime" onFocus="WdatePicker({minDate:'@ViewBag.ksrq',maxDate:'#F{$dp.$D(\'etime\')||\'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")\'}'})" readonly="readonly" class="dataipt txtipt time" value="@ViewBag.stime" />
+        </div>
+        <div class="date-tool-input-text">
+            <input name="etime" type="text" id="etime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")'})" readonly="readonly" class="dataipt txtipt time" value="@ViewBag.etime" />
+        </div>
+        <a class="btn btn-primary" id="btn_search">查询</a>
+    </div>
+    <div id="chart" class="box_container"></div>
+</section>

@@ -1,0 +1,208 @@
+﻿@{
+    ViewBag.Title = "上传";
+    var mode = ViewBag.model as JMP.MDL.jmp_appsdk;
+    var mo = ViewBag.mo as JMP.MDL.jmp_app;
+}
+<link href="~/js/fileupload/uploadify.css" rel="stylesheet" />
+@JMP.TOOL.UserHelper.css("base.css")
+@JMP.TOOL.UserHelper.css("user.css")
+@JMP.TOOL.UserHelper.js("jquery.js")
+@JMP.TOOL.UserHelper.js("base.js")
+<style type="text/css">
+    .uploadify-button {
+        border-radius: 3px;
+    }
+
+    #btn_sub {
+        margin: 0;
+        height: 32px;
+        font: 16px/32px "microsoft yahei","Arial";
+    }
+
+        #btn_sub.btn_min {
+            width: 100px;
+        }
+
+    #iframeheight {
+        margin-left: 120px;
+    }
+
+        #iframeheight .control-group .controls {
+            width: 320px;
+        }
+
+        #iframeheight .controls .control-group .control-label {
+            width: 110px;
+        }
+</style>
+<script src="~/js/fileupload/jquery.uploadify.js"></script>
+<div class="box_container" id="iframeheight">
+    <div class="controls">
+        @{
+            if (mode.a_auditstate != 1)
+            {
+                if (mo.a_platform_id == 3)
+                { 
+            <div class="control-group">
+                <label class="control-label bold">H5地址： </label>
+                <div class="controls">
+                    <input type="text" id="appurl" name="appurl" value="@(string.IsNullOrEmpty(mode.appurl) ? "" : mode.appurl)" style="margin-left: 10px; width: 80%;" maxlength="40" onblur="yzurl()" class="setSub box-shadow-1" />
+                    <a id="btn_subH5" class="btn btn_min btn_orange" onclick="Add()">确认</a>
+                </div>
+            </div>
+                }
+                else
+                {
+            <div class="control-group">
+                <label class="control-label bold">上传应用SDK： </label>
+                <div class="controls">
+                    <input id="UpLoad" />
+                    <script type="text/javascript">
+                        $(function () {
+                            $("#UpLoad").uploadify({
+                                auto: true,                      //是否自动上传
+                                swf: '/js/fileupload/uploadify.swf',      //上传swf控件,不可更改
+                                uploader: '/App/fileupload',            //上传处理页面,可以aspx
+                                fileTypeDesc: 'pdf文件或者图像',
+                                fileTypeExts: '*.zip;*.rar;',   //文件类型限制,默认不受限制
+                                buttonText: '浏览文件',//按钮文字
+                                width: 100,
+                                height: 26,
+                                //最大文件数量'uploadLimit':
+                                multi: false,//单选
+                                fileSizeLimit: '50MB',
+                                removeCompleted: false,
+                                onUploadSuccess: function (file, data, response) {
+                                    var ts = JSON.parse(data);
+                                    if (ts.success == 1) {
+                                        var appid = $.trim($("#appid").val());
+                                        var url = "/App/InsertOrUpdate";
+                                        var data = { appid: $.trim(appid), appurl: $.trim(ts.msg) };
+                                        $.post(url, data, function (retJson) {
+                                            if (retJson.success == 1) {
+                                                window.parent.ShowMsg(retJson.msg, "ok", function () { window.parent.frames['mainFrame'].location.reload(); btnCodesc(); });
+                                            }
+                                            else if (retJson.success == 9998) {
+                                                window.parent.ShowMsg(retJson.msg, "error", "");
+                                                return false;
+                                            } else if (retJson.success == 9999) {
+                                                window.parent.ShowMsg(retJson.msg, "error", "");
+                                                window.top.location.href = retJson.Redirect;
+                                                return false;
+                                            } else if (retJson.success == 9997) {
+                                                window.top.location.href = retJson.Redirect;
+                                                return false;
+                                            }
+                                            else {
+                                                window.parent.ShowMsg(retJson.msg, "error", "");
+                                                return false;
+                                            }
+                                        })
+                                    } else {
+                                        window.parent.ShowMsg("上传失败", "ok", function () { window.parent.frames['mainFrame'].location.reload(); btnCodesc(); });
+                                    }
+                                },
+                                onSelectError: function (file, errorCode, errorMsg) {
+                                    switch (errorCode) {
+                                        case -100:
+                                            window.parent.ShowMsg("上传的文件数量已经超出系统限制的!", "error", "");
+                                            break;
+                                        case -110:
+                                            window.parent.ShowMsg("上传的大小超出系统限制的!文件大小不能超过50MB！", "error", "");
+                                            break;
+                                        case -120:
+                                            window.parent.ShowMsg("上传的文件大小异常！文件大小不能超过50MB！", "error", "");
+                                            break;
+                                        case -130:
+                                            window.parent.ShowMsg("上传的文件类型不正确！只能上传zip或rar的压缩文件！", "error", "");
+                                            break;
+                                    }
+                                }
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+                }
+            }
+        }
+        @{
+            if (!string.IsNullOrEmpty(mode.appurl))
+            {
+            <div class="control-group">
+                <label class="control-label bold">应用名称： </label>
+                <div class="controls">
+                    @(string.IsNullOrEmpty(mode.a_name) ? "" : mode.a_name)
+                </div>
+            </div>
+                if (mode.a_platform_id != 3)
+                {
+            <div class="control-group">
+                <label class="control-label bold">应用SDK下载： </label>
+                <div class="controls">
+                    <a id="btn_sub" target="_blank" class="btn btn_min btn_orange" href="@(string.IsNullOrEmpty(mode.appurl) ? "" : mode.appurl)">下载资料</a>
+                </div>
+            </div>
+                }
+                else
+                {
+            <div class="control-group">
+                <label class="control-label bold">H5地址： </label>
+                <div class="controls">
+                    <a id="btn_sub" target="_blank" class="btn btn_min btn_orange" href="@(string.IsNullOrEmpty(mode.appurl) ? "" : mode.appurl)">H5地址</a>
+                </div>
+            </div>
+                }
+            }
+        }
+    </div>
+    <input type="hidden" id="appid" value="@ViewBag.appid" />
+</div>
+<script type="text/javascript">
+    //验证地址
+    function yzurl() {
+        var appurl = $.trim($("#appurl").val());
+        var testurl = /^((https|http)?:\/\/)[^\s]+/;
+        if ($.trim(appurl) == "") {
+            window.parent.ShowMsg("地址不能为空！", "error", "");
+            return false;
+        } else if (!testurl.test(appurl)) {
+            window.parent.ShowMsg("请正确填写通知地址，必须已http或https开头！", "error", "");
+            return false;
+        }
+    }
+    function Add() {
+        var appid = $.trim($("#appid").val());
+        var url = "/App/InsertOrUpdate";
+        var appurl = $.trim($("#appurl").val());
+        var testurl = /^((https|http)?:\/\/)[^\s]+/;
+        if ($.trim(appurl) == "") {
+            window.parent.ShowMsg("地址不能为空！", "error", "");
+            return false;
+        } else if (!testurl.test(appurl)) {
+            window.parent.ShowMsg("请正确填写通知地址，必须已http或https开头！", "error", "");
+            return false;
+        }
+        var data = { appid: $.trim(appid), appurl: $.trim(appurl) };
+        $.post(url, data, function (retJson) {
+            if (retJson.success == 1) {
+                window.parent.ShowMsg(retJson.msg, "ok", function () { window.parent.frames['mainFrame'].location.reload(); btnCodesc(); });
+            }
+            else if (retJson.success == 9998) {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            } else if (retJson.success == 9999) {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                window.top.location.href = retJson.Redirect;
+                return false;
+            } else if (retJson.success == 9997) {
+                window.top.location.href = retJson.Redirect;
+                return false;
+            }
+            else {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            }
+        })
+    }
+</script>

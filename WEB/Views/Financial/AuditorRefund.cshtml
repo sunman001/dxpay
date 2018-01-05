@@ -1,0 +1,54 @@
+﻿@model WEB.Models.AppUser.MerchantListViewModel
+@{
+    ViewBag.Title = "审核页面";
+    Layout = "~/Views/UI/dialog.cshtml";
+   
+}
+@JMP.TOOL.UserHelper.js("Financial/RefundList.js")
+
+
+<div class="main">
+    <input type="hidden" id="r_id" value="@(ViewBag.uids)" />
+    <div class="clear10"></div>
+    <div class="plate-form">
+        <dl>
+            <dt>是否通过：</dt>
+            <dd>
+                 <label for="r_state1"><input value="-1" name="rstate" type="radio" id="r_state1" />不通过</label>
+                 <label for="r_state2"><input value="1" name="rstate" type="radio" id="r_state2" checked="checked" class="ml10" />通过</label>
+            </dd>
+        </dl>
+        <dl>
+            <dt>备注：</dt>
+            <dd>
+                <textarea  name="r_remark" type="text" id="r_remark" style="width:300px; height:80px;"> </textarea>
+                <div class="Validform_checktip" id="r_remark_p">*如不同意必填</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>支付渠道：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="c_payname" type="text" id="c_payname" readonly="readonly" onclick="zfqd()" /><span class="ie7-input-bug-end"></span>
+                    <input type="hidden" id="c_payid" name="c_payid" />
+                </div>
+                <div class="Validform_checktip" id="yzkfz1">* 如同意，请选择支付渠道</div>
+            </dd>
+        </dl>
+  
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnAuditorRefund" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn" />
+    </div>
+    <div class="clear"></div>
+</div>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+
+    })
+</script>

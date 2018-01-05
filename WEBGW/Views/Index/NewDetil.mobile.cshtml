@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "NewDetil";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var mode = ViewBag.model as JMP.MDL.newsrelease;
+    string qt_url = (string)ViewBag.UploadUrl;
+    string  qt_urlimage = qt_url + "//ueditor/net/upload/image";
+    string qt_urlfile = qt_url + "//ueditor/net/upload/file/";
+    string qt_urlattachment = qt_url + "//ueditor/dialogs/attachment/fileTypeImages";
+}
+
+<header>
+    <section class="banner">
+        <img src="~/mobile/upload/2017/05/21/n_banner_2.png" alt="新闻详情" title="新闻详情" width="100%" />
+    </section>
+</header>
+<section class="center-box news-box">
+    <div class="news-title">
+        <h3>@mode.n_title</h3>
+        <span>发布时间：@mode.n_time 浏览次数：@mode.n_count 次</span>
+    </div>
+    <div class="news-content">
+        @Html.Raw(mode.n_info.Replace("/ueditor/net/upload/image", qt_urlimage).Replace("/ueditor/net/upload/file/", qt_urlfile).Replace("/ueditor/dialogs/attachment/fileTypeImages", qt_urlattachment))
+    </div>
+    <div class="news-btn">
+        <a href="~/index/new" class="btns" title="新闻列表">返回</a>
+    </div>
+</section>

@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "设备信息列表";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.terminallist as List<JMP.MDL.jmp_terminal>;
+}
+@JMP.TOOL.UserHelper.js("mobile/REPORT/terminal.js")
+
+<div class="main mobile-container">
+    <section id="ToolBar" class="sct-btn-tit">
+        <a id="btn-show-search" class="btn btn-primary" onclick="pop.showSearch('search-container')">查询</a>
+    </section>
+    
+    <div class="search-container">
+        <select name="searchType" id="searchType" class="ui dropdown fluid fluid-block">
+            <option value="1" @(ViewBag.searchType == 1 ? "selected=selected" : "")>编号</option>
+            <option value="2" @(ViewBag.searchType == 2 ? "selected=selected" : "")>IP地址</option>
+            <option value="3" @(ViewBag.searchType == 3 ? "selected=selected" : "")>手机品牌</option>
+            <option value="4" @(ViewBag.searchType == 4 ? "selected=selected" : "")>省份</option>
+        </select>
+        
+
+        <div class="ui input fluid fluid-block">
+            <input name="searchname" type="text" id="searchname" placeholder="请输入关键字" value="@ViewBag.searchname" class="txtipt" />
+
+        </div>
+        <select name="nettype" id="nettype" class="ui dropdown fluid fluid-block">
+            <option value="" @( ViewBag.nettype == "" ? "selected=selected" : "")>运营商</option>
+            <option value="移动" @( ViewBag.nettype == "移动" ? "selected=selected" : "")>移动</option>
+            <option value="联通" @( ViewBag.nettype == "联通" ? "selected=selected" : "")>联通</option>
+            <option value="电信" @( ViewBag.nettype == "电信" ? "selected=selected" : "")>电信</option>
+            <option value="其他" @( ViewBag.nettype == "其他" ? "selected=selected" : "")>其他</option>
+        </select>
+
+        <select name="searchDesc" id="searchDesc" class="ui dropdown fluid fluid-block">
+            <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+            <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+        </select>
+     
+        <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="selectorderlist()">查询</a>
+    </div>
+    <div class="data-table-2 table-container table-responsive">
+        <table class="ui celled striped " id="table">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th>编号</th>
+                    <th>应用名称</th>
+                    <th>ip地址</th>
+                    <th>省份</th>
+                    <th>imsi</th>
+                    <th>Mark</th>
+                    <th>硬件版本</th>
+                    <th>sdk版本</th>
+                    <th>屏幕分辨率</th>
+                    <th>注册时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+
+                        foreach (var item in list)
+                        {
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+
+                            <tr onclick="clickOpen(@id)">
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i></td>
+                                <td>@item.t_id</td>
+                                <td>@item.a_name</td>
+                                <td>@item.t_ip.Split(':')[0].ToString()</td>
+                                <td>@item.t_province</td>
+                                <td>@(item.t_imsi == "404" ? "" : item.t_imsi)</td>
+                                <td>@item.t_mark.Replace("/", ":")</td>
+                                <td>@item.t_hardware</td>
+                                <td>@item.t_sdkver</td>
+                                <td>@item.t_screen</td>
+                                <td>@item.t_time</td>
+                            </tr>
+                        <!--展开部分-->
+                            <tr>
+                                <td colspan="11" style="display:none;" name="Open" id="@Open">
+                                    <div class="dcnt-tab">
+                                        <table class="table-lst">
+                                            <tr>
+                                                <td>运营商:@(item.t_nettype == "其他" ? "未知" : item.t_nettype)</td>
+                                                <td>手机网络:@item.t_network</td>
+                                                <td>手机品牌:@item.t_brand</td>
+                                                <td>手机系统:@item.t_system</td>
+                                            </tr>
+
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td align="center" colspan="11" class="nodata">暂无记录</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+    <input type="hidden" id="pageIndex" value="@ViewBag.pageIndexs" />
+
+</div>

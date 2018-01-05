@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "设置成本费率";
+    Layout = "~/Views/UI/dialog.cshtml";
+
+    var JmpInterface = ViewBag.JmpInterface as JMP.MDL.jmp_interface;
+}
+@JMP.TOOL.UserHelper.js("payment/Interface.js")
+<div class="main">
+    <div class="clear10"></div>
+    <div class="plate-form">
+        <dl>
+            <dt>成本费率：</dt>
+            <dd>
+                <div class="single-input">
+                    <input name="CostRatio" type="text" id="CostRatio" value="@(string.IsNullOrEmpty(JmpInterface.l_CostRatio.ToString())?"":JmpInterface.l_CostRatio.ToString())" onblur="CheckCostRatio()" />
+                </div>
+                <div class="Validform_checktip" id="y_CostRatio">*请填写成本费率！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt></dt>
+            <dd>
+                <input type="hidden" id="id" value="@(JmpInterface.l_id == 0 ? 0 : JmpInterface.l_id)" />
+            </dd>
+        </dl>
+    </div>
+
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+
+        <input type="button" name="btnSave" value="保存" id="btnCostRatio" class="btn btn-primary" />
+
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+
+    </div>
+    <div class="clear"></div>
+</div>

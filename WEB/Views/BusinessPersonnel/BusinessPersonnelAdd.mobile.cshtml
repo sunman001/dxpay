@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "BusinessPersonnelAdd.mobile";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+
+    var co_model = ViewBag.co_model as JMP.MDL.CoBusinessPersonnel;
+}
+@JMP.TOOL.UserHelper.js("mobile/BusinessPersonnel/BusinessPersonnel.mobile.js")
+<div class="mobile-popup mobile-container">
+    <div class="plate-form ui form">
+        <dl>
+
+            <dt>登录名称：</dt>
+            <dd>
+                <div class="field">
+                    <input name="LoginName" type="text" id="LoginName" value="@(string.IsNullOrEmpty(co_model.LoginName)?"":co_model.LoginName)" onblur="CheckLoginName()" />
+                </div>
+                <div class="Validform_checktip" id="y_LoginName">*必填，请填写登录名称！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>登录密码：</dt>
+            <dd>
+                <div class="field">
+                    <input name="Passwords" type="password" id="Passwords" value="@(string.IsNullOrEmpty(co_model.Password) ? null: JMP.TOOL.DESEncrypt.Decrypt(co_model.Password)) " onblur="CheckPasswords()" />
+                </div>
+                <div class="Validform_checktip" id="y_Passwords">*必填，请填写登录密码！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>姓名：</dt>
+            <dd>
+                <div class="field">
+                    <input name="DisplayName" type="text" id="DisplayName" value="@(string.IsNullOrEmpty(co_model.DisplayName)?"":co_model.DisplayName)" onblur="CheckDisplayName()" />
+                </div>
+                <div class="Validform_checktip" id="y_DisplayName">*必填，请填写姓名！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>邮箱地址：</dt>
+            <dd>
+                <div class="field">
+                    <input name="EmailAddress" type="text" id="EmailAddress" value="@(string.IsNullOrEmpty(co_model.EmailAddress)?"":co_model.EmailAddress)" onblur="CheckEmailAddress()" />
+                </div>
+                <div class="Validform_checktip" id="y_EmailAddress">*必填，请填写邮箱地址！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>手机号码：</dt>
+            <dd>
+                <div class="field">
+                    <input name="MobilePhone" type="text" id="MobilePhone" value="@(string.IsNullOrEmpty(co_model.MobilePhone)?"":co_model.MobilePhone)" onblur="CheckMobilePhone()" />
+                </div>
+                <div class="Validform_checktip" id="y_MobilePhone">*11位手机号或固定电话(号码或区号-号码)！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>QQ号码：</dt>
+            <dd>
+                <div class="field">
+                    <input name="QQ" type="text" id="QQ" value="@(string.IsNullOrEmpty(co_model.QQ)?"":co_model.QQ)" onblur="CheckQQ()" />
+                </div>
+                <div class="Validform_checktip" id="y_QQ">*必填且纯数字组成，5-16位之间！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>网址：</dt>
+            <dd>
+                <div class="field">
+                    <input name="Website" type="text" id="Website" value="@(string.IsNullOrEmpty(co_model.Website)?"":co_model.Website)" />
+                </div>
+
+            </dd>
+        </dl>
+        <dl>
+            <dt></dt>
+            <dd>
+                <input type="hidden" id="id" value="@(co_model.Id == 0 ? 0 : co_model.Id)" />
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" id="btnBusinessPersonnel" class="btn btn-primary" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+    </div>
+</div>

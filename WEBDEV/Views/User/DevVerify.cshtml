@@ -1,0 +1,247 @@
+﻿@{
+    ViewBag.Title = "实名认证";
+    Layout = "~/Views/UI/master.cshtml";
+
+    var j_user = ViewBag.j_user as JMP.MDL.jmp_user;
+    string ht_url = (string)ViewBag.UploadUrl;
+}
+@JMP.TOOL.UserHelper.js("user/DevVerify.js")
+@JMP.TOOL.UserHelper.js("plugin/Authentication.js")
+@JMP.TOOL.UserHelper.js("plugin/layer/layer.js")
+@JMP.TOOL.UserHelper.js("jquery.ajaxupload.js")
+<div class="rnatn-cnt">
+    <input type="hidden" id="u_category" value="@j_user.u_category" />
+    <input type="hidden" id="u_email" name="u_email" value="@j_user.u_email" />
+    <ul class="rnatn-frm clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">基本信息</span>
+            </p>
+        </li>
+        <li>
+            <i class="star fl">*</i>
+            <div class="dpt fl">
+                <div class="dtit">身份证号码</div>
+                <div class="dipt">
+                    <input type="text" name="u_idnumber" id="u_idnumber" class="txtipt" onblur="CheckIdNo()" value="@(string.IsNullOrEmpty(j_user.u_idnumber) ? "" : j_user.u_idnumber)" placeholder="请填写身份证号码" />
+                </div>
+                <span class="error" id="yz_idnumber"></span>
+            </div>
+        </li>
+        <li>
+            <i class="star fl">*</i>
+            <div class="dpt fl">
+                <div class="dtit">真实姓名或者公司名称</div>
+                <div class="dipt">
+                    <input type="text" name="u_realname" id="u_realname" class="txtipt" onblur="CheckNmae()" value="@(!string.IsNullOrEmpty(j_user.u_realname) ? j_user.u_realname : "")" placeholder="请填写真实姓名或者公司名称" />
+                </div>
+                <span class="error" id="yz_realname"></span>
+            </div>
+        </li>
+        <li>
+            <i class="star fl">*</i>
+            <div class="dpt fl">
+                <div class="dtit">开户账号</div>
+                <div class="dipt dipt-fa">
+                    <input type="text" name="u_account" id="u_account" class="txtipt" onblur="CheckAccount()" value="@(!string.IsNullOrEmpty(j_user.u_account) ? j_user.u_account : "")" placeholder="请填写开户账号" />
+
+                </div>
+                <span class="error" id="yz_account"></span>
+            </div>
+        </li>
+        <li>
+            <i class="star fl">*</i>
+            <div class="dpt fl">
+                <div class="dtit">开户名称</div>
+                <div class="dipt">
+                    <input type="text" name="u_name" id="u_name" class="txtipt" onblur="CheckAccNmae()" value="@(!string.IsNullOrEmpty(j_user.u_name) ? j_user.u_name : "")" placeholder="请填写开户名称" />
+                </div>
+                <span class="error" id="yz_name"></span>
+            </div>
+        </li>
+        <li>
+            <i class="star fl">*</i>
+            <div class="dpt fl">
+                <div class="dtit">开户银行全称</div>
+                <div class="dipt">
+                    <input type="text" name="u_bankname" id="u_bankname" class="txtipt" onblur="CheckBankName()" value="@(!string.IsNullOrEmpty(j_user.u_bankname) ? j_user.u_bankname : "")" placeholder="请填写开户银行全称" />
+                </div>
+                <span class="error" id="yz_bankname"></span>
+            </div>
+        </li>
+        @if (j_user.u_category == 1)
+            {
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">营业执照编号</div>
+                    <div class="dipt">
+                        <input type="text" name="u_blicensenumber" id="u_blicensenumber" class="txtipt" onblur="CheckYyzz()" value="@(!string.IsNullOrEmpty(j_user.u_blicensenumber) ? j_user.u_blicensenumber : "")" placeholder="请填写营业执照编号" />
+                    </div>
+                    <span class="error" id="yz_blicensenumber"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">企业法人</div>
+                    <div class="dipt">
+                        <input type="text" name="u_BusinessEntity" id="BusinessEntity" class="txtipt" onblur="CheckBusinessEntity()" value="@(!string.IsNullOrEmpty(j_user.BusinessEntity) ? j_user.BusinessEntity : "")" placeholder="请填写企业法人" />
+                    </div>
+                    <span class="error" id="yz_BusinessEntity"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">企业注册地址</div>
+                    <div class="dipt">
+                        <input type="text" name="u_RegisteredAddress" id="RegisteredAddress" class="txtipt" onblur="CheckRegisteredAddress()" value="@(!string.IsNullOrEmpty(j_user.RegisteredAddress) ? j_user.RegisteredAddress : "")" placeholder="请填写企业注册地址" />
+                    </div>
+                    <span class="error" id="yz_RegisteredAddress"></span>
+                </div>
+            </li>
+        }
+
+    </ul>
+    <ul class="rnatn-frm clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">联系方式</span>
+            </p>
+        </li>
+        <li>
+            <i class="star fl">*</i>
+            <div class="dpt fl">
+                <div class="dtit">联系电话</div>
+                <div class="dipt">
+                    <input type="text" name="u_phone" id="u_phone" class="txtipt" onblur="CheckPhone()" disabled="disabled" value="@(!string.IsNullOrEmpty(j_user.u_phone) ? j_user.u_phone : "")" placeholder="联系电话" />
+                </div>
+                <span class="error"></span>
+            </div>
+        </li>
+        <li>
+            <i class="star fl">*</i>
+            <div class="dpt fl">
+                <div class="dtit">联系QQ</div>
+                <div class="dipt">
+                    <input type="text" name="u_qq" id="u_qq" class="txtipt" onblur="CheckQQ()" value="@(!string.IsNullOrEmpty(j_user.u_qq) ? j_user.u_qq : "")" placeholder="请填写联系QQ" />
+                </div>
+                <span class="error" id="yz_qq"></span>
+            </div>
+        </li>
+        <li>
+            <i class="star fl">*</i>
+            <div class="dpt fl">
+                <div class="dtit">联系地址</div>
+                <div class="dipt">
+                    <input type="text" name="u_address" id="u_address" class="txtipt" onblur="CheckAddress()" value="@(!string.IsNullOrEmpty(j_user.u_address) ? j_user.u_address : "")" placeholder="请填写联系地址" />
+                </div>
+                <span class="error" id="yz_address"></span>
+            </div>
+        </li>
+
+    </ul>
+    <ul class="rnatn-frm rnatn-frm-pic clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">证件认证</span>
+            </p>
+        </li>
+        <li>
+            <div class="fl clearfix">
+                <div class="rnatn-pic">
+                    <div class="bor" id="u_idno_img">
+                        @{
+                            var urlsfz = string.IsNullOrEmpty(j_user.u_photo) ? "" : ht_url + j_user.u_photo;
+                        }
+                        @if (urlsfz == "")
+                        {
+                            <i id="add" class="fa fa-plus"></i>
+                        }
+
+                        <img src="@urlsfz" id="certificate" width="145" height="145" />
+                        <input name="certificatefile" type="file" id="certificatefile" onchange="FileChange()" class="txtfile" />
+                        <input type="hidden" name="u_photo" id="u_photo" value="@(string.IsNullOrEmpty(j_user.u_photo)?"":j_user.u_photo)" />
+                    </div>
+                    <p class="txt">身份证照片正面</p>
+                    <span class="error" id="u_photo_tip"></span>
+                </div>
+            </div>
+            <div class="fl clearfix">
+                <div class="rnatn-pic">
+                    <div class="bor" id="u_idno_img">
+                        @{
+                            var urlsfzf = string.IsNullOrEmpty(j_user.u_photof) ? "" : ht_url + j_user.u_photof;
+                        }
+                        @if (urlsfzf == "")
+                        {
+                            <i id="add1" class="fa fa-plus"></i>
+                        }
+
+                        <img src="@urlsfzf" id="certificatef" width="145" height="145" />
+                        <input name="certificatefilef" type="file" id="certificatefilef" onchange="FileChangef()" class="txtfile" />
+                        <input type="hidden" name="u_photof" id="u_photof" value="@(string.IsNullOrEmpty(j_user.u_photof)?"":j_user.u_photof)" />
+                    </div>
+                    <p class="txt">身份证照片反面</p>
+                    <span class="error" id="u_photo_tipf"></span>
+                </div>
+            </div>
+            <div class="fl clearfix">
+                <div class="rnatn-pic">
+                    <div class="bor" id="u_idno_img">
+                        @{
+                            var urllicence = string.IsNullOrEmpty(j_user.u_licence) ? "" : ht_url + j_user.u_licence;
+                        }
+                        @if (urllicence == "")
+                        {
+                            <i id="add2" class="fa fa-plus"></i>
+                        }
+
+                        <img src="@urllicence" id="licencef" width="145" height="145" />
+                        <input name="licencefilef" type="file" id="licencefilef" onchange="FileChangexkz()" class="txtfile" />
+                        <input type="hidden" name="u_licence" id="u_licence" value="@(string.IsNullOrEmpty(j_user.u_licence)?"":j_user.u_licence)" />
+                    </div>
+                    @if (j_user.u_category==0)
+                    {
+                        <p class="txt">银行卡正面照</p>
+                    }
+                    else
+                    {
+                        <p class="txt">开户许可证照片</p>
+                    }
+                    <span class="error" id="u_licence_tip"></span>
+                </div>
+            </div>
+
+            @if (j_user.u_category == 1)
+            {
+                <div class="fl clearfix" id="qysfz">
+                    <div class="rnatn-pic">
+                        <div class="bor" id="u_idno_img">
+                            @{
+                                var urlyyzz = string.IsNullOrEmpty(j_user.u_blicense) ? "" : ht_url + j_user.u_blicense;
+                            }
+                            @if (urlyyzz == "")
+                            {
+                                <i id="adds" class="fa fa-plus"></i>
+                            }
+                            <img src="@urlyyzz" id="sfzficate" width="145" height="145" />
+                            <input name="sfzcertificatefile" type="file" id="sfzcertificatefile" onchange="FileChangeSfz()" class="txtfile" />
+                            <input type="hidden" name="u_blicense" id="u_blicense" value="@(string.IsNullOrEmpty(j_user.u_blicense)?"":j_user.u_blicense)" />
+                        </div>
+                        <p class="txt">营业执照照片</p>
+                        <span class="error" id="sfzficateyy"></span>
+                    </div>
+                </div>
+                                }
+        </li>
+    </ul>
+    <div class="div-btn">
+        <input type="submit" value="提交审核" id="btn_submit" class="btn btn-primary" />
+    </div>
+
+</div>

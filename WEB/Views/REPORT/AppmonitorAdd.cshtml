@@ -1,0 +1,218 @@
+﻿@{
+    ViewBag.Title = "添加应用投诉";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var mode = ViewBag.model as JMP.MDL.appmonitor;
+}
+@JMP.TOOL.UserHelper.js("REPORT/Appmonitor.js")
+@JMP.TOOL.UserHelper.js("payment/Interface.js")
+<div class="main">
+    <div class="plate-form">
+        <dl>
+            <dt>所属应用：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="appName" type="text" id="appName" readonly="readonly" onclick="shyy()"/><span class="ie7-input-bug-end"></span>
+                    <input type="hidden" id="r_appid" name="r_appid"/>
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="appNameyy">*请选择所属应用</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>监控类型:</dt>
+            <dd>
+                <div class="rule-single-select">
+                    <select name="a_type" id="a_type">
+                        <option value="0">支付成功率</option>
+                        <option value="1">无订单监控</option>
+                        <option value="2">金额成功率</option>
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <dl id="thresholdController">
+            <dt>阀值：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input name="a_request" type="text" id="a_request" onblur="yzrequest()" value="0" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>&nbsp;&nbsp;
+                <span class='red'>%</span>
+                <div class="Validform_checktip" id="requestyy">*阀值只能为数字</div>
+            </dd>
+        </dl>
+        <dl class="plate-form-slec">
+            <dt>时间段一：</dt>
+            <dd>
+                <span class="txt">从</span>
+                <div class="rule-single-select">
+                    <select name="StartDay " id="StartDay">
+                        <option value="">请选择</option>
+                        <option value="0">00</option>
+                        <option value="1">01</option>
+                        <option value="2">02</option>
+                        <option value="3">03</option>
+                        <option value="4">04</option>
+                        <option value="5">05</option>
+                        <option value="6">06</option>
+                        <option value="7">07</option>
+                        <option value="8">08</option>
+                        <option value="9">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                    </select>
+                </div>
+                <span class="txt">到</span>
+                <div class="rule-single-select">
+                    <select name="EndDay" id="EndDay">
+                        <option value="">请选择</option>
+                        <option value="0">00</option>
+                        <option value="1">01</option>
+                        <option value="2">02</option>
+                        <option value="3">03</option>
+                        <option value="4">04</option>
+                        <option value="5">05</option>
+                        <option value="6">06</option>
+                        <option value="7">07</option>
+                        <option value="8">08</option>
+                        <option value="9">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                    </select>
+                </div>
+                <span class="txt">分钟数：</span>
+                <div class="single-input normal">
+                    <input name="a_minute" type="text" id="a_minute" onblur="yzMinute()" value="5" class="min"/>
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="minuteyy">*分钟数只能为数字</div>
+            </dd>
+        </dl>
+        <dl class="plate-form-slec">
+            <dt>时间段二：</dt>
+            <dd>
+                <span class="txt">从</span>
+                <div class="rule-single-select">
+                    <select name="StartNight " id="StartNight">
+                        <option value="">请选择</option>
+                        <option value="0">00</option>
+                        <option value="1">01</option>
+                        <option value="2">02</option>
+                        <option value="3">03</option>
+                        <option value="4">04</option>
+                        <option value="5">05</option>
+                        <option value="6">06</option>
+                        <option value="7">07</option>
+                        <option value="8">08</option>
+                        <option value="9">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                    </select>
+                </div>
+                <span class="txt">到</span>
+                <div class="rule-single-select">
+                    <select name="EndNight" id="EndNight">
+                        <option value="">请选择</option>
+                        <option value="0">00</option>
+                        <option value="1">01</option>
+                        <option value="2">02</option>
+                        <option value="3">03</option>
+                        <option value="4">04</option>
+                        <option value="5">05</option>
+                        <option value="6">06</option>
+                        <option value="7">07</option>
+                        <option value="8">08</option>
+                        <option value="9">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                    </select>
+                </div>
+                <span class="txt">分钟数：</span>
+                <div class="single-input normal">
+                    <input name="NightMinute" type="text" id="NightMinute" onblur="yzNightMinute()" value="5" class="min"/>
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="NightMinuteyy">*分钟数只能为数字</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>其他时间段：</dt>
+            <dd>分钟数：
+                <div class="single-input normal">
+                    <input name="OtherMinte" type="text" id="OtherMinte" onblur="yzOtherMinte()" value="5" class="min"/>
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="OtherMinteyy">*分钟数只能为数字</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>备注：</dt>
+            <dd class="red">
+                <p>1.各时间段的时间不要重复;</p>
+                <p>2.自定义时间段如果不设定,系统会默认设置为5分钟</p>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnSaveAddAppmonitor" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+
+    })
+</script>

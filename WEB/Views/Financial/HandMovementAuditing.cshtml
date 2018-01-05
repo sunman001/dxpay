@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "手动打款审核";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+<div class="main">
+    <input type="hidden" id="id" value="@ViewBag.batchnumber" />
+    <div class="plate-form">
+        <dl>
+            <dt>审核状态：</dt>
+            <dd>
+                <input value="-1" name="u_auditstate" type="radio" id="u_stat1" onclick="radio_ck()" /><label for="u_stat1" onclick="radio_ck()">未通过</label>
+                <input value="1" name="u_auditstate" type="radio" id="u_stat3" checked='checked' onclick="radio_ck()" /><label for="u_stat3" onclick="radio_ck()">通过</label>
+            </dd>
+        </dl>
+        <dl id="jyls">
+            <dt>交易流水号：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input type="text" id="b_tradeno" value="" />
+                </div>
+                <div class="Validform_checktip" id="yzTradeno">* 必填</div>
+            </dd>
+        </dl>
+        <dl id="jyremark" style="display: none">
+            <dt>备注：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <textarea style="width: 200px; height:50px;" id="b_remark"></textarea>
+                </div>
+                <div class="Validform_checktip" id="yzRemark">* 必填</div>
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" onclick="HMAuditstate()" class="btn btn-primary" id="btn-save-add" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    //选择状态时
+    function radio_ck() {
+        var auditstate = $('input[name="u_auditstate"]:checked').val();
+
+        if (auditstate == -1) {
+
+            $("#jyls").hide();
+            $("#jyremark").show();
+
+        }
+        else {
+
+            $("#jyls").show();
+            $("#jyremark").hide();
+        }
+    }
+
+
+    //审核
+    function HMAuditstate() {
+        var auditstate = $('input[name="u_auditstate"]:checked').val();
+        var id = $("#id").val();
+        var b_tradeno = $("#b_tradeno").val();
+        var b_remark = $("#b_remark").val();
+
+        if (auditstate == -1) {
+
+            if (b_remark == "") {
+                $("#yzRemark").attr("class", "Validform_checktip Validform_wrong");
+                $("#yzRemark").html("请填写备注信息！")
+                return false;
+            }
+
+        }
+        else {
+
+            if (b_tradeno == "") {
+                $("#yzTradeno").attr("class", "Validform_checktip Validform_wrong");
+                $("#yzTradeno").html("请填写交易流水号！")
+                return false;
+            }
+        }
+        var url = "/Financial/CheckHandMovementAuditing";
+        var data = { p_state: auditstate, ids: id, b_tradeno: $.trim(b_tradeno), b_remark: $.trim(b_remark) };
+
+        $("#btn-save-add").attr("disabled", "disabled");
+
+        $.post(url, data, function (result) {
+            $("#btn-save-add").attr("disabled", false);
+            if (result.success == 1) {
+                window.parent.ShowMsg(result.msg, "ok", function () {
+                    window.parent.global.reload();
+                    window.parent.layer.closeAll();
+                });
+            }
+            else {
+                window.parent.ShowMsg(result.msg, "error", "");
+            }
+
+
+        })
+    }
+
+
+</script>

@@ -1,0 +1,182 @@
+﻿@{
+    ViewBag.Title = "应用列表";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_app>;
+    var glptdt = ViewBag.glptdt as List<JMP.MDL.jmp_platform>;
+}
+
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">应用管理</span>
+</header>
+<!--头部 end-->
+<section>
+    <ul class="frm-ul-tit clearfix">
+        <li>
+            <a id="btn-show-search" onclick="pop.showSearch('search-container')"   class="sle-btn">查询</a>
+        </li>
+    </ul>
+    <div class="search-container" style="display:none">
+        <div class="rule-single-select">
+            <select name="searchType" id="searchType">
+                <option>应用名称</option>
+            </select>
+        </div>
+        <div class="srch-dipt">
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </div>
+            <div class="rule-single-select">
+                <select id="terrace">
+                    <option value="0">--请选择--</option>
+                    @{
+                        foreach (var pt in glptdt)
+                        {
+                            <option value="@pt.p_id" @(ViewBag.terrace == pt.p_id ? "selected=selected" : "")>@pt.p_name</option>
+                        }
+                    }
+                </select>
+            </div>
+       
+        <a id="btnSearch"  class="btn btn-primary" href="javascript:" onclick="selectApplist()">查 询</a>
+    </div>
+    <div class="table-dcnt">
+        <div class="table-container">
+            <table class="table-cnt">
+                <thead>
+                    <tr>
+                        <th>应用编号</th>
+                        <th>应用名称</th>
+                        <th>运行平台</th>
+                        <th>所属商户</th>
+                        <th>应用类型</th>
+                        <th>创建时间</th>
+                        <th>审核状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   @{
+                       if (list.Count > 0)
+                       {
+                           foreach (var item in list)
+                           {
+                            <tr>
+                                <td>@item.a_id</td>
+                                <td>@item.a_name </td>
+                                <td>@item.p_name</td>
+                                <td>@item.u_realname</td>
+                                <td>@item.t_name</td>
+                                <td>@item.a_time.ToString("yyyy-MM-dd")</td>
+                                <td>
+                                    <div class="green">
+                                        @*    @(item.a_state == 1 ? "开启" : "关闭")*@
+                                        @{
+                                            switch (item.a_auditstate)
+                                            {
+                                                case 0:
+                                                    <span class="blue">等待审核</span>
+                                                    break;
+                                                case 1:
+                                                    <span class="green">审核通过</span>
+                                                    break;
+                                                case 2:
+                                                    <span class="red">审核未通过</span>
+                                                    break;
+                                            }
+                                        }
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="javascript:void(0)"onclick="info(@item.a_id)"  class='blue selc'>查看</a>
+                                    <a href="javascript:void(0)"  onclick="UpdateApp(@item.a_id)" class='blue edit'>编辑</a>
+                                    @if (item.a_auditstate != 1)
+                                    {
+                                        <a href="javascript:void(0)" onclick="DeleteApp(@item.a_id)" class="red">删除</a>
+                                    }
+                                </td>
+                            </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="9" class="nodata">暂无应用</td>
+                                                </tr>
+                                            }
+                }
+                    
+                  
+                </tbody>
+            </table>
+        </div>
+        @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+       
+    </div>
+</section>
+<!--内容 end-->
+<script>
+    function ArticleManage(pageIndex, pageSize) {
+
+        var searchname = $("#searchname").val();
+        var terrace = $("#terrace").val();
+
+        var url = "/App/AppList?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+
+        if (searchname) {
+            url += "&searchname=" + $.trim(searchname);
+        }
+        if (terrace > 0) {
+            url += "&terrace=" + $.trim(terrace);
+        }
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    function selectApplist() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+    //修改应用弹窗
+    function UpdateApp(a_id) {   
+        window.location.href = "/APP/UpdateAPP?appid=" + a_id;
+      
+    }
+    
+    function info(a_id)
+    {
+        window.location.href = "/App/down?appid=" + a_id;
+    }
+    function DeleteApp(typeappid) {
+        var data = { a_id: $.trim(typeappid) };
+        var url = "/App/DeleteApp";
+        $.post(url, data, function (retJson) {
+            //判断是否登录、报错、有权限
+            //CheckJsonData(retJson);
+            if (retJson.success == 1) {
+                window.parent.location.reload();
+                window.parent.ShowMsg(retJson.msg, "ok", function () { 
+                });
+                return false;
+            }
+            else if (retJson.success == 9998) {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            } else if (retJson.success == 9999) {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                window.top.location.href = retJson.Redirect;
+                return false;
+            } else if (retJson.success == 9997) {
+                window.top.location.href = retJson.Redirect;
+                return false;
+            }
+            else {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                //location.href = encodeURI("/App/GoodsList?appid=" + retJson.success + "&appname=" + $.trim(appname));
+            }
+        })
+    }
+</script>

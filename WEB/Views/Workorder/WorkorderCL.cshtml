@@ -1,0 +1,431 @@
+﻿@{
+    ViewBag.Title = "处理工单";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_exchange>;
+    var mode = ViewBag.model as JMP.MDL.jmp_workorder;
+    int pageCount = ViewBag.pageCount;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("Workorder/Workorder.js")
+<div class="main">
+    <input type="hidden" id="id" value="@(ViewBag.id)" />
+    <input type="hidden" id="progress" value="@(mode.progress)" />
+    <input type="hidden" id="status" value="@(mode.status)" />
+    <input type="hidden" id="jl" value="@(ViewBag.jl)" />
+    <div class="wkrd-com">
+        <ul id="tabnav" class="wkrd-tit clearfix">
+            <li class="on">
+                <span> 工单信息 </span>
+            </li>
+            <li>
+                <span>交流详细信息</span>
+            </li>
+        </ul>
+        <div class="wkrd-bifo-fix">
+            <div class="wkrd-tab-lst wkrd-tab wkrd-tab0">
+                <div class="flow-tit">
+                    <ul class="or-process">
+
+                        @{
+                        switch (mode.progress)
+                        {
+
+                            case 0:
+                                    <li class="on">
+                                        <span class="c">未响应</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+
+                                    <li>
+                                        <span class="c">处理中</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="c">已处理</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="c">已评分</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="c">已完成</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                break;
+                            case 1:
+                                    <li class="on">
+                                        <span class="c">未响应</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+
+                                    <li class="on">
+                                        <span class="c">处理中</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="c">已处理</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="c">已评分</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="c">已完成</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                break;
+                            case 2:
+                                    <li class="on">
+                                        <span class="c">未响应</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+
+                                    <li class="on">
+                                        <span class="c">处理中</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                    <li class="on">
+                                        <span class="c">已处理</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="c">已评分</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="c">已完成</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                break;
+                            case 3:
+                                    <li class="on">
+                                        <span class="c">未响应</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+
+                                    <li class="on">
+                                        <span class="c">处理中</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                    <li class="on">
+                                        <span class="c">已处理</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                    <li class="on">
+                                        <span class="c">已评分</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="c">已完成</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                break;
+                            case 4:
+                                    <li class="on">
+                                        <span class="c">未响应</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+
+                                    <li class="on">
+                                        <span class="c">处理中</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                    <li class="on">
+                                        <span class="c">已处理</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                    <li class="on">
+                                        <span class="c">已评分</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                    <li class="on">
+                                        <span class="c">已完成</span>
+                                        <span class="b">
+                                            <i class="num"></i>
+                                            <em class="process-line"></em>
+                                        </span>
+                                    </li>
+                                break;
+
+                        }
+                        }
+
+                    </ul>
+                    <i class="bor"></i>
+                </div>
+                <ul class="wkrd-bifo">
+                    <li>
+                        <span class="name">工单标题：</span>
+                        <span class="txt black">@mode.title</span>
+                    </li>
+                </ul>
+                <ul class="wkrd-ifo clearfix">
+                    <li>
+                        <span class="name">状态：</span>
+                        @{
+                        switch (mode.status)
+                        {
+
+                            case 0:
+                                    <span class="green txt">正常</span>
+                                break;
+                            case -1:
+                                    <span class="blue txt">关闭</span>
+                                break;
+                            case -2:
+                                    <span class="red txt">申诉</span>
+                                break;
+                        }
+                        }
+                    </li>
+                    <li>
+                        <span class="name">值班人：</span>
+                        <span class="txt"> @mode.name</span>
+                    </li>
+                    <li>
+                        <span class="name">工单类型：</span>
+                        @{
+                        switch (Convert.ToInt32(mode.catalog))
+                        {
+
+                            case 0:
+                                    <span class="red txt">紧急问题</span>
+                                break;
+                            case 1:
+                                    <span class="blue txt">功能需求</span>
+                                break;
+                        }
+                        }
+                    </li>
+                    <li>
+                        <span class="name">评分：</span>
+                        <span class="txt">@mode.score</span>
+                    </li>
+                    <li>
+                        <span class="name">查看次数：</span>
+                        <span class="txt">@mode.viewcount</span>
+                    </li>
+                    <li>
+                        <span class="name">是否推送提醒：</span>
+
+                        @{
+                        if (mode.pushedremind)
+                        {
+                                <span class="txt"> 是 </span>
+                        }
+                        else
+                        {
+                                <span class="txt"> 否 </span>
+                        }
+                        }
+
+                    </li>
+                    <li>
+                        <span class="name">推送提醒时间：</span>
+                        <span class="txt">@mode.pushreminddate</span>
+                    </li>
+                    <li>
+                        <span class="name">最后查看时间：</span>
+                        <span class="txt">@mode.latestviewdate</span>
+                    </li>
+                </ul>
+                <ul class="wkrd-bifo">
+                    <li>
+                        <span class="name">工单内容：</span>
+                        <span class="txt black">@mode.content</span>
+                    </li>
+                    @{
+                    if (mode.status == -1 || mode.progress == 0)
+                    {
+                            <li>
+                                <span class="name">工单关闭原因：</span>
+                                <span class="txt">@mode.closereason</span>
+                            </li>
+                    }
+                    if (mode.status == -2 && mode.progress == 3)
+                    {
+                            <li>
+                                <span class="name">处理者申诉原因：</span>
+                                <span class="txt">@mode.handlerreason</span>
+                            </li>
+                    }
+                    if (mode.status == -2 && mode.progress == 0)
+                    {
+                            <li>
+                                <span class="name">创建者申诉原因：</span>
+                                <span class="txt">@mode.initiatorreason</span>
+                            </li>
+                    }
+                    if (mode.progress >= 3 && mode.scorereason != "")
+                    {
+                            <li>
+                                <span class="name">评分原因：</span>
+                                <span class="txt">@mode.scorereason</span>
+                            </li>
+                    }
+                    if ((mode.progress >= 1 && mode.status != -1) && mode.result != "")
+                    {
+                            <li>
+                                <span class="name">响应结果：</span>
+                                <span class="txt">@mode.result</span>
+                            </li>
+                    }
+                    }
+
+
+
+                </ul>
+            </div>
+            <div class="plate-form-ptop wkrd-tab wkrd-tab1" style="display:none;">
+                <ul class="wkrd-lst">
+                    @{
+                    var j = 0;
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            j = j + 1;
+                                <li>
+                                    <div class="num fl">@j</div>
+                                    <div class="cnt">
+                                        <p class="ptxt">
+                                            <span class="name">提交人：<i>@item.creartbyname</i></span>
+                                            <span class="time">@item.handledate.ToString("yyyy-MM-dd")</span>
+                                        </p>
+                                        <p class="dtxt">@item.handleresultdescription</p>
+                                    </div>
+                                </li>
+                        }
+                    }
+                    else
+                    {
+                            <li align="center" colspan="4" class="nodata">暂无记录</li>
+                    }
+
+                    }
+
+                </ul>
+                @JMP.TOOL.HtmlPage.PagersCL("ArticleManagecl", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)
+            </div>
+        </div>
+        <div class="plate-form plate-form-eng plate-form-fix">
+            <dl>
+                <dt>交流描述：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <textarea name="handleResultDescription" type="text" id="handleResultDescription" onblur="yzhandleResultDescription()" class="txt1"> </textarea>
+                    </div>
+                    <div class="Validform_checktip" id="yzhandleResultDescription">请填写交流描述</div>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="page-footer">
+        <div class="btn-listbtn">
+            <input type="button" name="btnWorkorderCL" value="保存" id="btnWorkorderCL" class="btn btn-primary" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var progress= @(mode.progress);
+        var status =(@mode.status);
+        if(progress==0 && status==0)
+        {
+            document.getElementById("handleResultDescription").innerText = "此需求预计需要    分钟";
+        }
+
+        var jl = $("#jl").val();
+
+        if (jl == 2)
+        {
+            $(".wkrd-tit li").removeClass("on");
+            $($(".wkrd-tit li").get(1)).addClass("on");
+            $(".wkrd-tab").hide();
+            $(".wkrd-tab1").show();
+        }
+
+        $(".wkrd-tit li").click(function () {
+            $(".wkrd-tit li").removeClass("on");
+            $(this).addClass("on");
+            $(".wkrd-tab").hide();
+            $(".wkrd-tab" + $(this).index()).show();
+        })
+    });
+</script>

@@ -1,0 +1,52 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>帮助中心 | 盾行云计费</title>
+    @Styles.Render("~/bundles/help/css")
+    @RenderSection("styles",false)
+</head>
+<body>
+    <div class="main">
+        @Html.Partial("_hc_search_header")
+        <div class="content-wrap">
+            @RenderBody()
+        </div>
+        <div class="help-no-answer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="help-no-answer">
+                            <h4>没有找到答案</h4>
+                            <p>您可以联络我们获取更多信息。开发相关问题请查阅 <a href="~/doc/index">开发者中心</a>。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="~/asste/canvas/001.js"></script>
+        @Scripts.Render("~/bundles/help/js")
+        <script type="text/javascript">
+            $(function () {
+                $("#btn_search").click(function() {
+                    var q = $("#kw").val();
+                    if (q.length <= 0) {
+                        return;
+                    }
+                    var url = "@Url.Content("~/help/search?q=")" + encodeURIComponent(q);
+                    window.location.href = url;
+                });
+
+                $("#kw").keypress(function (e) {
+                    if (e.which === 13) {
+                        $("#btn_search").trigger("click");
+                    }
+                });
+
+            });
+        </script>
+        @RenderSection("scripts",false)
+    </div>
+</body>
+</html>

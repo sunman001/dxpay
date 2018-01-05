@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "销售排行";
+}
+@JMP.TOOL.UserHelper.css("base.css")
+@JMP.TOOL.UserHelper.css("user.css")
+@JMP.TOOL.UserHelper.js("jquery.js")
+@JMP.TOOL.UserHelper.js("plugin/fusionchart/fusioncharts.js")
+@JMP.TOOL.UserHelper.js("plugin/fusionchart/fusioncharts.theme.zune.js")
+@JMP.TOOL.UserHelper.js("plugin/my97datepicker/WdatePicker.js")
+@JMP.TOOL.UserHelper.js("base.js")
+@JMP.TOOL.UserHelper.js("ysfx/SalesRank.js")
+<style type="text/css">
+    .searchs .form .time {
+        width: 110px;
+        height: 30px;
+        margin: 0;
+        text-align: center;
+        text-indent: 0;
+    }
+
+    .form {
+        float: left;
+    }
+
+    .separate {
+        float: left;
+        margin: 0 5px;
+        line-height: 38px;
+    }
+
+    .tool {
+    }
+
+    .tab-wrap {
+    }
+</style>
+<div class="box_container" id="iframeheight" style="height: 700px">
+    <div class="box_header">
+        销售排行        
+        <div class="searchs tab-wrap">
+            <a class="btn-search-link active" id="type_0">应用</a>
+            <a class="btn-search-link" id="type_1">商户</a>
+            <a class="btn-search-link" id="type_2">渠道</a>
+            <a class="btn-search-link" id="type_3">商品</a>
+        </div>
+    </div>
+    <div class="searchs" style="height: 36px;">
+        <form class="form" id="form">
+            @{Html.RenderAction("UserAppList", "Home");}
+            <span class="separate">&nbsp;</span>
+            <input name="stime" type="text" id="stime" class="time txt box-shadow-1" value="@(string.IsNullOrEmpty(Request["begin"]) ? DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd") : "")" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}',minDate:'@DateTime.Now.ToString("yyyy-01-01")',dateFmt:'yyyy-MM-dd'})"/>
+            <span class="separate">-</span>
+            <input name="etime" type="text" id="etime" class="time txt box-shadow-1" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")',dateFmt:'yyyy-MM-dd'})" value="@(string.IsNullOrEmpty(Request["end"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : "")"/>
+            <a class="btn_search" id="btn_search"></a>
+        </form>
+    </div>
+    <div id="chart" style="margin: 30px 0 0 10px"></div>
+</div>

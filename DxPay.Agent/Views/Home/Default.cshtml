@@ -1,0 +1,179 @@
+﻿@using JMP.TOOL;
+@{
+    ViewBag.Title = "Default";
+    Layout = "~/Views/UI/master.cshtml";
+}
+
+<i class="bg"></i>
+<section class="idx-fl">
+    <div class="navbar-collapse">
+        <dl class="idx-menu-logo">
+            <dt><i class="logo" title="logo"></i></dt>
+        </dl>
+        
+        @{
+            try
+            {
+                Html.RenderAction("Menu", "Partial");
+            }
+            catch
+            {
+            }
+        }
+    </div>
+    <div class="idx-fl-bg"></div>
+</section>
+<!--左侧 end-->
+<section class="cont-wrapper">
+    <header class="header-wrap clearfix">
+        <div class="dcnt fl">极速、便捷、可靠的第三方支付平台</div>
+        <ul class="header-nav fr clearfix">
+            <li>
+                <span class="txt">@UserInfo.UserName</span>
+            </li>
+            <li id="UpdatePwd">
+                <i class="fa fa-lock"></i>
+                <div class="header-sts header-sts-q">
+                    <p class="scnt">
+                        <i class="icon-sj"></i>
+                        修改密码
+                    </p>
+                </div>
+            </li>
+            <li id="tcClick">
+                <i class="fa fa-power-off"></i>
+                <div class="header-sts">
+                    <p class="scnt">
+                        <i class="icon-sj"></i>
+                        退出
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </header>
+    <!--顶部 end-->
+    <section class="content">
+
+        <div class="cont-wrapper-pren">
+            <div class="cont-wrapper-min">
+                <div class="tab-dvrep">
+                    <i class="fa fa-caret-left faicon" id="fa-caret-left"></i>
+                    <i class="fa fa-caret-right faicon" id="fa-caret-right"></i>
+                    <ul id="tab-panel-menu-list" class="tab-panel">
+                        <li class="active">
+                            <span onclick="tabmenu(this)">首页</span>
+                        </li>
+                    </ul>
+                </div>
+                <div id="tab-panel-content-wrapper" class="tab-panel-content">
+                    <div class="cont active">
+                        <iframe src="/Home/Index"></iframe> 
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+    </section>
+    <!--内容 end-->
+</section>
+<script src="../asste/jquery.countup/jquery.waypoints.min.js"></script>
+<script src="../asste/jquery.countup/jquery.countup.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+
+        //退出、忘记密码
+        $(".header-nav li").hover(function () {
+            $(this).addClass("on");
+            $(this).css("overflow", "inherit");
+        }, function () {
+            $(this).removeClass("on");
+            $(this).css("overflow", "hidden");
+        })
+
+        //退出
+        $("#tcClick").unbind("click").click(function () {
+            layer.confirm('您确定要退出吗？', {
+                btn: ['确认', '取消'] //按钮
+            }, function () {
+                $.post("/Login/LoginOut", { action: "exit" }, function (data) {
+                    if (data.success) {
+                        window.top.location.href = data.gourl;
+                    }
+                });
+            });
+        });
+        $("#UpdatePwd").click(function () {
+            //alert('123');
+            var name = "修改密码";
+            var isLeaf = true;//是否套用
+            var id = "1284";//id
+            var href = "/User/ModifyInfo";//链接
+            AddTab(name, isLeaf, href, 'ModifyInfo' + id, 'parent');
+
+        })
+
+        //tab选项卡-向左
+        var prd = $(".tab-dvrep").innerWidth() - 80;//tab-ul父级宽度；
+        var tab = $("#tab-panel-menu-list");//tab标题
+        var tnswh = 0;
+        var tnswhb = 0;
+        $("#fa-caret-left").click(function () {
+            var tns = 0;
+            var bigb = tab.innerWidth() - prd;//滑动最大的像素
+            var pageli = tab.find("li");
+            if (tab.innerWidth() > prd) {
+                for (var i = 0; i < 3; i++) {
+                    tns += $(pageli[i]).outerWidth();
+                }
+                if (tnswh == 0) {
+                    tns = bigb - tns;
+                } else {
+                    tns = tnswh - tns;
+                }
+                tnswh = tns;
+
+                var nums = parseInt(tab.css("transform").substr(20, 5));
+                if (tnswh < 64) {
+                    tab.css("transition", "all 2s ease-out 0s");
+                    tab.css("transform", "translate3d(0px, 0px, 0px)");
+                    window.parent.ShowMsg("已经到第一页了！", "", "提示");
+                    tnswh = 0;
+                    return;
+                } else {
+                    tab.css("transform", "translate3d(-" + tns + "px, 0px, 0px)");
+                }
+                //debugger;
+            }
+        });
+        //tab选项卡-向右
+        $("#fa-caret-right").click(function () {
+            var tns = 0;
+            var bigb = tab.innerWidth() - prd;//滑动最大的像素
+            var pageli = tab.find("li");
+            if (tab.innerWidth() > prd) {
+                for (var i = 0; i < 3; i++) {
+                    tns += $(pageli[i]).outerWidth();
+                }
+                if (tnswhb == 0) {
+                    tns = tns;
+                } else {
+                    tns = tnswhb + tns;
+                }
+                tnswhb = tns;
+                if (tnswhb < bigb) {
+                    tab.css("transition", "all 2s ease-out 0s");
+                    tab.css("transform", "translate3d(-" + tns + "px, 0px, 0px)");
+                } else {
+                    tab.css("transition", "all 2s ease-out 0s");
+                    tab.css("transform", "translate3d(-" + (bigb - 1) + "px, 0px, 0px)");
+                    tnswhb = 0;
+                    window.parent.ShowMsg("已经到最后一页了！", "", "提示");
+                    return;
+                }
+            }
+        });
+
+
+    })
+</script>

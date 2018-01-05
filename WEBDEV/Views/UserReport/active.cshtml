@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "活跃用户报表";
+}
+@JMP.TOOL.UserHelper.css("base.css")
+@JMP.TOOL.UserHelper.css("user.css")
+@JMP.TOOL.UserHelper.js("jquery.js")
+@JMP.TOOL.UserHelper.js("base.js")
+@JMP.TOOL.UserHelper.js("plugin/fusionchart/fusioncharts.js")
+@JMP.TOOL.UserHelper.js("plugin/fusionchart/fusioncharts.theme.zune.js")
+@JMP.TOOL.UserHelper.js("plugin/my97datepicker/WdatePicker.js")
+<style type="text/css">
+    .searchs .form .time {
+        width: 110px;
+        height: 30px;
+        margin: 0;
+        text-align: center;
+        text-indent: 0;
+    }
+
+    .separate {
+        float: left;
+        margin: 0 5px;
+        line-height: 38px;
+    }
+</style>
+
+<div class="box_container" id="iframeheight" style="height: 650px">
+    <div class="box_header">
+        活跃用户  
+   <div class="searchs">
+       <a class="btn-search-link active" name="rzy" id="day" href="javascript:XzSelect('day')">日</a>
+       <a class="btn-search-link" name="rzy" id="week" href="javascript:XzSelect('week')">周</a>
+       <a class="btn-search-link" name="rzy" id="month" href="javascript:XzSelect('month')">月</a>
+   </div>
+    </div>
+    <div class="searchs" style="height: 36px;">
+        <form class="form" id="form" style="float: left;">
+             @{Html.RenderAction("UserAppList", "Home");}
+            <span class="separate">&nbsp;&nbsp;</span>
+            <input name="stime" type="text" id="stime"  onFocus="WdatePicker({minDate:'@ViewBag.ksrq',maxDate:'#F{$dp.$D(\'etime\')||\'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")\'}'})"  readonly="readonly" class="time txt box-shadow-1" value="@ViewBag.stime"/>
+            <span class="separate">-</span>
+            <input name="etime" type="text" id="etime"   onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")'})" readonly="readonly" class="time txt box-shadow-1" value="@ViewBag.etime" />
+            <a class="btn_search" id="btn_search"></a>
+        </form>
+    </div>
+    <div id="chart" style="margin: 30px 0 0 10px"></div>
+</div>
+<script type="text/javascript">
+    function FusionChart(type) {
+        var winHeight = document.body.clientHeight - 200;
+        var stime = $.trim($("#stime").val());
+        var etime = $.trim($("#etime").val());
+        var a_name = $.trim($("#s_applist option:selected").text());
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/UserReport/activecount?stime=" + stime + "&etime=" + etime + "&type=" + $.trim(type) + "&a_name=" + $.trim(a_name),
+            success: function (retJson) {
+                if (retJson == "0") {
+                    $("#chart").html("<div style='font-size:14px;color:#5e788a; font-weight:lighter; text-align:center; width:100%;'>未查询到符合条件的数据</div>");
+                } else {
+                    var data = eval('(' + retJson + ')');
+                    var chart = new FusionCharts({
+                        type: "zoomline",//zoomline
+                        renderAt: "chart",
+                        width: "100%",
+                        height: winHeight + "px",
+                        dataSource: data,
+                        dataFormat: "json"
+                    }).render();
+                }
+            }
+        });
+    }
+    function XzSelect(typeid) {
+        $("a[name='rzy']").removeClass("active");
+        $("#" + typeid).addClass("active");
+        FusionChart(typeid);
+    }
+    $(function () {
+        FusionChart('day');
+        $("#btn_search").click(function () {
+            var type = $("a[class='btn-search-link active']").html();
+            switch (type) {
+                case "日":
+                    FusionChart('day');
+                    break;
+                case "周":
+                    FusionChart('week');
+                    break;
+                case "月":
+                    FusionChart('month');
+                    break;
+            }
+        })
+    });
+</script>

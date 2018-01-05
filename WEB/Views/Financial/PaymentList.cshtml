@@ -1,0 +1,149 @@
+﻿@{
+    ViewBag.Title = "提款管理";
+    Layout = "~/Views/UI/master.cshtml";
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+@JMP.TOOL.UserHelper.js("Financial/PayMentList.js")
+<div class="main">
+    <div class="date-tool">
+        @*<div class="rule-single-select mr10">
+            <select name="searchType" id="searchType">
+                <option value="0" @(Request["s_type"] == "0" ? "selected=selected" : "")>用户编号</option>
+                <option value="1" @(Request["s_type"] == "1" ? "selected=selected" : "")>用户名称</option>
+            </select>
+        </div>
+        <div class="date-tool-input mr10">
+            <div class="date-tool-input-text">
+                <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["s_key"]" />
+            </div>
+        </div>*@
+        <div class="date-tool-input mr10">
+            <div class="date-tool-lable br">
+                申请日期
+            </div>
+            <div class="date-tool-input-text">
+                <input name="stime" type="text" id="stime" class="Wdate" style="width:70px;" value="@(string.IsNullOrEmpty(Request["s_begin"]) ? DateTime.Now.ToString("yyyy-MM-dd") : Request["s_begin"])" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}',minDate:'@DateTime.Now.ToString("yyyy-01-01")',dateFmt:'yyyy-MM-dd'})" />
+            </div>
+            <div class="date-tool-lable bl">
+                至
+            </div>
+            <div class="date-tool-input-text">
+                <input name="etime" type="text" id="etime" class="Wdate" style="width:70px;" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.ToString("yyyy-MM-dd")',dateFmt:'yyyy-MM-dd'})" value="@(string.IsNullOrEmpty(Request["s_end"]) ? DateTime.Now.ToString("yyyy-MM-dd") : Request["s_end"])" />
+            </div>
+        </div>
+        <div class="rule-single-select mr10">
+            <select name="s_state" id="s_state">
+                <option value="" @(Request["s_state"] == "" ? "selected='selected'" : "")>提款状态</option>
+                <option value="-1" @(Request["s_state"] == "-1" ? "selected='selected'" : "")>失败</option>
+                <option value="0" @(Request["s_state"] == "0" ? "selected='selected'" : "")>等待</option>
+                <option value="1" @(Request["s_state"] == "1" ? "selected='selected'" : "")>成功</option>
+            </select>
+        </div>
+        <div class="rule-single-select ml10">
+            <select name="searchTotal" id="searchTotal">
+                <option value="" @(Request["s_field"] == "" ? "selected=selected" : "")>排序字段</option>
+                <option value="0" @(Request["s_field"] == "0" ? "selected=selected" : "")>提款金额</option>
+                <option value="1" @(Request["s_field"] == "1" ? "selected=selected" : "")>申请时间</option>
+                <option value="2" @(Request["s_field"] == "2" ? "selected=selected" : "")>打款时间</option>
+            </select>
+        </div>
+        <div class="rule-single-select ml10">
+            <select name="searchDesc" id="searchDesc">
+                <option value="1" @(Request["s_sort"] == "1" ? "selected=selected" : "")>降序</option>
+                <option value="0" @(Request["s_sort"] == "0" ? "selected=selected" : "")>升序</option>
+            </select>
+        </div>
+        <a id="btn_search" class="btn-search ml10" href="javascript:" onclick="SerachUserReport()">查询</a>
+    </div>
+    <div class="clear10"></div>
+    <div class="data-table-2">
+        <table border="0" cellpadding="0" cellspacing="0" id="table">
+            <thead>
+                <tr>
+                    <th>流水号</th>
+                    <th>申请时间</th>
+                    <th>提款金额</th>
+                    <th>打款时间</th>
+                    <th>开户行名称</th>
+                    <th>银行账户</th>
+                    <th>收款人</th>
+                    <th>交易号</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Rows.Count > 0)
+                {
+                    foreach (System.Data.DataRow dr in Model.Rows)
+                    {
+                    <tr>
+                        <td>@(!string.IsNullOrEmpty(dr["p_tradeno"].ToString()) ? dr["p_tradeno"].ToString() : "---")</td>
+                        <td>@(!string.IsNullOrEmpty(dr["p_applytime"].ToString()) ? DateTime.Parse(dr["p_applytime"].ToString()).ToString("yyyy-MM-dd HH:mm:ss") : "---")</td>
+                        <td>@(!string.IsNullOrEmpty(dr["p_money"].ToString()) ? decimal.Parse(dr["p_money"].ToString()).ToString("f2") : "---")</td>
+                        <td>@(!string.IsNullOrEmpty(dr["p_paytime"].ToString()) ? DateTime.Parse(dr["p_paytime"].ToString()).ToString("yyyy-MM-dd HH:mm:ss") : "---")</td>
+                        <td>@(!string.IsNullOrEmpty(dr["u_bankname"].ToString()) ? dr["u_bankname"].ToString() : "---")</td>
+                        <td>@(!string.IsNullOrEmpty(dr["u_account"].ToString()) ? dr["u_account"].ToString() : "---")</td>
+                        <td>@(!string.IsNullOrEmpty(dr["u_name"].ToString()) ? dr["u_name"].ToString() : "---")</td>
+                        <td>
+                            @{if (dr["p_state"].ToString() == "0")
+                              {
+                                <div class="single-input txt">
+                                    <input name="p_dealno" type="text" id="p_dealno_@dr["p_id"].ToString()" value="@(!string.IsNullOrEmpty(dr["p_dealno"].ToString()) ? dr["p_dealno"].ToString() : "")" />
+                                </div>
+                              }
+                              else
+                              {
+                                @(!string.IsNullOrEmpty(dr["p_dealno"].ToString()) ? dr["p_dealno"].ToString() : "---")
+                              }
+                            }
+                        </td>
+                        <td>
+                            @{if (!string.IsNullOrEmpty(dr["p_state"].ToString()))
+                              {
+                                  if (dr["p_state"].ToString() == "-1")
+                                  {
+                                <span style="color: red;">失败</span>
+                                  }
+                                  else if (dr["p_state"].ToString() == "0")
+                                  {
+                                <span style="color: blue;">等待</span>
+                                  }
+                                  else if (dr["p_state"].ToString() == "1")
+                                  {
+                                <span style="color: green;">成功</span>
+                                  }
+                              }
+                              else
+                              {
+                                <span style="color: black;">---</span>
+                              }
+                            }
+                        </td>
+                        <td>
+                            @{if (dr["p_state"].ToString() == "0")
+                              {
+                                <a href="javascript:" class="icon icon-edit" onclick="UpdatePay(@dr["p_id"].ToString())">打款</a>
+                              }
+                              else
+                              {
+                                <span style="color: black;">---</span>
+                              }                                
+                            }
+                        </td>
+                    </tr>
+                    }
+                }
+                else
+                { 
+                    <tr>
+                        <td align="center" colspan="10">暂无记录</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    <input type="hidden" id="p_currcent" value="@ViewBag.pageIndexs" />
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>

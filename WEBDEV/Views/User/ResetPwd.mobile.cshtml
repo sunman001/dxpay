@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "重置密码";
+}
+
+@JMP.TOOL.UserHelper.js("jquery.js")
+@JMP.TOOL.UserHelper.js("plugin/layer/layer.js")
+@JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+<script src="~/mobile/js/user/ResetPwd.js"></script>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1" />
+    <title>聚米支付平台-重置密码</title>
+    <link rel="stylesheet" href="../mobile/asste/fa-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../mobile/asste/fa-awesome/css/font-awesome-ie7.min.css">
+    <link href="../mobile/css/logrit.css" rel="stylesheet" type="text/css">
+</head>
+<body class="body-rig">
+    <section class="rigt-logo">
+        <i class="logo"></i>
+    </section>
+    <section class="log-cnt">
+        <input type="hidden" id="u_phone" value="@ViewBag.Phone" />
+        <ul class="log-frm rigt-frm">
+            <li>
+                <i class="icon icon-key fl"></i>
+
+                <div class="d-cnt d-valt">
+                    <input type="password" id="new_pwd" name="new_pwd" class="txtipt" placeholder="请输入新密码" />
+                </div>
+            </li>
+            <li>
+                <i class="icon icon-key fl"></i>
+
+                <div class="d-cnt d-valt">
+                    <input type="password" id="qr_pwd" name="qr_pwd" class="txtipt" placeholder="请再次输入新密码" />
+                </div>
+            </li>
+            <li>
+                <a id="btn_ResetPwd" class="btn">重置密码</a>
+            </li>
+        </ul>
+    </section>
+</body>
+</html>
+

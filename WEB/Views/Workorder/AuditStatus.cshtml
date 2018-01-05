@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "主管审核";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var mode = ViewBag.mode as JMP.MDL.CsCustomerServiceRecord;
+}
+<div class="main">
+    <input type="hidden" id="id" value="@mode.Id" />
+    <div class="plate-form">
+        <dl>
+            <dt>审核状态：</dt>
+            <dd>
+                <input value="-1" name="u_auditstate" type="radio" id="u_stat1" @(mode.AuditStatus == true ? "checked='checked'" : "") /><label for="u_stat1" value="-1">打回</label>
+                <input value="1" name="u_auditstate" type="radio" id="u_stat3" @(mode.AuditStatus == true ? "checked='checked'" : "")/><label for="u_stat3" value="1">已审核</label>
+            </dd>
+            <dl>
+                <dt>处理评级：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <div class="rule-single-select">
+                            @*处理评级[0:未评级,1:优秀，2:良好，3:合格，4:不合格.由审核人员选择等级]*@
+                            <select name="HandelGrade" id="HandelGrade">
+                                <option value="1">优秀</option>
+                                <option value="2">良好</option>
+                                <option value="3">合格</option>
+                                <option value="4">不合格</option>
+                            </select>
+                        </div>
+                    </div>
+                </dd>
+            </dl>
+        </dl>
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" class="btn btn-primary" onclick="onckAudit()" id="btn-save-add" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    //主管审核
+    function onckAudit()
+    {
+        var id = $("#id").val();
+        var auditstate = $('input[name="u_auditstate"]:checked').val();
+
+        var url = "/Workorder/UpdateAuditStatus";
+        var data = { id: $.trim(id), auditstate: $.trim(auditstate), HandelGrade: $.trim($("#HandelGrade").val()) };
+
+        $("#btn-save-add").attr("disabled", "disabled");
+
+        $.post(url, data, function (retJson) {
+
+            $("#btn-save-add").attr("disabled", false);
+            if (retJson.success == 1) {
+
+                window.parent.global.reload();
+                window.parent.ShowMsg(retJson.msg, "ok", function () { window.parent.layer.closeAll(); });
+            }
+            else {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            }
+        })
+    }
+
+</script>

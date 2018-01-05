@@ -1,0 +1,32 @@
+﻿@using WEBDEV.Extensions
+@{
+    Layout = "~/views/shared/_layout_doc_center.cshtml";
+}
+<div class="doc-content-box">
+    <div class="row">
+        <div id="sidebar_wrap" class="col-lg-3 col-sm-3">
+            <a id="doc_show_sidebar" class="doc-show-sidebar hidden-md hidden-sm hidden-lg">查看文档列表</a>
+            <div class="doc-sidebar-box hidden-xs">
+                @Html.CreateDocMenu(0, 0)
+            </div>
+        </div>
+        <div class="col-lg-9 col-sm-9">
+            <div class="doc-content-container">
+                <article>
+                    <h1>文档用途</h1>
+                    <div class="content">
+                        本文档旨在对现在支付的聚合支付服务端接口服务提供一份详细的规范定义说明。以方便聚合支付平台商户开发者能更方便地接入现在支付的聚合支付服务。
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        $("#doc_show_sidebar").click(function () {
+            $(".doc-sidebar-box").toggleClass("hidden-xs").slideDown();
+        });
+    </script>
+}

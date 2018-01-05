@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "修改密码";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    JMP.MDL.jmp_user UModel = (JMP.MDL.jmp_user)ViewBag.jmpUser;
+}
+
+@JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+<script src="~/mobile/js/user/ModifyInfo.js"></script>
+
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">修改密码</span>
+</header>
+
+<section class="real">
+    <input type="hidden" id="u_id" value="@UModel.u_id" />
+    <ul class="frm-ul">
+        <li>
+            <div class="dbor">
+                <p class="ptit">用户账号</p>
+                @(UModel != null ? !string.IsNullOrEmpty(UModel.u_email) ? UModel.u_email : "" : "")
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">原密码</p>
+                <input type="password" class="txtipt" id="old_pwd" placeholder="请输入原密码" />
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">新密码</p>
+                <input type="password" class="txtipt" id="new_pwd" placeholder="请输入新密码" />
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">确认新密码</p>
+                <input type="password" name="qr_pwd" id="qr_pwd" class="txtipt" placeholder="请再次输入新密码" />
+            </div>
+        </li>
+    </ul>
+    <div class="frm-btn">
+        <input type="submit" value="确认提交" id="btn_save" class="btn" />
+    </div>
+</section>

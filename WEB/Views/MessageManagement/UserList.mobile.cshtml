@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "查询用户";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+    var userList = ViewBag.list as List<JMP.MDL.jmp_user>;
+}
+<div class="mobile-popup mobile-container">
+    <div class="search-container-show">
+        <select name="s_type" id="s_type" class="ui dropdown fluid fluid-block">
+            <option value="0" @(ViewBag.stype == "0" ? "selected='selected'" : "")>邮箱</option>
+            <option value="1" @(ViewBag.stype == "1" ? "selected='selected'" : "")>联系电话</option>
+            <option value="3" @(ViewBag.stype == "3" ? "selected='selected'" : "")>身份证号</option>
+            <option value="6" @(ViewBag.stype == "6" ? "selected='selected'" : "")>营业执照</option>
+        </select>
+        <div class="date-tool-input mr10">
+            <div class="ui input fluid fluid-block">
+                <input name="s_keys" id="s_keys" type="text" placeholder="请输入关键字" value="@(!string.IsNullOrEmpty(ViewBag.skeys) ? ViewBag.skeys : "")" />
+            </div>
+        </div>
+        <select name="s_category" id="s_category" class="ui dropdown fluid fluid-block">
+            <option value="" @(ViewBag.scategory == "" ? "selected='selected'" : "")>认证类型</option>
+            <option value="0" @(ViewBag.scategory == "0" ? "selected='selected'" : "")>个人</option>
+            <option value="1" @(ViewBag.scategory == "1" ? "selected='selected'" : "")>企业</option>
+        </select>
+        <select name="s_sort" id="s_sort" class="ui dropdown fluid fluid-block">
+            <option value="1" @(ViewBag.s_sort == 1 ? "selected='selected'" : "")>降序</option>
+            <option value="0" @(ViewBag.s_sort == 0 ? "selected='selected'" : "")>升序</option>
+        </select>
+        <a id="btn_user_query" class="ui button fluid fluid-block" href="javascript:" onclick="selectUserLiset()">查询</a>
+    </div>
+
+    <div class="date-tool">
+        <a id="btn_user_select" class="ui button primary big fluid fluid-block" href="javascript:" onclick="selectxzuser()">确认选择</a>
+    </div>
+    <div class="table-container table-responsive">
+        <table class="ui celled striped white" id="tableUser">
+            <thead>
+                <tr>
+                    <th> <input type="checkbox" name="all" onclick="checkAll(this)" /></th>
+                    <th>个人信息</th>
+                    <th>账户</th>
+                    <th>审核</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (userList.Count > 0)
+                    {
+                        foreach (var item in userList)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="child" class="checkall" value="@item.u_id" />
+                                </td>
+                                <td>邮箱:@(string.IsNullOrEmpty(item.u_email) ? "---" : item.u_email)<br />姓名:@(string.IsNullOrEmpty(item.u_realname) ? "---" : item.u_realname)</td>
+                                <td>@(item.u_state == 0 ? Html.Raw("<font color='red'>冻结</font>") : Html.Raw("<font color='green'>正常</font>"))
+                                <td>@(item.u_auditstate == 0 ? Html.Raw("<font color='orange'>等待审核</font>") : item.u_auditstate == 1 ? Html.Raw("<font color='green'>通过</font>") : Html.Raw("<font color='red'>未通过</font>"))</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td align="center" colspan="5">暂无记录</td>
+                        </tr>}
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("LoadData", ViewBag.CurrPage, ViewBag.PageSize, ViewBag.PageCount)
+    <input id="curr_page" type="hidden" value="@ViewBag.CurrPage" />
+</div>
+@JMP.TOOL.UserHelper.js("mobile/MessageManagement/message.js")
+<script type="text/javascript">
+    //选择每页显示数量
+    function pagexz() {
+        //每页记录数
+        var PageSize = $("#pagexz").val();
+        LoadData(1, PageSize);
+    }
+</script>

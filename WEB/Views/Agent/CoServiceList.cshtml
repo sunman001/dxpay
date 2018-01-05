@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "费率等级列表";
+    Layout = "~/Views/UI/dialog.cshtml";
+
+    var list = ViewBag.list as List<JMP.MDL.CoServiceFeeRatioGrade>;
+}
+@JMP.TOOL.UserHelper.js("Agent/CoServiceList.js")
+@JMP.TOOL.UserHelper.js("Agent/userList.js")
+<div class="main">
+    <div class="layer-mt15">
+        <ul class="frm-ul clearfix">
+            <li></li>
+            <li>
+                <div class="rule-single-select">
+                    <select name="searchType" id="searchType">
+                        <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>等级名称</option>
+
+                        <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>提交人</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+            </li>
+
+            <li>
+                <div class="rule-single-select">
+                    <select name="searchDesc" id="searchDesc">
+                        <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                        <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <a id="btnSearch" class="btn btn-primary btn-mgn" href="javascript:" onclick="serchlocuser()">查询</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>服务费等级名称</th>
+                    <th>开发者的服务费比例</th>
+                    <th>直客提成比例</th>
+                    <th>描述信息</th>
+                    <th>创建时间</th>
+                    <th>创建者</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <td>
+
+                                    @item.Name
+                                </td>
+                                <td>
+                                    @Html.Raw(string.Format(" " + decimal.Parse(item.ServiceFeeRatio.ToString("f2")) * 100 + " %"))
+                                </td>
+                                <td>
+                                    @Html.Raw(string.Format(" " + decimal.Parse(item.CustomerWithoutAgentRatio.ToString("f2")) * 100 + " %"))
+                                </td>
+                                <td>
+                                    @item.Description
+                                </td>
+                                <td>@item.CreatedOn.ToString("yyyy-MM-dd")</td>
+                                <td>@item.CreatedByName</td>
+                                <td>
+                                    <a href="javascript:" class='blue' onclick="xzfl(@item.Id,'@item.Name')">选择</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td align="center" colspan="9" class="nodata"> 暂无记录 </td>
+                        </tr>
+                    }
+
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+

@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "实时监控";
+}
+@JMP.TOOL.UserHelper.css("base.css")
+@JMP.TOOL.UserHelper.js("jquery.js")
+@JMP.TOOL.UserHelper.js("plugin/fusionchart/fusioncharts.js")
+@JMP.TOOL.UserHelper.js("plugin/fusionchart/fusioncharts.theme.zune.js")
+@JMP.TOOL.UserHelper.js("base.js")
+@JMP.TOOL.UserHelper.js("report/RealTime.js")
+<style type="text/css">
+    .searchs .form .time {
+        width: 110px;
+        height: 30px;
+        margin: 0;
+        text-align: center;
+        text-indent: 0;
+    }
+
+    .separate {
+        float: left;
+        margin: 0 5px;
+        line-height: 38px;
+    }
+
+    .tool {
+    }
+
+    .tab-wrap {
+        float: right;
+    }
+</style>
+<div class="box_container" id="iframeheight" style="height: 700px">
+    <div class="box_header">
+        实时监控
+        <div class="searchs tool">
+            <a class="btn-search-link active" id="days_0">今天</a>
+            <a class="btn-search-link" id="days_1">昨天</a>
+            <a class="btn-search-link" id="days_2">前天</a>
+        </div>
+    </div>
+    <div class="searchs" style="height: 36px;">
+        <form class="form" id="form" style="float: left; width: 68%;">
+            @{Html.RenderAction("UserAppList", "Home");}
+        </form>
+    </div>
+    <div id="chart" style="margin: 30px 0 0 10px"></div>
+</div>

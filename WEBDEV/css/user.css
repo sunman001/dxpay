@@ -1,0 +1,172 @@
+/******账户管理******/
+.form {
+    width: 95%;
+    margin: 10px auto 40px;
+}
+
+.control-group {
+    margin-top: 17px;
+}
+
+    .control-group .control-label {
+        width: 12%;
+        text-align: right;
+        margin-right: 4%;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .control-group .controls {
+        width: 79%;
+        font-size: 14px;
+    }
+
+.controls .control-group .control-label {
+    font-size: 14px;
+    font-weight: 400;
+    margin-right: 2%;
+    width: 19%;
+}
+
+.controls .hr {
+    border-top: 1px solid #f2f2f2;
+    position: relative;
+    top: 17px;
+    height: 16px;
+}
+
+.controls .hr1 {
+    position: relative;
+    top: 30px;
+    height: 25px;
+}
+
+.controls label {
+    width: 140px;
+    display: inline-block;
+}
+
+/***联系方式***/
+.relation-tpye {
+    margin-top: 12px;
+}
+
+    .relation-tpye .controls input[type=text] {
+        width: 130px;
+    }
+
+    .relation-tpye .control-group {
+        float: left;
+    }
+
+        .relation-tpye .control-group .control-label {
+            width: 132px;
+            margin-right: 4px;
+        }
+
+        .relation-tpye .control-group .controls {
+            width: auto;
+        }
+
+/*****证件认证*****/
+.list_paper {
+    margin: 20px 0 0 46px;
+}
+
+    .list_paper li {
+        display: inline-block;
+        float: left;
+        text-align: center;
+        width: 91px;
+        margin-right: 20px;
+    }
+
+    .list_paper .upload {
+        cursor: pointer;
+    }
+
+
+
+/****消息管理****/
+.list_msg {
+    color: #87909e;
+    font-size: 16px;
+    padding: 25px 0 25px 35px;
+}
+
+    .list_msg a {
+        color: #87909e;
+    }
+
+    .list_msg li {
+        line-height: 30px;
+        padding: 8px 0;
+        position: relative;
+    }
+
+    .list_msg .msg_desc {
+        display: inline-block;
+        float: left;
+    }
+
+    .list_msg .msg_btn {
+        width: 80px;
+        float: right;
+    }
+
+        .list_msg .msg_btn a {
+            text-decoration: underline;
+            margin-right: 35px;
+        }
+
+/*弹窗底部样式*/
+.page-footer {
+    padding: 10px 0;
+    height: 32px;
+}
+
+    .page-footer .btn-listbtn {
+        position: fixed;
+        padding: 10px 20px;
+        left: 0px;
+        right: 0px;
+        bottom: 0;
+        background: #f9f9f9;
+        border-top: 1px solid #e2e2e5;
+        text-align: center;
+    }
+
+.clear {
+    width: 100%;
+    height: 0px;
+    line-height: 0px;
+    font-size: 0px;
+    clear: both;
+    overflow: hidden;
+}
+
+.personal_img {
+    display: inline-block;
+    margin: 0;
+    /*width: 300px;*/
+    border: solid 1px #e1e1e1;
+    color: #666;
+    font-size: 12px;
+    text-decoration: none;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+    vertical-align: top;
+    max-height:200px;
+}
+
+.upload_img {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    filter: alpha(opacity=0);
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    opacity: 0;
+    cursor: pointer;
+}

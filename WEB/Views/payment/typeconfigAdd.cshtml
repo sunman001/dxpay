@@ -1,0 +1,117 @@
+﻿@{
+    ViewBag.Title = "支付参数管理添加";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var paylist = ViewBag.paylist as List<JMP.MDL.jmp_paymode>;
+    var mo = ViewBag.mo as JMP.MDL.jmp_payment_type_config;
+}
+@JMP.TOOL.UserHelper.js("/payment/typeconfig.js")
+<div class="main">
+    <div class="clear10"></div>
+    <div class="plate-form">
+        <dl>
+            <dt>支付类型：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <div class="rule-single-select">
+                        <select id="paymodeid" name="paymodeid" onchange="zflxtype()">
+                            <option value="0">--请选择类型--</option>
+                            @{
+                                foreach (var item in paylist)
+                                {
+                                    <option value="@item.p_id" @(mo.paymodeId == item.p_id ? "selected='selected'" : "")>@item.p_name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="Validform_checktip" id="paymodeidyy">*支付类型</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>支付通道：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <div class="rule-single-select" id="paymenttypeht">
+                        <select name="paymenttype" id="paymenttype">
+                            <option value="0">--请选择类型--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="Validform_checktip" id="zftdyy">*支付通道</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>文本类型：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <div class="rule-single-select">
+                        <select name="InputType" id="InputType">
+                            <option value="">--请选择类型--</option>
+                            <option @(mo.InputType == "text" ? "selected='selected'" : "") value="text">text</option>
+                            <option @(mo.InputType == "textarea" ? "selected='selected'" : "") value="textarea">textarea</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="Validform_checktip" id="InputTypeyy">*数据类型</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>标签名称：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="Label" type="text" id="Label" onblur="yzLabel()" maxlength="20" value="@(string.IsNullOrEmpty(mo.Label) ? "" : mo.Label)" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="Labelyy">*标签名称</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>字段名称：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="FieldName" type="text" id="FieldName" onblur="yzFieldName()" maxlength="20" value="@(string.IsNullOrEmpty(mo.FieldName) ? "" : mo.FieldName)"  />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="FieldNameyy">*字段名称</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>描述：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <textarea id="Description" name="Description" onblur="yzDescription()" style="width: 400px; height: 100px;"></textarea>
+                    @{
+                        if (!string.IsNullOrEmpty(mo.Description))
+                        {
+                            <script type="text/javascript">
+                                document.getElementById("Description").innerText = ' @mo.Description';
+
+                            </script>
+                        }
+                    }
+                </div>
+                <div class="Validform_checktip" id="Descriptionyy">*数据类型</div>
+            </dd>
+        </dl>
+        <input type="hidden" id="Id" value="@(mo.Id > 0 ? mo.Id : 0)" />
+        <input type="hidden" id="zftdid" value="@(mo.PaymentTypeId > 0 ? mo.PaymentTypeId : 0)" />
+        <input type="hidden" id="CreatedOn" value="@(!string.IsNullOrEmpty(mo.CreatedOn.ToString()) ? mo.CreatedOn.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))" />
+        <input type="hidden" id="Status" value="@(mo.Status > 0 ? mo.Status : 0)" />
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnSavezftdcs" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        if(@mo.Id > 0){
+            zflxtype();
+        }
+    })
+</script>

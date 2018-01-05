@@ -1,0 +1,233 @@
+﻿@{
+    ViewBag.Title = "开发者银行卡管理";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var userList = ViewBag.list as List<JMP.MDL.jmp_userbank>;
+    int pageCount = ViewBag.PageCount;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("mobile/Financial/RefundList.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main mobile-container">
+    <div class="toolbar-container">
+        <div id="ToolBar" class="frm-dcnt">
+            <ul class="frm-ul-tit clearfix">
+                @Html.Raw(ViewBag.locUrl)
+                <li>
+                    <a id="btn-show-search" class="btn" onclick="pop.showSearch('search-container')">查询</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="search-container">
+        <select name="s_type" id="s_type" class="ui dropdown fluid fluid-block">
+            <option value="0" @(ViewBag.stype == "0" ? "selected='selected'" : "")>开发者邮箱</option>
+            <option value="1" @(ViewBag.stype == "1" ? "selected='selected'" : "")>持卡人姓名</option>
+            <option value="3" @(ViewBag.stype == "3" ? "selected='selected'" : "")>银行卡号</option>
+            <option value="4" @(ViewBag.stype == "4" ? "selected='selected'" : "")>银行名称</option>
+            <option value="5" @(ViewBag.stype == "5" ? "selected='selected'" : "")>开户行名称</option>
+        </select>
+
+        <div class="ui input fluid fluid-block">
+            <input name="s_keys" id="s_keys" type="text" placeholder="请输入关键字" value="@(!string.IsNullOrEmpty(ViewBag.skeys) ? ViewBag.skeys : "")" class="txtipt" />
+        </div>
+
+        <select name="s_state" id="s_state" class="ui dropdown fluid fluid-block">
+            <option value="" @(ViewBag.state == "" ? "selected='selected'" : "")>银行卡状态</option>
+            <option value="0" @(ViewBag.state == "0" ? "selected='selected'" : "")>正常</option>
+            <option value="1" @(ViewBag.state == "1" ? "selected='selected'" : "")>冻结</option>
+        </select>
+        <select name="s_check" id="s_check" class="ui dropdown fluid fluid-block">
+            <option value="" @(ViewBag.scheck == "" ? "selected='selected'" : "")>审核状态 </option>
+            <option value="-1" @(ViewBag.scheck == "-1" ? "selected='selected'" : "")>审核失败 </option>
+            <option value="0" @(ViewBag.scheck == "0" ? "selected='selected'" : "")>待审核</option>
+            <option value="1" @(ViewBag.scheck == "1" ? "selected='selected'" : "")>审核通过</option>
+        </select>
+        <select name="s_sort" id="s_sort" class="ui dropdown fluid fluid-block">
+            <option value="1" @(ViewBag.s_sort == 1 ? "selected='selected'" : "")>降序</option>
+            <option value="0" @(ViewBag.s_sort == 0 ? "selected='selected'" : "")>升序</option>
+        </select>
+        <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="SearchUser()">查询</a>
+    </div>
+    <div class="data-table-2 table-container table-responsive">
+        <table class="ui celled striped table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="all" onclick="checkAll(this)" value="0" />
+                    </th>
+                    <th>展开</th>
+                    <th>编号</th>
+                    <th>开发账户</th>
+                    <th>真实姓名</th>
+                    <th>银行名称</th>
+                    <th>开户行名称</th>
+                    <th>银行卡号</th>
+                    <th>付款标识</th>
+                    <th>审核状态</th>
+                    <th>冻结状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (userList.Count > 0)
+                    {
+                        string u_id = JMP.TOOL.UserInfo.UserId.ToString();
+                        int r_id = int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString());
+
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+                        foreach (var item in userList)
+                        {
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+                            <tr onclick="clickOpen(@id)">
+                                <td>
+                                    <input type="checkbox" name="child" class="checkall" value="@item.u_id" />
+                                </td>
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                                <td>@item.u_id</td>
+                                <td>@(string.IsNullOrEmpty(item.u_email) ? "---" : item.u_email)</td>
+                                <td>@(string.IsNullOrEmpty(item.u_realname) ? "---" : item.u_realname)</td>
+                                <td>@(string.IsNullOrEmpty(item.u_bankname) ? "---" : item.u_bankname)</td>
+                                <td>@(string.IsNullOrEmpty(item.u_openbankname) ? "---" : item.u_openbankname)</td>
+                                <td>@(string.IsNullOrEmpty(item.u_banknumber) ? "--" : item.u_banknumber)</td>
+                                <td>@(item.u_flag == "00" ? Html.Raw("<span class='green'>对私</span>") : Html.Raw("<span class='red'>对公</span>"))</td>
+                                <td>
+                                    @{
+                                        switch (item.u_state)
+                                        {
+                                            case 0:
+                                                <span class='blue'>待审核</span>
+                                                break;
+                                            case 1:
+                                                <span class='green'>审核通过</span>
+                                                break;
+                                            case -1:
+                                                <span class='red'>审核未通过</span>
+                                                break;
+
+
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        switch (item.u_freeze)
+                                        {
+                                            case 0:
+                                                <span class='green'>正常</span>
+                                                break;
+                                            case 1:
+                                                <span class='red'>冻结</span>
+                                                break;
+
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        <a href='javascript:' class='blue' onclick='getAuditing(@item.u_id)'>审核</a>
+
+                                    }
+                                </td>
+                            </tr>
+                    <!--展开部分-->
+                                        <tr>
+                                            <td colspan="12" style="display: none;" name="Open" id="@Open">
+                                                <div class="dcnt-tab">
+                                                    <table class="table-lst">
+                                                        <tr>
+                                                            <td>持卡人姓名:@(string.IsNullOrEmpty(item.u_name) ? "---" : item.u_name)</td>
+                                                            <td>省份：@item.u_province</td>
+                                                            <td>城市：@item.u_area</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>审核人:@(string.IsNullOrEmpty(item.u_auditor) ? "---" : item.u_auditor)</td>
+                                                            <td>审核时间:@item.u_date</td>
+                                                            <td>备注:@(string.IsNullOrEmpty(item.u_remarks) ? "---" : item.u_remarks)</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="12">暂无记录</td>
+                                            </tr>
+                                        }
+
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("LoadData", ViewBag.CurrPage, ViewBag.PageSize, pageCount)
+    <script>
+        //查询用户列表
+        function SearchUser() {
+            //每页记录数
+            var PageSize = $("#pagexz").val();
+            LoadData(1, PageSize);
+        }
+
+        //加载数据
+        function LoadData(currPage, pageSize) {
+            var url = "/AppUserBank/Index?curr=" + currPage + "&psize=" + pageSize;
+            var type = $("#s_type").val();
+            var keys = $("#s_keys").val();
+            var state = $("#s_state").val();
+            var check = $("#s_check").val();
+            var sort = $("#s_sort").val();
+            url += "&stype=" + type + "&skeys=" + keys + "&state=" + state + "&scheck=" + check + "&s_sort=" + sort ;
+            location.href = encodeURI(url);
+        }
+
+        //选择每页显示数量
+        function pagexz() {
+            //每页记录数
+            var PageSize = $("#pagexz").val();
+            LoadData(1, PageSize);
+        }
+
+        //批量更新
+        function doAll(obj) {
+            var vals = "";
+            $("#table :checkbox[checked]").each(function (i) {
+                if (i > 0)
+                    vals += ",";
+                vals += $(this).val();
+            });
+            if (vals == "") {
+                window.parent.ShowMsg("请选择信息！", "error", "");
+                return;
+            }
+            $.post("/AppUserBank/DoAll", { uids: vals, tag: obj }, function (result) {
+                if (result.success == 1) {
+                    window.parent.ShowMsg(result.msg, "ok", function () {
+                        window.parent.global.reload();
+                        window.parent.layer.closeAll();
+                    });
+                } else if (result.success == 9998) {
+                    window.parent.ShowMsg(result.msg, "error", "");
+                    return;
+                } else if (result.success == 9999) {
+                    window.parent.ShowMsg(result.msg, "error", "");
+                    window.top.location.href = retJson.Redirect;
+                    return;
+                } else {
+                    window.parent.ShowMsg(result.msg, "error", "");
+                    return;
+                }
+            });
+        }
+        function getAuditing(id)
+        {
+            window.parent.ShouwDiaLogWan("审核数据", 500, 400, "/AppUserBank/AppUserBankAuditing?id=" + id);
+        }
+    </script>
+</div>

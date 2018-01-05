@@ -1,0 +1,29 @@
+﻿@model List<WEBDEV.Models.Help.CatalogForIndexViewModel>
+@{
+    Layout = "~/views/shared/_layout_helper_center.cshtml";
+}
+<div class="container">
+    <div class="row">
+        @foreach (var cat in Model)
+        {
+            <div class="col-lg-4 col-sm-4">
+                <div class="help-item">
+                    <a href="~/help/catalog/@cat.Id">
+                        <div class="icon"><img src="~/images/help/@cat.Icon"/>
+                        </div>
+                        <h5>@cat.Name</h5><h6>@cat.Description</h6>
+                    </a>
+                </div>
+            </div>
+        }
+        <div class="col-lg-4 col-sm-4">
+            <div class="help-item">
+                <a href="~/doc/index">
+                    <div class="icon"><img src="~/images/help/coding_developer.svg">
+                    </div>
+                    <h5>开发者中心</h5><h6>客户端，服务器端等接入文档</h6>
+                </a>
+            </div>
+            <div></div></div>
+    </div>
+</div>

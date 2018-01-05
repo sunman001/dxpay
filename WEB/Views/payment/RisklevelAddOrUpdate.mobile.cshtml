@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "支付配置界面";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_risklevel>;
+    var applist = ViewBag.applist as List<JMP.MDL.jmp_apptype>;
+    var mo = ViewBag.mo as JMP.MDL.jmp_risklevelallocation;
+}
+@JMP.TOOL.UserHelper.js("mobile/payment/Interface.mobile.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="mobile-container mobile-popup">
+
+    <div class="plate-form  ui form ">
+        <div class="field">
+            <label>应用类型：</label>
+            <select id="apptypeid" name="apptypeid" class="ui dropdown fluid fluid-block" onchange="xzapptype()">
+                <option value="0">--请选择类型--</option>
+                @{
+                    foreach (var m in applist)
+                    {
+                        <option value="@m.t_id" @(mo.r_apptypeid == m.t_id ? "selected='selected'" : "")>@m.t_name</option>
+                    }
+                }
+            </select>
+            <div class="Validform_checktip" id="apptypeidyy">*应用类型</div>
+        </div>
+        <div class="field">
+            <label>风险等级：</label>
+            <select id="risklevelid" name="risklevelid"  class="ui dropdown fluid fluid-block" onchange="Selectrisklevel()">
+                <option value="0">--请选择风险等级--</option>
+                @{
+                    foreach (var item in list)
+                    {
+                        <option value="@item.r_id" @(mo.r_risklevel == item.r_id ? "selected='selected'" : "")>@item.r_name</option>
+                    }
+                }
+            </select>
+
+            <div class="Validform_checktip" id="risklevelyy">*应用类型</div>
+        </div>
+       
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <input type="hidden" value="@mo.r_id" id="rid" />
+        <input type="button" name="btnSave" value="保存" id="btnSavefxpz" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+
+</div>
+<script type="text/javascript">
+    $(function () {
+        //添加风险配置
+        $("#btnSavefxpz").click(function () {
+            var apptypeid = $.trim($("#apptypeid").val());
+            var risklevelid = $.trim($("#risklevelid").val());
+            var rid = $.trim($("#rid").val());
+            if (apptypeid == 0) {
+                $("#apptypeidyy").attr("class", "Validform_checktip Validform_wrong");
+                $("#apptypeidyy").html("请选择应用类型！");
+                return false;
+            }
+            if (risklevelid == 0) {
+                $("#risklevelyy").attr("class", "Validform_checktip Validform_wrong");
+                $("#risklevelyy").html("请选择风险等级！");
+                return false;
+            }
+            var data = { r_apptypeid: $.trim(apptypeid), r_risklevel: $.trim(risklevelid), r_id: $.trim(rid) };
+            $("#btnSavefxpz").attr("disabled", "disabled");
+            var url = "/payment/AddRisklevel";
+            $.post(url, data, function (retJson) {
+                $("#btnSavefxpz").attr("disabled", false);
+                if (retJson.success == 1) {
+                    window.parent.ShowMsg(retJson.msg, "ok", function () {
+                        window.location.href = "/payment/RisklevelList";
+                    });
+                }
+                else if (retJson.success == 9998) {
+                    window.parent.ShowMsg(retJson.msg, "error", "");
+                    return false;
+                } else if (retJson.success == 9999) {
+                    window.parent.ShowMsg(retJson.msg, "error", "");
+                    window.top.location.href = retJson.Redirect;
+                    return false;
+                } else if (retJson.success == 9997) {
+                    window.top.location.href = retJson.Redirect;
+                    return false;
+                }
+                else {
+                    window.parent.ShowMsg(retJson.msg, "error", "");
+                    return false;
+                }
+            })
+        })
+    })
+    //选择应用类型判断
+    function xzapptype() {
+        var apptypeid = $.trim($("#apptypeid").val());
+        if (apptypeid == 0) {
+            $("#apptypeidyy").attr("class", "Validform_checktip Validform_wrong");
+            $("#apptypeidyy").html("请选择应用类型！");
+            return false;
+        } else {
+            $("#apptypeidyy").attr("class", "Validform_checktip  Validform_right");
+            $("#apptypeidyy").html("验证通过");
+        }
+    }
+    //选择风险等级
+    function Selectrisklevel() {
+        var risklevelid = $.trim($("#risklevelid").val());
+        if (risklevelid == 0) {
+            $("#risklevelyy").attr("class", "Validform_checktip Validform_wrong");
+            $("#risklevelyy").html("请选择风险等级！");
+            return false;
+        } else {
+            $("#risklevelyy").attr("class", "Validform_checktip  Validform_right");
+            $("#risklevelyy").html("验证通过");
+        }
+    }
+</script>

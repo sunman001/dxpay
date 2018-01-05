@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "添加工单";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+}
+@JMP.TOOL.UserHelper.js("mobile/Workorder/Workorder.mobile.js")
+
+<div class="mobile-popup mobile-container">
+    <div class="ui form">
+        <dl>
+            <dt>值班者：</dt>
+            <dd>
+                <div class="field">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="watchIdsOfTheDayname" type="text" id="watchIdsOfTheDayname" readonly="readonly" value="@(ViewBag.name)" /><span class="ie7-input-bug-end"></span>
+                    <input type="hidden" id="watchIdsOfTheDay" name="watchIdsOfTheDay" value="@(ViewBag.id)" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>工单标题：</dt>
+            <dd>
+                <div class="field">
+                    <input name="title" type="text" id="title" onblur="yztitle()" @(ViewBag.id == 0 ? "readonly='readonly'" : "") value="" />
+
+                    <div id="yztitle" class="Validform_checktip">*请输入工单标题！</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>工单类别：</dt>
+            <dd>
+                <div class="field">
+                    <select name="catalog" id="catalog" class="ui dropdown fluid fluid-block" @(ViewBag.id == 0 ? "disabled='disabled'" : "")>
+                        <option value="0">紧急问题</option>
+                        <option value="1">功能需求</option>
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>工单内容：</dt>
+            <dd>
+                <div class="field">
+                    <textarea name="content" type="text" id="content" class="txt1" onblur="yzcontent()" @(ViewBag.id == 0 ? "readonly='readonly'" : "")> </textarea>
+
+                    <div id="yzcontent" class="Validform_checktip">*请输入工单内容！</div>
+                </div>
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer">
+        <input type="button" name="btnSave" value="提交" id="AddWorkorder" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn" />
+    </div>
+</div>

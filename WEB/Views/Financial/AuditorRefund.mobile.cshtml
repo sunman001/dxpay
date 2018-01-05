@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "审核页面";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+}
+@JMP.TOOL.UserHelper.js("mobile/Financial/RefundList.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="mobile-container mobile-popup">
+    <input type="hidden" id="r_id" value="@(ViewBag.uids)" />
+    <div class="plate-form  ui form ">
+        <div class="field">
+            是否通过：
+            <label for="r_state1" style="display: inline-block; margin-right: 5px;"><input value="-1" name="rstate" type="radio" id="r_state1" />不通过</label>
+            <label for="r_state2" style="display: inline-block"><input value="1" name="rstate" type="radio" id="r_state2" checked="checked" class="ml10" />通过</label>
+            
+        </div>
+        <div class="field">
+            <label>备注：</label>
+            <textarea name="r_remark" type="text" id="r_remark" style="width:300px; height:80px;"> </textarea> <br />
+            <div class="Validform_checktip" id="r_remark_p">*如不同意必填</div>
+        </div>
+
+        <div class="field">
+            <label>支付渠道：</label>
+            <input name="c_payname" type="text" id="c_payname" readonly="readonly" onclick="zfqd()" /><span class="ie7-input-bug-end"></span>
+            <input type="hidden" id="c_payid" name="c_payid" />
+            <div class="Validform_checktip" id="yzkfz1">* 如同意，请选择支付渠道</div>
+        </div>
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" class="large ui primary button" name="btnAuditorRefund" value="保存" id="btnAuditorRefund" class="btn mr10" />
+            <a href="~/Financial/RefundList" class="large ui primary button"> 取消</a>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+
+    })
+</script>

@@ -1,0 +1,36 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+
+/*header-blue-grad 渐变蓝色*/
+.tmp-blue-grad .header-brand,.tmp-blue-grad .header-nav{background: linear-gradient(to bottom,#3498db 0%,#2980b9 100%);}
+.tmp-blue-grad .head-btn:hover,.tmp-blue-grad .head-btn.active{color: #fff;background: #005486;}
+.tmp-blue-grad .header-pull .fa,.tmp-blue-grad .header-pull .count,.tmp-blue-grad .header-pull .name{color: #fff;} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

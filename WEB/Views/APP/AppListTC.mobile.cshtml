@@ -1,0 +1,149 @@
+﻿@{
+    ViewBag.Title = "应用列表";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_app>;
+    int pageCount = ViewBag.pageCount;
+}
+@JMP.TOOL.UserHelper.js("mobile/Financial/RefundList.js")
+<div class="mobile-popup mobile-container">
+    <div class="search-container-show">
+        <select name="searchType" id="searchType" class="ui dropdown fluid fluid-block">
+            <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>应用编号</option>
+            <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>应用名称</option>
+            <option value="3" @(ViewBag.type == 3 ? "selected='selected'" : "")>所属商户</option>
+        </select>
+        <div class="ui input fluid fluid-block">
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" />
+        </div>
+        <select name="searchDesc" id="searchDesc" class="ui dropdown fluid fluid-block">
+            <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+            <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+        </select>
+
+        <select name="auditstate" id="platformid" class="ui dropdown fluid fluid-block">
+            <option value="0" @(ViewBag.platformid == 0 ? "selected='selected'" : "")>关联平台</option>
+            <option value="1" @(ViewBag.platformid == 1 ? "selected='selected'" : "")>安卓</option>
+            <option value="2" @(ViewBag.platformid == 2 ? "selected='selected'" : "")>苹果</option>
+            <option value="3" @(ViewBag.platformid == 3 ? "selected='selected'" : "")>H5</option>
+        </select>
+        <a id="btn_user_query" class="ui button fluid fluid-block" href="javascript:" onclick="selectUserLiset()">查询</a>
+    </div>
+    <div class="date-tool">
+        <a id="btn_user_select" class="ui button primary big fluid fluid-block" href="javascript:" onclick="serchlocuser()">确认选择</a>
+    </div>
+    <div class="table-container table-responsive">
+        <table class="ui celled striped white" id="tableUser">
+                <thead>
+                    <tr>
+                        <th width="100">应用编号</th>
+                        <th>应用名称</th>
+                        <th>所属商户</th>
+                        <th>关联平台</th>
+                        <th>审核状态</th>
+                        <th>状态</th>
+                        <th>审核人</th>
+                        <th>商品总数</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (list.Count > 0)
+                        {
+                            foreach (var item in list)
+                            {
+                                <tr>
+                                    <td>@item.a_id</td>
+                                    <td>@item.a_name</td>
+
+                                    <td>@item.u_realname</td>
+                                    <td>
+                                        @{switch (item.a_platform_id)
+                                            {
+                                                case 1:
+                                                    <label>安卓</label>
+                                                    break;
+                                                case 2:
+                                                    <label>苹果</label>
+                                                    break;
+                                                case 3:
+                                                    <label>H5</label>
+                                                    break;
+                                            }}
+                                    </td>
+                                    <td>
+                                        @{
+                                            switch (item.a_auditstate)
+                                            {
+                                                case 0:
+                                                    <font color='red'>等待审核</font>
+                                                    break;
+                                                case 1:
+                                                    <font color='green'>审核通过</font>
+                                                    break;
+                                                case 2:
+                                                    <font color='red'>审核未通过</font>
+                                                    break;
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.a_state == 1)
+                                            {
+                                                <font color='green'>正常</font>
+                                            }
+                                            else
+                                            {
+                                                <font color='red'>冻结</font>
+                                            }
+                                        }
+                                    </td>
+                                    <td>@(!string.IsNullOrEmpty(item.a_auditor) ? item.a_auditor : "--")</td>
+                                    <td>--</td>
+                                    @{
+                                        <td>
+                                            <a style="cursor:pointer" onclick="yzyymc(@item.a_id,'@item.a_name',@item.a_user_id,'@item.u_realname')">选择</a>
+                                        </td>
+
+                                    }
+
+                                </tr>
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="12">暂无记录</td>
+                                            </tr>
+                                        }
+                    }
+                </tbody>
+            </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)
+    <input id="curr_page" type="hidden" value="@ViewBag.CurrPage" />
+</div>
+<script type="text/javascript">
+    //分页
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/APP/AppListTC?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        var searchType = $("#searchType").val();
+        var sea_name = $("#sea_name").val();
+        var searchDesc = $("#searchDesc").val();
+        var platformid = $.trim($("#platformid").val());
+        url += "&type=" + searchType + "&sea_name=" + sea_name + "&searchDesc=" + searchDesc + "&platformid=" + platformid;
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+    //列表查询
+    function serchlocuser() {//查询
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+</script>

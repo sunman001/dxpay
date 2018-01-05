@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "盾行天下支付";
+}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--[if lt IE 7 ]><html class="ie6 lti8"><![endif]-->
+<!--[if IE 7 ]><html class="ie7 lti8"><![endif]-->
+<!--[if IE 8 ]><html class="ie8 lti8"><![endif]-->
+<!--[if (gt IE 8)|!(IE)]><!-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!--<![endif]-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>聚合云计费</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" href="~/images/favicon.ico" />
+    @JMP.TOOL.UserHelper.css("logrgt.css")
+    @JMP.TOOL.UserHelper.js("jquery.js")
+    @JMP.TOOL.UserHelper.js("plugin/layer/layer.js")
+    @JMP.TOOL.UserHelper.js("main.js")
+    @JMP.TOOL.UserHelper.js("base.js")
+    @JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+
+</head>
+<body>
+    <i class="bg"></i>
+    <header class="lgn-head">
+        <h1 class="tit">极速、便捷、可靠的第三方支付平台</h1>
+        <div class="bor">
+            <span class="btxt">开发者</span>
+        </div>
+    </header>
+        @RenderBody()
+</body>
+</html>

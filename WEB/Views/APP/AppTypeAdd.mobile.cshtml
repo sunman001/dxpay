@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "添加应用类型";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_apptype>;
+    var model = ViewBag.model as JMP.MDL.jmp_apptype;
+}
+@JMP.TOOL.UserHelper.js("mobile/APP/AppType.mobile.js")
+<div class="mobile-popup mobile-container">
+    <div class="plate-form ui form">
+        <dl>
+            <dt>所属应用类型：</dt>
+            <dd>
+                <div class="field">
+                    <select name="t_topid" id="t_topid" onblur="yzlx()" class="ui dropdown fluid">
+                        <option value='-1'>--请选择--</option>
+                        <option value='0' @(model.t_topid == 0 ? "selected='selected' " : "")>父级</option>
+                        @{
+                            foreach (var item in list)
+                            {
+                                <option value='@item.t_id' @(model.t_topid == item.t_id ? "selected='selected' " : "")>├ @item.t_name</option>
+                            }
+                        }
+                    </select>
+                    <div class="Validform_checktip" id="yylx">* 应用类型</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>应用类型名称：</dt>
+            <dd>
+                <div class="field">
+                    <input name="t_name" type="text" id="t_name" onblur="yzyyname()" maxlength="20" value="@(string.IsNullOrEmpty(model.t_name) ? "" : model.t_name)" />
+                    <div class="Validform_checktip" id="yyname">*应用类型长度不超过20</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>排序：</dt>
+            <dd>
+                <div class="field">
+                    <input name="t_sort" type="text" id="t_sort" onblur="yzpx()" maxlength="20" value="@(string.IsNullOrEmpty(model.t_sort) ? "" : model.t_sort)" />
+                    <div class="Validform_checktip" id="pxid">*排序</div>
+                </div>
+            </dd>
+        </dl>
+        @*<dl>
+                <dt>test</dt>
+                <dd>
+                    <textarea id="editor" name="editor"></textarea>
+                </dd>
+
+            </dl>*@
+        <dl>
+            <dt></dt>
+            <dd>
+                <input type="hidden" id="t_id" value="@(model.t_id == 0 ? 0 : model.t_id)" />
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer">
+        <input type="button" name="btnSave" value="保存" id="btnSaveAddorUpdateAppType" class="ui button primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="ui button" />
+    </div>
+</div>

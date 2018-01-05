@@ -1,0 +1,251 @@
+﻿@using JMP.Model.Query
+@{
+    ViewBag.Title = "开发者管理";
+    Layout = "~/Views/UI/master.cshtml";
+    var userList = ViewBag.list as List<AppUserMerchant>;
+    int pageCount = ViewBag.PageCount;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.btnstr)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="s_type" id="s_type">
+                    <option value="0" @(ViewBag.stype == "0" ? "selected='selected'" : "")>邮箱</option>
+                    <option value="1" @(ViewBag.stype == "1" ? "selected='selected'" : "")>真实姓名</option>
+                    <option value="4" @(ViewBag.stype == "4" ? "selected='selected'" : "")>开户名</option>
+                    <option value="7" @(ViewBag.stype == "7" ? "selected='selected'" : "")>上级名称</option>
+                    <option value="8" @(ViewBag.stype == "8" ? "selected='selected'" : "")>编号</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="s_keys" id="s_keys" type="text" placeholder="请输入关键字" value="@(!string.IsNullOrEmpty(ViewBag.skeys) ? ViewBag.skeys : "")" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="s_state" id="s_state">
+                    <option value="" @(ViewBag.state == "" ? "selected='selected'" : "")>用户状态</option>
+                    <option value="0" @(ViewBag.state == "0" ? "selected='selected'" : "")>冻结</option>
+                    <option value="1" @(ViewBag.state == "1" ? "selected='selected'" : "")>正常</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="s_category" id="s_category">
+                    <option value="" @(ViewBag.scategory == "" ? "selected='selected'" : "")>认证类型</option>
+                    <option value="0" @(ViewBag.scategory == "0" ? "selected='selected'" : "")>个人</option>
+                    <option value="1" @(ViewBag.scategory == "1" ? "selected='selected'" : "")>企业</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="relation_type" id="relation_type">
+                    <option value="-1" @(ViewBag.relation_type == -1 ? "selected='selected'" : "")>上级类型</option>
+                    <option value="1" @(ViewBag.relation_type == 1 ? "selected='selected'" : "")>商务</option>
+                    <option value="2" @(ViewBag.relation_type == 2 ? "selected='selected'" : "")>代理商</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="s_check" id="s_check">
+                    <option value="" @(ViewBag.scheck == "" ? "selected='selected'" : "")>审核状态 </option>
+                    <option value="-1" @(ViewBag.scheck == "-1" ? "selected='selected'" : "")>未通过 </option>
+                    <option value="0" @(ViewBag.scheck == "0" ? "selected='selected'" : "")>等待审核</option>
+                    <option value="1" @(ViewBag.scheck == "1" ? "selected='selected'" : "")>审核通过</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="RiskM" id="RiskM">
+                    <option value="" @(ViewBag.RiskM == "" ? "selected='selected'" : "")>风控资料 </option>
+                    <option value="0" @(ViewBag.RiskM == "0" ? "selected='selected'" : "")>已完善</option>
+                    <option value="1" @(ViewBag.RiskM == "1" ? "selected='selected'" : "")>未完善</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="s_sort" id="s_sort">
+                    <option value="1" @(ViewBag.s_sort == 1 ? "selected='selected'" : "")>降序</option>
+                    <option value="0" @(ViewBag.s_sort == 0 ? "selected='selected'" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btn_user_query" class="btn btn-primary" href="javascript:" onclick="SearchUser()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="all" onclick="checkAll(this)" value="0" />
+                    </th>
+                    <th>展开</th>
+                    <th>编号</th>
+                    <th>登录邮件地址</th>
+                    <th>真实姓名</th>
+                    <th>所属类型</th>
+                    <th>所属上级</th>
+                    <th>账户状态</th>
+                    <th>审核状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (userList.Count > 0)
+                    {
+                        string u_id = JMP.TOOL.UserInfo.UserId.ToString();
+                        int r_id = int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString());
+                        bool getView = bll_limit.GetLocUserLimitVoids("/AppUser/ViewUser", u_id, r_id);
+                        bool getEdit = bll_limit.GetLocUserLimitVoids("/AppUser/UpdateUser", u_id, r_id);
+                        bool getsxf = bll_limit.GetLocUserLimitVoids("/AppUser/UserSxF", u_id, r_id); //手续费按钮
+                        bool getskl = bll_limit.GetLocUserLimitVoids("/AppUser/UserKl", u_id, r_id); //扣量按钮
+                        bool getAuditing = bll_limit.GetLocUserLimitVoids("/AppUser/CheckAuditing", u_id, r_id); //审核
+                        bool getUidT = bll_limit.GetLocUserLimitVoids("/AppUser/doAll(1)", u_id, r_id); //一键
+                        bool getTepi = bll_limit.GetLocUserLimitVoids("/AppUser/AppUserTePi", u_id, r_id); //特批
+                        bool getUpdate = bll_limit.GetLocUserLimitVoids("/AppUser/AppUserUpdateFrozenMoney", u_id, r_id);
+                        bool getRisk = bll_limit.GetLocUserLimitVoids("/AppUser/CheckRiskSH", u_id, r_id);
+                        bool getRePassword = bll_limit.GetLocUserLimitVoids("/AppUser/AppRePassword", u_id, r_id);//重置密码
+
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+                        foreach (var item in userList.OrderByDescending(x => x.IsSpecialApproval))
+                        {
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+
+                            <tr class="@(item.IsSpecialApproval ? "important" : "")" onclick="clickOpen(@id)">
+                                <td>
+                                    @if (getUidT)
+                                    {
+                                        <input type="checkbox" name="child" class="checkall" value="@item.u_id" />
+                                    }
+                                </td>
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                                <td>@item.u_id</td>
+                                <td><a href="@ViewBag.Userurl/Home/UserLoginbyadm?qs=@(JMP.TOOL.DESEncrypt.Encrypt(item.u_email + ";" + item.u_password + ";" + JMP.TOOL.UserInfo.UserName + ";" + System.DateTime.Now.ToString()))" target="_blank" class="blue">@(string.IsNullOrEmpty(item.u_email) ? "---" : item.u_email)</a></td>
+                                <td>@(string.IsNullOrEmpty(item.u_realname) ? "---" : item.u_realname)</td>
+                                <td>@(item.relation_type == 1 ? "商务" : "代理商")</td>
+                                @if (item.relation_type == 1)
+                                {
+                                    <td>@(string.IsNullOrEmpty(item.sw) ? "--" : item.sw)</td>
+                                }
+                                else
+                                {
+                                    <td>@(string.IsNullOrEmpty(item.dls) ? "--" : item.dls)</td>
+                                }
+
+                                <td>@(item.u_state == 0 ? Html.Raw("<span class='red'>冻结</span>") : Html.Raw("<span class='green'>正常</span>"))</td>
+
+                                <td>@(item.u_auditstate == 0 ? Html.Raw("<span class='orange'>等待审核</span>") : item.u_auditstate == 1 ? Html.Raw("<span class='green'>通过</span>") : Html.Raw("<span class='red'>未通过</span>"))</td>
+                                <td>
+                                    @{
+                                        if (getView)
+                                        {
+                                            <a href='javascript:' class='blue' onclick='ViewUser(@item.u_id)'>查看</a>
+                                        }
+
+                                        if (getEdit)
+                                        {
+                                            <a href='javascript:' class='blue' onclick='UpdateUser(@item.u_id)'>编辑</a>
+                                        }
+                                        if (getsxf)
+                                        {
+                                            <a href='javascript:' class='blue' onclick='getsxf(@item.u_id)'>手续费设置</a>
+                                        }
+                                        if (getskl)
+                                        {
+                                            <a href='javascript:' class='blue' onclick='getkl(@item.u_id)'>扣量设置</a>
+                                        }
+                                        if (getAuditing)
+                                        {
+                                            <a href='javascript:' class='blue' onclick='getAuditing(@item.u_id)'>审核</a>
+                                        }
+                                        if (getTepi)
+                                        {
+                                            <a href='javascript:' class='blue' onclick='gettepi(@item.u_id)'>特批</a>
+                                        }
+                                        if (getUpdate)
+                                        {
+                                            <a href='javascript:' class='blue' onclick='UpdateFrozenMoney(@item.u_id)'>设置冻结金额</a>
+                                        }
+                                        if (getRisk)
+                                        {
+                                            <a href='javascript:' class='blue' onclick='UpdateRiskview(@item.u_id)'>风控资料</a>
+                                        }
+                                        if (getRePassword)
+                                        {
+                                            <a href='javascript:' class='blue' onclick='UpdateRePassword(@item.u_id)'>重置提现密码</a>
+                                        }
+
+                                    }
+                                </td>
+                            </tr>
+                    <!--展开部分-->
+                                        <tr>
+                                            <td colspan="10" style="display: none;" name="Open" id="@Open">
+                                                <div class="dcnt-tab">
+                                                    <table class="table-lst">
+                                                        <tr>
+
+                                                            <td>QQ号码:@(string.IsNullOrEmpty(item.u_qq) ? "---" : item.u_qq)</td>
+                                                            <td>开户银行:@(string.IsNullOrEmpty(item.u_bankname) ? "---" : item.u_bankname)</td>
+                                                            <td>开户名:@(string.IsNullOrEmpty(item.u_name) ? "---" : item.u_name)</td>
+                                                            <td>注册时间:@(string.IsNullOrEmpty(item.u_time.ToString()) ? "---" : item.u_time.ToString())</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>开户账号:@(string.IsNullOrEmpty(item.u_account) ? "---" : item.u_account)</td>
+                                                            <td>认证类别:@(item.u_category == 0 ? "个人" : "企业")</td>
+                                                            <td>
+                                                                证件号码:@(item.u_category == 0 ? (string.IsNullOrEmpty(item.u_idnumber) ? "---" : item.u_idnumber) : (string.IsNullOrEmpty(item.u_blicensenumber) ? "---" : item.u_blicensenumber))
+                                                            </td>
+                                                            <td>审核人：@(string.IsNullOrEmpty(item.u_auditor) ? "---" : item.u_auditor)</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>联系电话：@(string.IsNullOrEmpty(item.u_phone) ? "---" : item.u_phone)</td>
+                                                            <td>
+                                                                是否签订合同：
+                                                                @(item.IsSignContract == true ? "是" : "否")
+
+                                                            </td>
+                                                            <td colspan="2">
+                                                                是否产品备案：
+                                                                @(item.IsRecord == true ? "是" : "否")
+
+                                                            </td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="10">暂无记录</td>
+                                            </tr>
+                                        }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("LoadData", ViewBag.CurrPage, ViewBag.PageSize, pageCount)
+    <input id="curr_page" type="hidden" value="@ViewBag.CurrPage" />
+</div>
+@JMP.TOOL.UserHelper.js("AppUser/appuser.js")

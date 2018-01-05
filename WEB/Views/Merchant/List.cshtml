@@ -1,0 +1,95 @@
+﻿@using WEB.Extensions
+@model WEB.Models.Merchant.ListViewModel
+@{
+    ViewBag.Title = "商户列表";
+    Layout = "~/Views/UI/master.cshtml";
+    string merchantUrl = System.Configuration.ConfigurationManager.AppSettings["merchantUrl"];
+}
+<div class="main">
+
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(Model.ButtonsTags)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="search_Type" id="search_Type">
+                    <option value="1" @(ViewBag.stype == "1" ? "selected='selected'" : "")>登录名</option>
+                    <option value="2" @(ViewBag.stype == "2" ? "selected='selected'" : "")>真实姓名</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="s_keys" id="s_keys" type="text" placeholder="请输入关键字" value="@(Model.MerchantSearchModel.SearchKey)" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="s_state" id="s_state">
+                    <option value="" @(Model.MerchantSearchModel.State == "" ? "selected='selected'" : "")>用户状态</option>
+                    <option value="1" @(Model.MerchantSearchModel.State == "1" ? "selected='selected'" : "")>冻结</option>
+                    <option value="0" @(Model.MerchantSearchModel.State == "0" ? "selected='selected'" : "")>正常</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="s_sort" id="s_sort">
+                    <option value="1" @(Model.MerchantSearchModel.Sort == 1 ? "selected='selected'" : "")>降序</option>
+                    <option value="0" @(Model.MerchantSearchModel.Sort == 0 ? "selected='selected'" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btn_user_query" class="btn btn-primary" href="javascript:" onclick="SearchMerchant()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="all" onclick="checkAll(this);" value="0" />
+                    </th>
+                    <th>编号</th>
+                    <th>登录名称</th>
+                    <th>真实姓名</th>
+                    <th>登录次数</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Merchants.Any())
+                {
+                    foreach (var item in Model.Merchants)
+                    {
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="child" class="checkall" value="@item.m_id" />
+                            </td>
+                            <td>@item.m_id</td>
+                            <td>
+                                <a href='@merchantUrl?qs=@(JMP.TOOL.DESEncrypt.Encrypt(item.m_loginname + ";" + item.m_pwd + ";" + JMP.TOOL.UserInfo.UserName + ";" + System.DateTime.Now.ToString()))' target="_blank" class="blue">@item.m_loginname</a>
+                            </td>
+                            <td>@item.m_realname</td>
+                            <td>@item.m_count</td>
+                            <td>@(item.m_state == 0 ? "正常" : "冻结")</td>
+                            <td>
+                                <a href='javascript:' class='blue' onclick='UpdateUser(@item.m_id)'>编辑</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td align="center" colspan="7">暂无记录</td>
+                    </tr>}
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("LoadData", Model.CurrentPage, Model.PageSize, Model.PageCount)
+  <input id="curr_page" type="hidden" value="@Model.CurrentPage" />
+</div>
+@JMP.TOOL.UserHelper.js("merchant/main.js")

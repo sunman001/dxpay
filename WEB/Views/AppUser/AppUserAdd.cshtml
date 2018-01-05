@@ -1,0 +1,239 @@
+﻿@{
+    ViewBag.Title = "添加用户";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+@JMP.TOOL.UserHelper.js("Authentication.js")
+@JMP.TOOL.UserHelper.js("AppUser/appuser.js")
+@JMP.TOOL.UserHelper.js("jquery.ajaxupload.js")
+<form id="frm-user-add" method="post" enctype="multipart/form-data">
+    <div class="main">
+        <div class="plate-tab-wrap">
+            <div id="floatHead" class="plate-tab">
+                <div class="plate-tab-ul-wrap">
+                    <ul>
+                        <li><a href="javascript:;" onclick="dialogTab(this);" class="selected">基本信息</a></li>
+                        <li><a href="javascript:;" onclick="dialogTab(this);">身份信息</a></li>
+                        <li><a href="javascript:;" onclick="dialogTab(this);">财务信息</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="plate-dialog-tab-form border">
+            <dl>
+                <dt>认证类别：</dt>
+                <dd>
+                    <div class="rule-single-select">
+                        <select name="u_category" id="u_category" onchange="ChangeType(this)">
+                            <option value="0" selected="selected">个人</option>
+                            <option value="1">企业</option>
+                        </select>
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>所属上级：</dt>
+                <dd>
+                    <div class="rule-single-select">
+                        <select name="relation_type" id="relation_type">
+                            <option value="2" selected="selected">代理商</option>
+                            <option value="1">商务</option>
+                        </select>
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>所属上级姓名：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="relation_person_name" type="text" id="relation_person_name" onclick="relation_type_add()" />
+                        <input type="hidden" name="relation_person_id" id="relation_person_id" />
+                    </div>
+                    <div class="Validform_checktip" id="relation_person_id_tip">*必选！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>登录邮件地址：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="u_email" type="text" id="u_email" onblur="CheckEmail()" />
+                    </div>
+                    <div class="Validform_checktip" id="u_email_tip">*必填，登录邮件地址！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>登录密码：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="u_password" type="password" id="u_password" onblur="CheckPwd()" />
+                    </div>
+                    <div class="Validform_checktip" id="u_password_tip">*必填，由6-30个字符组成！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>真实姓名：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="u_realname" type="text" id="u_realname" onblur="CheckRName()" />
+                    </div>
+                    <div class="Validform_checktip" id="u_realname_tip">*必填且1-6位汉字组成！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>联系电话：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="u_phone" type="text" id="u_phone" onblur="CheckPhone()" />
+                    </div>
+                    <div class="Validform_checktip" id="u_phone_tip">*必填，联系电话为11位手机号！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>QQ号码：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="u_qq" type="text" id="u_qq" onblur="CheckQQ()" />
+                    </div>
+                    <div class="Validform_checktip" id="u_qq_tip">*必填且纯数字组成，5-16位之间！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>联系地址：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="u_address" type="text" id="u_address" onblur="CheckAddRess()" />
+                    </div>
+                    <div class="Validform_checktip" id="u_address_tip">*必填且10-60位之间(一个汉字占两个字符)！</div>
+                </dd>
+            </dl>
+        </div>
+        <div class="plate-dialog-tab-form border" style="display: none">
+            <dl id="user_idno">
+                <dt>身份证号码：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="u_idnumber" type="text" id="u_idnumber" maxlength="18" onblur="CheckIdno()" />
+                    </div>
+                    <div class="Validform_checktip" id="u_idnumber_tip">*必填，用户身份证号码！</div>
+                </dd>
+            </dl>
+            <dl id="user_qyfr" style="display: none;">
+                <dt>企业法人：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="BusinessEntity" type="text" id="BusinessEntity" maxlength="18" onblur="Checkqyfr()" />
+                    </div>
+                    <div class="Validform_checktip" id="BusinessEntity_tip">*必填且长度为1或6位！</div>
+                </dd>
+            </dl>
+            <dl id="user_qyzcaddress" style="display: none;">
+                <dt>企业注册地址：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="RegisteredAddress" type="text" id="RegisteredAddress" maxlength="18" onblur="Checkqyzcaddress()" />
+                    </div>
+                    <div class="Validform_checktip" id="RegisteredAddress_tip">*必填且长度为5或30位！</div>
+                </dd>
+            </dl>
+            <dl id="user_yyzz" style="display: none;">
+                <dt>营业执照：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="u_blicensenumber" type="text" id="u_blicensenumber" maxlength="18" onblur="CheckYYZZ()" />
+                    </div>
+                    <div class="Validform_checktip" id="u_blicensenumber_tip">*必填且长度为15或18位！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt id="zjzpname">身份证正面照片：</dt>
+                <dd>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width:300px; height:200px;">
+                            <img src="" id="certificate" style="width:100%;" />
+                        </div>
+                        <input name="certificatefile" type="file" id="certificatefile" onchange="FileChange()" />
+                        <input type="hidden" name="u_photo" id="u_photo" />
+                       
+                    </div>
+                    <div class="Validform_checktip" id="u_photo_tip">*请选择身份证正面图片（.jpg.png.bmp.jpeg）！</div>
+                </dd>
+            </dl>
+           <dl>
+               <dt> 身份证反面照片</dt>
+               <dd>
+              <div class="upload-certificate">
+                  <div class="upload-box" style="width:300px; height:200px;">
+                      <img src="" id="certificatef" style="width:100%;" />
+                  </div>
+                  <input name="certificatefilef" type="file" id="certificatefilef" onchange="FileChangef()" />
+                  <input type="hidden" name="u_photof" id="u_photof" />
+              </div>
+                   <div class="Validform_checktip" id="u_photo_tipf">*请选择身份证反面图片（.jpg.png.bmp.jpeg）！</div>
+               </dd>
+           </dl>
+            <dl id="qysfz" style="display: none; ">
+                <dt>营业执照照片：</dt>
+                <dd>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width:300px; height:200px;">
+                            <img src="" id="sfzficate" style="width:100%;"  />
+                        </div>
+                        <input name="sfzcertificatefile" type="file" id="sfzcertificatefile" onchange="FileChangeSfz()" />
+                        @*<input type="hidden" name="sfzu_photo" id="sfzu_photo" />*@
+                        <input type="hidden" name="u_blicense" id="u_blicense" />
+                    </div>
+                    <div class="Validform_checktip" id="sfzficateyy">*请选择证件图片（.jpg.png.bmp.jpeg）！</div>
+                </dd>
+            </dl>
+        </div>
+        <div class="plate-dialog-tab-form border" style="display: none">
+
+            <dl id="bank_zhanghu">
+                <dt>银行账户：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="u_account" type="text" id="u_account" onblur="CheckAccount()" />
+                    </div>
+                    <div id="u_account_tip" class="Validform_checktip">*必填，请输入银行卡号！</div>
+                </dd>
+            </dl>
+            <dl id="bank_kaihuren">
+                <dt>开户名称：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="u_name" type="text" id="u_name" onblur="CheckName()" />
+                    </div>
+                    <div class="Validform_checktip" id="u_name_tip">*必填且由1-6位汉字组成！</div>
+                </dd>
+            </dl>
+            <dl id="bank_fenhang">
+                <dt>开户行全称：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="u_bankname" type="text" id="u_bankname" onblur="CheckBankName()" />
+                    </div>
+                    <div class="Validform_checktip" id="u_bankname_tip">*必填且10-60位之间(一个汉字占两个字符)！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt id="u_licencehtml"> 银行卡正面照片</dt>
+                <dd>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width:300px; height:200px;">
+                            <img src="" id="licencef" style="width:100%;" />
+                        </div>
+                        <input name="licencefilef" type="file" id="licencefilef" onchange="FileChangexkz()" />
+                        <input type="hidden" name="u_licence" id="u_licence" />
+                    </div>
+                    <div class="Validform_checktip" id="u_licence_tip">*请选择银行卡正面照片（.jpg.png.bmp.jpeg）！</div>
+                </dd>
+            </dl>
+        </div>
+        <div class="page-footer" style="width: 100%;">
+            <div class="btn-listbtn">
+                <input type="button" name="btnSave" value="保存" onclick="SaveUser()" class="btn btn-primary" id="btn-save-add" />
+                <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</form>

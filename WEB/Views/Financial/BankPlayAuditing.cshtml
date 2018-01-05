@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "代付打款审核";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+<div class="main">
+    <input type="hidden" id="id" value="@ViewBag.batchnumber" />
+    <input type="hidden" id="payId" value="" />
+    <div class="plate-form">
+        <dl>
+            <dt>审核状态：</dt>
+            <dd>
+                <input value="-1" name="u_auditstate" type="radio" id="u_stat1" onclick="radio_ck()" /><label for="u_stat1" onclick="radio_ck()">未通过</label>
+                <input value="1" name="u_auditstate" type="radio" id="u_stat3" checked='checked' onclick="radio_ck()" /><label for="u_stat3" onclick="radio_ck()">通过</label>
+            </dd>
+        </dl>
+        <dl id="jyPayChannel">
+            <dt>代付通道：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input type="text" id="PayChannel" value="" onclick="PayChannelStart()" />
+                </div>
+                <div class="Validform_checktip" id="yzPayChannel">* 必填</div>
+            </dd>
+        </dl>
+        <dl id="jyremark" style="display: none">
+            <dt>备注：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <textarea style="width: 200px; height:50px;" id="b_remark"></textarea>
+                </div>
+                <div class="Validform_checktip" id="yzRemark">* 必填</div>
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" onclick="UserAuditstate()" class="btn btn-primary" id="btn-save-add" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    //选择状态时
+    function radio_ck() {
+        var auditstate = $('input[name="u_auditstate"]:checked').val();
+
+        if (auditstate == -1) {
+            $("#jyremark").show();
+            $("#jyPayChannel").hide();
+
+        }
+        else {
+            $("#jyremark").hide();
+            $("#jyPayChannel").show();
+        }
+    }
+
+    //选择通道
+    function PayChannelStart() {
+        window.parent.ShouwDiaLogWan("选择通道信息", 800, 500, "/Financial/SelectionChannel");
+    }
+
+    //提交代付
+    function UserAuditstate() {
+
+        var auditstate = $('input[name="u_auditstate"]:checked').val();
+        var b_remark = $("#b_remark").val();
+
+        if (auditstate == -1) {
+
+            if (b_remark == "") {
+                $("#yzRemark").attr("class", "Validform_checktip Validform_wrong");
+                $("#yzRemark").html("请填写备注信息！")
+                return false;
+            }
+
+        }
+
+        var id = $("#id").val();
+        var payId = $("#payId").val();
+
+        var url = "/Financial/CheckAuditing";
+        var data = { p_state: auditstate, ids: id, payId: $.trim(payId), b_remark: $.trim(b_remark) };
+
+        $("#btn-save-add").attr("disabled", "disabled");
+        window.parent.ShowMsgtime("500000", "数据正在处理中，请稍后！", "ok", "");
+        $.post(url, data, function (result) {
+            $("#btn-save-add").attr("disabled", false);
+            if (result.success == 1) {
+                window.parent.ShowMsg(result.msg, "ok", function () {
+                    window.parent.global.reload();
+                    window.parent.layer.closeAll();
+                });
+            }
+            else {
+                window.parent.ShowMsg(result.msg, "error", "");
+                window.parent.layer.closeAll();
+            }
+
+
+        })
+    }
+</script>

@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "商品列表";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_goods>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("APP/goods.js")
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>商品编号</option>
+                    <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>商品名称</option>
+                    <option value="3" @(ViewBag.type == 3 ? "selected='selected'" : "")>所属应用</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="date-tool-input">
+                <div class="date-tool-input-text">
+                    <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="SelectState" id="SelectState">
+                    <option value="-1" @(ViewBag.SelectState == -1 ? "selected='selected'" : "")>状态</option>
+                    <option value="1" @(ViewBag.SelectState == 1 ? "selected='selected'" : "")>正常</option>
+                    <option value="0" @(ViewBag.SelectState == 0 ? "selected='selected'" : "")>冻结</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                    <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlocuser()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th width="40">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th width="100">商品编号</th>
+                    <th>商品名称</th>
+                    <th>销售类型</th>
+                    <th>所属应用</th>
+                    <th>商品价格</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="child" class="checkall" value="@item.g_id" />
+                                </td>
+                                <td>@item.g_id</td>
+                                <td>@item.g_name</td>
+                                <td>@item.s_name</td>
+                                <td>@item.a_name</td>
+                                <td>@String.Format("{0:N2}", item.g_price)</td>
+                                <td>
+                                    @{
+                                    if (item.g_state == 1)
+                                    {
+                                            <span class="green">正常</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="red">正常</span>
+                                        }
+                                    }
+                            </td>
+                            <td>
+                                @{
+                                    bool getEdit = bll_limit.GetLocUserLimitVoids("/APP/InsertOrUpdateAddGOODS", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                    if (getEdit)
+                                    {
+                                        <a href="javascript:" class='blue' onclick="UpdateUser(@item.g_id)">编辑</a>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td align="center" colspan="8" class="nodata">暂无记录</td>
+                                        </tr>
+                                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>

@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "工单统计";
+    Layout = "~/Views/UI/master.cshtml";
+}
+@JMP.TOOL.UserHelper.js("fusionchart/fusioncharts.js")
+@JMP.TOOL.UserHelper.js("fusionchart/fusioncharts.theme.zune.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul class="frm-ul clearfix">
+        <li>
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" value="@(string.IsNullOrEmpty(Request["begin"]) ? DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd") : "")" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}',minDate:'@DateTime.Now.ToString("yyyy-01-01")',dateFmt:'yyyy-MM-dd'})" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.ToString("yyyy-MM-dd")',dateFmt:'yyyy-MM-dd'})" value="@(string.IsNullOrEmpty(Request["end"]) ? DateTime.Now.ToString("yyyy-MM-dd") : "")" />
+        </li>
+        <li>
+            <a id="btn_search" class="btn btn-primary" href="javascript:">查询</a>
+        </li>
+    </ul>
+    <div class="plate">
+        <div class="tool">
+            工单统计
+            <span class="tool-fr">
+                <a id="date_0" class="selected" href="javascript:;" title="1">日</a>
+                <i>|</i>
+                <a id="date_1" href="javascript:;">周</a>
+                <i>|</i>
+                <a id="date_2" href="javascript:;">月</a>
+            </span>
+        </div>
+        <div class="chart-main">
+            <div id="chart"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //统计维度
+    var showTypes = 0;
+    //统计类型
+    var sumTypes = 0;
+    $(function () {
+        //点击不同统计维度切换样式
+        $(".tool a").each(function (index) {
+            $(this).click(function () {
+                $(".tool a").removeClass("selected");
+                $(this).addClass("selected");
+                showTypes = this.id.substr(this.id.lastIndexOf("_") + 1, 1);
+                //alert(showTypes);
+                ChartMain();
+            });
+        });
+
+        //查询按钮
+        $("#btn_search").click(function () {
+            ChartMain();
+        });
+
+        //mainHeightAuto();
+        ChartMain();
+    });
+    //营收概况
+    function ChartMain() {
+        var start = $("#stime").val();
+        var ends = $("#etime").val();
+        var sKeys = $("#sKey").val();
+        var queryParams = "showType=" + showTypes + "&sumType=" + sumTypes + "&begin=" + start + "&end=" + ends;
+        var winHeight = $(window).height() - 280;
+        $.ajax({
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            url: "/Workorder/TradeMain?" + queryParams,
+            success: function (retJson) {
+                if (retJson == "0") {
+                    var childHtm = '<div style="font-size:14px;color:#5e788a;font-weight:lighter;text-align:center;width:100%;">未查询到符合条件的数据</div>';
+                    $("#chart").html(childHtm);
+                } else {
+                    var data = eval('(' + retJson + ')');
+                    var chart = new FusionCharts({
+                        type: "msline",
+                        renderAt: "chart",
+                        width: "100%",
+                        height: winHeight + "px",
+                        dataSource: data,
+                        dataFormat: "json"
+                    }).render();
+                }
+            }
+        });
+    }
+
+</script>

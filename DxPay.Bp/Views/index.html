@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>jQuery下拉查询筛选插件Combo Select</title>
+<meta name="description" content="前端菜鸟（www.bird100.cn）是为前端初学者提供div+css、html5+css3、JavaScript、jquery、前端web开发、移动端html5开发集一体的前端知识以及前端资讯网站！学习前端，从这里开始！" />
+<meta name="keywords" content="div+css，html5+css3，JavaScript，jquery，前端web开发，移动端html5开发，前端菜鸟" />
+<link rel="shortcut icon" href="http://www.bird100.cn/wp-content/themes/begin/img/favicon.ico">
+<link rel="apple-touch-icon" sizes="114x114" href="http://www.bird100.cn/wp-content/themes/begin/img/favicon.png" />
+
+<link rel="stylesheet" href="css/combo.select.css">
+<style>
+.jq22 { width: 400px; margin: 100px auto;}
+</style>
+</head>
+
+<body>
+<h1>默认</h1>
+
+<div class="jq22">
+	<select>
+		<option value="">月份</option>
+		<option value="一月">一月</option>
+		<option value="二月">二月</option>
+		<option value="三月">三月</option>
+		<option value="四月">四月</option>
+		<option value="五月">五月</option>
+		<option value="六月">六月</option>
+		<option value="七月">七月</option>
+		<option value="八月">八月</option>
+		<option value="九月">九月</option>
+		<option value="十月">十月</option>
+		<option value="十一月">十一月</option>
+		<option value="十二月">十二月</option>
+	</select>
+</div>
+
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/jquery.combo.select.js"></script>
+<script>
+$(function() {
+	$('select').comboSelect();
+});
+</script>
+
+
+
+
+
+
+
+<!-- 以下信息与演示无关，可不必理会 -->
+<style>
+body { margin: 0; border-left: 200px solid #ccc;}
+
+h1 { width: 1000px; margin: 40px auto; font: 32px "Microsoft Yahei"; text-align: center;}
+
+.menu { position: absolute; left: 0; top: 0; bottom: 0; width: 200px; padding-top: 100px; font-family: Consolas,arial,"宋体"; background-color: #ccc;}
+.menu a { display: block; height: 40px; margin: 0 0 1px 2px; padding-left: 10px; line-height: 40px; font-size: 14px; color: #333; text-decoration: none;}
+.menu a:hover { background-color: #eee;}
+.menu .cur { color: #000; background-color: #fff !important;}
+
+.vad { margin: 320px 0 10px; font-family: Consolas,arial,宋体,sans-serif; text-align:center;}
+.vad a { display: inline-block; height: 36px; line-height: 36px; margin: 0 5px; padding: 0 50px; font-size: 14px; text-align:center; color:#eee; text-decoration: none; background-color: #222;}
+.vad a:hover { color: #fff; background-color: #000;}
+.thead { width: 728px; height: 90px; margin: 0 auto; border-bottom: 40px solid transparent;}
+</style>
+
+
+<div class="menu">
+	<a class="cur" href="index.html">1、默认</a>
+	<a href="index2.html">2、分组</a>
+	<a href="index3.html">3、默认选中/禁用</a>
+	<a href="index4.html">4、回调函数</a>
+	<a href="index5.html">5、展开/收起</a>
+</div>
+
+</body>
+</html>

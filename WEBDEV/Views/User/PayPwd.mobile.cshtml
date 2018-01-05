@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "设置支付密码";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    JMP.MDL.jmp_user UModel = (JMP.MDL.jmp_user)ViewBag.jmpUser;
+}
+
+@JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+<script src="~/mobile/js/user/PayPwd.js"></script>
+
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">设置支付密码</span>
+</header>
+
+<section class="real">
+    <input type="hidden" id="u_id" value="@UModel.u_id" />
+    <input type="hidden" id="ypwd" value="@UModel.u_paypwd" />
+    <ul class="frm-ul">
+        <li>
+            <div class="dbor">
+                <p class="ptit">用户账号</p>
+                @(UModel != null ? !string.IsNullOrEmpty(UModel.u_email) ? UModel.u_email : "" : "")
+            </div>
+        </li>
+        @if (!string.IsNullOrEmpty(UModel.u_paypwd))
+        {
+            <li>
+                <div class="dbor">
+                    <p class="ptit">原支付密码</p>
+                    <input type="password" name="old_paypwd" id="old_paypwd" class="txtipt" maxlength="18" placeholder="请输入原支付密码" />
+                </div>
+            </li>
+        }
+        <li>
+            <div class="dbor">
+                <p class="ptit">支付密码</p>
+                <input type="password" name="u_paypwd" id="u_paypwd" class="txtipt" maxlength="18" placeholder="请输入支付密码" />
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">确认支付密码</p>
+                <input type="password" name="u_qrpaypwd" id="u_qrpaypwd" class="txtipt" maxlength="18" placeholder="请输入支付密码" />
+            </div>
+        </li>
+    </ul>
+    <div class="frm-btn">
+        <input type="submit" value="确认提交" id="btn_PayPwd" class="btn" />
+    </div>
+</section>

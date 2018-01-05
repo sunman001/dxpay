@@ -1,0 +1,276 @@
+﻿@{
+    ViewBag.Title = "添加开发者";
+    Layout = "~/Views/UI/master.cshtml";
+
+}
+@JMP.TOOL.UserHelper.js("Authentication.js")
+@JMP.TOOL.UserHelper.js("AppUser/appuser.js")
+@JMP.TOOL.UserHelper.js("jquery.ajaxupload.js")
+<div id="frm-user-add" method="post" enctype="multipart/form-data">
+    <div class="rnatn-cnt">
+        <ul class="rnatn-frm clearfix">
+            <li class="tit">
+                <p class="ptit">
+                    <i class="calr"></i>
+                    <span class="t">基本信息</span>
+                </p>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">类别</div>
+                    <div class="dipt">
+                        <div class="rule-singless-select">
+                            <select id="u_category" name="u_category" onchange="ChangeType(this)">
+                                <option value="0" selected="selected">个人</option>
+                                <option value="1">企业</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">登录邮件地址</div>
+                    <div class="dipt">
+                        <input name="u_email" type="text" id="u_email" onblur="CheckEmail()" class="txtipt" />
+                    </div>
+                    <span class="error" id="u_email_tip"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">登录密码</div>
+                    <div class="dipt">
+                        <input name="u_password" type="password" id="u_password" class="txtipt" onblur="CheckPwd()" />
+                    </div>
+                    <span class="error" id="u_password_tip"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">真实姓名或者公司名称</div>
+                    <div class="dipt">
+                        <input name="u_realname" type="text" id="u_realname" class="txtipt" onblur="CheckRName()" />
+                    </div>
+                    <span id="u_realname_tip" class="error"> </span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt">
+                    <div class="dtit">联系电话</div>
+                    <div class="dipt dipt-fa">
+                        <input name="u_phone" type="text" id="u_phone" class="txtipt" onblur="CheckPhone()" />
+                    </div>
+                    <span id="u_phone_tip" class="error"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt">
+                    <div class="dtit">QQ号码</div>
+                    <div class="dipt">
+                        <input name="u_qq" type="text" id="u_qq" class="txtipt" onblur="CheckQQ()" />
+                    </div>
+                    <span class="error" id="u_qq_tip"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt">
+                    <div class="dtit">联系地址</div>
+                    <div class="dipt">
+                        <input name="u_address" type="text" id="u_address" class="txtipt" onblur="CheckAddRess()" />
+                    </div>
+                    <span class="error" id="u_address_tip"></span>
+                </div>
+            </li>
+        </ul>
+        <ul class="rnatn-frm clearfix">
+            <li class="tit">
+                <p class="ptit">
+                    <i class="calr"></i>
+                    <span class="t">财务信息</span>
+                </p>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dpt" id="bank_zhanghu">
+                        <div class="dtit">银行账号</div>
+                        <div class="dipt dipt-fa">
+                            <input name="u_account" type="text" id="u_account" class="txtipt" onblur="CheckAccount()" />
+                        </div>
+                        <span class="error" id="u_account_tip"></span>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="dpt" id="bank_kaihuren">
+                    <i class="star fl">*</i>
+                    <div class="dpt fl">
+                        <div class="dtit">开户名称</div>
+                        <div class="dipt dipt-fa">
+                            <input name="u_name" type="text" id="u_name" class="txtipt" onblur="CheckName()" />
+                        </div>
+                        <span class="error" id="u_name_tip"></span>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="dpt" id="bank_fenhang">
+                    <i class="star fl">*</i>
+                    <div class="dpt fl">
+                        <div class="dtit">开户行全称</div>
+                        <div class="dipt dipt-fa">
+                            <input name="u_bankname" type="text" id="u_bankname" class="txtipt" onblur="CheckBankName()" />
+                        </div>
+                        <span class="error" id="u_bankname_tip"></span>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="dpt" id="bank_fenhang" style="display:none">
+                    <div class="dtit">审核状态</div>
+                    <div class="dipt dipt-rdi">
+                        <!--
+
+                        <input value="-1" name="u_auditstate" type="radio" id="u_stat1" /><label for="u_stat1">未通过</label>
+                        <input value="0" name="u_auditstate" type="radio" id="u_stat2" checked="checked" /><label for="u_stat2"></label>
+                        <input value="1" name="u_auditstate" type="radio" id="u_stat3" /><label for="u_stat3"></label>
+                        -->
+                        @*<div class="checkbox radio">
+                            <input type="radio" name="u_auditstate" id="u_stat1" value="0" checked />
+                            <label for="u_stat1"></label>
+                            <span class="name">未通过</span>
+                        </div>
+                        <div class="checkbox radio">
+                            <input type="radio" name="u_auditstate" id="u_stat2" value="0" />
+                            <label for="u_stat2"></label>
+                            <span class="name">等待审核</span>
+                        </div>
+                        <div class="checkbox radio">
+                            <input type="radio" name="u_auditstate" id="u_stat3" value="0" />
+                            <label for="u_stat3"></label>
+                            <span class="name">通过</span>
+                        </div>*@
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul   class="rnatn-frm clearfix">
+            <li class="tit">
+                <p class="ptit">
+                    <i class="calr"></i>
+                    <span class="t">身份信息</span>
+                </p>
+            </li>
+            <li id="user_idno">
+                <i class="star fl">*</i>
+                <div class="dpt">
+                    <div class="dtit">身份证号码</div>
+                    <div class="dipt">
+                        <input name="u_idnumber" type="text" id="u_idnumber" class="txtipt" maxlength="18" onblur="CheckIdno()" value="" />
+                    </div>
+                    <span class="error" id="u_idnumber_tip"></span>
+                </div>
+            </li>
+            <li id="user_yyzz" style="display: none;">
+                <i class="star fl">*</i>
+                <div class="dpt">
+                    <div class="dtit">营业执照</div>
+                    <div class="dipt">
+                        <input name="u_blicensenumber" type="text" id="u_blicensenumber" class="txtipt" maxlength="18" onblur="CheckYYZZ()" value="" />
+                    </div>
+                    <span class="error" id="u_blicensenumber_tip"></span>
+                </div>
+            </li>
+            <li id="user_qyfr" style="display:none">
+                <i class="star fl">*</i>
+                <div class="dpt">
+                    <div class="dtit">企业法人</div>
+                    <div class="dipt">
+                        <input name="BusinessEntity" type="text" id="BusinessEntity" class="txtipt" maxlength="18" onblur="Checkqyfr()" value="" />
+                    </div>
+                    <span class="error" id="BusinessEntity_tip"></span>
+                </div>
+            </li>
+            <li id="user_qyzcaddress" style="display: none;">
+                <i class="star fl">*</i>
+                <div class="dpt">
+                    <div class="dtit">企业注册地址</div>
+                    <div class="dipt">
+                        <input name="RegisteredAddress" type="text" id="RegisteredAddress" class="txtipt"  maxlength="18" onblur="Checkqyzcaddress()" />
+                    </div>
+                    <span class="error" id="RegisteredAddress_tip"></span>
+                </div>
+            </li>
+
+        </ul>
+        <ul class="rnatn-frm rnatn-frm-pic clearfix">
+            <li class="tit">
+                <p class="ptit">
+                    <i class="calr"></i>
+                    <span class="t">上传证件</span>
+                </p>
+            </li>
+            <li >
+                <div class="fl clearfix">
+                    <div class="rnatn-pic">
+                        <div class="bor" id="u_idno_img">
+                            <i id="add" class="fa fa-plus"></i>
+                            <img src="" id="certificate" width="145" height="145" />
+                            <input name="certificatefile" type="file" id="certificatefile"  onchange="FileChange()"  class="txtfile"   />
+                            <input type="hidden" name="u_photo" id="u_photo" />
+                        </div>
+                        <p class="txt">身份证正面照片</p>
+                        <span class="error" id="u_photo_tip"></span>
+                    </div>
+                </div>
+                <div class="fl clearfix">
+                    <div class="rnatn-pic">
+                        <div class="bor" id="u_idno_img">
+                            <i id="add1" class="fa fa-plus"></i>
+                            <img src="" id="certificatef" width="145" height="145" />
+                            <input name="certificatefilef" type="file" id="certificatefilef" onchange="FileChangef()" class="txtfile" />
+                            <input type="hidden" name="u_photof" id="u_photof" />
+                        </div>
+                        <p class="txt">身份证反面照片</p>
+                        <span class="error" id="u_photo_tipf"></span>
+                    </div>
+                </div>
+                <div class="fl clearfix">
+                    <div class="rnatn-pic">
+                        <div class="bor" id="u_idno_img">
+                            <i id="add2" class="fa fa-plus"></i>
+                            <img src="" id="licencef" width="145" height="145" />
+                            <input name="licencefilef" type="file" id="licencefilef" onchange="FileChangexkz()" class="txtfile" />
+                            <input type="hidden" name="u_licence" id="u_licence" />
+                        </div>
+                        <p class="txt"id="u_licencehtml" >银行卡正面照片</p>
+                        <span class="error" id="u_licence_tip"></span>
+                    </div>
+                </div>
+                <div class="fl clearfix" id="qysfz" style="display: none;">
+                    <div class="rnatn-pic">
+                        <div class="bor" id="u_idno_img">
+                            <i id="adds" class="fa fa-plus"></i>
+                            <img src="" id="sfzficate" width="145" height="145" />
+                            <input name="sfzcertificatefile" type="file" id="sfzcertificatefile"onchange="FileChangeSfz()" class="txtfile"   />
+                            <input type="hidden" name="u_blicense" id="u_blicense" />
+                        </div>
+                        <p class="txt">营业执照照片</p>
+                        <span class="error" id="sfzficateyy"></span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="div-btn">
+            <input type="button" value="提交审核" onclick="SaveUser()" id="btn-save-add" class="btn btn-primary" />
+        </div>
+    </div>
+</div> 

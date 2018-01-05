@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "UserLoginbyadm";
+    
+    
+}
+
+<h2>@ViewBag.message</h2>
+
+<script>
+    var result="@ViewBag.message";
+    if (result.indexOf("登录成功") > 0) {
+       // window.location.href = encodeURI("/Home/Default");
+        window.top.location.href = "/Home/Default";
+    }
+ </script>

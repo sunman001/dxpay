@@ -1,0 +1,76 @@
+﻿
+@{
+    Layout = "~/Views/UI/MaseterNewdetil.cshtml";
+    var mode = ViewBag.model as JMP.MDL.newsrelease;
+    string qt_url = (string)ViewBag.UploadUrl;
+    string qt_urlimage = qt_url + "//ueditor/net/upload/image";
+    string qt_urlfile = qt_url + "//ueditor/net/upload/file/";
+    string qt_urlattachment = qt_url + "//ueditor/dialogs/attachment/fileTypeImages";
+    var list = ViewBag.list as List<JMP.MDL.newsrelease>;
+    ViewBag.keywords = mode.keywords;
+    ViewBag.description = mode.description;
+    ViewBag.title = mode.n_title;
+}
+<section class="about">
+    <div class="about-bg">
+        <p class="tit">convenient</p>
+        <p class="subt">致力于成为定制化支付方案服务方</p>
+        <p class="ifo">主要服务于第三方支付机构和大、中型的企业客户</p>
+        <p class="ifo">业务范围涵盖移动支付接入服务以及各种行业的移动应用解决方案</p>
+    </div>
+    <div class="about-tit">
+        <ul class="about-ul clearfix">
+            <li>
+                <span class="txt">当前位置：<a href="http://www.dunxingpay.com">首页</a> >@(mode.n_category == 2 ? Html.Raw("<a href='/index/News.html'>行业新闻</a>") : Html.Raw("<a href='/index/zixun.html'>公司资讯</a>")   ) >@mode.n_title</span>
+            </li>
+        </ul>
+    </div>
+    <div class="about-tab">
+        <section class="about-news about-tab0 clearfix  " style="display: block;">
+            <div class="news-ifo">
+                <div class="nsifo-tit">
+                    <h1 class="tit">@mode.n_title</h1>
+                    <p class="time">发布时间：@mode.n_time  浏览次数：@mode.n_count 次</p>
+                </div>
+                <div class="nsifo-cnt">
+                    @Html.Raw(mode.n_info.Replace("/ueditor/net/upload/image", qt_urlimage).Replace("/ueditor/net/upload/file/", qt_urlfile).Replace("/ueditor/dialogs/attachment/fileTypeImages", qt_urlattachment))
+                </div>
+                <div style="margin: 0px auto;">
+                    @{
+                        string url = "";
+                        if (list.Count > 0)
+                        {
+                            foreach (var item in list)
+                            {
+                                if (ViewBag.id > item.n_id)
+                                {
+                                    url = "/Index/NewDetil/" + item.n_id + ".html";
+                                    <a href="@url">上一篇：@(item.n_title.Length > 25 ? item.n_title.Substring(0, 25).ToString() + "..." : item.n_title)</a>
+                                }
+
+                                if (ViewBag.id < item.n_id)
+                                {
+                                    url = "/Index/NewDetil/" + item.n_id + ".html";
+                                    <a href="@url" style="float:right;">下一篇：@(item.n_title.Length > 25 ? item.n_title.Substring(0, 25).ToString() + "..." : item.n_title)</a>
+                                }
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </section>
+
+    </div>
+</section>
+
+<script type="text/javascript">
+    $(function () {
+        $(".about-ul li").click(function () {
+            $(".about-ul li").removeClass("on");
+            $(this).addClass("on");
+            $(".about-tab section").hide();
+            $(".about-tab" + $(this).index()).show();
+        });
+    })
+</script>
+

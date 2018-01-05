@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>盾行平台管理系统[移动版]</title>
+    <link href="~/assets/semantic-ui/semantic.min.css" rel="stylesheet" />
+    <link href="~/assets/semantic-ui-icon/icon.min.css" rel="stylesheet" />
+    <link href="~/assets/semantic-ui/theme/github.css" rel="stylesheet" />
+    <link href="~/css/mobile/main.css" rel="stylesheet" />
+
+    <script src="~/js/jquery-1.12.4.min.js"></script>
+    <script src="~/js/mobile/global.js"></script>
+    @JMP.TOOL.UserHelper.js("layout.js")
+    @JMP.TOOL.UserHelper.js("JValidator.js")
+    @JMP.TOOL.UserHelper.css("plugin/font-awesome/css/font-awesome-ie7.min.css")
+    @JMP.TOOL.UserHelper.css("plugin/font-awesome/css/font-awesome.min.css")
+
+    <script src="~/assets/layer3.0.3/layer.js"></script>
+    @JMP.TOOL.UserHelper.js("mobile/PubMethod.mobile.js")
+    <script src="~/assets/semantic-ui/semantic.min.js"></script>
+</head>
+<body class="mobile">
+    <header class="section-top-bar ">
+        <ul class="header-dct clearfix">
+            <li class="fl">
+                <i class="fa fa-bars btn-toggle"></i>
+            </li>
+            <li class="tit">@ViewBag.Title</li>
+            <li class="fr">
+                <i class="fa  fa-power-off"></i>
+                <!--<div class="active section"> / <a href="~/Login/Default">首页</a></div>-->
+            </li>
+        </ul>
+    </header>
+    <section class="section-sidebar-container">
+        <div class="navbar-collapse">
+            @{
+                try
+                {
+                    Html.RenderAction("MenuMobile", "Partial");
+                }
+                catch
+                {
+                }
+            }
+        </div>
+    </section>
+    <section class="section-main-container">
+        @RenderBody()
+    </section>
+    <footer class="footer-bar" style="clear: both;display:none;">
+        <p>Copyright ©@(DateTime.Now.Year) AdJuMi.com All Rights Reserved.</p>
+        <p>聚米移动广告 版权所有 ICP备13013448号-2</p>
+    </footer>
+    <script type="text/javascript">
+        $(function () {
+
+            $(".fa-power-off").click(function(){
+                layer.confirm('您确定要退出吗？', {
+                    btn: ['确认', '取消'] //按钮
+                }, function () {
+                    $.post("/Login/LoginOut", { action: "exit" }, function (data) {
+                        if (data.success) {
+                            window.top.location.href = data.gourl;
+                        }
+                    });
+                });
+            });
+
+            $(".fa-bars").click(function () {
+                $("body").toggleClass("sidebar-expanded");
+            });
+
+            $(document).click(function (e) {
+                if ($(e.target).hasClass("btn-toggle")) {
+                    return;
+                }
+                var container = $(".section-sidebar-container");
+                if (!container.is(e.target) && container.has(e.target).length === 0) {
+                    $("body").removeClass("sidebar-expanded");
+                }
+            });
+            //左导航
+            $('.nav > li > a').on('click', function () {
+                var item = $(this).parent().find('.submenu');
+                if (item) {
+                    $('.submenu').hide(200);
+                    var ds = $(this).parent().find('.submenu').css("display");
+                    if (ds == "block") {
+                        $('.nav > li').removeClass('active');
+                    } else {
+                        $(this).parent().find('.submenu').show(200);
+                    }
+                }
+                $('.nav > li').removeClass('active');
+                $(this).parent().addClass('active');
+            });
+
+            $("li[data-mid='" + config.menu.currentAction + "']").closest("li.menu-main").addClass("active");
+            /*
+            //二级导航
+            $(".submenu > li").on('click', function (e) {
+                if ($(e.target).hasClass("btn-toggle")) {
+                    return;
+                }
+                $("body").removeClass("sidebar-expanded");
+                $('.submenu > li').removeClass('active');
+                $(this).addClass('active');
+                $('.container').removeClass('nav-small');
+                $('.nav-small .nav > li').unbind('hover');
+            });
+
+            //左导航缩小
+            $('.nav-small .nav > li').hover(function () {
+                var wh = parseInt($(".nav-small .nav").width());
+                if (wh == 64) {
+                    $(this).addClass('active');
+                    $(this).find('.submenu').show(200);
+                }
+            }, function () {
+                var wh = parseInt($(".nav-small .nav").width());
+                if (wh == 64) {
+                    $(this).removeClass('active');
+                    $(this).find('.submenu').hide(200);
+                }
+            });
+            */
+
+
+            $('.ui.dropdown')
+                .dropdown();
+            $('.ui.checkbox')
+                .checkbox();
+            $('.ui.radio.checkbox')
+                    .checkbox()
+                ;
+        });
+    </script>
+</body>
+</html>

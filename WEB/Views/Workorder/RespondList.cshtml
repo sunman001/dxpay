@@ -1,0 +1,355 @@
+﻿@using JMP.TOOL
+@using TOOL.EnumUtil
+@using WEB.Extensions
+@{
+    ViewBag.Title = "RespondList";
+    Layout = "~/Views/UI/master.cshtml";
+
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+    var list = ViewBag.list as List<JMP.MDL.CsCustomerServiceRecord>;
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="-1">-查询类型-</option>
+                    <option value="1" @(Request["searchType"] == "1" ? "selected=selected" : "")>值班人</option>
+                    <option value="2" @(Request["searchType"] == "2" ? "selected=selected" : "")>处理人</option>
+                    <option value="3" @(Request["searchType"] == "3" ? "selected=selected" : "")>审核人</option>
+                    <option value="4" @(Request["searchType"] == "4" ? "selected=selected" : "")>开发者名称</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["s_key"]" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="Status" id="Status">
+                    <option value="-1">-处理状态-</option>
+                    <option value="0" @(Request["Status"] == "0" ? "selected=selected" : "")>新建</option>
+                    <option value="1" @(Request["Status"] == "1" ? "selected=selected" : "")>处理中</option>
+                    <option value="2" @(Request["Status"] == "2" ? "selected=selected" : "")>处理完成</option>
+                    <option value="3" @(Request["Status"] == "3" ? "selected=selected" : "")>已关闭</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="Grade" id="Grade">
+                    <option value="-1">-审核评级-</option>
+                    <option value="0" @(Request["Grade"] == "0" ? "selected=selected" : "")>未评级</option>
+                    <option value="1" @(Request["Grade"] == "1" ? "selected=selected" : "")>优秀</option>
+                    <option value="2" @(Request["Grade"] == "2" ? "selected=selected" : "")>良好</option>
+                    <option value="3" @(Request["Grade"] == "3" ? "selected=selected" : "")>合格</option>
+                    <option value="4" @(Request["Grade"] == "4" ? "selected=selected" : "")>不合格</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="AuditStatus" id="AuditStatus">
+                    <option value="-1">-主管审核-</option>
+                    <option value="0" @(Request["AuditStatus"] == "0" ? "selected=selected" : "")>未审核</option>
+                    <option value="1" @(Request["AuditStatus"] == "1" ? "selected=selected" : "")>已审核</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="startdate" type="text" id="startdate" class="dataipt txtipt" onFocus="WdatePicker({ maxDate: '#F{$dp.$D(\'enddate\')}' })" value="@(string.IsNullOrEmpty(ViewBag.startdate)?DateTime.Now.ToString("yyyy-MM-dd"):ViewBag.startdate)" />
+            <i class="fg">~</i>
+            <input name="enddate" type="text" id="enddate" class="dataipt txtipt" onFocus="WdatePicker({ minDate: '#F{$dp.$D(\'startdate\')}' })" value="@(string.IsNullOrEmpty(ViewBag.enddate) ? DateTime.Now.AddDays(30).ToString("yyyy-MM-dd") : ViewBag.enddate)" />
+        </li>
+        <li>
+            <a id="btn_search" class="btn btn-primary" href="javascript:" onclick="RespondCx()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th>值班人</th>
+                    <th>大类</th>
+                    <th>小类</th>
+                    <th>提问时间</th>
+                    <th>响应时间</th>
+                    <th>处理时间</th>
+                    <th>状态</th>
+                    <th>处理人</th>
+                    <th>审核状态</th>
+                    <th>审核人</th>
+                    <th>审核时间</th>
+                    <th>审核评级</th>
+                    <th>处理评级</th>
+                    <th>来源</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+                        foreach (var item in list)
+                        {
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+
+                            <tr onclick="clickOpen(@id)">
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                                <td>@item.u_realname</td>
+                                <td>
+                                    @{
+                                        switch (item.MainCategory)
+                                        {
+                                            case 0:
+                                                <label>运营</label>
+                                                break;
+                                            case 1:
+                                                <label>技术</label>
+                                                break;
+                                        }
+
+                                    }
+                                </td>
+                                <td>
+                                    @(item.SubCategory.GetEnumDescByValue<CustomerResponse.SubCategory>())
+                                </td>
+                                <td>@(item.AskDate == null ? "" : Convert.ToDateTime(item.AskDate).ToString("yyyy-MM-dd HH:mm"))</td>
+                                <td>@(item.ResponseDate == null ? "" : Convert.ToDateTime(item.ResponseDate).ToString("yyyy-MM-dd HH:mm"))</td>
+                                <td>@(item.CompletedDate == null ? "" : Convert.ToDateTime(item.CompletedDate).ToString("yyyy-MM-dd HH:mm"))</td>
+                                <td>
+                                    @Html.Raw(item.Status.ConvertResponseStatusToHtmlString())
+                                </td>
+                                <td>@item.HandlerName</td>
+                                <td>@(item.AuditStatus == false ? Html.Raw("<span class='green'>未审核</span>") : Html.Raw("<span class='red'>已审核</span>"))</td>
+                                <td>@item.AuditByUserName</td>
+                                <td>@item.AuditDate</td>
+                                <td>
+                                    @switch (item.Grade)
+                                    {
+                                        case 0:
+                                            <label>未评级</label>
+                                            break;
+                                        case 1:
+                                            <span class='green'>
+                                                优秀
+                                            </span>
+                                            break;
+                                        case 2:
+                                            <span class='blue'>
+                                                良好
+                                            </span>
+                                            break;
+                                        case 3:
+                                            <label>合格</label>
+                                            break;
+                                        case 4:
+                                            <span class='red'>
+                                                不合格
+                                            </span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    @switch (item.HandelGrade)
+                                    {
+                                        case 0:
+                                            <label>未评级</label>
+                                            break;
+                                        case 1:
+                                            <span class='green'>
+                                                优秀
+                                            </span>
+                                            break;
+                                        case 2:
+                                            <span class='blue'>
+                                                良好
+                                            </span>
+                                            break;
+                                        case 3:
+                                            <label>合格</label>
+                                            break;
+                                        case 4:
+                                            <span class='red'>
+                                                不合格
+                                            </span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.ParentId > 0)
+                                    {
+                                        <span class="red">转发</span>
+                                    }
+                                    else
+                                    {
+                                        <span>自建</span>
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        bool getEdit = bll_limit.GetLocUserLimitVoids("/Workorder/HandleDetails", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        bool getStart = bll_limit.GetLocUserLimitVoids("/Workorder/RespondStatus", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        bool getAuditing = bll_limit.GetLocUserLimitVoids("/Workorder/AuditStatus", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+
+                                        if (getEdit && (item.Status < 2 || item.ParentId > 0) && UserInfo.UserId == item.WatchId)
+                                        {
+                                            <a href="javascript:" class="green" onclick="handleEdit(@item.Id)">编辑</a>
+                                            <a href="javascript:" class="blue" onclick="CkHandleDetails(@item.Id)">追加详情</a>
+                                        }
+                                        <a href="javascript:" class="blue" onclick="CkDetails(@item.Id,'响应记录详情')">详情</a>
+                                        if (item.ParentId > 0)
+                                        {
+                                            <a href="javascript:" class="blue" onclick="CkDetails(@item.ParentId,'来源响应记录详情')">来源详情</a>
+                                        }
+                                        //关闭后不能再处理数据
+                                        if (item.Status != 3 && UserInfo.UserId == item.WatchId)
+                                        {
+                                            if (getStart)
+                                            {
+                                                <a href="javascript:" class="blue" onclick="CkRespondStatus(@item.Id)">更新状态</a>
+                                            }
+                                        }
+                                        if (item.AuditStatus == false)
+                                        {
+
+                                            if (getAuditing && item.Status == 2)
+                                            {
+                                                <a href="javascript:" class="blue" onclick="CkAuditStatus(@item.Id)">主管审核</a>
+                                            }
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                            <!--展开部分-->
+                                        <tr>
+                                            <td colspan="16" style="display: none;" name="Open" id="@Open">
+                                                <div class="dcnt-tab">
+                                                    <table class="table-lst">
+
+                                                        <tr>
+                                                            <td>
+                                                                <p>开发者:@item.DeveloperEmail</p>
+                                                                处理详情：@item.HandleDetails
+                                                            </td>
+
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="16" class="nodata">暂无记录</td>
+                                            </tr>
+                                        }
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+<script type="text/javascript">
+
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/Workorder/RespondList?pageIndexs=" + pageIndex + "&psize=" + pageSize;
+
+        var searchType = $("#searchType").val();
+        var searchKey = $("#searchKey").val();
+        var Status = $("#Status").val();
+        var Grade = $("#Grade").val();
+        var AuditStatus = $("#AuditStatus").val();
+        var startdate = $("#startdate").val();
+        var enddate = $("#enddate").val();
+
+        url += "&searchType=" + searchType + "&s_key=" + searchKey + "&Status=" + Status + "&Grade=" + Grade + "&AuditStatus=" + AuditStatus + "&startdate=" + startdate + "&enddate=" + enddate;
+
+        location.href = encodeURI(url);
+    }
+
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //查询
+    function RespondCx() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //响应记录
+    function AddRespond() {
+        window.parent.ShouwDiaLogWan("添加响应记录", 950, 700, "/Workorder/RespondAdd");
+    }
+
+    //追加详情
+    function CkHandleDetails(id) {
+
+        if (id > 0) {
+            window.parent.ShouwDiaLogWan("追加详情", 500, 300, "/Workorder/HandleDetails?id=" + id);
+        }
+        else {
+            window.parent.ShowMsg("请选择要追加的数据", "error", "");
+        }
+    }
+
+    //更新状态
+    function CkRespondStatus(id) {
+
+        if (id > 0) {
+            window.parent.ShouwDiaLogWan("更新状态", 500, 300, "/Workorder/RespondStatus?id=" + id);
+        }
+        else {
+            window.parent.ShowMsg("请选择要更新状态的数据", "error", "");
+        }
+    }
+
+    //主管审核
+    function CkAuditStatus(id) {
+
+        if (id > 0) {
+            window.parent.ShouwDiaLogWan("主管审核", 500, 300, "/Workorder/AuditStatus?id=" + id);
+        }
+        else {
+            window.parent.ShowMsg("请选择要审核的数据", "error", "");
+        }
+    }
+
+    //详细信息
+    function CkDetails(id, title) {
+        if (id > 0) {
+            window.parent.ShouwDiaLogWan("响应详情[" + title + "]", 900, 700, "/Workorder/RespondDetails?id=" + id);
+        }
+        else {
+            window.parent.ShowMsg("请选择要查看的数据", "error", "");
+        }
+    }
+
+    //编辑信息
+    function handleEdit(id) {
+        if (id > 0) {
+            window.parent.ShouwDiaLogWan("编辑响应", 900, 700, "/Workorder/RespondAdd?id=" + id);
+        }
+        else {
+            window.parent.ShowMsg("请选择要查看的数据", "error", "");
+        }
+    }
+
+</script>

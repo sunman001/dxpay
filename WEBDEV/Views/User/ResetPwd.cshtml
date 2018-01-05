@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "重置密码";
+    Layout = "~/Views/UI/Account.cshtml";
+}
+
+@JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+@JMP.TOOL.UserHelper.js("user/ResetPwd.js")
+<form class="reg-frm">
+    <input type="hidden" id="u_phone" value="@ViewBag.Phone" />
+    <ul class="lgn-frm-dc reg-frm-dc clearfix">
+        <li>
+            <span class="lgn-tit">新密码</span>
+            <input type="password" name="u_phone" id="new_pwd" class="form-ctrl form-ctl-vlte" placeholder="请输入新密码" onblur="CheckNewPwd()" />
+            <div id="yz_new_pwd" class="lgn-error lgn-ervlt"></div>
+
+        </li>
+        <li>
+            <span class="lgn-tit">确认新密码</span>
+            <input type="password" name="qr_pwd" id="qr_pwd" class="form-ctrl form-ctl-vlte" placeholder="请再次输入新密码" onblur="CheckQrPwd()" />
+            <div id="yz_qr_pwd" class="lgn-error lgn-ervlt"></div>
+        </li>
+
+    </ul>
+    <div class="dbtn">
+
+        <div class="dbtn">
+
+            <a id="btn_ResetPwd" class="lgn-btn on" title="" value=""><i class="icon-sj"></i></a>
+
+        </div>
+
+    </div>
+</form>

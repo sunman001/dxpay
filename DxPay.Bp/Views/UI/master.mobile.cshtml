@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "母版页";
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>商务平台手机端</title>
+    <!-- css -->
+    <link rel="stylesheet" href="../mobile/asste/fa-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../mobile/asste/fa-awesome/css/font-awesome-ie7.min.css">
+    <link href="../mobile/css/base.css" rel="stylesheet" type="text/css">
+    @JMP.TOOL.UserHelper.js("jquery.js")
+    @JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+    @JMP.TOOL.UserHelper.js("plugin/layer/layer.js")
+    @JMP.TOOL.UserHelper.js("layout.js")
+    <script type="text/javascript" src="../mobile/js/base.js"></script>
+    <script src="~/mobile/js/mian.js"></script>
+</head>
+<body>
+    
+    @RenderBody()
+    <section class="sec-nav sec-nav-active">
+        <i class="fa fa-times-circle" title="关闭"></i>
+
+        <section class="idx-fl">
+            <div class="navbar-collapse">
+                <dl class="idx-menu-head">
+
+                    
+                </dl>
+                @{
+                    try
+                    {
+                        Html.RenderAction("MenuMobile", "Partial");
+                    }
+                    catch(Exception ex)
+                    {
+                        Html.Raw(ex.ToString());
+                    }
+                }
+            </div>
+            <div class="idx-fl-bg"></div>
+        </section>
+        <span class="exit" id="exit">退出登录</span>
+        <i class="lyer-bg" title="黑色背景"></i>
+    </section>
+</body>
+</html>
+<script>
+    //tab套用-实名认证
+    $('#exit').click(function () {
+        layer.confirm('您确定要退出吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            $.post("/Login/LoginOut", { action: "exit" }, function (data) {
+                if (data.success) {
+                    window.top.location.href = data.gourl;
+                }
+            });
+        });
+    })
+</script>

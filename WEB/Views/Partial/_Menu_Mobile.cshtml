@@ -1,0 +1,44 @@
+﻿@using WEB.Util
+@model IEnumerable<WEB.Models.Login.MenuViewModel>
+@{
+    var currentAction = "";
+}
+<ul class="nav" id="jm_menu_items">
+    @foreach (var menu in Model)
+    {
+        if (menu.Children.Count > 0)
+        {
+            <li class="menu-main">
+                <a href="javascript:;">
+                    <img style="display: inline-block;" src="../images/@(menu.Icon).png" alt=""/><span class="name">@menu.Title</span>
+                </a>
+                <ul class="submenu">
+                    @foreach (var children in menu.Children)
+                    {
+                        var isCurrent = false;
+                        if (Html.IsCurrentPath(children.Href))
+                        {
+                            currentAction = children.Id;
+                            isCurrent = true;
+                        }
+                        <li data-mid="@children.Id" @(isCurrent? "class=active":"")>
+                            <a href="@children.Href"><i class="fa fa-dashboard @children.Icon"></i> @children.Title</a>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+        else
+        {
+            <li class="menu-main">
+                <a href="@menu.Href">
+                    <i class="fa fa-dashboard @menu.Icon"></i>
+                    <span class="name">@menu.Title</span>
+                </a>
+            </li>
+        }
+    }
+</ul>
+<script type="text/javascript">
+    config.menu.currentAction = '@currentAction';
+</script>

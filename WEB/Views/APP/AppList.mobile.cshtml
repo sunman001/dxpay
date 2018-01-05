@@ -1,0 +1,262 @@
+﻿@{
+    ViewBag.Title = "应用列表";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_app>;
+    int pageCount = ViewBag.pageCount;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+    var yylist = ViewBag.yylist as List<JMP.MDL.jmp_apptype>;
+}
+@JMP.TOOL.UserHelper.js("mobile/APP/APP.mobile.js")
+<div class="mobile-container">
+    <div class="toolbar-container">
+        <div id="ToolBar" class="frm-dcnt">
+            <ul class="frm-ul-tit clearfix">
+                @Html.Raw(ViewBag.locUrl)
+                <li>
+                    <a id="btn-show-search" class="btn" onclick="pop.showSearch('search-container')">查询</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="search-container">
+        <div class="ui input fluid fluid-block">
+            <select name="searchType" id="searchType" class="ui dropdown fluid fluid-block">
+                <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>应用编号</option>
+                <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>应用名称</option>
+                <option value="3" @(ViewBag.type == 3 ? "selected='selected'" : "")>所属商户</option>
+            </select>
+        </div>
+        <div class="ui input fluid fluid-block">
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" />
+        </div>
+        <div class="ui input fluid fluid-block">
+            <select name="SelectState" id="SelectState" class="ui dropdown fluid fluid-block">
+                <option value="-1" @(ViewBag.SelectState == -1 ? "selected='selected'" : "")>状态</option>
+                <option value="1" @(ViewBag.SelectState == 1 ? "selected='selected'" : "")>正常</option>
+                <option value="0" @(ViewBag.SelectState == 0 ? "selected='selected'" : "")>冻结</option>
+            </select>
+        </div>
+        <div class="ui input fluid fluid-block">
+            <select name="searchDesc" id="searchDesc" class="ui dropdown fluid fluid-block">
+                <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+            </select>
+        </div>
+        <div class="ui input fluid fluid-block">
+            <select name="auditstate" id="auditstate" class="ui dropdown fluid fluid-block">
+                <option value="-1" @(ViewBag.auditstate == -1 ? "selected='selected'" : "")>审核状态</option>
+                <option value="0" @(ViewBag.auditstate == 0 ? "selected='selected'" : "")>等待审核</option>
+                <option value="1" @(ViewBag.auditstate == 1 ? "selected='selected'" : "")>审核通过</option>
+                <option value="2" @(ViewBag.auditstate == 2 ? "selected='selected'" : "")>审核未通过</option>
+            </select>
+        </div>
+        <div class="ui input fluid fluid-block">
+            <select name="auditstate" id="platformid" class="ui dropdown fluid fluid-block">
+                <option value="0" @(ViewBag.platformid == 0 ? "selected='selected'" : "")>关联平台</option>
+                <option value="1" @(ViewBag.platformid == 1 ? "selected='selected'" : "")>安卓</option>
+                <option value="2" @(ViewBag.platformid == 2 ? "selected='selected'" : "")>苹果</option>
+                <option value="3" @(ViewBag.platformid == 3 ? "selected='selected'" : "")>H5</option>
+            </select>
+        </div>
+
+        <div class="ui input fluid fluid-block">
+            <select name="auditstate" id="r_id" class="ui dropdown fluid fluid-block">
+                <option value="0" @(ViewBag.r_id == 0 ? "selected='selected'" : "")>风险等级</option>
+                <option value="1" @(ViewBag.r_id == 1 ? "selected='selected'" : "")>高</option>
+                <option value="2" @(ViewBag.r_id == 2 ? "selected='selected'" : "")>中</option>
+                <option value="3" @(ViewBag.r_id == 3 ? "selected='selected'" : "")>低</option>
+            </select>
+        </div>
+        <div class="ui input fluid fluid-block">
+            <select name="appType" id="appType" class="ui dropdown fluid fluid-block">
+                <option value="0" @(ViewBag.appType == 0 ? "selected='selected'" : "")>应用类型</option>
+                @foreach (var item in yylist)
+                {
+                    <option value="@item.t_id" @(ViewBag.appType == item.t_id ? "selected='selected'" : "")>@item.t_name</option>
+                }
+
+            </select>
+        </div>
+
+        <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="serchlocuser()">查 询</a>
+    </div>
+    <div class="table-container table-responsive">
+        <table class="ui celled striped white" id="table">
+            <thead>
+                <tr>
+                    <th width="40">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th width="30">展开</th>
+                    <th width="80">应用编号</th>
+                    <th>应用名称</th>
+                    <th>所属应用类型</th>
+                    <th>所属商户</th>
+                    <th>关联平台</th>
+                    <th>审核状态</th>
+                    <th>状态</th>
+                    <th>审核人</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+
+                        foreach (var item in list)
+                        {
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+
+                            <tr onclick="clickOpen(@id)">
+                                <td>
+                                    <input type="checkbox" name="child" class="checkall" value="@item.a_id" />
+                                </td>
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                                <td>@item.a_id</td>
+                                <td>@item.a_name</td>
+                                <td>@item.t_name</td>
+                                <td>@item.u_realname</td>
+                                <td>
+                                    @{switch (item.a_platform_id)
+                                        {
+                                            case 1:
+                                                <span>安卓</span>
+                                                break;
+                                            case 2:
+                                                <span>苹果</span>
+                                                break;
+                                            case 3:
+                                                <span>H5</span>
+                                                break;
+                                        }}
+                                </td>
+
+
+                                <td>
+                                    @{
+                                        switch (item.a_auditstate)
+                                        {
+                                            case 0:
+                                                <span class="red">等待审核</span>
+                                                break;
+                                            case 1:
+                                                <span class="green">审核通过</span>
+                                                break;
+                                            case 2:
+                                                <span class="red">审核未通过</span>
+                                                break;
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        if (item.a_state == 1)
+                                        {
+                                            <span class="green">正常</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="red">冻结</span>
+                                        }
+
+                                    }
+                                </td>
+                                <td>@(!string.IsNullOrEmpty(item.a_auditor) ? item.a_auditor : "--")</td>
+                                <td>
+                                    @{
+                                        bool getEdit = bll_limit.GetLocUserLimitVoids("/APP/InsertUpdateApp", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑按钮
+                                        if (getEdit)
+                                        {
+                                            <a href="javascript:" class='blue' onclick="UpdateApp(@item.a_id)">编辑</a>
+
+                                        }
+                                        bool getEdit1 = bll_limit.GetLocUserLimitVoids("/APP/UpdateStateDt", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑按钮 if (getEdit)
+                                        if (getEdit)
+                                        {
+                                            if (item.a_state == 1)
+                                            {
+                                                <a href="javascript:" class='blue' onclick="Delete(@item.a_id,0)">冻结</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="javascript:" class='blue' onclick="Delete(@item.a_id,1)">解冻</a>
+                                            }
+                                        }
+                                        bool getEdit2 = bll_limit.GetLocUserLimitVoids("/APP/AppAuditing", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑按钮 if (getEdit)
+                                        if (getEdit2)
+                                        {
+                                            <a href="javascript:" class='blue' onclick="updateSh(@item.a_id)">审核</a>
+                                        }
+                                        string u_id = JMP.TOOL.UserInfo.UserId.ToString();
+                                        int r_id = int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString());
+                                        bool getskl = bll_limit.GetLocUserLimitVoids("/App/AppKl", u_id, r_id); //扣量按钮
+                                        if (getskl)
+                                        {
+                                            <a href='javascript:' class='blue' onclick='getkl(@item.a_id)'>通道费率设置</a>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+
+                              <!--展开-->
+                                        <tr>
+                                            <td colspan="12" style="display:none;" name="Open" id="@Open">
+                                                <div class="dcnt-tab">
+                                                    <table class="table-lst">
+                                                        <tr>
+                                                            <td>
+                                                                应用key:@item.a_key
+                                                            </td>
+                                                            <td>应用秘钥:@item.a_secretkey</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                风险等级：
+
+                                                                @{
+                                                                    switch (item.r_id)
+                                                                    {
+                                                                        case 0:
+                                                                            <span style="color:#900f37"> 未配置</span>
+                                                                            break;
+                                                                        case 1:
+                                                                            <span style="color:#ee185a  "> 高</span>
+                                                                            break;
+                                                                        case 2:
+                                                                            <font style="color:#25ef46"> 中</font>
+                                                                            break;
+                                                                        case 3:
+                                                                            <span style="color:#41c3e4"> 低</span>
+                                                                            break;
+                                                                    }
+
+                                                                }
+                                                            </td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <tr>
+                                                                            <td align="center" colspan="12" class="nodata">暂无记录</td>
+                                                                        </tr>
+                                                                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)
+</div>

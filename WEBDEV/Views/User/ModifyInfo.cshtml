@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "修改密码";
+    Layout = "~/Views/UI/master.cshtml";
+    JMP.MDL.jmp_user UModel = (JMP.MDL.jmp_user)ViewBag.jmpUser;
+}
+@JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+@JMP.TOOL.UserHelper.js("user/ModifyInfo.js")
+
+<div class="rnatn-cnt">
+    <input type="hidden" id="u_id" value="@UModel.u_id" />
+    <ul class="rnatn-frm rnatn-adre clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">修改密码</span>
+            </p>
+        </li>
+        <li>
+            <div class="dpt">
+                <div class="dtit">用户账号</div>
+                <div class="dipt dipt-fa">
+                    @(UModel != null ? !string.IsNullOrEmpty(UModel.u_email) ? UModel.u_email : "" : "")
+                </div>
+
+            </div>
+        </li>
+        <li>
+            <div class="dpt">
+                <div class="dtit">原密码</div>
+                <div class="dipt dipt-fa">
+                    <input type="password" name="old_pwd" id="old_pwd" class="txtipt" onblur="CheckOldPwd()" maxlength="18" placeholder="请输入原密码" />
+                </div>
+                <span class="error" id="yz_old_pwd"></span>
+            </div>
+        </li>
+        <li>
+            <div class="dpt">
+                <div class="dtit">新密码</div>
+                <div class="dipt dipt-fa">
+                    <input type="password" name="new_pwd" id="new_pwd" class="txtipt" onblur="CheckNewPwd()" maxlength="18" placeholder="请输入新密码" />
+                </div>
+                <span class="error" id="yz_new_pwd"></span>
+            </div>
+        </li>
+        <li>
+            <div class="dpt" id="tbdzxs">
+                <div class="dtit">确认新密码</div>
+                <div class="dipt dipt-fa">
+                    <input type="password" name="qr_pwd" id="qr_pwd" class="txtipt" onblur="CheckQrPwd()" maxlength="18" placeholder="请再次输入新密码" />
+                </div>
+                <span class="error" id="yz_qr_pwd"></span>
+            </div>
+        </li>
+    </ul>
+    <div class="div-btn">
+        <a class="btn btn-primary" id="btn_save">确认提交</a>
+    </div>
+</div>

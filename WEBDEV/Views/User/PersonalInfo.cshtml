@@ -1,0 +1,215 @@
+﻿@{
+    ViewBag.Title = "个人信息";
+    Layout = "~/Views/UI/master.cshtml";
+
+    var j_user = ViewBag.jmpUser as JMP.MDL.jmp_user;
+    string ht_url = (string)ViewBag.UploadUrl;
+}
+
+<div class="rnatn-cnt">
+
+    <ul class="rnatn-frm clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">基本信息</span>
+            </p>
+        </li>
+        <li>
+            <div class="dpt fl">
+                <div class="dtit">登录邮箱</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" value="@(string.IsNullOrEmpty(j_user.u_email) ? "" : j_user.u_email)" disabled="disabled" />
+
+                </div>
+
+            </div>
+        </li>
+        <li>
+            <div class="dpt fl">
+                <div class="dtit">身份证号码</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" value="@(string.IsNullOrEmpty(j_user.u_idnumber) ? "" : j_user.u_idnumber)" disabled="disabled" />
+                </div>
+
+            </div>
+        </li>
+        <li>
+            <div class="dpt fl">
+                <div class="dtit">真实姓名或者公司名称</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(j_user.u_realname) ? j_user.u_realname : "")" disabled="disabled" />
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="dpt fl">
+                <div class="dtit">开户账号</div>
+                <div class="dipt dipt-fa">
+                    <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(j_user.u_account) ? j_user.u_account : "")" disabled="disabled" />
+
+                </div>
+
+            </div>
+        </li>
+        <li>
+
+            <div class="dpt fl">
+                <div class="dtit">开户名称</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(j_user.u_name) ? j_user.u_name : "")" disabled="disabled" />
+                </div>
+
+            </div>
+        </li>
+        <li>
+
+            <div class="dpt fl">
+                <div class="dtit">开户银行全称</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(j_user.u_bankname) ? j_user.u_bankname : "")" disabled="disabled" />
+                </div>
+
+            </div>
+        </li>
+        @if (j_user.u_category == 1)
+            {
+            <li>
+                <div class="dpt fl">
+                    <div class="dtit">营业执照编号</div>
+                    <div class="dipt">
+                        <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(j_user.u_blicensenumber) ? j_user.u_blicensenumber : "")" disabled="disabled" />
+                    </div>
+
+                </div>
+            </li>
+            <li>
+
+                <div class="dpt fl">
+                    <div class="dtit">企业法人</div>
+                    <div class="dipt">
+                        <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(j_user.BusinessEntity) ? j_user.BusinessEntity : "")" disabled="disabled" />
+                    </div>
+
+                </div>
+            </li>
+            <li>
+
+                <div class="dpt fl">
+                    <div class="dtit">企业注册地址</div>
+                    <div class="dipt">
+                        <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(j_user.RegisteredAddress) ? j_user.RegisteredAddress : "")" disabled="disabled" />
+                    </div>
+
+                </div>
+            </li>
+        }
+
+    </ul>
+    <ul class="rnatn-frm clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">联系方式</span>
+            </p>
+        </li>
+        <li>
+            <div class="dpt fl">
+                <div class="dtit">联系电话</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" disabled="disabled" value="@(!string.IsNullOrEmpty(j_user.u_phone) ? j_user.u_phone : "")" />
+                </div>
+            </div>
+        </li>
+        <li>
+
+            <div class="dpt fl">
+                <div class="dtit">联系QQ</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(j_user.u_qq) ? j_user.u_qq : "")" disabled="disabled" />
+                </div>
+
+            </div>
+        </li>
+        <li>
+
+            <div class="dpt fl">
+                <div class="dtit">联系地址</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(j_user.u_address) ? j_user.u_address : "")" disabled="disabled" />
+                </div>
+
+            </div>
+        </li>
+
+    </ul>
+    <ul class="rnatn-frm rnatn-frm-pic clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">证件认证</span>
+            </p>
+
+        </li>
+        <li>
+            <div class="fl clearfix">
+
+                <div class="rnatn-pic">
+                    <div class="bor" id="u_idno_img">
+
+                        @{
+                            var urlsfz = string.IsNullOrEmpty(j_user.u_photo) ? "" : ht_url + j_user.u_photo;
+                        }
+
+                        <a href="@urlsfz" target="_blank">  <img class="personal_img" src="@urlsfz" style="width:145px;height:145px;" /></a>
+                    </div>
+                    <p class="txt">身份证正面照片</p>
+
+                </div>
+                <div class="rnatn-pic">
+                    <div class="bor" id="u_idno_img">
+
+                        @{
+                            var urlsfzf = string.IsNullOrEmpty(j_user.u_photof) ? "" : ht_url + j_user.u_photof;
+                        }
+
+                        <a href="@urlsfzf" target="_blank">  <img class="personal_img" src="@urlsfz" style="width:145px;height:145px;" /></a>
+                    </div>
+                    <p class="txt">身份证反面照片</p>
+
+                </div>
+                <div class="rnatn-pic">
+                    <div class="bor" id="u_idno_img">
+
+                        @{
+                            var urlsxkz = string.IsNullOrEmpty(j_user.u_licence) ? "" : ht_url + j_user.u_licence;
+                        }
+
+                        <a href="@urlsxkz" target="_blank">  <img class="personal_img" src="@urlsfz" style="width:145px;height:145px;" /></a>
+                    </div>
+                    <p class="txt">开户许可证照片</p>
+
+                </div>
+                @if (j_user.u_category == 1)
+                {
+                    <div class="rnatn-pic">
+                        <div class="bor" id="u_yyzz_img">
+                            @{
+                                var urlyyzz = string.IsNullOrEmpty(j_user.u_blicense) ? "" : ht_url + j_user.u_blicense;
+                            }
+
+                            <a href="@urlyyzz" target="_blank"> <img class="personal_img" src="@urlyyzz" style="width:145px;height:145px;" /></a>
+                        </div>
+                        <p class="txt">营业执照</p>
+
+                    </div>
+                                }
+
+            </div>
+
+
+        </li>
+
+    </ul>
+
+</div>

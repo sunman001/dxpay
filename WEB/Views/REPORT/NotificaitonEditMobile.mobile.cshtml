@@ -1,0 +1,149 @@
+﻿@using TOOL.EnumUtil;
+@{
+    ViewBag.Title = "添加通知短信分组信息";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var mode = ViewBag.model as JMP.MDL.jmp_notificaiton_group;
+}
+@JMP.TOOL.UserHelper.js("mobile/REPORT/Notify.mobile.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="mobile-container mobile-popup">
+    <input name="Id" id="Id" type="hidden" value="@(mode.Id == 0 ? 0 : mode.Id)" />
+    <div class="plate-form  ui form ">
+        <div class="field">
+            <label>类型：</label>
+            @if (mode.Id <= 0)
+            {
+                <div class="ejzldiv-nb">
+                    <input type="checkbox" name="zflx" class="inputChck" value="短信" checked='checked' /> 短息
+                    <input type="checkbox" name="zflx" class="inputChck" value="语音" /> 语音
+                </div>
+            }
+            else
+            {
+                <div class="ejzldiv-nb">
+                    @Html.Raw(ViewBag.zf)
+                </div>
+            }
+        </div>
+        <div class="field">
+            <label>是否允许发送：</label>
+            <select disabled="disabled" name="IsAllowSendMessage" id="IsAllowSendMessage" class="ui dropdown fluid">
+                @{
+                    if (mode.Id > 0)
+                    {
+                        <option value=false @(mode.IsAllowSendMessage == false ? "selected='selected'" : "")>否</option>
+                        <option value=true @(mode.IsAllowSendMessage == true ? "selected='selected'" : "")>是</option>
+
+                    }
+                    else
+                    {
+                        <option value=false>否</option>
+                        <option value=true selected='selected'>是</option>
+                    }
+                }
+            </select>
+
+        </div>
+
+        <div class="field">
+            <label>任务执行周期单位：</label>
+            <select  disabled="disabled" name="IntervalUnit" id="IntervalUnit" class="ui dropdown fluid">
+                <option value="second" @(mode.IntervalUnit == "second" ? "selected='selected'" : "")>second</option>
+                <option value="minute" @(mode.IntervalUnit == "minute" ? "selected='selected'" : "")>minute</option>
+                <option value="hour" @(mode.IntervalUnit == "hour" ? "selected='selected'" : "")>hour</option>
+                <option value="day" @(mode.IntervalUnit == "day" ? "selected='selected'" : "")>day</option>
+                <option value="month" @(mode.IntervalUnit == "month" ? "selected='selected'" : "")>month</option>
+                <option value="year" @(mode.IntervalUnit == "year" ? "selected='selected'" : "")>year</option>
+            </select>
+        </div>
+        <div class="field">
+
+            <label>执行周期：</label>
+            <input readonly="readonly"  name="IntervalValue" type="text" id="IntervalValue" onblur="yzIntervalValue()" value="@(mode.IntervalValue>0 ? mode.IntervalValue :0)" />
+            <div class="Validform_checktip" id="IntervalValueyy">请填写执行周期</div>
+
+        </div>
+
+        <div class="field">
+            <label>编码</label>
+            <select  disabled="disabled" name="Code" id="Code" class="ui dropdown fluid">
+                @{
+                    var groups = Enum.GetValues(typeof(ScheduleGroupCode));
+                    foreach (ScheduleGroupCode item in groups)
+                    {
+                        var desc = item.GetDescription();
+                        var value = item.ToString();
+                        var index = (int)item;
+                        <option value="@value" @(mode.Code == value ? "selected='selected'" : "")>@desc</option>
+                    }
+                }
+            </select>
+        </div>
+        @if (mode.Id <= 0)
+            {
+            <div class="field">
+                <label>分组名称</label>
+                <input readonly="readonly"  name="Name" type="text" id="Name" onblur="yzName()" value="@(!string.IsNullOrEmpty(mode.Name) ? mode.Name : "")" />
+                <div class="Validform_checktip" id="Nameyy">*请填写分组名称</div>
+            </div>
+        }
+        <div class="field">
+            <label>
+                任务分组描述
+            </label>
+            <textarea readonly="readonly"   name="Description" type="text" id="Description" onblur="yzDescription()" class="txt1"> </textarea>
+            @{
+                if (!string.IsNullOrEmpty(mode.Description))
+                {
+                    <script type="text/javascript">
+                    document.getElementById("Description").innerText = ' @mode.Description';
+                    </script>
+                }
+            }
+            <div class="Validform_checktip" id="Descriptionyy">*请填写任务分组描述</div>
+        </div>
+
+        <div class="field">
+            <label>通知手机号码: </label>
+
+            <textarea    name="NotifyMobileList" type="text" id="NotifyMobileList" onblur="yzNotifyMobileList()" class="txt1"> </textarea>
+            @{
+                if (!string.IsNullOrEmpty(mode.NotifyMobileList))
+                {
+                    <script type="text/javascript">
+                    document.getElementById("NotifyMobileList").innerText = ' @mode.NotifyMobileList';
+                    </script>
+                }
+            }
+            <div class="Validform_checktip" id="NotifyMobileListyy">*请填写通知手机号码（多个手机号码以逗号(,)分隔）</div>
+        </div>
+        <div class="field">
+            <label>短信模板</label>
+            <textarea readonly="readonly"   name="MessageTemplate" type="text" id="MessageTemplate" onblur="yzMessageTemplate()" class="txt1"> </textarea>
+            @{
+                if (!string.IsNullOrEmpty(mode.MessageTemplate))
+                {
+                    <script type="text/javascript">
+                    document.getElementById("MessageTemplate").innerText = ' @mode.MessageTemplate';
+                    </script>
+                }
+            }
+            <div class="Validform_checktip" id="MessageTemplateyy">*请填写短信模板</div>
+        </div>
+
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" class="large ui primary button" name="btnSaveAdd" value="保存" id="btnSaveAdd" class="btn mr10" />
+            <a href="/REPORT/NotificaitonList" class="large ui primary button"> 取消</a>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+
+    })
+</script>

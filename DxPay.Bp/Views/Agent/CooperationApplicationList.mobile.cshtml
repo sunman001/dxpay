@@ -1,0 +1,146 @@
+﻿@{
+    ViewBag.Title = "抢单管理";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.CoCooperationApplication>;
+    int pageCount = ViewBag.pageCount;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+
+<script src="~/mobile/js/Agent/CooperationApplication.js"></script>
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">抢单管理</span>
+</header>
+<!--头部 end-->
+<section>
+    <ul class="frm-ul-tit clearfix">
+        
+        <li>
+            <a id="btn-show-search" onclick="pop.showSearch('search-container')" class="sle-btn">查询</a>
+        </li>
+    </ul>
+    <div class="search-container" style="display:none">
+        <div class="rule-single-select">
+            <select name="searchType" id="searchType">
+                <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>代理商姓名</option>
+                <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>电子邮箱</option>
+                <option value="5" @(ViewBag.type == 5 ? "selected='selected'" : "")>手机号码</option>
+            </select>
+        </div>
+        <div class="srch-dipt">
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </div>
+        <div class="rule-single-select">
+            <select name="searchDesc" id="searchDesc">
+                <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+            </select>
+        </div>
+        <a id="btnSearch" class="btn btn-primary btn-mgn" href="javascript:" onclick="serchlocuser()">查询</a>
+    </div>
+    <div class="table-dcnt">
+        <div class="table-container">
+            <table class="table-cnt" id="table">
+                <thead>
+                    <tr>
+                        <th>展开</th>
+                        <th>姓名</th>
+                        <th>邮箱地址</th>
+                        <th>手机号码</th>
+                        <th>QQ号码</th>
+                        <th>状态</th>
+                        <th>提交时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (list.Count > 0)
+                        {
+                            int id = 0;
+                            string Icon = "Icon_";
+                            string Open = "Open_";
+                            foreach (var item in list)
+                            {
+                                id = id + 1;
+                                Icon = "Icon_" + id;
+                                Open = "Open_" + id;
+                                <tr onclick="clickOpen(@id)">
+                                    <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                                    <td>
+                                        @item.Name
+                                    </td>
+                                    <td>
+                                        @item.EmailAddress
+                                    </td>
+                                    <td>@item.MobilePhone</td>
+                                    <td>
+                                        @item.QQ
+                                    </td>
+                                    <td>
+                                        @{
+                                            switch (item.State)
+                                            {
+
+                                                case 0:
+                                                    <span class="blue">未抢单</span>
+                                                    break;
+                                                case -1:
+                                                    <span class="red">已关闭</span>
+                                                    break;
+                                            }
+                                        }
+                                    </td>
+                                    <td>@item.CreatedOn.ToString("yyyy-MM-dd")</td>
+                                    <td>
+                                        @{
+                                            //抢单
+                                            //  bool getEdit = bll_limit.GetLocUserLimitVoids("/Agent/UpdateState", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                            // if (getEdit)
+                                            // {
+                                            if (item.State == 0)
+                                            {
+                                                <a href="javascript:" class='blue' onclick="UpdateState(@item.Id,1)">抢单</a>
+                                                <a href="javascript:" class='blue' onclick="UpdateState(@item.Id,-1)">关闭</a>
+                                            }
+
+                                        }
+
+                                    </td>
+                                </tr>
+                          <!--展开-->
+                                            <tr>
+                                                <td colspan="8" style="display:none;" name="Open" id="@Open">
+                                                    <div class="dcnt-tab">
+                                                        <table class="table-lst">
+                                                            <tr>
+                                                                <td>网址:@item.Website</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td title="@item.RequestContent">
+                                                                    附加信息:@JMP.TOOL.RequestHelper.cutString(item.RequestContent, 200)
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td align="center" colspan="8" class="nodata"> 暂无记录 </td>
+                                                </tr>
+                                            }
+
+                    }
+                </tbody>
+            </table>
+        </div>
+        @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+
+    </div>
+</section>
+

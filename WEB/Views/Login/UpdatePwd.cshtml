@@ -1,0 +1,209 @@
+﻿@{
+    ViewBag.Title = "修改密码";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+<div class="main">
+    <div class="plate-form">
+        <dl>
+            <dt>旧密码：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input name="old_pwd" type="password" id="old_pwd" onblur="CheckOldPwd()" value="" />
+                </div>
+                <div id="yz_old_pwd" class="Validform_checktip">*请输入旧密码！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>新密码：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input name="new_pwd" type="password" id="new_pwd" onblur="CheckNewPwd()" value="" />
+                </div>
+                <div id="yz_new_pwd" class="Validform_checktip">*请输入新密码！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>确认新密码：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input name="qr_pwd" type="password" id="qr_pwd" onblur="CheckQrPwd()" value="" />
+                </div>
+                <div id="yz_qr_pwd" class="Validform_checktip">*请确认新密码！</div>
+            </dd>
+        </dl>
+
+
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSaveAdd" value="保存" id="btnSaveAdd" onclick="xgPwd()" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn" />
+    </div>
+    <div class="clear"></div>
+</div>
+<script type="text/javascript">
+
+    //验证原密码
+    function CheckOldPwd() {
+
+        var upass = $("#old_pwd").val();
+        if (upass == "") {
+
+            $("#yz_old_pwd").attr("class", "Validform_checktip Validform_wrong");
+            $("#yz_old_pwd").html("请输入原密码！");
+            return false;
+        }
+        else {
+
+            $("#yz_old_pwd").attr("class", "Validform_checktip Validform_wrong");
+            $("#yz_old_pwd").html("");
+        }
+
+    }
+
+    //验证新密码
+    function CheckNewPwd() {
+
+        //新密码
+        var upass = $("#new_pwd").val();
+
+
+        if (upass == "") {
+
+            $("#yz_new_pwd").attr("class", "Validform_checktip Validform_wrong");
+            $("#yz_new_pwd").html("请输入新密码！");
+            return false;
+
+        } else {
+
+            $("#yz_new_pwd").attr("class", "Validform_checktip Validform_wrong");
+            $("#yz_new_pwd").html("");
+
+
+        }
+
+    }
+
+    //验证确认密码
+    function CheckQrPwd() {
+
+        //确认密码
+        var upass = $("#qr_pwd").val();
+        var new_pass = $("#new_pwd").val();
+
+        if (upass == "") {
+
+            $("#yz_qr_pwd").attr("class", "Validform_checktip Validform_wrong");
+            $("#yz_qr_pwd").html("请输入确认密码！");
+            return false;
+
+        } else if (upass != new_pass) {
+
+            $("#yz_qr_pwd").attr("class", "Validform_checktip Validform_wrong");
+            $("#yz_qr_pwd").html("两次输入的密码不一致！");
+            return false;
+
+        } else {
+
+            $("#yz_qr_pwd").attr("class", "error");
+            $("#yz_qr_pwd").html("");
+        }
+
+    }
+
+
+    function xgPwd() {
+
+        //旧密码
+        var upass = $("#old_pwd").val();
+        if (upass == "") {
+
+            $("#yz_old_pwd").attr("class", "Validform_checktip Validform_wrong");
+            $("#yz_old_pwd").html("请输入原密码！");
+            return false;
+        }
+        else {
+
+            $("#yz_old_pwd").attr("class", "Validform_checktip Validform_wrong");
+            $("#yz_old_pwd").html("");
+        }
+
+        //新密码
+        var xpwd = $("#new_pwd").val();
+
+
+        if (xpwd == "") {
+
+            $("#yz_new_pwd").attr("class", "Validform_checktip Validform_wrong");
+            $("#yz_new_pwd").html("请输入新密码！");
+            return false;
+
+        } else {
+
+            $("#yz_new_pwd").attr("class", "Validform_checktip Validform_wrong");
+            $("#yz_new_pwd").html("");
+
+        }
+
+        //确认密码
+        var qrpwd = $("#qr_pwd").val();
+        var new_pass = $("#new_pwd").val();
+
+        if (qrpwd == "") {
+
+            $("#yz_qr_pwd").attr("class", "Validform_checktip Validform_wrong");
+            $("#yz_qr_pwd").html("请输入确认密码！");
+            return false;
+
+        } else if (qrpwd != new_pass) {
+
+            $("#yz_qr_pwd").attr("class", "Validform_checktip Validform_wrong");
+            $("#yz_qr_pwd").html("两次输入的密码不一致！");
+            return false;
+
+        } else {
+
+            $("#yz_qr_pwd").attr("class", "error");
+            $("#yz_qr_pwd").html("");
+        }
+
+        var url = "/Login/loginUpdatePwd";
+        var data = { upass: upass, xpwd: xpwd, qrpwd: qrpwd };
+
+        //防止重复提交
+        $("#btnSaveAdd").attr("disabled", "disabled");
+
+        $.post(url, data, function (retJson) {
+            $("#btnSaveAdd").attr("disabled", false);
+            if (retJson.success == 1) {
+                window.parent.ShowMsg(retJson.msg, "ok", function () {
+
+                    $.post("/Login/LoginOut", { action: "exit" }, function (data) {
+                        if (data.success) {
+                            window.top.location.href = data.gourl;
+                        }
+                    });
+
+                });
+            }
+            else if (retJson.success == 9998) {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            } else if (retJson.success == 9999) {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                window.top.location.href = retJson.Redirect;
+                return false;
+            } else if (retJson.success == 9997) {
+                window.top.location.href = retJson.Redirect;
+                return false;
+            }
+            else {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            }
+
+        })
+    }
+
+</script>

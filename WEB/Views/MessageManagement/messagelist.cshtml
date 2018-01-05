@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "消息管理";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_message>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("MessageManagement/message.js")
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.searchType == 1 ? "selected='selected'" : "")>公告编号</option>
+                    <option value="2" @(ViewBag.searchType == 2 ? "selected='selected'" : "")>发送者登陆邮箱</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlocuser()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th width="100">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th width="100">编号</th>
+                    <th>发送人</th>
+                    <th>发送类型</th>
+                    <th>发送时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="child" class="checkall" value="@item.m_id" />
+                                </td>
+                                <td>@item.m_id</td>
+                                <td>@item.u_loginname</td>
+                                <td>
+                                    @{
+                                    switch (item.m_type)
+                                    {
+                                        case 1:
+                                            <span>系统消息</span>
+                                            break;
+                                        case 2:
+                                            <span>开发者</span>
+                                            break;
+                                        case 3:
+                                            <span>回复开发者</span>
+                                            break;
+                                    }
+
+                                }
+                            </td>
+                            <td>@item.m_time.ToString("yyyy-MM-dd")</td>
+                            <td>
+                                @{
+                                    if (item.m_type == 1)
+                                    {
+                                        bool getEdit = bll_limit.GetLocUserLimitVoids("/MessageManagement/insertOrUpdatenotice", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑按钮
+                                        if (getEdit)
+                                        {
+                                            <a href="javascript:" class='blue' onclick="Updatemessage(@item.m_id)">编辑</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        bool getEdit = bll_limit.GetLocUserLimitVoids("/MessageManagement/ReplyMessageUser", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑按钮
+                                        if (getEdit)
+                                        {
+                                            <a href="/MessageManagement/ReplyMessage?topid=@item.m_topid" class='blue'>查看</a>
+                                        }
+                                    }
+                                }
+                            </td>
+                        </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td align="center" colspan="10" class="nodata">暂无记录</td>
+                                        </tr>
+                                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>

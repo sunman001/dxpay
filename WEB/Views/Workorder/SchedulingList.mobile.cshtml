@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "值班列表";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+
+    var list = ViewBag.list as List<JMP.MDL.jmp_scheduling>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+@JMP.TOOL.UserHelper.js("mobile/Workorder/scheduling.mobile.js")
+<div class="mobile-container">
+    <div class="toolbar-container">
+        <div id="ToolBar" class="frm-dcnt">
+            <ul class="frm-ul-tit clearfix">
+                @Html.Raw(ViewBag.locUrl)
+                <li>
+                    <a id="btn-show-search" class="btn" onclick="pop.showSearch('search-container')">查询</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="search-container">
+
+        <div class="ui input fluid fluid-block">
+            <input name="s_name" type="text" id="s_name" placeholder="请输入值班人姓名" class="txtipt" value="@(string.IsNullOrEmpty(ViewBag.Sname)?"":ViewBag.Sname)" />
+        </div>
+        <div class="ui input fluid fluid-block">
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}'})" value="@(string.IsNullOrEmpty(ViewBag.startdate)?DateTime.Now.ToString("yyyy-MM-dd"):ViewBag.startdate)" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}'})" value="@(string.IsNullOrEmpty(ViewBag.enddate) ? DateTime.Now.AddDays(1).ToString("yyyy-MM-dd") : ViewBag.enddate)" />
+        </div>
+        <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="selectScheduling()">查 询</a>
+    </div>
+    <div class="table-container table-responsive">
+        <table class="ui celled striped white" id="table">
+            <thead>
+                <tr>
+
+                    <th width="100">编号</th>
+                    <th>值班开始日期</th>
+                    <th>值班结束日期</th>
+                    <th>值班人</th>
+                    <th>创建时间</th>
+                    <th>创建人</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (list.Count > 0)
+                {
+                    foreach (var item in list)
+                    {
+                        <tr>
+
+                            <td>@item.id</td>
+                            <td>@item.watchstartdate.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@item.watchenddate.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@item.u_realname</td>
+                            <td>
+                                @item.createdon
+                            </td>
+                            <td>
+                                @item.createdby
+                            </td>
+
+                            <td>
+                                @{
+                                    bool getEdit = bll_limit.GetLocUserLimitVoids("/Workorder/InsertOrUpdateScheduling", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString())); //编辑按钮
+                                    if (getEdit)
+                                    {
+                                <a href="javascript:" class='icon icon-edit' onclick="UpdateSdl(@item.id)">编辑</a><label>&nbsp;&nbsp;</label>
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td align="center" colspan="7">暂无记录</td>
+                                        </tr>
+                                    }
+
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>

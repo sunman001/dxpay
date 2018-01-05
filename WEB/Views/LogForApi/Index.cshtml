@@ -1,0 +1,160 @@
+﻿@using TOOL.EnumUtil;
+@model List<JMP.MDL.LogForApi>
+@{
+    ViewBag.Title = "全局错误日志管理[接口]";
+    Layout = "~/Views/UI/master.cshtml";
+
+     var clients = typeof(DxApiClient).ToDictionary<DxApiClient>();
+}
+
+<div class="main">
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="s_type" id="s_type">
+                    <option value="0" @(ViewBag.stype == "0" ? "selected='selected'" : "")>编号</option>
+                    <option value="1" @(ViewBag.stype == "1" ? "selected='selected'" : "")>平台名称</option>
+                    <option value="2" @(ViewBag.stype == "2" ? "selected='selected'" : "")>简短说明</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["searchKey"]" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="clientId" id="clientId">
+                    <option value="-1" @(string.IsNullOrEmpty(Request["clientId"]) ? "selected=selected" : "") @(Request["clientId"] == "-1" ? "selected=selected" : "")>平台类型</option>
+                    @foreach (var client in clients)
+                    {
+                        <option value="@client.Key.ToString()" @(Request["clientId"] == client.Key.ToString() ? "selected=selected" : "")>@client.Value</option>
+                    }
+
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="1" @(string.IsNullOrEmpty(Request["sort"]) ? "" : "") @(Request["sort"] == "1" ? "selected=selected" : "")>降序</option>
+                    <option value="0" @(Request["sort"] == "0" ? "selected=selected" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlocuserlog()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th style="text-align: left;">ID</th>
+                    <th style="text-align: left;">平台名称</th>
+                    <th style="text-align: left;">类型</th>
+                    <th style="text-align: left;">简短说明</th>
+                    <th style="text-align: left;">日志时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count > 0)
+            {
+                int id = 0;
+                string Icon = "Icon_";
+                string Open = "Open_";
+
+                foreach (var item in Model)
+                {
+                    id = id + 1;
+                    Icon = "Icon_" + id;
+                    Open = "Open_" + id;
+
+                        <tr onclick="clickOpen(@id)">
+                            <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                            <td style="text-align: left;">@item.Id</td>
+                            <td style="text-align: left;">@item.ClientName</td>
+                            <td style="text-align: left;"><span class="red">错误日志</span></td>
+                            <td style="text-align: left;">@item.Summary</td>
+                            <td style="text-align: left;">@item.CreatedOn</td>
+                        </tr>
+                    <!--展开-->
+                        <tr>
+                            <td colspan="6" style="display:none;" name="Open" id="@Open">
+                                <div class="dcnt-tab">
+                                    <table class="table-lst">
+                                        <tr>
+                                            <td>IP地址:@item.IpAddress</td>
+                                            <td>报错位置:@item.Location</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" title="@item.Message">
+                                                附加信息:@JMP.TOOL.RequestHelper.cutString(item.Message, 150) <a class="popup-message-details" href="javascript:;" title='@item.Message'>详情</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td align="center" colspan="6" class="nodata">暂无记录</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+
+<script type="text/javascript">
+
+    //消息提示框
+    //content:提示内容
+    //info:提示类型,error:错误;info:信息;ok:成功
+    //callback:回调函数,格式：functiong（）{}
+    function ShowMsg(content, info, callback) {
+        layer.msg(content, {
+            icon: info === "error" ? 2 : info === "ok" ? 1 : 0,
+            time: 2000,
+            skin: 'layer-ext-moon'
+        }, callback === "" ? "" : callback);
+    }
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/logforapi/index?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        var searchKey = $("#searchKey").val();
+        var s_type=$("#s_type  option:selected").val();
+        var regnumber = new RegExp("^[0-9]*$");
+        if(s_type==0)
+        { 
+            if (!regnumber.test(searchKey)) {
+                ShowMsg("编号只能输入数字", "error", "");
+                return false
+            }
+        }
+        var sort = $("#searchDesc  option:selected").val();
+        var clientId = $("#clientId  option:selected").val();
+        url += "&searchKey=" + searchKey + "&sort=" + sort + "&clientId=" + clientId +"&s_type="+s_type;
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+    //搜索管理员列表
+    function serchlocuserlog() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    $('.popup-message-details').click(function() {
+        var message = $(this).attr('title');
+        window.top.PopupMessage(message);
+    });
+
+</script>

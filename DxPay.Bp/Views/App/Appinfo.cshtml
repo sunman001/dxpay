@@ -1,0 +1,146 @@
+﻿@{
+    ViewBag.Title = "应用信息";
+    Layout = "~/Views/UI/master.cshtml";
+    var mo = ViewBag.modapp as JMP.MDL.jmp_app;
+
+    string[] pay = ViewBag.pay;
+}
+<div class="rnatn-cnt">
+    <ul class="rnatn-frm app-frm clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">应用信息</span>
+            </p>
+        </li>
+        <li>
+            <dl class="app-dl clearfix">
+                <dd>
+                    <span class="stit"><b>应用编号</b></span>
+                    <span class="scnt">@(mo.a_id)</span>
+                </dd>
+                <dd>
+                    <span class="stit"><b>应用名称</b></span>
+                    <span class="scnt">@(string.IsNullOrEmpty(mo.a_name) ? "" : mo.a_name)</span>
+                </dd>
+                <dd>
+                    <span class="stit"><b>运行平台</b></span>
+                    <span class="scnt">@(string.IsNullOrEmpty(mo.p_name) ? "" : mo.p_name)</span>
+                </dd>
+
+            </dl>
+        </li>
+        <li>
+            <p class="aptit"><b>应用key</b></p>
+            <p class="apcnt">
+                <span class="num">@(string.IsNullOrEmpty(mo.a_key) ? "" : mo.a_key)</span>
+                <span class="blue">备注：支付SDK使用</span>
+            </p>
+        </li>
+        <li>
+            <p class="aptit"><b>应用秘钥</b></p>
+            <p class="apcnt">
+                <span class="num">@(string.IsNullOrEmpty(mo.a_secretkey) ? "" : mo.a_secretkey)</span>
+                <span class="blue">备注：通知接口使用</span>
+            </p>
+        </li>
+        <li>
+            <p class="aptit"><b>通知地址</b></p>
+            <p class="apcnt">
+                <span class="num">@(string.IsNullOrEmpty(mo.a_notifyurl) ? "" : mo.a_notifyurl)</span>
+                <span class="blue"></span>
+            </p>
+        </li>
+        @if (mo.p_name.Trim() == "H5")
+        {
+            <li>
+                <p class="aptit"><b>同步通知地址</b></p>
+                <p class="apcnt">
+                    <span class="num">@(string.IsNullOrEmpty(mo.a_showurl) ? "" : mo.a_showurl)</span>
+                    <span class="blue"></span>
+                </p>
+            </li>
+        }
+    </ul>
+    <ul class="rnatn-frm app-frm-buy clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">支付方式</span>
+            </p>
+        </li>
+
+        @if (pay.Length > 0)
+        {
+            for (int i = 0; i < pay.Length; i++)
+            {
+                switch (pay[i])
+                {
+                    case "支付宝":
+                        <li>
+                            <i class="icon icon2"></i>
+                            <span class="name">@pay[i]</span>
+                        </li>
+                        break;
+                    case "微信":
+                        <li>
+                            <i class="icon icon3"></i>
+                            <span class="name">@pay[i]</span>
+                        </li>
+                        break;
+                    case "银联":
+                        <li>
+                            <i class="icon icon1"></i>
+                            <span class="name">@pay[i]</span>
+                        </li>
+                        break;
+                    case "微信公众号":
+                        <li>
+                            <i class="icon icon3"></i>
+                            <span class="name">@pay[i]</span>
+                        </li>
+                        break;
+                    case "微信APP":
+                        <li>
+                            <i class="icon icon3"></i>
+                            <span class="name">@pay[i]</span>
+                        </li>
+                        break;
+                    case "微信扫码":
+                        <li>
+                            <i class="icon icon3"></i>
+                            <span class="name">@pay[i]</span>
+                        </li>
+                        break;
+                    case "支付宝扫码":
+                        <li>
+                            <i class="icon icon2"></i>
+                            <span class="name">@pay[i]</span>
+                        </li>
+                        break;
+                    case "QQ钱包":
+                        <li>
+                            <i class="icon icon5"></i>
+                            <span class="name">@pay[i]</span>
+                        </li>
+                        break;
+                }
+            }
+        }
+
+    </ul>
+    <ul class="rnatn-frm app-frm-buy clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">帮助文档</span>
+            </p>
+        </li>
+        <li>
+            <p class="apcnt">
+                <span class="num"><a href="@ViewBag.helpUrl" target="_blank"> 帮助文档地址</a></span>
+                <span class="blue"></span>
+            </p>
+        </li>
+    </ul>
+</div>

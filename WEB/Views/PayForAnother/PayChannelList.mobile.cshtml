@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "代付接口管理";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+    var PayChannel = ViewBag.list as List<JMP.MDL.PayChannel>;
+}
+
+<div class="main mobile-container">
+    <div class="data-table-2 table-container table-responsive">
+        <table class="ui celled striped white table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>接口名称</th>
+                    <th>接口标识</th>
+                    <th>添加人</th>
+                    <th>添加时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (PayChannel.Count > 0)
+                    {
+                        foreach (var item in PayChannel)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.ChannelName</td>
+                                <td>
+                                    @item.ChannelIdentifier
+                                </td>
+                                <td>@item.Append</td>
+                                <td>@item.Appendtime</td>
+
+                            </tr>
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td align="center" colspan="5" class="nodata">暂无记录</td>
+                        </tr>
+                    }
+
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+<script type="text/javascript">
+
+    //分页
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/PayForAnother/PayChannelList?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        location.href = encodeURI(url);
+    }
+
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+
+</script>

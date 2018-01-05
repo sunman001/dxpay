@@ -1,0 +1,135 @@
+﻿@using TOOL;
+@{
+    ViewBag.Title = "应用监控管理";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.appmonitor>;
+    int pageCount = ViewBag.pageCount;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("mobile/REPORT/Appmonitor.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main mobile-container">
+    <div class="toolbar-container">
+        <div id="ToolBar" class="frm-dcnt">
+            <ul class="frm-ul-tit clearfix">
+                @Html.Raw(ViewBag.locUrl)
+                <li>
+                    <a id="btn-show-search" class="btn" onclick="pop.showSearch('search-container')">查询</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="search-container">
+        <select name="searchType" id="searchType" class="ui dropdown fluid fluid-block">
+            <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>所属应用</option>
+            <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>成功率</option>
+            <option value="3" @(ViewBag.type == 3 ? "selected='selected'" : "")>分钟数</option>
+        </select>
+        <div class="ui input fluid fluid-block">
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" />
+        </div>
+        <select name="SelectState" id="SelectState" class="ui dropdown fluid fluid-block">
+            <option value="1" @(ViewBag.SelectState == "1" ? "selected='selected'" : "")>正常</option>
+            <option value="0" @(ViewBag.SelectState == "0" ? "selected='selected'" : "")>冻结</option>
+        </select>
+        <select name="searchDesc" id="searchDesc" class="ui dropdown fluid fluid-block">
+            <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+            <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+        </select>
+       
+        <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="serchlocuser()">查询</a>
+    </div>
+    <div class="data-table-2 table-container table-responsive">
+        <table class="ui celled striped white table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th width="40">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th>所属应用</th>
+                    <th>成功率</th>
+                    <th>时间段分钟详细信息</th>
+                    <th>处理时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <td>
+
+                                    <input type="checkbox" name="child" class="checkall" value="@item.a_id" />
+
+                                </td>
+                                <td>@item.a_name</td>
+                                <td>
+                                    @(!string.IsNullOrEmpty(item.a_request.ToString()) ? item.a_request * 100 + "%" : "" )
+
+
+                                </td>
+                                <td>
+                                    @{
+                                        string str = "";
+                                        var timeRanges = item.a_time_range.ParseAppMonitorTimeRangeModel();
+                                        if (timeRanges.AppMonitorTimeDay != null)
+                                        {
+                                            str += "时间段一：从" + timeRanges.AppMonitorTimeDay.Start + "点到" + timeRanges.AppMonitorTimeDay.End + "点分钟数：" + timeRanges.AppMonitorTimeDay.Minutes;
+                                        }
+                                        if (timeRanges.AppMonitorTimeNight != null)
+                                        {
+                                            str += "," + "时间段二：从" + timeRanges.AppMonitorTimeNight.Start + "点到" + timeRanges.AppMonitorTimeNight.End + "点分钟数：" + timeRanges.AppMonitorTimeNight.Minutes + ",";
+                                        }
+                                        if (timeRanges.AppMonitorTimeCustom != null)
+                                        {
+                                            str += "其他分钟数：" + timeRanges.AppMonitorTimeCustom.Minutes;
+                                        }
+
+
+                                    }
+                                    @str
+                                </td>
+                                <td>@item.a_datetime.ToString("yyyy-MM-dd")</td>
+                                <td>
+                                    @{
+                                        if (item.a_state == 1)
+                                        {
+                                            <span class='green'>正常</span>
+                                        }
+                                        else
+                                        {
+                                            <span class='red'>冻结</span>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        bool getEdit = bll_limit.GetLocUserLimitVoids("/REPORT/AppmonitorEdit", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑按钮
+                                        if (getEdit)
+                                        {
+                                            <a href="javascript:" class='blue' onclick="UpdateComplaint(@item.a_id)">编辑</a>
+
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="16" class="nodata"> 暂无记录 </td>
+                                            </tr>
+                                        }
+
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)
+
+</div>

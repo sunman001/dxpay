@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,minimum-scale=1, maximum-scale=1">
+    <title>产品咨询</title>
+    <link rel="stylesheet" href="css/stlye.css" />
+    <script src="js/jquery-3.2.1.min.js"></script>
+</head>
+<body style="background: #fcfcfc;">
+	<div class="bodys"></div>
+	<div class="consult">
+		
+	</div>
+	<div id="main" class="swiper-container" style=" height: auto;">
+		<div id="nav">
+			<div class="top">
+				<div class="logo"><img src="img/nav_03.png" alt="logo"  title="logo" /></div>
+				<div class="menu"><img src="img/nav_05.png" alt="菜单"  title="菜单" /></div>
+			</div>
+			<div class="submenu">
+				<div class="payment">
+					<a href="javascript:void(0);" title="产品支付"><i><img src="img/nav_10.png" alt="产品支付" title="产品支付" /></i><span>产品支付</span></a>
+					<ul>
+						<li><a href="javascript:void(0);" title="微信支付">微信支付</a></li>
+						<li><a href="javascript:void(0);" title="支付宝支付">支付宝支付</a></li>
+						<li><a href="javascript:void(0);" title="银联支付">银联支付</a></li>
+						<li><a href="javascript:void(0);" title="其它支付">其它支付</a></li>
+					</ul>
+				</div>
+				<div class="payment about">
+					<a href="javascript:void(0);"><i><img src="img/nav_13.png" alt="关于我们" title="关于我们" /></i><span>关于我们</span></a>
+					<ul>
+						<li><a href="javascript:void(0);" title="盾行简介">盾行简介</a></li>
+						<li><a href="javascript:void(0);" title="公司咨询">公司咨询</a></li>
+						<li><a href="javascript:void(0);" title="联系我们">联系我们</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>		
+		<div class="cons">
+			<div class="cons1">
+				<span>盾行云计费平台—<font>商务咨询</font></span>
+				<p>极速、便捷、可靠的第三方支付平台，让支付更便捷，轻松畅游云世界</p>
+			</div>
+			<div class="cons2">
+				<form action="#" method="post" autocomplete="on">  
+				<div class="ul">
+					<div class="li">
+						<div class="inp">
+							<i><img src="img/cons1.jpg" alt="用户图标" title="用户图标" /> </i>
+							<input class="inputbox"  type="text" placeholder="请输入用户名" required  maxLength="4" min="0" max="4" />
+						</div>
+						<div class="error"></div>
+					</div>
+					<div class="li">
+						<div class="inp">
+							<i><img src="img/cons2.jpg" alt="手机图标" title="手机图标" /> </i>
+							<input class="inputbox" placeholder="请输入手机" name="phone" type="text"  required  pattern="1[34578]\d{9}$"  /> 
+						</div>
+						<div class="error"></div>
+					</div>
+					<div class="li">
+						<div class="inp">
+							<i><img src="img/cons3.jpg" alt="qq图标" title="qq图标" /> </i>
+						    <input class="inputbox" name="qq" placeholder="请输入QQ"required   pattern="[0-9]{6,12}" type="text" />  
+						</div>	
+						<div class="error"></div>
+					</div>
+					<div class="li">
+						<div class="inp">
+							<i><img src="img/cons4.jpg" alt="邮件图标" title="邮件图标" /> </i>
+						    <input class="inputbox" name="email" placeholder="请输入邮箱" required  type="email" />  
+						</div>
+						<div class="error"></div>
+					</div>
+					<div class="lis">
+						<div class="inp">
+							<label><input class="radiobox" name="sum" type="radio" value="" checked="checked" />小于5万 </label> 
+							<label><input class="radiobox" name="sum" type="radio" value="" />大于5万到10万</label> 
+							<label><input class="radiobox" name="sum" type="radio" value="" />15万以上 </label> 
+						</div>
+					</div>
+					<div class="li">
+						<div class="inp inptar">
+							<i><img src="img/cons5.jpg" alt="支付需求" title="支付需求" /> </i>
+						    <input class="inputbox" name="subject" placeholder="请描述您的产品需要的支付需求" required="" tabindex="2" type="text" />  
+						</div>
+						<div class="error"></div>
+					</div>					
+					<div class="lis">
+						<input class="sub" type="submit" value="发送" />
+					</div>	
+				</div>
+				</form>  
+			</div>
+		</div>
+	</div>
+    <script type="text/javascript" src="js/main.js" ></script>   
+</body>
+</html>

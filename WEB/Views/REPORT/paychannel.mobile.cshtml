@@ -1,0 +1,169 @@
+﻿@{
+    ViewBag.Title = "支付渠道汇总";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_paychannel>;
+    var dt = ViewBag.dt as System.Data.DataTable;
+    var paymodeList = ViewBag.paymodeList as List<JMP.MDL.jmp_paymode>;
+    int num = ViewBag.num;
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main mobile-container">
+    <section class="sct-btn-tit">
+        <a id="btn-show-search" class="btn btn-primary" onclick="pop.showSearch('search-container')">查询</a>
+    </section>
+    <div class="search-container">
+        <select name="searchType" id="searchType" class="ui dropdown fluid fluid-block">
+            <option value="1" @(Request["s_type"] == "1" ? "selected=selected" : "")>渠道名称</option>
+        </select>
+        <div class="ui input fluid fluid-block">
+            <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["s_key"]" />
+        </div>
+        <div class="ui input fluid fluid-block field">
+            <input name="stime" type="text" id="stime" value="@(string.IsNullOrEmpty(Request["s_begin"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : Request["s_begin"])" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')||\'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")\'}'})" />
+            ~
+            <input name="etime" type="text" id="etime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")'})" value="@(string.IsNullOrEmpty(Request["s_end"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : Request["s_end"])" />
+        </div>
+        <select name="paymode" id="paymode" class="ui dropdown fluid fluid-block">
+            <option value="" @( ViewBag.paymode == "" ? "selected=selected" : "")>支付类型</option>
+            @{
+                foreach (var em in paymodeList)
+                {
+                    <option value="@em.p_name" @( ViewBag.paymode == em.p_name ? "selected=selected" : "")>@em.p_name</option>
+                }
+            }
+        </select>
+        <select name="searchDesc" id="searchDesc" class="ui dropdown fluid fluid-block">
+            <option value="1" @(Request["s_sort"] == "1" ? "selected=selected" : "")>降序</option>
+            <option value="0" @(Request["s_sort"] == "0" ? "selected=selected" : "")>升序</option>
+        </select>
+        <div class="ui input fluid fluid-block field">
+            <input name="daytime" type="text" id="daytime" value="@(string.IsNullOrEmpty(Request["daytime"]) ? "00:00" : Request["daytime"])" onfocus="WdatePicker({dateFmt:'HH:mm',minDate:'00:00',maxDate:'23:30'})" />
+            ~
+            <input name="enddaytime" type="text" id="enddaytime" value="@(string.IsNullOrEmpty(Request["enddaytime"]) ? "23:30" : Request["enddaytime"])" onfocus="WdatePicker({dateFmt:'HH:mm',minDate:'#F{$dp.$D(\'stime\')}',maxDate:'23:30'})" />
+        </div>
+        <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="SearchAppReport()">查询</a>
+        <br />
+        <a id="btn_today" class="ui button fluid big primary fluid-block" href="javascript:" onclick="SearcgAppToday()">查询今日</a>
+    </div>
+    <div class="table-container table-responsive">
+        <table class="ui celled striped  table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th>统计日期</th>
+                    <th>渠道编号</th>
+                    <th>渠道名称</th>
+                    <th>支付类型</th>
+                    @if (num == 0)
+                    {
+                        <th>成本费率</th>
+                    }
+                    <th>统计金额</th>
+                    @if (num == 0)
+                    {
+                        <th>成本金额</th>
+                        <th>上游结算金额</th>
+                    }
+                    <th>请求量</th>
+                    <th>成功量</th>
+                    <th>付费成功率</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (list.Count > 0)
+                {
+
+
+                    foreach (var item in list)
+                    {
+
+                        <tr>
+                            <td>@item.datetimes.ToString("yyyy-MM-dd")</td>
+                            <td>@(item.payid > 0 ? item.payid.ToString() : "--")</td>
+                            <td>@(!string.IsNullOrEmpty(item.payname) ? item.payname : "--")</td>
+                            <td>@(!string.IsNullOrEmpty(item.paytype) ? item.paytype : "--")</td>
+                            @if (num == 0)
+                            {
+                                <td>@(string.IsNullOrEmpty(item.ChannelCostRatio.ToString()) ? "--" : String.Format("{0:N2}", (item.ChannelCostRatio * 100)) + "%")</td>
+                            }
+                            <td>@(!string.IsNullOrEmpty(item.money.ToString()) ? String.Format("{0:N2}", item.money) : "--")</td>
+                            @if (num == 0)
+                            {
+                                <td>@(string.IsNullOrEmpty(item.ChannelCostFee.ToString()) ? "--" : String.Format("{0:N2}", item.ChannelCostFee))</td>
+                                <td>@(string.IsNullOrEmpty(item.SettlementAmount.ToString()) ? "--" : String.Format("{0:N2}", item.SettlementAmount))</td>
+                            }
+                            <td>@(item.success + item.notpay)</td>
+                            <td>@(!string.IsNullOrEmpty(item.success.ToString()) ? item.success.ToString() : "--")</td>
+                            <td>@(!string.IsNullOrEmpty(item.successratio.ToString()) ? String.Format("{0:N2}", (item.successratio * 100)) + "%" : "--")</td>
+                        </tr>
+
+                    }
+                    if (dt.Rows.Count > 0)
+                    {
+                        <tr>
+
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            @if (num == 0)
+                            {
+                                <td></td>
+                            }
+                            <td>合计：</td>
+                            <td>@(!string.IsNullOrEmpty(dt.Rows[0]["money"].ToString()) ? String.Format("{0:N2}", dt.Rows[0]["money"]) : "--")</td>
+                            @if (num == 0)
+                            {
+                                <td>@(!string.IsNullOrEmpty(dt.Rows[0]["ChannelCostFee"].ToString()) ? String.Format("{0:N2}", dt.Rows[0]["ChannelCostFee"]) : "--")</td>
+                                <td>@(!string.IsNullOrEmpty(dt.Rows[0]["SettlementAmount"].ToString()) ? String.Format("{0:N2}", dt.Rows[0]["SettlementAmount"]) : "--")</td>
+                            }
+                            <td>@(!string.IsNullOrEmpty(dt.Rows[0]["success"].ToString()) && !string.IsNullOrEmpty(dt.Rows[0]["notpay"].ToString()) ? (Int32.Parse(dt.Rows[0]["success"].ToString()) + Int32.Parse(dt.Rows[0]["notpay"].ToString())) : 0)</td>
+                            <td>@(!string.IsNullOrEmpty(dt.Rows[0]["success"].ToString()) ? dt.Rows[0]["success"].ToString() : "--")</td>
+                            <td>@(decimal.Parse(dt.Rows[0]["success"].ToString()) + decimal.Parse(dt.Rows[0]["notpay"].ToString()) > 0 ? ((decimal.Parse(dt.Rows[0]["success"].ToString()) / (decimal.Parse(dt.Rows[0]["success"].ToString()) + decimal.Parse(dt.Rows[0]["notpay"].ToString()))) * 100).ToString("f2") + "%" : "0%")</td>
+
+                        </tr>
+                    }
+
+                }
+                else
+                {
+                    <tr>
+                        <td align="center" colspan="11" class="nodata">暂无记录</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+    <script type="text/javascript">
+        function ArticleManage(pageIndex, pageSize, ptype) {
+            if (ptype == null || ptype == "" || ptype == undefined)
+                ptype = "total";
+            var url = "/REPORT/paychannel?curr=" + pageIndex + "&psize=" + pageSize + "&rtype=" + ptype;
+            var types = $("#searchType option:selected").val();
+            var searchKey = $("#searchKey").val();
+            var stime = $("#stime").val();
+            var etime = $("#etime").val();
+            var sort = $("#searchDesc option:selected").val();
+            var daytime = $.trim($("#daytime").val());
+            var enddaytime = $.trim($("#enddaytime").val());
+            var paymode = $.trim($("#paymode").val());
+            url += "&s_type=" + types + "&s_key=" + searchKey + "&s_sort=" + sort + "&s_begin=" + stime + "&s_end=" + etime + "&enddaytime=" + enddaytime + "&daytime=" + daytime + "&paymode=" + paymode;
+            location.href = encodeURI(url);
+        }
+
+        //选择每页显示数量
+        function pagexz() {
+            var PageSize = $("#pagexz").val();
+            ArticleManage(0, PageSize);
+        }
+
+        function SearchAppReport() {
+            var PageSize = $("#pagexz").val();
+            ArticleManage(1, PageSize, "total");
+        }
+        function SearcgAppToday() {
+            var PageSize = $("#pagexz").val();
+            ArticleManage(1, PageSize, "today");
+        }
+    </script>
+</div>

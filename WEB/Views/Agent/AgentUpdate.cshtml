@@ -1,0 +1,223 @@
+﻿@{
+    ViewBag.Title = "修改代理商";
+    Layout = "~/Views/UI/dialog.cshtml";
+    string qt_url = (string)ViewBag.UploadUrl;
+    var modelAgent = ViewBag.modelAgent as JMP.MDL.CoAgent;
+}
+@JMP.TOOL.UserHelper.js("Authentication.js")
+@JMP.TOOL.UserHelper.js("Agent/AgentList.js")
+@JMP.TOOL.UserHelper.js("jquery.ajaxupload.js")
+<form id="frm-user-add" method="post" enctype="multipart/form-data">
+    <input name="id" id="id" type="hidden" value="@modelAgent.Id" />
+    <div class="main">
+        <div class="plate-tab-wrap">
+            <div id="floatHead" class="plate-tab">
+                <div class="plate-tab-ul-wrap">
+                    <ul>
+                        <li><a href="javascript:;" onclick="dialogTab(this);" class="selected">基本信息</a></li>
+                        <li><a href="javascript:;" onclick="dialogTab(this);">身份信息</a></li>
+                        <li><a href="javascript:;" onclick="dialogTab(this);">财务信息</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="plate-dialog-tab-form border">
+            <dl>
+                <dt>认证类别：</dt>
+                <dd>
+                    <div class="rule-single-select">
+                        <select name="u_category" id="u_category" onchange="ChangeType(this)">
+                            <option value="0" @(modelAgent.Classify == 0 ? "selected='selected'" : "")>个人</option>
+                            <option value="1" @(modelAgent.Classify == 1 ? "selected='selected'" : "")>企业</option>
+                        </select>
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>所属商务姓名：</dt>
+                <dd>
+                    <div class="single-input normal">
+
+                        <input type="text" name="relation_person_name" id="relation_person_name" value="@(string.IsNullOrEmpty(modelAgent.OwnerName)?"":modelAgent.OwnerName)" onclick="relation_add()" readonly="readonly" />
+                        <input type="hidden" name="relation_person_id" id="relation_person_id" value="@(modelAgent.OwnerId>0?modelAgent.OwnerId:0)" />
+                        <input type="hidden" name="relation_person_names" id="relation_person_names" value="@(string.IsNullOrEmpty(modelAgent.OwnerName)?"":modelAgent.OwnerName)" />
+                    </div>
+                    <div class="Validform_checktip" id="relation_person_id_tip">*必选！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>登录名称：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="LoginName" type="text" id="LoginName" onblur="CheckLoginName()" value="@(string.IsNullOrEmpty(modelAgent.LoginName)?"":modelAgent.LoginName)" />
+                    </div>
+                    <div class="Validform_checktip" id="LoginName_tip">*必填，登录名称！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>登录密码：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="Password" type="password" id="Password" onblur="CheckPwd()" value="@(JMP.TOOL.DESEncrypt.Decrypt(string.IsNullOrEmpty(modelAgent.Password)?"":modelAgent.Password))" />
+                    </div>
+                    <div class="Validform_checktip" id="Password_tip">*必填，由6-30个字符组成！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>真实姓名：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="DisplayName" type="text" id="DisplayName" onblur="CheckRName()" value="@(string.IsNullOrEmpty(modelAgent.DisplayName)?"":modelAgent.DisplayName)" />
+                    </div>
+                    <div class="Validform_checktip" id="DisplayName_tip">*必填且1-6位汉字组成！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>邮件地址：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="EmailAddress" type="text" id="EmailAddress" onblur="CheckEmail()" value="@(string.IsNullOrEmpty(modelAgent.EmailAddress)?"":modelAgent.EmailAddress)" />
+                    </div>
+                    <div class="Validform_checktip" id="EmailAddress_tip">*必填，登录邮件地址！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>联系电话：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="MobilePhone" type="text" id="MobilePhone" onblur="CheckPhone()" value="@(string.IsNullOrEmpty(modelAgent.MobilePhone)?"":modelAgent.MobilePhone)" />
+                    </div>
+                    <div class="Validform_checktip" id="MobilePhone_tip">*11位手机号或固定电话(号码或区号-号码)！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>QQ号码：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="QQ" type="text" id="QQ" onblur="CheckQQ()" value="@(string.IsNullOrEmpty(modelAgent.QQ)?"":modelAgent.QQ)" />
+                    </div>
+                    <div class="Validform_checktip" id="QQ_tip">*必填且纯数字组成，5-16位之间！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>网址：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="Website" type="text" id="Website" value="@(string.IsNullOrEmpty(modelAgent.Website)?"":modelAgent.Website)" />
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>联系地址：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="ContactAddress" type="text" id="ContactAddress" onblur="CheckAddRess()" value="@(string.IsNullOrEmpty(modelAgent.ContactAddress)?"":modelAgent.ContactAddress)" />
+                    </div>
+                    <div class="Validform_checktip" id="ContactAddress_tip">*必填且10-60位之间(一个汉字占两个字符)！</div>
+                </dd>
+            </dl>
+        </div>
+        <div class="plate-dialog-tab-form border" style="display: none">
+            <dl id="user_idno">
+                <dt>身份证号码：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="IDCardNumber" type="text" id="IDCardNumber" maxlength="18" onblur="CheckIdno()" value="@(string.IsNullOrEmpty(modelAgent.IDCardNumber)?"":modelAgent.IDCardNumber)" />
+                    </div>
+                    <div class="Validform_checktip" id="IDCardNumber_tip">*必填，用户身份证号码！</div>
+                </dd>
+            </dl>
+            <dl id="user_yyzz" style="@(modelAgent.Classify == 1 ? "display:;" : "display:none;")">
+                <dt>营业执照：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="BusinessLicenseNumber" type="text" id="BusinessLicenseNumber" maxlength="18" onblur="CheckYYZZ()" value="@(string.IsNullOrEmpty(modelAgent.BusinessLicenseNumber)?"":modelAgent.BusinessLicenseNumber)" />
+                    </div>
+                    <div class="Validform_checktip" id="BusinessLicensePhotoPath_tip">*必填且长度为15或18位！</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt id="zjzpname">身份证照片：</dt>
+                <dd>
+                    <div class="upload-certificate">
+                        <div class="upload-box">
+                            @{
+
+                                var urlsfz = string.IsNullOrEmpty(modelAgent.PersonalPhotoPath) ? "" : qt_url + modelAgent.PersonalPhotoPath;
+                            }
+
+                            <img src="@urlsfz" id="certificate" />
+                        </div>
+                        <input name="certificatefile" type="file" id="certificatefile" onchange="FileChange()" />
+                        <input type="hidden" name="u_photo" id="u_photo" value="@(string.IsNullOrEmpty(modelAgent.PersonalPhotoPath)?"":modelAgent.PersonalPhotoPath)" />
+
+                    </div>
+                    <div class="Validform_checktip" id="u_photo_tip">*请选择证件图片（.jpg.png.bmp.jpeg）！</div>
+                    <br />
+                    @if (urlsfz != "")
+                    {
+                        <div class="Validform_checktip"><a href="@urlsfz" target="_blank">预览</a></div>
+                    }
+                </dd>
+            </dl>
+            <dl id="qysfz" style="@(modelAgent.Classify == 1 ? "display:;" : "display:none;")">
+                <dt>营业执照照片：</dt>
+                <dd>
+                    <div class="upload-certificate">
+                        <div class="upload-box">
+                            @{
+                                var urlyyzz = string.IsNullOrEmpty(modelAgent.BusinessLicensePhotoPath) ? "" : qt_url + modelAgent.BusinessLicensePhotoPath;
+                            }
+                            <img src="@urlyyzz" id="sfzficate" />
+                        </div>
+                        <input name="sfzcertificatefile" type="file" id="sfzcertificatefile" onchange="FileChangeSfz()" />
+                        <input type="hidden" name="u_blicense" id="u_blicense" value="@(string.IsNullOrEmpty(modelAgent.BusinessLicensePhotoPath)?"":modelAgent.BusinessLicensePhotoPath)" />
+                    </div>
+                    <div class="Validform_checktip" id="sfzficateyy">*请选择证件图片（.jpg.png.bmp.jpeg）！</div>
+                    <br />
+                    @if (!string.IsNullOrEmpty(urlyyzz))
+                    {
+                        <div class="Validform_checktip"><a href="@urlyyzz" target="_blank">预览</a></div>
+                    }
+                </dd>
+            </dl>
+        </div>
+        <div class="plate-dialog-tab-form border" style="display: none">
+            <dl id="bank_zhanghu">
+                <dt>银行账户：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="BankAccount" type="text" id="BankAccount" onblur="CheckAccount()" value="@(string.IsNullOrEmpty(modelAgent.BankAccount)?"":modelAgent.BankAccount)" />
+                    </div>
+                    <div id="BankAccount_tip" class="Validform_checktip">*必填，请输入银行卡号！</div>
+                </dd>
+            </dl>
+            <dl id="bank_kaihuren">
+                <dt>开户名称：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="BankAccountName" type="text" id="BankAccountName" onblur="CheckName()" value="@(string.IsNullOrEmpty(modelAgent.BankAccountName)?"":modelAgent.BankAccountName)" />
+                    </div>
+                    <div class="Validform_checktip" id="BankAccountName_tip">*必填且由1-6位汉字组成！</div>
+                </dd>
+            </dl>
+            <dl id="bank_fenhang">
+                <dt>开户行全称：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="BankFullName" type="text" id="BankFullName" onblur="CheckBankName()" value="@(string.IsNullOrEmpty(modelAgent.BankFullName)?"":modelAgent.BankFullName)" />
+                    </div>
+                    <div class="Validform_checktip" id="BankFullName_tip">*必填且10-60位之间(一个汉字占两个字符)！</div>
+                </dd>
+            </dl>
+
+        </div>
+        <div class="page-footer" style="width: 100%;">
+            <div class="btn-listbtn">
+                <input type="button" value="保存" onclick="SaveUpdateAgent()" class="btn btn-primary" id="btn-save-add" />
+                <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</form>

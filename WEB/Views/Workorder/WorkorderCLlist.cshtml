@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "值班者统计";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_workorderReport>;
+    int pageCount = ViewBag.pageCount;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul class="frm-ul clearfix">
+        <li>
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入值班者" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </li>
+        <li>
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" value="@(string.IsNullOrEmpty(ViewBag.stime) ? DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd") : ViewBag.stime)" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}',minDate:'@DateTime.Now.ToString("yyyy-01-01")',dateFmt:'yyyy-MM-dd'})" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.ToString("yyyy-MM-dd")',dateFmt:'yyyy-MM-dd'})" value="@(string.IsNullOrEmpty(ViewBag.etime) ? DateTime.Now.AddDays(0).ToString("yyyy-MM-dd") : ViewBag.etime)" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                    <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary btn-mgn" href="javascript:" onclick="serch()">查询</a>
+
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>值班人</th>
+                    <th>工单总量</th>
+                    <th>工单成功处理总量</th>
+                    <th>平均响应时间(分钟)</th>
+                    <th>平均评分</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <td>
+                                    @item.u_realname
+                                </td>
+                                <td>@item.countworkorder</td>
+                                <td>@item.sucessworkorder</td>
+                                <td>@item.branch</td>
+                                <td>@item.socre</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td align="center" colspan="5" class="nodata"> 暂无记录 </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManageTJ", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)
+    <script type="text/javascript">
+        function ArticleManageTJ(pageIndex, pageSize) {
+            var url = "/Workorder/WorkorderCLlist?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+            var sea_name = $("#sea_name").val();
+            var searchDesc = $("#searchDesc").val();
+            var r_begin = $.trim($("#stime").val());
+            var r_end = $.trim($("#etime").val());
+            url += "&sea_name=" + sea_name + "&searchDesc=" + searchDesc + "&r_begin=" + r_begin + "&r_end=" + r_end;
+            location.href = encodeURI(url);
+        }
+        //统计查询
+        function serch() {//查询
+            var PageSize = $("#pagexz").val();
+            ArticleManageTJ(1, PageSize);
+        }
+        //选择每页显示数量
+        function pagexz() {
+            var PageSize = $("#pagexz").val();
+            ArticleManageTJ(1, PageSize);
+        }
+    </script>
+</div>

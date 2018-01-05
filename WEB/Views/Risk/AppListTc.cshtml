@@ -1,0 +1,342 @@
+﻿@{
+    ViewBag.Title = "应用弹窗";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_app>;
+    var listapp = ViewBag.listapp as List<JMP.MDL.jmp_app>;
+    string appstr = "," + ViewBag.appstr + ",";
+}
+<div class="main">
+    <input type="hidden" id="cid" value="@ViewBag.cid" />
+    <div class="layer-mt15">
+        <ul class="frm-ul clearfix">
+            <li>
+                <div class="rule-single-select">
+                    <select name="searchType" id="searchType">
+                        <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>应用编号</option>
+                        <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>应用名称</option>
+                        <option value="3" @(ViewBag.type == 3 ? "selected='selected'" : "")>所属商户</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+            </li>
+            <li>
+                <div class="rule-single-select">
+                    <select name="auditstate" id="platformid">
+                        <option value="0" @(ViewBag.platformid == 0 ? "selected='selected'" : "")>关联平台</option>
+                        <option value="1" @(ViewBag.platformid == 1 ? "selected='selected'" : "")>安卓</option>
+                        <option value="2" @(ViewBag.platformid == 2 ? "selected='selected'" : "")>苹果</option>
+                        <option value="3" @(ViewBag.platformid == 3 ? "selected='selected'" : "")>H5</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlocuser()">查询</a>
+            </li>
+            <li>
+                <a id="btn_user_select" class="btn btn-primary" href="javascript:" onclick="selectxzuser()">确认选择</a>
+            </li>
+        </ul>
+    </div>
+    <div class="clear10"></div>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="apptable" class="table-cnt lay-table-cnt">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th width="100">应用编号</th>
+                    <th>应用名称</th>
+                    <th>所属商户</th>
+                    <th>关联平台</th>
+                    <th>审核状态</th>
+                    <th>状态</th>
+                    <th>审核人</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+
+                    if (!string.IsNullOrEmpty(ViewBag.sea_name))
+                    {
+                        if (list.Count > 0)
+                        {
+                            foreach (var item in list)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="child" class="checkall" @((!string.IsNullOrEmpty(appstr) && appstr.Contains("," + item.a_id.ToString() + ",")) ? " checked=\"checked\"" : "") value="@item.a_id" />
+                                    </td>
+                                    <td>@item.a_id</td>
+                                    <td>@item.a_name</td>
+                                    <td>@item.u_realname</td>
+                                    <td>
+                                        @{switch (item.a_platform_id)
+                                            {
+                                                case 1:
+                                                    <label>安卓</label>
+                                                    break;
+                                                case 2:
+                                                    <label>苹果</label>
+                                                    break;
+                                                case 3:
+                                                    <label>H5</label>
+                                                    break;
+                                            }}
+                                    </td>
+                                    <td>
+                                        @{
+                                            switch (item.a_auditstate)
+                                            {
+                                                case 0:
+                                                    <font color='red'>等待审核</font>
+                                                    break;
+                                                case 1:
+                                                    <font color='green'>审核通过</font>
+                                                    break;
+                                                case 2:
+                                                    <font color='red'>审核未通过</font>
+                                                    break;
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.a_state == 1)
+                                            {
+                                                <font color='green'>正常</font>
+                                            }
+                                            else
+                                            {
+                                                <font color='red'>冻结</font>
+                                            }
+                                        }
+                                    </td>
+                                    <td>@(!string.IsNullOrEmpty(item.a_auditor) ? item.a_auditor : "--")</td>
+                                </tr>
+                                                }
+                                            }
+
+                                            if (listapp.Count > 0)
+                                            {
+                                                foreach (var item in listapp)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <input type="checkbox" name="child" class="checkall" @((!string.IsNullOrEmpty(appstr) && appstr.Contains("," + item.a_id.ToString() + ",")) ? " checked=\"checked\"" : "") value="@item.a_id" />
+                                                        </td>
+                                                        <td>@item.a_id</td>
+                                                        <td>@item.a_name</td>
+                                                        <td>@item.u_realname</td>
+                                                        <td>
+                                                            @{switch (item.a_platform_id)
+                                                                {
+                                                                    case 1:
+                                                                        <label>安卓</label>
+                                                                        break;
+                                                                    case 2:
+                                                                        <label>苹果</label>
+                                                                        break;
+                                                                    case 3:
+                                                                        <label>H5</label>
+                                                                        break;
+                                                                }}
+                                                        </td>
+                                                        <td>
+                                                            @{
+                                                                switch (item.a_auditstate)
+                                                                {
+                                                                    case 0:
+                                                                        <font color='red'>等待审核</font>
+                                                                        break;
+                                                                    case 1:
+                                                                        <font color='green'>审核通过</font>
+                                                                        break;
+                                                                    case 2:
+                                                                        <font color='red'>审核未通过</font>
+                                                                        break;
+                                                                }
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @{
+                                                                if (item.a_state == 1)
+                                                                {
+                                                                    <font color='green'>正常</font>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <font color='red'>冻结</font>
+                                                                }
+                                                            }
+                                                        </td>
+                                                        <td>@(!string.IsNullOrEmpty(item.a_auditor) ? item.a_auditor : "--")</td>
+                                                    </tr>
+
+                                                                        }
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+
+
+
+                                                                    if (listapp.Count > 0)
+                                                                    {
+                                                                        foreach (var item in listapp)
+                                                                        {
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <input type="checkbox" name="child" class="checkall" @((!string.IsNullOrEmpty(appstr) && appstr.Contains("," + item.a_id.ToString() + ",")) ? " checked=\"checked\"" : "") value="@item.a_id" />
+                                                                                </td>
+                                                                                <td>@item.a_id</td>
+                                                                                <td>@item.a_name</td>
+                                                                                <td>@item.u_realname</td>
+                                                                                <td>
+                                                                                    @{switch (item.a_platform_id)
+                                                                                        {
+                                                                                            case 1:
+                                                                                                <label>安卓</label>
+                                                                                                break;
+                                                                                            case 2:
+                                                                                                <label>苹果</label>
+                                                                                                break;
+                                                                                            case 3:
+                                                                                                <label>H5</label>
+                                                                                                break;
+                                                                                        }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    @{
+                                                                                        switch (item.a_auditstate)
+                                                                                        {
+                                                                                            case 0:
+                                                                                                <font color='red'>等待审核</font>
+                                                                                                break;
+                                                                                            case 1:
+                                                                                                <font color='green'>审核通过</font>
+                                                                                                break;
+                                                                                            case 2:
+                                                                                                <font color='red'>审核未通过</font>
+                                                                                                break;
+                                                                                        }
+                                                                                    }
+                                                                                </td>
+                                                                                <td>
+                                                                                    @{
+                                                                                        if (item.a_state == 1)
+                                                                                        {
+                                                                                            <font color='green'>正常</font>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <font color='red'>冻结</font>
+                                                                                        }
+                                                                                    }
+                                                                                </td>
+                                                                                <td>@(!string.IsNullOrEmpty(item.a_auditor) ? item.a_auditor : "--")</td>
+                                                                            </tr>
+
+                                                                                            }
+                                                                                        }
+
+                                                                                        if (list.Count > 0)
+                                                                                        {
+                                                                                            foreach (var item in list)
+                                                                                            {
+                                                                                                <tr>
+                                                                                                    <td>
+                                                                                                        <input type="checkbox" name="child" class="checkall" @((!string.IsNullOrEmpty(appstr) && appstr.Contains("," + item.a_id.ToString() + ",")) ? " checked=\"checked\"" : "") value="@item.a_id" />
+                                                                                                    </td>
+                                                                                                    <td>@item.a_id</td>
+                                                                                                    <td>@item.a_name</td>
+                                                                                                    <td>@item.u_realname</td>
+                                                                                                    <td>
+                                                                                                        @{switch (item.a_platform_id)
+                                                                                                            {
+                                                                                                                case 1:
+                                                                                                                    <label>安卓</label>
+                                                                                                                    break;
+                                                                                                                case 2:
+                                                                                                                    <label>苹果</label>
+                                                                                                                    break;
+                                                                                                                case 3:
+                                                                                                                    <label>H5</label>
+                                                                                                                    break;
+                                                                                                            }}
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        @{
+                                                                                                            switch (item.a_auditstate)
+                                                                                                            {
+                                                                                                                case 0:
+                                                                                                                    <font color='red'>等待审核</font>
+                                                                                                                    break;
+                                                                                                                case 1:
+                                                                                                                    <font color='green'>审核通过</font>
+                                                                                                                    break;
+                                                                                                                case 2:
+                                                                                                                    <font color='red'>审核未通过</font>
+                                                                                                                    break;
+                                                                                                            }
+                                                                                                        }
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        @{
+                                                                                                            if (item.a_state == 1)
+                                                                                                            {
+                                                                                                                <font color='green'>正常</font>
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                <font color='red'>冻结</font>
+                                                                                                            }
+                                                                                                        }
+                                                                                                    </td>
+                                                                                                    <td>@(!string.IsNullOrEmpty(item.a_auditor) ? item.a_auditor : "--")</td>
+                                                                                                </tr>
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+@JMP.TOOL.UserHelper.js("payment/Interface.js")
+<script type="text/javascript">
+    //分页
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/Risk/AppListTc?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        var searchType = $("#searchType").val();
+        var sea_name = $("#sea_name").val();
+        var platformid = $.trim($("#platformid").val());
+        var valArr = new Array;
+        $("#apptable :checkbox[checked]").each(function (i) {
+            valArr[i] = $(this).val();
+        });
+        var vals = $.trim((valArr.join(',')).replace("on,", ""));
+        var appstr = vals;
+        var cid = $.trim($("#cid").val());
+        url += "&type=" + searchType + "&sea_name=" + sea_name + "&platformid=" + platformid + "&appstr=" + appstr + "&cid=" + cid;
+        if (searchType == "1" && isNaN(sea_name)) {
+            window.parent.ShowMsg("只能输入数字！", "error", "");
+            return false;
+        }
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+    //列表查询
+    function serchlocuser() {//查询
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+</script>

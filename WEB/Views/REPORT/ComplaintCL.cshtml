@@ -1,0 +1,36 @@
+﻿@model WEB.Models.AppUser.MerchantListViewModel
+@{
+    ViewBag.Title = "处理页面";
+    Layout = "~/Views/UI/dialog.cshtml";
+
+}
+@JMP.TOOL.UserHelper.js("REPORT/Complaint.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+
+
+<div class="main">
+    <input type="hidden" id="r_id" value="@(ViewBag.uids)" />
+    <div class="clear10"></div>
+    <div class="plate-form">
+        <dl>
+            <dt>处理结果：</dt>
+            <dd>
+                <textarea name="c_result" type="text" id="c_result"> </textarea>
+                <div class="Validform_checktip" id="c_result_p">*请填写处理结果</div>
+            </dd>
+        </dl> 
+</div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnComplaintCL" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+
+    })
+</script>

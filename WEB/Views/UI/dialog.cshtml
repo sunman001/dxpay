@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    
+    <title>@ViewBag.Title</title>
+    @JMP.TOOL.UserHelper.css("plugin/font-awesome/css/font-awesome-ie7.min.css")
+    @JMP.TOOL.UserHelper.css("plugin/font-awesome/css/font-awesome.min.css")
+    @JMP.TOOL.UserHelper.css("main.css")
+    @JMP.TOOL.UserHelper.js("jquery-1.7.2.min.js")
+    @JMP.TOOL.UserHelper.js("layout.js")
+    @JMP.TOOL.UserHelper.js("JValidator.js")
+    @JMP.TOOL.UserHelper.js("layer/layer.js")
+    @JMP.TOOL.UserHelper.js("PubMethod.js")
+</head>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+</body>
+</html>

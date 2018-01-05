@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "开发者风控信息审核";
+    Layout = "~/Views/UI/dialog.cshtml";
+    JMP.MDL.jmp_user UModel = (JMP.MDL.jmp_user)ViewBag.usermodel;
+}
+@JMP.TOOL.UserHelper.js("AppUser/appuser.js")
+<div class="main">
+    <input type="hidden" id="userid" value="@UModel.u_id" />
+
+        <div class="plate-form">
+            <dl>
+                <dt>签订合同状态：</dt>
+                <dd>
+                    <input value="1" name="IsSignContract" type="radio" id="IsSignContract" @(UModel.IsSignContract == true ? "checked='checked'" : "") /><label for="u_stat1">是</label>
+                    <input value="0" name="IsSignContract" type="radio" id="IsSignContract" @(UModel.IsSignContract == false ? "checked='checked'" : "") /><label for="u_stat2">否</label>                 
+                </dd>
+            </dl>
+            <dl>
+                <dt>产品备案状态：</dt>
+                <dd>
+                    <input value="1" name="IsRecord" type="radio" id="IsRecord" @(UModel.IsRecord == true ? "checked='checked'" : "") /><label for="u_stat1">是</label>
+                    <input value="0" name="IsRecord" type="radio" id="IsRecord" @(UModel.IsRecord == false ? "checked='checked'" : "") /><label for="u_stat2">否</label>
+                </dd>
+            </dl>
+        </div>
+        <div class="page-footer" style="width: 100%;">
+            <div class="btn-listbtn">
+                <input type="button" name="btnRisk" value="保存" onclick="UpateRisk()" class="btn btn-primary" id="btn-save-add" />
+                <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+            </div>
+            <div class="clear"></div>
+        </div>
+
+</div>

@@ -1,0 +1,172 @@
+﻿@{
+    ViewBag.Title = "应用异常核查管理";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_app_request_audit>;
+    int pageCount = ViewBag.pageCount;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("mobile/REPORT/AppRequestAuditList.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main mobile-container">
+    <div class="toolbar-container">
+        <div id="ToolBar" class="frm-dcnt">
+            <ul class="frm-ul-tit clearfix">
+                @Html.Raw(ViewBag.locUrl)
+                <li>
+                    <a id="btn-show-search" class="btn" onclick="pop.showSearch('search-container')">查询</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="search-container">
+        <select name="searchType" id="searchType" class="ui dropdown fluid fluid-block">
+            <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>所属应用</option>
+            <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>处理人</option>
+        </select>
+
+        <div class="ui input fluid fluid-block">
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" />
+           
+        </div>
+        <div class="date-tool-lable bl">
+            创建开始日期：
+        </div>
+        <div class="ui input fluid fluid-block">
+            <input name="stime" type="text" id="stime" value="@(string.IsNullOrEmpty(ViewBag.stime)? DateTime.Now.ToString("yyyy-MM-dd"):ViewBag.stime)" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}',dateFmt:'yyyy-MM-dd'})" />
+        </div>
+        <div class="date-tool-lable bl">
+            结束日期
+        </div>
+        <div class="ui input fluid fluid-block">
+            <input name="etime" type="text" id="etime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.ToString("yyyy-MM-dd")',dateFmt:'yyyy-MM-dd'})" value="@(string.IsNullOrEmpty(ViewBag.etime)? DateTime.Now.ToString("yyyy-MM-dd"):ViewBag.etime)" />
+        </div>
+        <select name="searchDesc" id="searchDesc" class="ui dropdown fluid fluid-block">
+            <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+            <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+        </select>
+
+        <select name="auditstate" id="auditstate" class="ui dropdown fluid fluid-block">
+            <option value="" @(ViewBag.auditstate == "" ? "selected='selected'" : "")>处理状态</option>
+            <option value="0" @(ViewBag.auditstate == "0" ? "selected='selected'" : "")>未处理</option>
+            <option value="1" @(ViewBag.auditstate == "1" ? "selected='selected'" : "")>已处理</option>
+        </select>
+        <select name="typeclass" id="typeclass" class="ui dropdown fluid fluid-block">
+            <option value="" @(ViewBag.typeclass == "" ? "selected='selected'" : "")>全部</option>
+            <option value="0" @(ViewBag.typeclass == "0" ? "selected='selected'" : "")>应用核查</option>
+            <option value="1" @(ViewBag.typeclass == "1" ? "selected='selected'" : "")>通道核查</option>
+        </select>
+        <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="serchlocuser()">查询</a>
+    </div>
+    <div class="data-table-2 table-container table-responsive">
+        <table class="ui celled striped white table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th width="40">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th>展开</th>
+                    <th style="text-align: left;">所属应用/通道</th>
+                    <th>创建时间</th>
+                    <th>是否已处理</th>
+                    <th>处理人</th>
+                    <th>处理时间</th>
+                    <th>处理结果</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+
+                        foreach (var item in list)
+                        {
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+
+                            <tr onclick="clickOpen(@id)">
+                                <td>
+                                    @if (Convert.ToInt32(item.is_processed) == 0)
+                                    {
+                                        <input type="checkbox" name="child" class="checkall" value="@item.id" />
+                                    }
+                                </td>
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                                <td style="text-align: left; white-space: nowrap"> @item.app_name</td>
+                                <td>
+                                    @item.created_on.ToString("yyyy-MM-dd")
+                                </td>
+                                <td>
+                                    @{
+                                        switch (Convert.ToInt32(item.is_processed))
+                                        {
+
+                                            case 0:
+                                                <span class="red">未处理</span>
+                                                break;
+                                            case 1:
+                                                <span class="green">已处理</span>
+                                                break;
+                                        }
+                                    }
+                                </td>
+                                <td>@(!string.IsNullOrEmpty(item.processed_by) ? item.processed_by : "--")</td>
+                                <td>
+                                    @(!string.IsNullOrEmpty(item.processed_time.ToString()) ? DateTime.Parse(item.processed_time.ToString()).ToString("yyyy-MM-dd HH:mm:ss") : "---")
+                                </td>
+                                <td>@(!string.IsNullOrEmpty(item.processed_result) ? item.processed_result : "--")</td>
+                                <td>
+                                    @{
+                                        bool getEdit = bll_limit.GetLocUserLimitVoids("/REPORT/ComplaintCLJG", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑按钮
+                                        if (getEdit)
+                                        {
+
+                                            if (Convert.ToInt32(item.is_processed) == 0)
+                                            {
+                                                <a href="javascript:" class="blue" onclick="complaintLC(@item.id)">处理</a>
+                                            }
+                                            else
+                                            {
+                                                <a>---</a>
+                                            }
+
+                                        }
+                                    }
+                                </td>
+                            </tr>
+
+                             <!--展开-->
+                                        <tr>
+                                            <td colspan="10" style="display:none;" name="Open" id="@Open">
+                                                <div class="dcnt-tab">
+                                                    <table class="table-lst">
+
+                                                        <tr>
+                                                            <td title="@item.message">
+                                                                消息内容:@item.message
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="10" class="nodata"> 暂无记录 </td>
+                                            </tr>
+                                        }
+
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)
+
+</div>

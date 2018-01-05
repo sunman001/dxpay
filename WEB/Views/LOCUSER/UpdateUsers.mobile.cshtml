@@ -1,0 +1,141 @@
+﻿@{
+    ViewBag.Title = "UpdateUsers";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+    var data = ViewBag.model as JMP.MDL.jmp_locuser;
+}
+@JMP.TOOL.UserHelper.js("mobile/local/locals.mobile.js")
+@JMP.TOOL.UserHelper.js("Authentication.js")
+<div class="mobile-popup mobile-container">
+    <div class="ui form">
+        <dl>
+            <dt>用户角色：</dt>
+            <dd>
+                <div class="field">
+                    <select name="selrole_id" id="selrole_id" class="ui dropdown fluid">
+                        @{
+                            if (ViewBag.admin == data.u_id)
+                            {
+                                <option value="1" selected="selected">超级管理员</option>
+                            }
+                            else
+                            {
+                                @Html.Raw(ViewBag.rote)
+                            }
+                        }
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>登录名：</dt>
+            <dd>
+                <div class="field">
+                    <input name="inputName" type="text" id="inputName" value="@data.u_loginname" onblur="inputCheckName()" />
+                    <div class="Validform_checktip" id="checkName">* 登录名不能为空</div>
+                </div>
+
+            </dd>
+        </dl>
+        <dl>
+            <dt>密码：</dt>
+            <dd>
+                <div class="field">
+
+                    <input name="inputPwd" type="password" id="inputPwd" maxlength="20" value="@JMP.TOOL.DESEncrypt.Decrypt(data.u_pwd)" onblur="inputPwdChange()" />
+                </div>
+                <div class="Validform_checktip" id="inputPwdtext">* 密码不能为空</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>确认密码：</dt>
+            <dd>
+                <div class="field">
+
+                    <input name="inputPwdTrue" type="password" id="inputPwdTrue" maxlength="20" value="@JMP.TOOL.DESEncrypt.Decrypt(data.u_pwd)" onblur="inputPwdChange2()" />
+                    <div class="Validform_checktip" id="inputPwd2text">* 确认密码不能为空</div>
+                </div>
+
+            </dd>
+        </dl>
+        <dl>
+            <dt>真实姓名：</dt>
+            <dd>
+                <div class="field">
+
+                    <input name="inputRealname" type="text" id="inputRealname" value="@data.u_realname" onblur="inputCheckRealName()" />
+                    <div class="Validform_checktip" id="checkRealName">* 真实姓名不能为空</div>
+                </div>
+
+            </dd>
+        </dl>
+        <dl>
+            <dt>部门：</dt>
+            <dd>
+                <div class="field">
+
+                    <input name="inputDepartment" type="text" id="inputDepartment" value="@data.u_department" onblur="inputCheckDep()" />
+                    <div class="Validform_checktip" id="checkDep">* 部门不能为空</div>
+                </div>
+
+            </dd>
+        </dl>
+        <dl>
+            <dt>职位：</dt>
+            <dd>
+                <div class="field">
+
+                    <input name="inputPosition" type="text" id="inputPosition" value="@data.u_position" onblur="inputCheckPos()" />
+                    <div class="Validform_checktip" id="checkPos">* 职位不能为空</div>
+                </div>
+
+            </dd>
+        </dl>
+        <dl>
+            <dt>手机号码：</dt>
+            <dd>
+                <div class="field">
+                    <input name="mobilenumber" type="text" id="mobilenumber" maxlength="20" value="@data.u_mobilenumber" onblur="Checkmobilenumber()" /><span class="ie7-input-bug-end"></span>
+                    <div class="Validform_checktip" id="Checkmobilenumber">* 手机号码不能为空</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>邮箱地址：</dt>
+            <dd>
+                <div class="field">
+                    <input name="emailaddress" type="text" id="emailaddress" maxlength="20" value="@data.u_emailaddress" onblur="Checkemailaddress()" /><span class="ie7-input-bug-end"></span>
+                    <div class="Validform_checktip" id="Checkemailaddress">* 邮箱地址不能为空</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>qq：</dt>
+            <dd>
+                <div class="field">
+                    <input name="qq" type="text" id="qq" maxlength="20" value="@data.u_qq" onblur="Checkqq()" /><span class="ie7-input-bug-end"></span>
+                    <div class="Validform_checktip" id="Checkqq">* qq不能为空</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>状态：</dt>
+            <dd id="radOrvActnS">
+                <table>
+                    <tr>
+                        @Html.Raw(ViewBag.state)
+                    </tr>
+                </table>
+            </dd>
+        </dl>
+
+        <dl>
+            <dd>
+                <input name="inputUid" type="hidden" id="inputUid" value="@data.u_id" />
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer">
+        <input type="button" name="btnSave" value="保存" id="btnSave" class="ui button primary" onclick="updatelcoaluser()" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="ui button" />
+    </div>
+</div>

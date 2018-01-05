@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "终端属性报表";
+    Layout = "~/Views/UI/master.cshtml";
+}
+@JMP.TOOL.UserHelper.js("fusionchart/fusioncharts.js")
+@JMP.TOOL.UserHelper.js("fusionchart/fusioncharts.theme.zune.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.searchType == 1 ? "selected=selected" : "")>应用名称</option>
+                    <option value="2" @(ViewBag.searchType == 2 ? "selected=selected" : "")>开发者邮箱</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="searchname" type="text" id="searchname" placeholder="请输入关键字" value="@ViewBag.searchname" class="txtipt" />
+        </li>
+        <li>
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'@ViewBag.ksrq',maxDate:'#F{$dp.$D(\'etime\')||\'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")\'}'})" readonly="readonly" value="@ViewBag.stime" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")'})" readonly="readonly" value="@ViewBag.etime" />
+        </li>
+        <li>
+            <a id="btn_search" class="btn btn-primary" href="javascript:">查询</a>
+        </li>
+    </ul>
+    <div class="plate">
+        <div class="tool">终端属性TOP10</div>
+        <div class="plate-tab-wrap">
+            <div id="floatHead" class="plate-tab">
+                <div class="plate-tab-ul-wrap">
+                    <ul>
+                        <li><a name="xzk" href="javascript:;" onclick="dialogTabJson(this,'statistics');" class="selected">品牌</a></li>
+                        <li><a name="xzk" href="javascript:;" onclick="dialogTabJson(this,'modelnumber');">型号</a></li>
+                        <li><a name="xzk" href="javascript:;" onclick="dialogTabJson(this,'operatingsystem');">操作系统</a></li>
+                        <li><a name="xzk" href="javascript:;" onclick="dialogTabJson(this,'resolution');">分辨率</a></li>
+                        <li><a name="xzk" href="javascript:;" onclick="dialogTabJson(this,'network');">网络</a></li>
+                        <li><a name="xzk" href="javascript:;" onclick="dialogTabJson(this,'operator');">运营商</a></li>
+                        <li><a name="xzk" href="javascript:;" onclick="dialogTabJson(this,'province');">省份</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="chartObj" class="chart-main">
+            <div id="chart">
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function FusionChart(type) {
+        var winHeight = $(window).height() - 160;
+        var stime = $.trim($("#stime").val());
+        var etime = $.trim($("#etime").val());
+        var searchType = $.trim($("#searchType").val());
+        var searchname = $.trim($("#searchname").val());
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/REPORT/TerminalCount?type=" + type + "&stime=" + stime + "&etime=" + etime + "&searchname=" + searchname + "&searchType=" + searchType,
+            success: function (retJson) {
+                if (retJson == "0") {
+                    $("#chart").html("<div style='font-size:14px;color:#5e788a; font-weight:lighter; text-align:center; width:100%;'>未查询到符合条件的数据</div>");
+                } else {
+                    var data = eval('(' + retJson + ')');
+                    var chart = new FusionCharts({
+                        type: "bar2d",
+                        renderAt: "chart",
+                        width: "100%",
+                        height: winHeight + "px",
+                        dataSource: data,
+                        dataFormat: "json"
+                    }).render();
+                }
+            }
+        });
+    }
+    //Tab控制函数用于终端属性报表
+    function dialogTabJson(tabObj, type) {
+        var tabNum = $(tabObj).parent().index("li")
+        //设置点击后的切换样式
+        $(tabObj).parent().parent().find("li a").removeClass("selected");
+        $(tabObj).addClass("selected");
+        FusionChart(type);
+    }
+    $(function () {
+        FusionChart("statistics");
+        $("#btn_search").click(function () {
+            var type = $("a[class='selected']").html();
+            switch (type) {
+                case "品牌":
+                    FusionChart("statistics");
+                    break;
+                case "型号":
+                    FusionChart("modelnumber");
+                    break;
+                case "操作系统":
+                    FusionChart("operatingsystem");
+                    break;
+                case "分辨率":
+                    FusionChart("resolution");
+                    break;
+                case "网络":
+                    FusionChart("network");
+                    break;
+                case "运营商":
+                    FusionChart("operator");
+                    break;
+                case "省份":
+                    FusionChart("province");
+                    break;
+            }
+        })
+    });
+</script>
+

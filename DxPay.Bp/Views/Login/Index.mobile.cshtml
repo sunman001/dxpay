@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>商务后台登陆</title>
+    <!-- plugin -->
+    <link rel="shortcut icon" href="~/images/favicon.ico">
+    <link rel="stylesheet" href="../css/plugin/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/plugin/font-awesome/css/font-awesome-ie7.min.css">
+    <link href="~/mobile/css/logrit.css" rel="stylesheet" />
+    @JMP.TOOL.UserHelper.js("jquery.js")
+    @JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+    @JMP.TOOL.UserHelper.js("plugin/layer/layer.js")
+    @JMP.TOOL.UserHelper.js("mian.js")
+ <script src="~/mobile/js/login/login.js"></script>
+</head>
+<body class="body-log">
+    <section class="head-logo">
+        <i class="logo"></i>
+        <span class="tit">商务</span>
+    </section>
+    <section class="log-cnt">
+        <ul class="log-frm log-frm-sw">
+            <li>
+                <i class="icon icon-user fl"></i>
+                <div class="d-cnt">
+                    <input type="text" class="txtipt txtipt-user" placeholder="请输入用户名" id="loginName"  value="dxzy"/>
+                    <i class="fa fa-times-circle" id="clear"></i>
+                </div>
+            </li>
+            <li>
+                <i class="icon icon-pwd fl"></i>
+                <div class="d-cnt">
+                    <input type="password" class="txtipt txtipt-pwdp" placeholder="请输入密码" id="password"  value="123456" />
+                    <input type="text" class="txtipt txtipt-pwdt" placeholder="请输入密码"  value="123456" />
+                    <i class="fa fa-eye-slash"></i>
+                    <i class="fa fa-eye"></i>
+                </div>
+            </li>
+            <li>
+                <i class="icon icon-d fl"></i>
+                <div class="d-cnt d-cnt-ta">
+                    <input id="code" type="text" name="vc" placeholder="请输入验证码" class="txtipt" />
+                    <div id="code" class="lgn-code" onclick="document.getElementById('verify').src = '/Login/GetValidateCode?height=58&k=' + new Date().toString();">
+                        <img id="verify" src="/Login/GetValidateCode?height=58" alt="看不清？换一张" title="看不清？换一张" />
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <a id="btn_sub" class="btn">立即登录</a>
+            </li>
+        </ul>
+    </section>
+
+    <script type="text/javascript" src="~/mobile/js/jquery-1.8.1.min.js"></script>
+    <script type="text/javascript" src="~/mobile/js/logrit.js"></script>
+</body>
+</html>
+<script>
+    $('#clear').click(function () {
+        document.getElementById("loginName").value = "";
+    })
+</script>
+

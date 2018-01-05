@@ -1,0 +1,161 @@
+﻿@{
+    Layout = null;
+    var mode = ViewBag.mode as JmPayApiServer.Models.CheckoutJsonModel;
+    var H5ViewModel = ViewBag.H5ViewModel as JmPayApiServer.Models.H5ViewModel;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="must-revalidate" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-store" />
+    <meta http-equiv="expires" content="0" />
+    <style type="text/css">
+        .red {
+            color: #f00 !important;
+        }
+
+        .payment-item { /*line-height: 20px;*/
+        }
+
+        /*.qidian_wpa_img {
+            display: none;
+        }*/
+    </style>
+    <script src="~/js/jquery-2.2.4.js"></script>
+    <noscript>
+        &lt;h1 style="color: red"&gt;您的浏览器不支持JavaScript，请更换浏览器或开启JavaScript设置!&lt;/h1&gt;
+    </noscript>
+    <script>
+        var cKey = "cookie_order_info";
+        var oid = '@mode.code';
+        var payApiBaseUrl = "@H5ViewModel.PayApiBaseUrl";
+        function confirmPay() {
+            
+            $("#btnPayH5").attr('disabled', "disabled");
+            $("#btnPayH5").removeAttr("onclick");
+
+            var payType = $("li span.secbtn.current").closest("font").data("paytype");
+            var cValue = oid + '_' + payType;
+            var payParameter = $("li span.secbtn.current").closest("font").data("encryption");
+            addOrder(cValue);
+            window.location.href = payApiBaseUrl + '?code=' + payParameter;
+        }
+
+        function addOrder(oid) {
+            if (orderExists(oid)) {
+                return;
+            }
+            var val = Cookies.get(cKey) + ',' + oid;
+            Cookies.set(cKey, val);
+        }
+
+        function orderExists(oid) {
+            var cookie = Cookies.get(cKey);
+            if (!cookie) {
+                return false;
+            }
+            if (!cKey) {
+                return false;
+            }
+            var orders = cookie.split(',');
+            if (orders.indexOf(oid) > -1) {
+                return true;
+            }
+            return false;
+        }
+
+        $(function () {
+            $("#payment_group li").each(function () {
+                var target = $(this);
+                var payType = target.find("font.topay").data("paytype");
+                var cValue = oid + '_' + payType;
+                if (orderExists(cValue)) {
+                    target.addClass("disabledPay").find(".payment-item").addClass("addDb");
+                    target.find(".desc").addClass("red").html("重复提交,请选择其他方式继续支付");
+                }
+            });
+
+        });
+    </script>
+    <script src="~/js/fastclick-1.0.5.js"></script>
+    <script src="~/js/iscroll-4.2.5.js"></script>
+    <script src="~/js/global.js"></script>
+    <script src="~/js/ipay-common.js"></script>
+    <script src="~/js/home.js"></script>
+    <script src="~/js/js.cookie.js"></script>
+    <link rel="stylesheet" href="~/css/style.css" />
+    <title>收银台</title>
+</head>
+<body class="homeBody lBody" style="padding-bottom: 0;">
+    <header class="clearfix">
+        <p>聚合收银台</p>
+    </header>
+
+    <div class="bill">
+        <div class="billn">
+            <h2>
+                ¥<span>@mode.price</span>
+            </h2>
+            <p class="billName current" style="color: #767676;">
+                @mode.goodsname
+            </p>
+            <p style="color: #b9b9b9">
+                @mode.code
+            </p>
+            <div class="footer">
+                <!--底部信息-->
+                24小时客服电话：023-67399392
+            </div>
+
+        </div>
+    </div>
+    <div class="borderTop"></div>
+    <!-- 支付方式列表 -->
+    <div id="wrapper-w">
+        <div id="wrapper" style="overflow: hidden; height: 343px;">
+            <div id="scroller" style="transition-property: transform; transform-origin: 0px 0px 0px; transform: translate(0px, 0px) scale(1) translateZ(0px);">
+                <input type="hidden" value='@H5ViewModel.Parameter' id="payParameter" />
+                <ul id="payment_group" class="paymentList marginT15">
+                    @{
+                        foreach (var payment in H5ViewModel.PaymentModes)
+                        {
+                            <li data-oid="@mode.code" class="@(!payment.Enabled?"disabledPay":"") ">
+                                <font data-realfee="@payment.Price" class="@(payment.ClsName) topay" data-paytype="@payment.PayType" data-encryption="@payment.encryption">
+                                    <span class="payment-item @(string.IsNullOrEmpty(payment.Description)?" ":" addDb")">@payment.Name</span>
+                                    <p class="desc">@payment.Description</p>
+                                    <span class="secbtn"></span>
+                                </font>
+                            </li>
+
+                        }
+                    }
+                    <p class="ac_togglePayment morePay">
+                        <span class="icon_down_n">其他支付方式</span>
+                    </p>
+                    <div class="footer" style="display: block;">
+                        <span style="float:left;text-align:right;width:60%;margin-left:10px;">24小时客服电话：023-67399392</span>
+                        <a href="http://q.url.cn/s/QP9YE6m?_type=wpa&isKfuin=1" target="_blank" style="text-align:left;width:30%;display:inline-block;" ><img src="~/img/qq.png"  /> </a>
+                    </div>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div class="btnPayBg" style="display: block;"></div>
+    <div class="btnPay down" id="btnPayH5" onclick="confirmPay()">
+        <p>
+            确认支付&nbsp;<span class="secbtn">@mode.price</span>
+        </p>
+    </div>
+
+</body>
+</html>

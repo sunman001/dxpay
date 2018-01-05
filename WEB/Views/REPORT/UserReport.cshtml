@@ -1,0 +1,213 @@
+﻿@{
+    ViewBag.Title = "用户报表";
+    Layout = "~/Views/UI/master.cshtml";
+    var ddt = ViewBag.ddt as System.Data.DataTable;
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    @*<option value="0" @(Request["s_type"] == "0" ? "selected=selected" : "")>用户编号</option>*@
+                    <option value="1" @(Request["s_type"] == "1" ? "selected=selected" : "")>用户名称</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["s_key"]" class="txtipt" />
+        </li>
+        <li>
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" value="@(string.IsNullOrEmpty(Request["s_begin"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : Request["s_begin"])" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')||\'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")\'}'})" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")'})" value="@(string.IsNullOrEmpty(Request["s_end"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : Request["s_end"])" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="relationtype" id="relationtype">
+                    <option value="-1" @( ViewBag.relationtype == -1 ? "selected=selected" : "")>商户类型</option>
+                    <option value="2" @( ViewBag.relationtype == 2 ? "selected=selected" : "")>代理商</option>
+                    <option value="1" @( ViewBag.relationtype == 1 ? "selected=selected" : "")>商务</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="1" @(Request["s_sort"] == "1" ? "selected=selected" : "")>降序</option>
+                    <option value="0" @(Request["s_sort"] == "0" ? "selected=selected" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btn_search" class="btn btn-primary btn-mgn" href="javascript:" onclick="SerachUserReport()">查询</a>
+            <a id="btnSearchdc" class="btn btn-primary" href="javascript:" onclick="Searchdc()">导出</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th>日期</th>
+                    <th>用户名</th>
+                    <th>类型</th>
+                    <th>设备量</th>
+                    <th>请求量</th>
+                    <th>成功量</th>
+                    <th>请求率</th>
+                    <th>付费成功率</th>
+                    <th>金额成功率</th>
+                    <th>合计收入</th>
+                    <th>arpu值</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Rows.Count > 0)
+                {
+                    int id = 0;
+                    string Icon = "Icon_";
+                    string Open = "Open_";
+                    foreach (System.Data.DataRow dr in Model.Rows)
+                    {
+                        id = id + 1;
+                        Icon = "Icon_" + id;
+                        Open = "Open_" + id;
+                        <tr onclick="clickOpen(@id)">
+                            <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp; </td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_time"].ToString()) ? DateTime.Parse(dr["a_time"].ToString()).ToString("yyyy-MM-dd") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["u_realname"].ToString()) ? dr["u_realname"].ToString() : "---")</td>
+                            <td>@{
+                                if (int.Parse(dr["relation_type"].ToString()) == 1)
+                                {
+                                    <font>商务</font>
+                                }
+                                else if (int.Parse(dr["relation_type"].ToString()) == 2)
+                                {
+                                    <font>代理商</font>
+                                }
+                                else
+                                {
+                                    <font>未指定</font>
+                                }
+                            }</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_equipment"].ToString()) ? decimal.Parse(dr["a_equipment"].ToString()).ToString("f0") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_count"].ToString()) ? decimal.Parse(dr["a_count"].ToString()).ToString("f0") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_success"].ToString()) ? decimal.Parse(dr["a_success"].ToString()).ToString("f0") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_equipment"].ToString()) && dr["a_equipment"].ToString() != "0" ? decimal.Parse(dr["a_equipment"].ToString()) != 0 ? ((decimal.Parse(dr["a_count"].ToString()) / decimal.Parse(dr["a_equipment"].ToString())) * 100).ToString("f2") + "%" : "0.00%" : "0.00%")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_count"].ToString()) && dr["a_count"].ToString() != "0" ? decimal.Parse(dr["a_count"].ToString()) != 0 ? ((decimal.Parse(dr["a_success"].ToString()) / decimal.Parse(dr["a_count"].ToString())) * 100).ToString("f2") + "%" : "0.00%" : "0.00%")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_money"].ToString()) ? decimal.Parse(dr["a_money"].ToString()) != 0 ? ((decimal.Parse(dr["a_curr"].ToString()) / decimal.Parse(dr["a_money"].ToString())) * 100).ToString("f2") + "%" : "0.00%" : "0.00%")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_curr"].ToString()) ? decimal.Parse(dr["a_curr"].ToString()).ToString("f2") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_equipment"].ToString()) && dr["a_equipment"].ToString() != "0" ? decimal.Parse(dr["a_equipment"].ToString()) != 0 ? (decimal.Parse(dr["a_curr"].ToString()) / decimal.Parse(dr["a_equipment"].ToString())).ToString("f2") : "0.00" : "0.00")</td>
+                        </tr>
+                         <!--展开部分-->
+                        <tr>
+                            <td colspan="12" style="display:none;" name="Open" id="@Open">
+                                <div class="dcnt-tab">
+                                    <table class="table-lst">
+                                        <tr>
+                                            <td>支付宝收入:@(!string.IsNullOrEmpty(dr["a_alipay"].ToString()) ? decimal.Parse(dr["a_alipay"].ToString()).ToString("f2") : "---")</td>
+                                            <td>微信收入:@(!string.IsNullOrEmpty(dr["a_wechat"].ToString()) ? decimal.Parse(dr["a_wechat"].ToString()).ToString("f2") : "---")</td>
+                                            <td>银联收入:@(!string.IsNullOrEmpty(dr["a_unionpay"].ToString()) ? decimal.Parse(dr["a_unionpay"].ToString()).ToString("f2") : "---")</td>
+                                            <td>QQ钱包收入:@(!string.IsNullOrEmpty(dr["a_qqwallet"].ToString()) ? decimal.Parse(dr["a_qqwallet"].ToString()).ToString("f2") : "---")</td>
+                                            <td>未支付量:@(!string.IsNullOrEmpty(dr["a_notpay"].ToString()) ? decimal.Parse(dr["a_notpay"].ToString()).ToString("f0") : "---")</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    if (ddt.Rows.Count > 0)
+                    {
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>合计：</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_equipment"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_equipment"].ToString()).ToString("f0") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_count"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_count"].ToString()).ToString("f0") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_success"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_success"].ToString()).ToString("f0") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_equipment"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_equipment"].ToString()) != 0 ? ((decimal.Parse(ddt.Rows[0]["a_count"].ToString()) / decimal.Parse(ddt.Rows[0]["a_equipment"].ToString())) * 100).ToString("f2") + "%" : "0.00%" : "0.00%")</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_count"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_count"].ToString()) != 0 ? ((decimal.Parse(ddt.Rows[0]["a_success"].ToString()) / decimal.Parse(ddt.Rows[0]["a_count"].ToString())) * 100).ToString("f2") + "%" : "0.00%" : "0.00%")</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_money"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_money"].ToString()) != 0 ? ((decimal.Parse(ddt.Rows[0]["a_curr"].ToString()) / decimal.Parse(ddt.Rows[0]["a_money"].ToString())) * 100).ToString("f2") + "%" : "0.00%" : "0.00%")</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_curr"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_curr"].ToString()).ToString("f2") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_equipment"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_equipment"].ToString()) != 0 ? (decimal.Parse(ddt.Rows[0]["a_curr"].ToString()) / decimal.Parse(ddt.Rows[0]["a_equipment"].ToString())).ToString("f2") : "0.00" : "0.00")</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>合计：</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td align="center" colspan="12" class="nodata">暂无记录</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+<script type="text/javascript">
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/REPORT/UserReport?curr=" + pageIndex + "&psize=" + pageSize;
+        var types = $("#searchType option:selected").val();
+        var searchKey = $("#searchKey").val();
+        var stime = $("#stime").val();
+        var etime = $("#etime").val();
+        var sort = $("#searchDesc option:selected").val();
+        var relationtype=$("#relationtype").val();
+        url += "&s_type=" + types + "&s_key=" + searchKey + "&s_sort=" + sort + "&s_begin=" + stime + "&s_end=" + etime+"&relationtype="+relationtype;
+        location.href = encodeURI(url);
+    }
+
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //查询
+    function SerachUserReport() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //查询当天
+    function SearchUserToday() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    function Searchdc() {
+        var url = "/REPORT/UserReportDC?dc=dc";
+        var types = $("#searchType option:selected").val();
+        var searchKey = $("#searchKey").val();
+        var stime = $("#stime").val();
+        var etime = $("#etime").val();
+        var sort = $("#searchDesc option:selected").val();
+        url += "&s_type=" + types + "&s_key=" + searchKey + "&s_sort=" + sort + "&s_begin=" + stime + "&s_end=" + etime;
+        location.href = encodeURI(url);
+        //if (auditstate == 1) {
+        //
+        //} else {
+        //    window.parent.ShowMsg("只能导出审核通过的数据！", "error", "");
+        //    return false;
+        //}
+    }
+</script>

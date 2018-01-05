@@ -1,0 +1,140 @@
+﻿@{
+    ViewBag.Title = "账单管理";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.CoSettlementDeveloperOverview>;
+    var model = ViewBag.model as JMP.MDL.CoSettlementDeveloperOverview;
+}
+@JMP.TOOL.UserHelper.js("plugin/my97datepicker/WdatePicker.js")
+@JMP.TOOL.UserHelper.js("financial/BillList.js")
+<div class="box_container">
+    <ul class="frm-ul clearfix">
+        <li>
+            <input name="stime" type="text" id="stime" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')||\'@DateTime.Now.AddDays(-8).ToString("yyyy-MM-dd")\'}'})" readonly="readonly" class="dataipt txtipt time" value="@ViewBag.stime" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")'})" readonly="readonly" class="dataipt txtipt" value="@ViewBag.etime" />
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="SerachBillList()">查询</a>
+
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="WithdrawalsStart" id="WithdrawalsStart">
+                    <option value="0">--提现方式--</option>
+                    <option value="1">单卡提现</option>
+                    <option value="2">多卡提现</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnBankCard" class="btn btn-primary" href="javascript:" onclick="btnWithdrawals()">提现</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table class="table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="all" onclick="checkAll(this)" value="0" />
+                    </th>
+                    <th>展开</th>
+                    <th>账单日期</th>
+                    <th>流水金额</th>
+                    <th>接口费</th>
+                    <th>结算金额</th>
+                    <th>退款金额</th>
+                    <th>已提金额</th>
+                    <th>可提金额</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+
+                        foreach (var item in list)
+                        {
+
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+
+                            <tr>
+                                <td>
+                                    @if (@TOOL.DecimalDigit.DecimalPlaces(item.KFZIncome - item.p_money) > 0 && @item.SettlementDay > DateTime.Parse("2017-06-08"))
+                                    {
+                                        <input type="checkbox" name="child" class="checkall" value="@item.Id" />
+                                    }
+                                </td>
+                                <td onclick="clickOpen(@id)"><i class="fa fa-plus-circle black" name="Icon" id="@Icon"></i>&nbsp;&nbsp; </td>
+                                <td><a href="javascript:void(0)" onclick="ysBillList('@JMP.TOOL.DESEncrypt.Encrypt(@item.SettlementDay.ToString("yyyy-MM-dd"))')" class="blue">@item.SettlementDay.ToString("yyyy-MM-dd")</a></td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.TotalAmount)</td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.PortFee)</td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.KFZIncome)</td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.RefundAmount)</td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.p_money)</td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString((item.KFZIncome - item.p_money))</td>
+                            </tr>
+
+                               <!--展开-->
+                            <tr>
+                                <td colspan="9" style="display:none;" name="Open" id="@Open">
+                                    <div class="dcnt-tab">
+                                        <table class="table-lst">
+                                            <tr>
+                                                <td>
+                                                    @{Html.RenderAction("BillList_Details", "Financial", new { appid = item.DeveloperId, SettlementDay = item.SettlementDay.ToString("yyyy-MM-dd") });}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                                                        }
+                                                        if (model != null)
+                                                        {
+                                                            <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td>合计：</td>
+                                                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(model.TotalAmount)</td>
+                                                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(model.PortFee)</td>
+                                                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(model.KFZIncome)</td>
+                                                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(model.RefundAmount)</td>
+                                                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(model.p_money)</td>
+                                                                <td><label style="color:red">@TOOL.DecimalDigit.DecimalPlacesToString((model.KFZIncome - model.p_money))</label></td>
+                                                            </tr>
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr>
+
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td>合计：</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                            </tr>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr>
+                                                                <td align="center" colspan="9" class="nodata">暂无记录</td>
+                                                            </tr>
+                                                        }
+                }
+            </tbody>
+        </table>
+        @JMP.TOOL.HtmlPage.UserPagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+    </div>
+    <input type="hidden" id="p_index" name="p_index" value="@ViewBag.pageIndexs" />
+    <input type="hidden" id="p_pagesize" name="p_pagesize" value="@ViewBag.PageSize" />
+</div>

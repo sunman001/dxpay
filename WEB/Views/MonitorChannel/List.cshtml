@@ -1,0 +1,146 @@
+﻿@model List<JMP.Model.MonitorChannel>
+@using TOOL;
+@using WEB.Extensions
+@{
+    ViewBag.Title = "通道监控管理";
+    Layout = "~/Views/UI/master.cshtml";
+    //var list = ViewBag.list as List<JMP.MDL.appmonitor>;
+    int pageCount = ViewBag.pageCount;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("monitorchannel/index.js")
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>所属通道</option>
+                    @*<option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>成功率</option>
+                    <option value="3" @(ViewBag.type == 3 ? "selected='selected'" : "")>分钟数</option>*@
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="a_type" id="a_type">
+                    <option value="-1" @(ViewBag.a_type == ""?"selected='selected'" : "")>监控类型</option>
+                    <option value="20" @(ViewBag.a_type == "20" ? "selected='selected'" : "")>无订单监控</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="SelectState" id="SelectState">
+                    @*<option value="" @(ViewBag.SelectState == ""?"selected='selected'" : "")>状态</option>*@
+                    <option value="1" @(ViewBag.SelectState == "1" ? "selected='selected'" : "")>正常</option>
+                    <option value="0" @(ViewBag.SelectState == "0" ? "selected='selected'" : "")>冻结</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                    <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlocuser()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th width="40">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th style="text-align: left" width="100">所属通道</th>
+                    <th style="text-align: left" width="100">监控类型/阀值</th>
+                    <th style="text-align: left" width="120">时间段/分钟详细信息</th>
+                    <th width="120">创建时间</th>
+                    <th width="100">状态</th>
+                    <th width="180">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.Count > 0)
+                    {
+                        bool getEdit = bll_limit.GetLocUserLimitVoids("/monitorchannel/edit", JMP.TOOL.UserInfo.UserId.ToString(), JMP.TOOL.UserInfo.UserRoleId);//编辑按钮
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="child" class="checkall" value="@item.a_id" />
+                                </td>
+                                <td style="text-align: left">@item.a_name</td>
+                                <td style="text-align: left">
+                                    @Html.Raw(item.a_type.ConvertMonitorChannelTypeToString(item.Threshold))
+                                </td>
+                                <td style="text-align: left">
+                                    @{
+                                        var str = new List<string>();
+                                        var timeRanges = item.a_time_range.ParseAppMonitorTimeRangeModel();
+                                        if (timeRanges.AppMonitorTimeDay != null)
+                                        {
+                                            str.Add("时间段一：从" + timeRanges.AppMonitorTimeDay.Start + "点到" + timeRanges.AppMonitorTimeDay.End + "点分钟数：" + timeRanges.AppMonitorTimeDay.Minutes);
+                                        }
+                                        if (timeRanges.AppMonitorTimeNight != null)
+                                        {
+                                            str.Add("时间段二：从" + timeRanges.AppMonitorTimeNight.Start + "点到" + timeRanges.AppMonitorTimeNight.End + "点分钟数：" + timeRanges.AppMonitorTimeNight.Minutes);
+                                        }
+                                        if (timeRanges.AppMonitorTimeCustom != null)
+                                        {
+                                            str.Add("其他分钟数：" + timeRanges.AppMonitorTimeCustom.Minutes);
+                                        }
+                                    }
+                                    @Html.Raw(string.Join("<br />", str))
+                                </td>
+                                <td>@item.a_datetime.ToString("yyyy-MM-dd")</td>
+                                <td>
+                                    @{
+                                        if (item.a_state == 1)
+                                        {
+                                            <span class="green">正常</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="red">冻结</span>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        if (getEdit)
+                                        {
+                                            <a href="javascript:" class='blue' onclick="UpdateComplaint(@item.a_id)">编辑</a><label>&nbsp;&nbsp;</label>
+
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="16" class="nodata"> 暂无记录 </td>
+                                            </tr>
+                                        }
+
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)
+</div>
+

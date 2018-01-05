@@ -1,0 +1,181 @@
+﻿@model JMP.MDL.CsCustomerServiceRecord
+@{
+    ViewBag.Title = "添加响应记录";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var list = ViewBag.list as List<JMP.Model.Query.WorkOrder.WatcherQuerier>;
+    var uploadedEvidences = ViewBag.EvidenceScreenshot as string[];
+    var imgBaseUrl = ViewBag.UploadUrl.ToString();
+}
+@JMP.TOOL.UserHelper.js("/Workorder/Respond.js")
+@JMP.TOOL.UserHelper.js("jquery.ajaxupload.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+
+<form id="frm-user-add" method="post" enctype="multipart/form-data">
+    <input type="hidden" id="Id" value="@Model.Id" />
+    <div class="main">
+        <div class="plate-form">
+            <dl>
+                <dt>大类：</dt>
+                <dd>
+                    <div class="rule-single-select">
+                        <select name="MainCategory" id="MainCategory">
+                            <option value="0" @(Model.MainCategory == 0 ? "selected='selected'" : "")>运营</option>
+                            <option value="1" @(Model.MainCategory == 1 ? "selected='selected'" : "")>技术</option>
+                        </select>
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>小类：</dt>
+                <dd>
+                    <div class="rule-single-select">
+                        <select name="SubCategory" id="SubCategory">
+                            <option value="0" @(Model.SubCategory == 0 ? "selected='selected'" : "")>商户注册</option>
+                            <option value="1" @(Model.SubCategory == 1 ? "selected='selected'" : "")>结算相关</option>
+                            <option value="2" @(Model.SubCategory == 2 ? "selected='selected'" : "")>技术对接</option>
+                            <option value="3" @(Model.SubCategory == 3 ? "selected='selected'" : "")>通道配置</option>
+                            <option value="4" @(Model.SubCategory == 4 ? "selected='selected'" : "")>故障排查</option>
+                        </select>
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>值班人：</dt>
+                <dd>
+                    <div class="rule-single-select">
+                        <select name="WatchId" id="WatchId">
+                            <option value="0">-请选择-</option>
+                            @foreach (var item in list)
+                            {
+                                <option value="@item.Id" @(Model.WatchId == item.Id ? "selected='selected'" : "")>@item.RealName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="Validform_checktip" id="WatchIdYz">* 值班人</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>开发者：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <span class="ie7-input-bug-start"></span>
+                        <input name="a_user_idyx" type="text" id="a_user_idyx" readonly="readonly" onclick="xzuser()" onblur="kfz()" value="@Model.DeveloperEmail" /><span class="ie7-input-bug-end"></span>
+                        <input type="hidden" id="a_user_id" name="a_user_id" value="@Model.DeveloperId" />
+                    </div>
+                    <div class="Validform_checktip" id="yzkfz">* 请选择开发者</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>提问时间：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="AskDate" type="text" id="AskDate" onFocus="WdatePicker({ maxDate: '#F{\'@DateTime.Now.ToString("yyyy-MM-dd")\'}', dateFmt: 'yyyy-MM-dd HH:mm' })" readonly="readonly" class="dataipt txtipt" value="@(Model.AskDate==null?DateTime.Now.ToString("yyyy-MM-dd HH:mm"):Convert.ToDateTime(Model.AskDate).ToString("yyyy-MM-dd HH:mm"))" />
+                    </div>
+                    <div class="Validform_checktip" id="AskDateYz">* 提问时间</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>提问截图：</dt>
+                <dd>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width: 300px; height: 200px;">
+                            <img src="@(imgBaseUrl+Model.AskScreenshot)" id="AskScreenshot" style="width: 100%;" />
+                        </div>
+                        <input name="AskScreenshotfile" type="file" id="AskScreenshotfile" onchange="FileAsk()" />
+                        <input type="hidden" name="Ask" id="Ask" value="@(Model.AskScreenshot)" />
+       />
+                    </div>
+                    <div class="Validform_checktip" id="AskYz">* 必传项</div>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>响应时间：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="ResponseDate" type="text" id="ResponseDate" onFocus="WdatePicker({ maxDate: '#F{\'@DateTime.Now.ToString("yyyy-MM-dd")\'}', dateFmt: 'yyyy-MM-dd HH:mm' })" readonly="readonly" class="dataipt txtipt" value="@(Model.ResponseDate==null?DateTime.Now.ToString("yyyy-MM-dd HH:mm"):Convert.ToDateTime(Model.ResponseDate).ToString("yyyy-MM-dd HH:mm"))" />
+                    </div>
+                    <div class="Validform_checktip" id="ResponseDateYz">* 响应时间</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>响应截图：</dt>
+                <dd>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width: 300px; height: 200px;">
+                            <img src="@(imgBaseUrl + Model.ResponseScreenshot)" id="ResponseScreenshot" style="width: 100%;" />
+                        </div>
+                        <input name="ResponseScreenshotfile" type="file" id="ResponseScreenshotfile" onchange="FileResponse()" />
+                        <input type="hidden" name="Response" id="Response" value="@(Model.ResponseScreenshot)" />
+                    </div>
+                    <div class="Validform_checktip" id="ReYz">* 必传项</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>处理详情：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <textarea id="HandleDetails">@Model.HandleDetails</textarea>
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>处理完成时间：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="CompletedDate" type="text" id="CompletedDate" onFocus="WdatePicker({ maxDate: '#F{\'@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")\'}', dateFmt: 'yyyy-MM-dd HH:mm' })" readonly="readonly" class="dataipt txtipt" value="@(Model.CompletedDate==null?DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"):Convert.ToDateTime(Model.CompletedDate).ToString("yyyy-MM-dd HH:mm:ss"))" />
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>截图证据：</dt>
+                <dd>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width: 300px; height: 200px;">
+                            @{
+                                var src = imgBaseUrl + (uploadedEvidences.Length >= 1 ? uploadedEvidences[0] : "");
+                            }
+                            <img src="@src" id="EnvidenceXS1" style="width: 100%;"/>
+                        </div>
+                        <input name="certificatefile1" type="file" id="certificatefile1" onchange="FileChange1()" />
+                        <input type="hidden" name="Envidence1" id="Envidence1" value="@(uploadedEvidences.Length>=1?uploadedEvidences[0]:"")" />
+                    </div>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width: 300px; height: 200px;">
+                            @{
+                                src = imgBaseUrl + (uploadedEvidences.Length >= 2 ? uploadedEvidences[1] : "");
+                            }
+                            <img src="@src" id="EnvidenceXS2" style="width: 100%;"/>
+                        </div>
+                        <input name="certificatefile2" type="file" id="certificatefile2" onchange="FileChange2()" />
+                        <input type="hidden" name="Envidence2" id="Envidence2" value="@(uploadedEvidences.Length>=2?uploadedEvidences[1]:"")" />
+
+                    </div>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width: 300px; height: 200px;">
+                            <img src="@(ViewBag.UploadUrl+(uploadedEvidences.Length>=3?uploadedEvidences[2]:""))" id="EnvidenceXS3" style="width: 100%;" />
+                        </div>
+                        <input name="certificatefile3" type="file" id="certificatefile3" onchange="FileChange3()" />
+                        <input type="hidden" name="Envidence3" id="Envidence3" value="@(uploadedEvidences.Length>=3?uploadedEvidences[2]:"")" />
+
+                    </div>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width: 300px; height: 200px;">
+                            <img src="@(ViewBag.UploadUrl+(uploadedEvidences.Length>=4?uploadedEvidences[3]:""))" id="EnvidenceXS4" style="width: 100%;" />
+                        </div>
+                        <input name="certificatefile4" type="file" id="certificatefile4" onchange="FileChange4()" />
+                        <input type="hidden" name="Envidence4" id="Envidence4" value="@(uploadedEvidences.Length>=4?uploadedEvidences[3]:"")" />
+                    </div>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" onclick="btnSaveAddRespond(false)" class="btn btn-primary" />
+            <input type="button" name="btnSave" value="保存并转发" title="保存并复制转发给指定的值班人员" onclick="btnSaveAddRespond(true)" class="btn btn-primary" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</form>

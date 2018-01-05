@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Import";
+Layout = "~/Views/UI/master.cshtml";
+}
+<script src="~/js/jquery.form.js"></script>
+ <script type="text/javascript">
+        $(function () {
+            $('#form').on("submit", function () {
+                $("#errorMessage").hide();
+                $(this).ajaxSubmit(
+                    {
+                        url: "/User/ImportApi",                 //默认是form的action
+                        type: "post",               //默认是form的method（get or post）
+                        dataType: "json",           //html(默认), xml, script, json...接受服务端返回的类型
+                        //clearForm: true,          //成功提交后，清除所有表单元素的值
+                        //resetForm: true,          //成功提交后，重置所有表单元素的值
+                       // target: '#output',          //把服务器返回的内容放入id为output的元素中
+                        //timeout: 3000,               //限制请求的时间，当请求大于3秒后，跳出请求
+                        //提交前的回调函数
+                        beforeSubmit: function (arr, $form, options) {
+                          
+                        },
+                        //提交成功后的回调函数
+                        success: function (result) {
+                            console.info(result);
+                            if (result.success == true) {
+                                //window.parent.global.reload();
+                                window.parent.ShowMsg(result.msg, "ok", function () {
+                                    var name = "银行卡管理";
+                                    var isLeaf = true;//是否套用
+                                    var id = $(this).attr("data-id");//id
+                                    var href = "/User/BankCardList";//链接
+                                    closeIfram(name, isLeaf, href, id, 'child');
+                                    window.parent.layer.closeAll();
+                                    //window.parent.location.href = "/User/BankCardList";
+                                    
+                                });
+                            }
+                            else
+                            {
+                                $("#CountMessage").show().html('成功导入' + result.successcount + '条数据');
+                                if (result.freeCount > 0) {
+                                    $("#FreeMessage").show().html('成功解锁数据' + result.freeCount+ '条数据');
+                                }
+                                $("#errorMessage").show().html(' 错误导入' + result.errcount + '条数据<br>银行卡导入错误详细信息如下:<br />' + result.msg);
+                               // console.info(result);
+                            }
+                            //window.parent.PopupMessage(result.msg, "error", "");
+                          
+                        },
+                        error: function (xhr, status, error, $form) {
+                            
+                        },
+                        complete: function (xhr, status, $form) {
+                           
+                        }
+                    }
+                );
+                return false; //阻止表单默认提交
+            });
+
+        });
+
+    </script>
+
+<form id="form" name="form" method="post">
+    <div class="rnatn-cnt">
+        <ul class="rnatn-frm clearfix">
+            <li>
+                <div style="margin-top:10px;" >
+                    <input id="FileUpload" type="file" name="files" style="width: 200px; height: 24px;" />
+                </div>
+                <span class="error" id="yz_banknumber"></span>
+            </li>
+        </ul>
+        <div  id="FreeMessage" class="red" style="padding-left:20px; color:red; padding-bottom:15px;">
+             
+        </div>
+        <div  id="CountMessage" class="red" style="padding-left:20px; color:red; padding-bottom:15px;">
+             
+        </div>
+        <div id="errorMessage" class="red" style="padding-left:20px; color:red; padding-bottom:15px;"></div>
+            <div class="div-btn">
+                <input class="btn btn-primary" type="submit" id="btnImport" value="导入" />
+            </div>
+</div>
+</form>

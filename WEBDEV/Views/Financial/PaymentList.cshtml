@@ -1,0 +1,316 @@
+﻿@{
+    ViewBag.Title = "提现申请列表";
+    Layout = "~/Views/UI/master.cshtml";
+
+    var list = ViewBag.list as List<JMP.MDL.jmp_BankPlaymoney>;
+    var model = ViewBag.model as JMP.MDL.jmp_BankPlaymoney;
+    var colist = ViewBag.colist as List<JMP.MDL.jmp_pays>;
+}
+
+@JMP.TOOL.UserHelper.js("plugin/my97datepicker/WdatePicker.js")
+<div class="box_container">
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="0" @(Request["s_type"] == "0" ? "selected=selected" : "")>提款批次号</option>
+                    <option value="1" @(Request["s_type"] == "1" ? "selected=selected" : "")>交易编号</option>
+                    <option value="2" @(Request["s_type"] == "2" ? "selected=selected" : "")>交易流水号</option>
+                    <option value="3" @(Request["s_type"] == "3" ? "selected=selected" : "")>持卡人</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="searchKey" id="searchKey" type="text" placeholder="请输入关键字" value="@ViewBag.searchname" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="s_check" id="s_check">
+                    <option value="" @(ViewBag.scheck == "" ? "selected='selected'" : "")>交易状态 </option>
+                    <option value="-1" @(ViewBag.scheck == "-1" ? "selected='selected'" : "")>交易失败 </option>
+                    <option value="1" @(ViewBag.scheck == "1" ? "selected='selected'" : "")>交易成功</option>
+                    <option value="0" @(ViewBag.scheck == "0" ? "selected='selected'" : "")>等待打款</option>
+                    <option value="2" @(ViewBag.scheck == "2" ? "selected='selected'" : "")>处理中</option>
+                    <option value="3" @(ViewBag.scheck == "3" ? "selected='selected'" : "")>订单异常</option>
+                    <option value="4" @(ViewBag.scheck == "4" ? "selected='selected'" : "")>已退款</option>
+                    <option value="5" @(ViewBag.scheck == "5" ? "selected='selected'" : "")>审核未通过</option>
+                    <option value="6" @(ViewBag.scheck == "6" ? "selected='selected'" : "")>冻结</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="s_payfashion" id="s_payfashion">
+                    <option value="" @(ViewBag.payfashion == "" ? "selected='selected'" : "")>打款方式 </option>
+                    <option value="2" @(ViewBag.payfashion == "2" ? "selected='selected'" : "")>代付打款</option>
+                    <option value="1" @(ViewBag.payfashion == "1" ? "selected='selected'" : "")>财务打款</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="stime" type="text" id="stime" onFocus="WdatePicker({minDate:'@DateTime.Now.ToString("yyyy-01-01")',maxDate:'#F{$dp.$D(\'etime\')||\'@DateTime.Now.ToString("yyyy-MM-dd")\'}'})" readonly="readonly" class="dataipt txtipt time" value="@ViewBag.stime" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.ToString("yyyy-MM-dd")'})" readonly="readonly" class="dataipt txtipt" value="@ViewBag.etime" />
+        </li>
+        <li>
+            <a id="btn_search" class="btn btn-primary" href="javascript:" onclick="SerachUserReport()">查询</a>
+        </li>
+    </ul>
+    <div class="box_container">
+        <table class="table-cnt">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th>开发者</th>
+                    <th>提款批次号</th>
+                    <th>交易编号</th>
+                    <th>交易流水号</th>
+                    <th>交易状态</th>
+                    <th>打款方式</th>
+                    <th>手续费</th>
+                    <th>打款金额</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+
+                        foreach (var item in list)
+                        {
+
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+
+                            <tr onclick="clickOpen(@id)">
+
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp; </td>
+                                <td> @item.u_realname</td>
+                                <td>@item.b_batchnumber</td>
+                                <td>@item.b_number</td>
+                                <td>@item.b_tradeno</td>
+                                <td>
+                                    @{
+                                        switch (item.b_tradestate)
+                                        {
+                                            case 0:
+                                                <span class='green'>等待打款</span>
+                                                break;
+                                            case 1:
+                                                <span class='blue'>交易成功</span>
+                                                break;
+                                            case -1:
+                                                <span class='red'>交易失败</span>
+                                                break;
+                                            case 2:
+                                                <span class='grey'>处理中</span>
+                                                break;
+                                            case 3:
+                                                <span class='red'>订单异常</span>
+                                                break;
+                                            case 4:
+                                                <span class='blue'>已退款</span>
+                                                break;
+                                            case 5:
+                                                <span class='blue'>审核未通过</span>
+                                                break;
+                                            case 6:
+                                                <span class='blue'>冻结</span>
+                                                break;
+                                        }
+                                    }
+
+                                </td>
+                                <td>
+                                    @{
+
+                                        if (item.b_payfashion == 2)
+                                        {
+                                            <span class='blue'>代付自动打款</span>
+                                        }
+                                        else if (item.b_payfashion == 1)
+                                        {
+                                            <span class='grey'>财务手动打款</span>
+                                        }
+                                        else
+                                        {
+                                            <span>&nbsp;</span>
+                                        }
+
+                                    }
+                                </td>
+                                <td>@item.b_ServiceCharge 元/笔</td>
+                                <td>@String.Format("{0:N2}", item.b_money)</td>
+
+                            </tr>
+                              <!--展开-->
+                                        <tr>
+                                            <td colspan="9" style="display:none;" name="Open" id="@Open">
+                                                <div class="dcnt-tab">
+                                                    <table class="table-lst">
+                                                        <tr>
+                                                            <td>银行名称：@item.u_bankname</td>
+                                                            <td>银行卡号：@item.u_banknumber</td>
+                                                            <td>持卡人：@item.u_name</td>
+                                                            <td>提款时间：@item.b_date</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4">
+                                                                备注：
+                                                                @{
+                                                                    if (!string.IsNullOrEmpty(item.b_remark))
+                                                                    {
+                                                                        int a = item.b_remark.LastIndexOf("|");
+                                                                        if (a > -1)
+                                                                        {
+
+                                                                            @item.b_remark.Substring(0, a)
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div class="table-hide-cnt">
+                                                    <table border="0" cellpadding="0" cellspacing="0" class="table-hide">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>序号</th>
+                                                                <td>账单日期</td>
+                                                                <td>申请时间</td>
+                                                                <th>审核状态</th>
+                                                                <th>审核时间</th>
+                                                                <th>结算金额</th>
+                                                                <th>已提金额</th>
+                                                                <th>可提金额</th>
+                                                                <th>本次提款金额</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @{ var count = 0; }
+                                                            @foreach (var items in colist.Where(x => x.p_batchnumber == item.b_batchnumber))
+                                                            {
+                                                                count = count + 1;
+                                                                if (item != null)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@count</td>
+                                                                        <td>@items.SettlementDay.ToString("yyyy-MM-dd")</td>
+                                                                        <td>@items.p_applytime.ToString("yyyy-MM-dd")</td>
+                                                                        <td>
+                                                                            @{
+                                                                                switch (items.p_state)
+                                                                                {
+                                                                                    case 0:
+                                                                                        <span class='green'>等待审核</span>
+                                                                                        break;
+                                                                                    case 1:
+                                                                                        <span class='blue'>审核通过</span>
+                                                                                        break;
+                                                                                    case -1:
+                                                                                        <span class='red'>审核未通过</span>
+                                                                                        break;
+                                                                                }
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @(items.p_date == null ? "---" : items.p_date.ToString())
+                                                                        </td>
+                                                                        <td>@TOOL.DecimalDigit.DecimalPlacesToString(items.KFZIncome)</td>
+                                                                        <td>@TOOL.DecimalDigit.DecimalPlacesToString(items.p_moneys)</td>
+                                                                        <td>@TOOL.DecimalDigit.DecimalPlacesToString((items.KFZIncome - items.p_moneys))</td>
+                                                                        <td>@TOOL.DecimalDigit.DecimalPlacesToString(items.p_money)</td>
+                                                                    </tr>
+                                                                                    }
+                                                                                }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                                                                }
+
+                                                                                if (model != null)
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td>合计：</td>
+                                                                                        <td>@String.Format("{0:N2}", model.b_money)</td>
+
+                                                                                    </tr>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <tr>
+
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td>合计：</td>
+                                                                                        <td></td>
+
+                                                                                    </tr>
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td align="center" colspan="9" class="nodata">暂无记录</td>
+                                                                                    </tr>
+                                                                                }
+                }
+            </tbody>
+
+        </table>
+        @JMP.TOOL.HtmlPage.UserPagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+        <div style="height: 100px; width: 100%;">&nbsp;</div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    function ArticleManage(pageIndex, pageSize) {
+
+        var url = "/Financial/PaymentList?curr=" + pageIndex + "&psize=" + pageSize;
+        var types = $("#searchType option:selected").val();
+        var check = $("#s_check").val();
+        var searchKey = $("#searchKey").val();
+        var stime = $("#stime").val();
+        var etime = $("#etime").val();
+        var s_payfashion = $("#s_payfashion").val();
+
+        url += "&s_type=" + types + "&s_key=" + searchKey + "&s_begin=" + stime + "&s_end=" + etime + "&check=" + check + "&payfashion=" + s_payfashion;
+        location.href = encodeURI(url);
+    }
+
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //查询
+    function SerachUserReport() {
+        var pagexz = '@ViewBag.pageIndexs';
+        var PageSize = $("#pagexz").val();
+        ArticleManage(pagexz, PageSize);
+    }
+
+
+</script>

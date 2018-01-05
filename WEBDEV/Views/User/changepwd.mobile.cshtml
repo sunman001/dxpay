@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "盾行支付平台-重置密码";
+}
+
+@JMP.TOOL.UserHelper.js("jquery.js")
+@JMP.TOOL.UserHelper.js("plugin/layer/layer.js")
+@JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+<script src="~/mobile/js/user/changepwd.js"></script>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1" />
+    <title>盾行支付平台-重置密码</title>
+    <link rel="stylesheet" href="../mobile/asste/fa-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../mobile/asste/fa-awesome/css/font-awesome-ie7.min.css">
+    <link href="../mobile/css/logrit.css" rel="stylesheet" type="text/css">
+</head>
+<body class="body-rig">
+    <section class="rigt-logo">
+        <i class="logo"></i>
+    </section>
+    <section class="log-cnt">
+
+        <ul class="log-frm rigt-frm">
+            <li>
+                <i class="icon icon-phone fl"></i>
+                <div class="d-cnt d-valt">
+                    <input type="text" id="u_phone" name="u_phone" class="txtipt" placeholder="请输入手机号码" />
+                    <span id="btn_get_verify_code_disabled" class="yzm" style="display:none">重新获取 还剩<i>60</i>S</span>
+                    <a id="btn_get_verify_code" class="txtipt yzm">发送验证码</a>
+                </div>
+            </li>
+            <li>
+
+                <i class="icon icon-key fl"></i>
+                <div class="d-cnt">
+                    <input type="text" class="txtipt" id="verified_code" placeholder="手机验证码" />
+                </div>
+            </li>
+            <li>
+                <a id="btn_ResetPwd" class="btn">验证信息</a>
+                <a href="/Home/Login" class="btxt">您是否有账号，立即登录<i class="fa fa-question-circle"></i></a>
+            </li>
+        </ul>
+    </section>
+</body>
+</html>

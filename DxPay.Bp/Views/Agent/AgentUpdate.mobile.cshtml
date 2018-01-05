@@ -1,0 +1,184 @@
+﻿@{
+    ViewBag.Title = "修改代理";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    string qt_url = (string)ViewBag.UploadUrl;
+    var modelAgent = ViewBag.modelAgent as JMP.MDL.CoAgent;
+}
+@JMP.TOOL.UserHelper.js("Authentication.js")
+<script src="~/mobile/js/Agent/Agent.js"></script>
+@JMP.TOOL.UserHelper.js("jquery.ajaxupload.js")
+
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">修改代理</span>
+</header>
+<!--头部 end-->
+
+<section class="real">
+    <div id="frm-agent-Edit" method="post" enctype="multipart/form-data">
+        <ul class="frm-ul">
+            <li class="tit">
+                <p class="tcnt">基本信息</p>
+                <input name="id" id="id" type="hidden" value="@modelAgent.Id" />
+                <input name="ServiceFeeRatioGradeId" id="ServiceFeeRatioGradeId" type="hidden" value="@modelAgent.ServiceFeeRatioGradeId" />
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span> 类别</p>
+                    <div class="rule-singless-select">
+                        <select id="Classify" onchange="ChangeType(this)">
+                            <option value="0" @(modelAgent.Classify == 0 ? "selected='selected'" : "")>个人</option>
+                            <option value="1" @(modelAgent.Classify == 1 ? "selected='selected'" : "")>企业</option>
+                        </select>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="dbor">
+
+                    <p class="ptit"><span style="color: #ff0000">*</span>  登录名</p>
+                    <input type="text" name="LoginName" id="LoginName" class="txtipt" placeholder="请填写登录名" value="@(string.IsNullOrEmpty(modelAgent.LoginName)?"":modelAgent.LoginName)" />
+                </div>
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span> 真实姓名或者公司名称</p>
+                    <input type="text" name="DisplayName" id="DisplayName" class="txtipt"  placeholder="请填写真实姓名或者公司名称" value="@(string.IsNullOrEmpty(modelAgent.DisplayName)?"":modelAgent.DisplayName)" />
+                </div>
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span> 登录密码</p>
+                    <input name="Password" type="password" id="Password" class="txtipt"  placeholder="请输入登录密码" value="@(JMP.TOOL.DESEncrypt.Decrypt(string.IsNullOrEmpty(modelAgent.Password)?"":modelAgent.Password))" />
+                </div>
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span> 手机号码</p>
+                    <input type="text" name="MobilePhone" id="MobilePhone" class="txtipt"  placeholder="请输入手机号码" value="@(string.IsNullOrEmpty(modelAgent.MobilePhone)?"":modelAgent.MobilePhone)" />
+                </div>
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span>QQ号码</p>
+                    <input type="text" name="QQ" id="QQ" class="txtipt"  placeholder="请输入QQ" value="@(string.IsNullOrEmpty(modelAgent.QQ)?"":modelAgent.QQ)" />
+                </div>
+            </li>
+
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> 邮箱地址</p>
+                    <input type="text" name="EmailAddress" id="EmailAddress" class="txtipt" value="@(string.IsNullOrEmpty(modelAgent.EmailAddress)?"":modelAgent.EmailAddress)" placeholder="请输入邮箱地址" />
+                </div>
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> 网址</p>
+                    <input type="text" name="Website" id="Website" class="txtipt" value="@(string.IsNullOrEmpty(modelAgent.Website)?"":modelAgent.Website)" placeholder="请输入网址" />
+                </div>
+            </li>
+
+        </ul>
+        <ul class="frm-ul">
+            <li class="tit">
+                <p class="tcnt">详细信息</p>
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span>身份证</p>
+                    <input type="text" name="IDCardNumber" id="IDCardNumber" class="txtipt" value="@(string.IsNullOrEmpty(modelAgent.IDCardNumber)?"":modelAgent.IDCardNumber)" placeholder="请输入身份证" />
+                </div>
+            </li>
+
+            <li id="user_yyzz" style="@( modelAgent.Classify== 1 ? "display:;" : "display:none;")">
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span>营业执照编号</p>
+                    <input type="text" name="BusinessLicenseNumber" id="BusinessLicenseNumber" class="txtipt" value="@(string.IsNullOrEmpty(modelAgent.BusinessLicenseNumber)?"":modelAgent.BusinessLicenseNumber)" placeholder="请填写营业执照编号" />
+                </div>
+            </li>
+
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span>开户行全称</p>
+                    <input type="text" name="BankFullName" id="BankFullName" class="txtipt" value="@(string.IsNullOrEmpty(modelAgent.BankFullName)?"":modelAgent.BankFullName)" placeholder="请填写开户银行全称" />
+                </div>
+            </li>
+
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span>开户名</p>
+                    <input type="text" name="BankAccountName" id="BankAccountName" class="txtipt" value="@(string.IsNullOrEmpty(modelAgent.BankAccountName)?"":modelAgent.BankAccountName)" placeholder="请填写开户名" />
+                </div>
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span>开户账号</p>
+                    <input type="text" name="BankAccount" id="BankAccount" class="txtipt" value="@(string.IsNullOrEmpty(modelAgent.BankAccount)?"":modelAgent.BankAccount)" placeholder="请填写开户账号" />
+                </div>
+            </li>
+
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span>联系地址</p>
+                    <input type="text" name="ContactAddress" id="ContactAddress" class="txtipt" value="@(string.IsNullOrEmpty(modelAgent.ContactAddress)?"":modelAgent.ContactAddress)" placeholder="请填写联系地址" />
+                </div>
+            </li>
+
+        </ul>
+
+        <ul class="frm-ul">
+            <li class="tit">
+                <p class="tcnt">证件认证</p>
+            </li>
+            <li class="nstar">
+                <dl class="rnatn-pic clearfix">
+                    <dd class="dfl fl">身份证照片</dd>
+                    <dd class="dfr fr">
+                        @{
+                            var urlsfz = string.IsNullOrEmpty(modelAgent.PersonalPhotoPath) ? "" : qt_url + modelAgent.PersonalPhotoPath;
+                        }
+                        @if (urlsfz == "")
+                        {
+
+                            <span id="addphoto" class="sfa">
+
+                                <i class="fa fa-plus"></i>
+                                <i class="stxt">添加图片</i>
+                            </span>
+                        }
+
+
+                        <img src="@urlsfz" id="certificate" width="100" height="100" class="simg">
+                        <input name="certificatefile" type="file" id="certificatefile" onchange="FileChange()" class="txtfile" />
+                        <input type="hidden" name="u_photo" id="u_photo" value="@(string.IsNullOrEmpty(modelAgent.PersonalPhotoPath)?"":modelAgent.PersonalPhotoPath)" />
+                    </dd>
+                </dl>
+
+                <dl class="rnatn-pic clearfix " id="qysfz" style="@(modelAgent.Classify == 1 ? "display:;" : "display:none;")">
+                    <dd class="dfl fl">营业执照照片</dd>
+
+                    <dd class="dfr fr">
+                        @{
+                            var urlyyzz = string.IsNullOrEmpty(modelAgent.BusinessLicensePhotoPath) ? "" : qt_url + modelAgent.BusinessLicensePhotoPath;
+                        }
+                        @if (urlyyzz == "")
+                        {
+                            <span id="add" class="sfa">
+                                <i class="fa fa-plus"></i>
+                                <i class="stxt">添加图片</i>
+                            </span>
+                        }
+                        <img src="@urlyyzz" id="sfzficate" width="100" height="100" class="simg">
+                        <input name="sfzcertificatefile" type="file" id="sfzcertificatefile" onchange="FileChangeSfz()" class="txtfile" />
+                        <input type="hidden" name="u_blicense" id="u_blicense" value="@(string.IsNullOrEmpty(modelAgent.BusinessLicensePhotoPath )?"":modelAgent.BusinessLicensePhotoPath)" />
+                    </dd>
+                </dl>
+
+
+            </li>
+        </ul>
+        <div class="frm-btn">
+            <a class="btn" onclick="SaveUpdateAgent()" id="btnyy">提交审核</a>
+        </div>
+    </div>
+</section>

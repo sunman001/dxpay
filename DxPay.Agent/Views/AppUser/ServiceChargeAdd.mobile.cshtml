@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "设置服务费管理";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var yylist = ViewBag.glptdt as List<JMP.MDL.CoServiceFeeRatioGrade>;
+    JMP.MDL.jmp_user UModel = (JMP.MDL.jmp_user)ViewBag.user;
+}
+
+@JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+<script src="~/mobile/js/AppUser/appuser.js"></script>
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">设置开发者服务费管理</span>
+</header>
+<!--头部 end-->
+<section class="real">
+    <input type="hidden" value="@ViewBag.model" id="u_auditstate" />
+    <ul class="frm-ul">
+        <li>
+            <div class="dbor">
+                <p class="ptit"> <span style="color: #ff0000">*</span> 费率</p>
+                <input type="hidden" id="id" value="@ViewBag.id" />
+                <div class="rule-singless-select">
+                    <select id="ServiceFeeRatioGradeId">
+                        <option value=""> -费率等级-开发费率比例-商务费率比例 </option>
+                        @{
+                            foreach (var pt in yylist)
+                            {
+                                var ServiceFeeRatio = (pt.ServiceFeeRatio * 100).ToString("f2") + "%";
+                                var AgentPushMoneyRatio = (pt.AgentPushMoneyRatio * 100).ToString("f2") + "%";
+                                <option value="@pt.Id" @(UModel.ServiceFeeRatioGradeId == pt.Id ? "selected=selected" : "")> @pt.Name,@ServiceFeeRatio, @AgentPushMoneyRatio </option>
+                            }
+                        }
+                    </select>
+                </div>
+
+            </div>
+        </li>
+
+    </ul>
+
+
+    <div class="frm-btn">
+
+        <input type="button" name="btnSave" value="保存" id="btnServiceFeeRatioGradeAdd" class="btn" />
+
+    </div>
+</section>

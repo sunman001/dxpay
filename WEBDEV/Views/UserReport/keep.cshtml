@@ -1,0 +1,241 @@
+﻿@{
+    ViewBag.Title = "留存用报表";
+    var dt = ViewBag.dt as System.Data.DataTable; 
+}
+@JMP.TOOL.UserHelper.css("base.css")
+@JMP.TOOL.UserHelper.css("user.css")
+@JMP.TOOL.UserHelper.js("jquery.js")
+@JMP.TOOL.UserHelper.js("base.js")
+@JMP.TOOL.UserHelper.js("plugin/fusionchart/fusioncharts.js")
+@JMP.TOOL.UserHelper.js("plugin/fusionchart/fusioncharts.theme.zune.js")
+@JMP.TOOL.UserHelper.js("plugin/my97datepicker/WdatePicker.js")
+<style type="text/css">
+    .box {
+        min-height: 780px;
+    }
+
+    .searchs .form .time {
+        width: 110px;
+        height: 30px;
+        margin: 0;
+        text-align: center;
+        text-indent: 0;
+    }
+
+    .separate {
+        float: left;
+        margin: 0 5px;
+        line-height: 38px;
+    }
+
+    th {
+        border-bottom: 1px solid #c4c4c4;
+    }
+
+    .datatable table .even th {
+        background: #eff0f3;
+    }
+
+    .keepuser {
+        background: url(../img/keepuser.png) center center no-repeat;
+        width: inherit;
+        height: inherit;
+    }
+</style>
+
+<div class="box_container" id="iframeheight" style="height: 650px; width: 100%; overflow: auto;">
+    <div class="box_header">
+        留存用户
+                        <div class="searchs">
+                            <a class="btn-search-link active" name="rzy" id="day" href="javascript:XzSelect('day')">日</a>
+                            <a class="btn-search-link" name="rzy" id="week" href="javascript:XzSelect('week')">周</a>
+                        </div>
+    </div>
+    <div class="searchs" style="height: 36px;">
+        <form class="form" id="form" style="float: left;">
+             @{Html.RenderAction("UserAppList", "Home", new { aid = ViewBag.aid });}
+            <span class="separate">&nbsp;&nbsp;</span>
+            <input name="stime" type="text" id="stime"  onFocus="WdatePicker({minDate:'@ViewBag.ksrq',maxDate:'#F{$dp.$D(\'etime\')||\'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")\'}'})"  readonly="readonly" class="time txt box-shadow-1"  value="@ViewBag.stime"/>
+            <span class="separate">-</span>
+            <input name="etime" type="text" id="etime"   onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")'})" readonly="readonly" class="time txt box-shadow-1" value="@ViewBag.etime" />
+            <a class="btn_search" id="btn_search" ></a>
+        </form>
+        <div style="float: right">
+            <a class="btn-search-link active" name="xzk" id="newyh" onclick="dialogTabJson('newyh');">新增用户</a>
+            <a class="btn-search-link" name="xzk" id="hyyh" onclick="dialogTabJson('hyyh');">活跃用户</a>
+        </div>
+    </div>
+    <div class="datatable">
+        <table cellpadding="0" cellspacing="0" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th rowspan="2">首次使用日期
+                    </th>
+                    <th rowspan="2" style="border-right: 1px solid #c2c2c2;">用户数
+                    </th>
+                    <th colspan="9">
+                        <div class="keepuser"></div>
+                    </th>
+                </tr>
+                <tr class="even">
+                    <th>1日
+                    </th>
+                    <th>2日
+                    </th>
+                    <th>3日
+                    </th>
+                    <th>4日
+                    </th>
+                    <th>5日
+                    </th>
+                    <th>6日
+                    </th>
+                    <th>7日
+                    </th>
+                    <th>15日
+                    </th>
+                    <th>30日
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @{
+                    if (dt.Rows.Count > 0)
+                    {
+                        if (ViewBag.selecttype == 0)
+                        {
+
+                            for (int i = 0; i < dt.Rows.Count; i++)
+                            {
+                    <tr>
+                        <td>@DateTime.Parse(dt.Rows[i]["k_time"].ToString()).ToString("yyyy-MM-dd")</td>
+                        <td>@( dt.Rows[i]["k_usercount"].ToString() == "1" ? "0" : dt.Rows[i]["k_usercount"])</td>
+                        <td>@( dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day1"].ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day2"].ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day3"].ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day4"].ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day5"].ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day6"].ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day7"].ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day14"].ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[i]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(dt.Rows[i]["k_day30"].ToString()) * 100)))%</td>
+                    </tr>
+                            }
+                        }
+                        else
+                        {
+                            List<JMP.MDL.jmp_keep> weeklist = new List<JMP.MDL.jmp_keep>();
+                            System.Collections.ArrayList kssjfw = JMP.TOOL.WeekDateTime.WeekMonday(DateTime.Parse(ViewBag.stime), DateTime.Parse(ViewBag.etime));//根据时间返回获取每周周一
+                            System.Collections.ArrayList jssjfw = JMP.TOOL.WeekDateTime.WeekDay(DateTime.Parse(ViewBag.stime), DateTime.Parse(ViewBag.etime));//根据时间返回获取每周星期天
+                            for (int k = 0; k < kssjfw.Count; k++)
+                            {
+                                System.Data.DataTable kwdt = JMP.TOOL.MdlList.TableSelect(dt, "k_time>='" + kssjfw[k] + " 00:00:00" + "' and k_time<='" + jssjfw[k] + " 23:59:59" + "'");
+                                if (kwdt != null)
+                                {
+                    <tr>
+                        <td>@(DateTime.Parse(kssjfw[k].ToString()).ToString("yy-MM-dd") + "~" + DateTime.Parse(jssjfw[k].ToString()).ToString("yy-MM-dd"))</td>
+                        <td>@( dt.Rows[k]["k_usercount"].ToString() == "1" ? "0" : kwdt.Compute("sum(k_usercount)", "TRUE"))</td>
+                        <td>@( dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day1)", "TRUE").ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day2)", "TRUE").ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day3)", "TRUE").ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day4)", "TRUE").ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day5)", "TRUE").ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day6)", "TRUE").ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day7)", "TRUE").ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day14)", "TRUE").ToString()) * 100)))%</td>
+                        <td>@( dt.Rows[k]["k_usercount"].ToString() == "1" ? "0.00" : String.Format("{0:N2}", (decimal.Parse(kwdt.Compute("sum(k_day30)", "TRUE").ToString()) * 100)))%</td>
+                    </tr>
+                                }
+                                else
+                                {
+                    <tr>
+                        <td>@(DateTime.Parse(kssjfw[k].ToString()).ToString("yy-MM-dd") + "~" + DateTime.Parse(jssjfw[k].ToString()).ToString("yy-MM-dd"))</td>
+                        <td>0</td>
+                        <td>0.00%</td>
+                        <td>0.00%</td>
+                        <td>0.00%</td>
+                        <td>0.00%</td>
+                        <td>0.00%</td>
+                        <td>0.00%</td>
+                        <td>0.00%</td>
+                        <td>0.00%</td>
+                        <td>0.00%</td>
+                    </tr>
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                    <tr>
+                        <td colspan="11" align="center">暂无记录 </td>
+                    </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <div style="height: 100px; width: 100%;">&nbsp;</div>
+    </div>
+</div>
+<script type="text/javascript">
+    if ('@ViewBag.setype' == 0) {
+        $("#newyh").removeClass("active");
+        $("#hyyh").removeClass("active");
+        $("#newyh").addClass("active");
+    } else {
+        $("#newyh").removeClass("active");
+        $("#hyyh").removeClass("active");
+        $("#hyyh").addClass("active");
+    }
+    if ('@ViewBag.selecttype' == 0) {
+        $("#day").removeClass("active");
+        $("#week").removeClass("active");
+        $("#day").addClass("active");
+    } else {
+        $("#week").removeClass("active");
+        $("#day").removeClass("active");
+        $("#week").addClass("active");
+    }
+    $(function () {
+        $("#btn_search").click(function () {
+            var stime = $.trim($("#stime").val());
+            var etime = $.trim($("#etime").val());
+            var searchType = $.trim($("#searchType").val());
+            var searchname = $.trim($("#searchname").val());
+            var a_name = $.trim($("#s_applist option:selected").text());
+            var aid = $.trim($("#s_applist").val());
+            var setype = 0;
+            var type = $("a[name='xzk'][class='btn-search-link active']").html();
+            if ($.trim(type) == "活跃用户") {
+                setype = 1;
+            } else {
+                setype = 0;
+            }
+            var selecttype = 0;
+            var weekordaytype = $("a[name='rzy'][class='btn-search-link active']").html();
+            if ($.trim(weekordaytype) == "周") {
+                selecttype = 1;
+            } else {
+                selecttype = 0;
+            }
+            var url = "/UserReport/keep?stime=" + $.trim(stime) + "&etime=" + $.trim(etime) + "&setype=" + $.trim(setype) + "&selecttype=" + selecttype + "&a_name=" + $.trim(a_name) + "&aid=" + $.trim(aid);
+            location.href = encodeURI(url);
+        })
+    });
+    function XzSelect(typeid) {
+        $("a[name='rzy']").removeClass("active");
+        $("#" + typeid).addClass("active");
+        $("#btn_search").click();
+    }
+    //Tab控制函数用于终端属性报表
+    function dialogTabJson(typeid) {
+        $("#newyh").removeClass("active");
+        $("#hyyh").removeClass("active");
+        //var tabNum = $(tabObj).parent().index("li")
+        //设置点击后的切换样式
+        //$(tabObj).parent().parent().find("li a").removeClass("selected");
+        $("#" + typeid).addClass("active");
+        $("#btn_search").click();
+    }
+</script>

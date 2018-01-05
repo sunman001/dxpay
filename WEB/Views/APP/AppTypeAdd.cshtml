@@ -1,0 +1,89 @@
+﻿@{
+    ViewBag.Title = "添加应用类型";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_apptype>;
+    var model = ViewBag.model as JMP.MDL.jmp_apptype;
+}
+@JMP.TOOL.UserHelper.js("APP/AppType.js")
+<script src="~/ueditor/ueditor.config.js"></script>
+<script src="~/ueditor/ueditor.all.js"></script>
+<link href="~/ueditor/themes/iframe.css" rel="stylesheet" />
+<script src="~/ueditor/lang/zh-cn/zh-cn.js"></script>
+<div class="main">
+    <div class="clear10"></div>
+    <div class="plate-form">
+        <dl>
+            <dt>所属应用类型：</dt>
+            <dd>
+                <div class="single-input normal">
+
+                    <div class="rule-single-select">
+                        <select name="t_topid" id="t_topid" onblur="yzlx()">
+                            <option value='-1'>--请选择--</option>
+                            <option value='0' @(model.t_topid == 0 ? "selected='selected' " : "")>父级</option>
+                            @{
+                                foreach (var item in list)
+                                {
+                                    <option value='@item.t_id' @(model.t_topid == item.t_id ? "selected='selected' " : "")>├ @item.t_name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                    <div class="Validform_checktip" id="yylx">* 应用类型</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>应用类型名称：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="t_name" type="text" id="t_name" onblur="yzyyname()" maxlength="20" value="@(string.IsNullOrEmpty(model.t_name) ? "" : model.t_name)" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="yyname">*应用类型长度不超过20</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>排序：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="t_sort" type="text" id="t_sort" onblur="yzpx()" maxlength="20" value="@(string.IsNullOrEmpty(model.t_sort) ? "" : model.t_sort)" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="pxid">*排序</div>
+            </dd>
+        </dl>
+        @*<dl>
+            <dt>test</dt>
+            <dd>
+                <textarea id="editor" name="editor"></textarea>
+            </dd>
+
+        </dl>*@
+        <dl>
+            <dt></dt>
+            <dd>
+                <input type="hidden" id="t_id" value="@(model.t_id == 0 ? 0 : model.t_id)" />
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnSaveAddorUpdateAppType" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>
+<script type="text/javascript">
+        var editor = new baidu.editor.ui.Editor({
+            UEDITOR_HOME_URL: '/ueditor/',//配置编辑器路径
+            iframeCssUrl: '/ueditor/themes/iframe.css',//样式路径
+            initialContent: '欢迎使用ueditor',//初始化编辑器内容
+            autoHeightEnabled: true,//高度自动增长
+            minFrameHeight: 500//最小高度
+        });
+        editor.render('editor');
+</script>

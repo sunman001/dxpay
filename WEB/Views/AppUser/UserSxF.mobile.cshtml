@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "用户手续费设置";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+    var yylist = ViewBag.glptdt as List<JMP.MDL.CoServiceFeeRatioGrade>;
+    JMP.MDL.jmp_user UModel = (JMP.MDL.jmp_user)ViewBag.user;
+}
+<div class="mobile-popup mobile-container">
+    <input type="hidden" id="userid" value="@ViewBag.id" />
+    <div>
+        <select name="s_type" id="s_type" class="ui dropdown fluid fluid-block">
+            <option value="0"> -费率等级-开发费率比例-商务费率比例 </option>
+            @{
+                foreach (var pt in yylist)
+                {
+                    var ServiceFeeRatio = (pt.ServiceFeeRatio * 100).ToString("f2") + "%";
+                    var CustomerWithoutAgentRatio = (pt.CustomerWithoutAgentRatio * 100).ToString("f2") + "%";
+                    <option value="@pt.Id" @(UModel.ServiceFeeRatioGradeId == pt.Id ? "selected=selected" : "")>@pt.Name,@ServiceFeeRatio,@CustomerWithoutAgentRatio</option>
+                }
+            }
+        </select>
+    </div>
+    <div class="page-footer">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" onclick="UserAuditstate()" class="btn btn-primary" id="btn-save-add" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+
+</div>
+<script type="text/javascript">
+
+    function UserAuditstate() {
+
+        var userid = $("#userid").val();
+        var s_type = $("#s_type").val();
+        if (s_type == 0) {
+            window.parent.ShowMsg("请选择费率", "error", "");
+            return false;
+        }
+
+        var url = "/AppUser/InserSxf";
+        var data = { s_type: s_type, userid: userid };
+        $.post(url, data, function (result) {
+            $.post(url, data, function (retJson) {
+
+                if (retJson.success == 1) {
+                    window.parent.location.reload();
+                    window.parent.ShowMsg(retJson.msg, "ok", function () { window.parent.layer.closeAll(); });
+                }
+                else if (retJson.success == 9998) {
+                    window.parent.ShowMsg(retJson.msg, "error", "");
+                    return false;
+                } else if (retJson.success == 9999) {
+                    window.parent.ShowMsg(retJson.msg, "error", "");
+                    window.top.location.href = retJson.Redirect;
+                    return false;
+                } else if (retJson.success == 9997) {
+                    window.top.location.href = retJson.Redirect;
+                    return false;
+                }
+                else {
+                    window.parent.ShowMsg(retJson.msg, "error", "");
+                    return false;
+                }
+
+            })
+
+        });
+    }
+
+</script>

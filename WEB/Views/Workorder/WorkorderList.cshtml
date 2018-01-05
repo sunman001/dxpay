@@ -1,0 +1,257 @@
+﻿@{
+    ViewBag.Title = "工单管理";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_workorder>;
+    int pageCount = ViewBag.pageCount;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("Workorder/Workorder.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+        <li class="fr-gd">
+            <span>当前值班人:<i> @ViewBag.name</i></span>
+            <span>手机号码:<i> @ViewBag.tel</i></span>
+            <span>邮箱地址:<i> @ViewBag.email</i></span>
+            <span>qq:<i> @ViewBag.qq</i></span>
+        </li>
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>值班人</option>
+                    <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>工单标题</option>
+                    <option value="5" @(ViewBag.type == 5 ? "selected='selected'" : "")>提交人</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </li>
+        <li>
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" value="@(string.IsNullOrEmpty(ViewBag.stime) ? DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd") : ViewBag.stime) "onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}',minDate:'',dateFmt:'yyyy-MM-dd'})" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.ToString("yyyy-MM-dd")',dateFmt:'yyyy-MM-dd'})" value="@(string.IsNullOrEmpty(ViewBag.etime)? DateTime.Now.ToString("yyyy-MM-dd"):ViewBag.etime)" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                    <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="status" id="status">
+                    <option value="" @(ViewBag.status == "" ? "selected='selected'" : "")>工单状态</option>
+                    <option value="0" @(ViewBag.status == "0" ? "selected='selected'" : "")>正常</option>
+                    <option value="-1" @(ViewBag.status == "-1" ? "selected='selected'" : "")>关闭</option>
+                    <option value="-2" @(ViewBag.status == "-2" ? "selected='selected'" : "")>申诉</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="progress" id="progress">
+                    <option value=""  @(ViewBag.progress == "" ? "selected='selected'" : "")>进度</option>
+                    <option value="0" @(ViewBag.progress == "0" ? "selected='selected'" : "")>未响应</option>
+                    <option value="1" @(ViewBag.progress == "1" ? "selected='selected'" : "")>处理中</option>
+                    <option value="2" @(ViewBag.progress == "2" ? "selected='selected'" : "")>已处理</option>
+                    <option value="3" @(ViewBag.progress == "3" ? "selected='selected'" : "")>已评分</option>
+                    <option value="4" @(ViewBag.progress == "4" ? "selected='selected'" : "")>已完成</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary btn-mgn" href="javascript:" onclick="serchlocuser()">查询</a>
+          
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th >值班人</th>
+                    <th  >工单分类</th>
+                    <th >工单标题</th>
+                    <th >工单状态</th>
+                    <th >工单进度</th>
+                    <th >创建时间</th>
+                    <th >创建者</th>
+                    <th >操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr >
+                                
+                                <td>
+                                   @{
+                                       if (item.createdon.ToString("yyyy-MM-dd")==DateTime.Now.ToString("yyyy-MM-dd"))
+                                       {
+                                           <i class="link"><img src="~/images/new.gif"/></i>
+                                       }
+                                   }
+                                    @item.name
+                                </td>
+                                <td>
+                                    @{
+                                        switch (Convert.ToInt32(item.catalog))
+                                        {
+
+                                            case 0:
+                                                <span class="red">紧急问题</span>
+                                                break;
+                                            case 1:
+                                                <span class="blue">功能需求</span>
+                                                break;
+                                        }
+                                    }
+                                  
+                                </td>
+                                <td >@item.title</td>
+                               
+                                <td>@{
+                                    switch (item.status)
+                                    {
+
+                                        case 0:
+                                            <span class="green">正常</span>
+                                            break;
+                                        case -1:
+                                            <span class="blue">关闭</span>
+                                            break;
+                                        case -2:
+                                            <span class="red">申诉</span>
+                                            break;
+                                    }
+                                }</td>
+                                <td>
+                                    @{
+                                        switch (item.progress)
+                                        {
+
+                                            case 0:
+                                                <span class="blue">未响应</span>
+                                                break;
+                                            case 1:
+                                                <span class="red">处理中</span>
+                                                break;
+                                            case 2:
+                                                <span class="green">已处理</span>
+                                                break;
+                                            case 3:
+                                                <span class="green">已评分</span>
+                                                break;
+                                            case 4:
+                                                <span class="green">已完成</span>
+                                                break;
+                                        }
+                                    }
+                                </td>
+                                <td >@item.createdon.ToString("yyyy-MM-dd")</td>
+                                <td >@item.createdbyname</td>
+                              
+                                <td >
+                                    @{
+                                        //关闭工单
+                                        bool getEdit = bll_limit.GetLocUserLimitVoids("/Workorder/UpdateState", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        if (getEdit)
+                                        {
+                                            if (item.status==0 && item.progress == 0)
+                                            {
+                                                <a href="javascript:" class='blue' onclick="UpdateState(@item.id)">关闭</a>
+                                            }
+
+                                        }
+                                        //处理工单
+                                        bool getCL = bll_limit.GetLocUserLimitVoids("/Workorder/WorkorderCLJG", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        if (getCL)
+                                        {
+                                            if ( item.status !=-1 && item.status != -2 &&(item.status==0&& item.progress!=4))
+                                            {
+                                                if (!ViewBag.ISJS)
+                                                {
+                                                    if (item.progress >= 1)
+                                                    {
+                                                        <a href="javascript:" class='blue' onclick="WorkorderCL(@item.id)">交流</a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <a href="javascript:" class='blue' onclick="WorkorderCL(@item.id)">交流</a>
+                                                }
+
+                                            }
+
+                                        }
+                                        //评价工单
+                                        bool getPJ = bll_limit.GetLocUserLimitVoids("/Workorder/WorkorderPFJG", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        if (getPJ)
+                                        {
+                                            if (item.progress == 2)
+                                            {
+                                                <a href="javascript:" class='blue' onclick="WorkorderPJ(@item.id)">评价</a>
+                                            }
+
+                                        }
+                                        //完成工单
+                                        bool getWC = bll_limit.GetLocUserLimitVoids("/Workorder/WorkorderWCJG", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        if (getWC)
+                                        {
+                                            if (item.progress == 1)
+                                            {
+                                            <a href="javascript:" class='blue' onclick="WorkorderWC(@item.id)">处理完成</a>
+                                            }
+                                        }
+
+                                        //提交人申诉
+                                        bool getTJSHS = bll_limit.GetLocUserLimitVoids("/Workorder/WorkorderTJSHSJG", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        if (getTJSHS)
+                                        {
+                                            if (item.status == -1 && item.progress != 4)
+                                            {
+                                            <a href="javascript:" class='blue' onclick="WorkorderTJSHS(@item.id)">关闭是否合理</a>
+                                            }
+                                        }
+                                        //处理人申诉
+                                        bool getCLSHS = bll_limit.GetLocUserLimitVoids("/Workorder/WorkorderCLSHSJG", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        if (getCLSHS)
+                                        {
+                                            if (item.progress == 3 && item.status == 0)
+                                            {
+                                            <a href="javascript:" class='blue' onclick="WorkorderCLSHS(@item.id)">评分是否合理</a>
+                                            }
+                                        }
+                                        //工单详情
+                                        bool getinfo = bll_limit.GetLocUserLimitVoids("/Workorder/WorkorderInfo", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        if (getinfo)
+                                        {
+                                            <a href="javascript:" class='blue' onclick="WorkorderInfo(@item.id)">详情</a>
+                                        }
+
+                                    }
+                                </td>
+                              </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="8" class="nodata"> 暂无记录 </td>
+                                            </tr>
+                                        }
+
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)
+</div>

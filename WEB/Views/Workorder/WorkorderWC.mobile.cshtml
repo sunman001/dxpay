@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "完成工单页面";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+}
+@JMP.TOOL.UserHelper.js("mobile/Workorder/Workorder.mobile.js")
+<div class="mobile-popup mobile-container">
+    <div class="ui form">
+        <dl>
+            <dt>工单进度：</dt>
+            <dd>
+                <input type="radio" readonly="readonly" checked="checked"> 完成
+            </dd>
+        </dl>
+        <dl>
+            <dt>交流内容：</dt>
+            <dd>
+                <textarea name="handleResultDescription" type="text" id="handleResultDescription"> </textarea>  
+            </dd>
+        </dl>
+        <dl>
+            <dt></dt>
+            <dd><input type="hidden" id="id" value="@(ViewBag.id)" /></dd>
+        </dl>
+    </div>
+    <div class="page-footer">
+        <input type="button" name="btnWorkorderWC" value="保存" id="btnWorkorderWC" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+</div>

@@ -1,0 +1,156 @@
+﻿@{
+    ViewBag.Title = "银行卡管理";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+
+    var userBankList = ViewBag.list as List<JMP.MDL.jmp_userbank>;
+}
+
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">银行卡管理</span>
+</header>
+<!--头部 end-->
+<section>
+    <ul class="frm-ul-tit clearfix">
+        <li>
+            <a id="btn-show-search" onclick="pop.showSearch('search-container')" class="sle-btn">查询</a>
+        </li>
+    </ul>
+    <div class="search-container" style="display:none">
+        <div class="rule-single-select">
+            <select name="searchType" id="searchType">
+                <option value="1" @(ViewBag.searchType == "1" ? "selected=selected" : "")>银行卡号</option>
+                <option value="2" @(ViewBag.searchType == "2" ? "selected=selected" : "")>银行名称</option>
+                <option value="3" @(ViewBag.searchType == "3" ? "selected=selected" : "")>持卡人姓名</option>
+            </select>
+        </div>
+        <div class="srch-dipt">
+            <input name="banknumber" id="banknumber" type="text" placeholder="请输入关键字" value="@ViewBag.banknumber" class="txtipt" />
+        </div>
+        <div class="rule-single-select">
+            <select name="flag" id="flag">
+                <option value="" @( ViewBag.flag == "" ? "selected=selected" : "")>付款标识</option>
+                <option value="00" @( ViewBag.flag == "00" ? "selected=selected" : "")>对私</option>
+                <option value="01" @( ViewBag.flag == "01" ? "selected=selected" : "")>对公</option>
+            </select>
+        </div>
+        <div class="rule-single-select">
+            <select name="state" id="state">
+                <option value="" @( ViewBag.state == "" ? "selected=selected" : "")>审核状态</option>
+                <option value="0" @( ViewBag.state == "0" ? "selected=selected" : "")>等待审核</option>
+                <option value="1" @( ViewBag.state == "1" ? "selected=selected" : "")>审核通过</option>
+                <option value="-1" @( ViewBag.state == "-1" ? "selected=selected" : "")>审核失败</option>
+            </select>
+        </div>
+        <div class="rule-single-select">
+            <select name="freeze" id="freeze">
+                <option value="" @( ViewBag.freeze == "" ? "selected=selected" : "")>冻结状态</option>
+                <option value="0" @( ViewBag.freeze == "0" ? "selected=selected" : "")>正常</option>
+                <option value="1" @( ViewBag.freeze == "1" ? "selected=selected" : "")>冻结</option>
+
+            </select>
+        </div>
+        <a id="btn_search" class="btn btn-primary" href="javascript:" onclick="btnUserBank()">查询</a>
+    </div>
+
+    <div class="table-dcnt">
+        <div class="table-container">
+            <table class="table-cnt">
+                <thead>
+                    <tr>
+                        <th>银行卡号</th>
+                        <th>银行名称</th>
+                        <th>开户行名称</th>
+                        <th>持卡人姓名</th>
+                        <th>省份</th>
+                        <th>城市</th>
+                        <th>付款标识</th>
+                        <th>审核状态</th>
+                        <th>冻结状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (userBankList.Count > 0)
+                        {
+                            foreach (var item in userBankList)
+                            {
+                                <tr>
+                                    <td>@item.u_banknumber</td>
+                                    <td>@item.u_bankname</td>
+                                    <td>@item.u_openbankname</td>
+                                    <td>@item.u_name</td>
+                                    <td>@item.u_province</td>
+                                    <td>@item.u_area</td>
+                                    <td>@(item.u_flag == "00" ? Html.Raw("<span class='green'>对私</span>") : Html.Raw("<span class='red'>对公</span>"))</td>
+                                    <td>
+                                        @switch (item.u_state)
+                                        {
+                                            case 0:
+                                                <span class="blue">等待审核</span>
+                                                break;
+                                            case 1:
+                                                <span class="green">审核通过</span>
+                                                break;
+                                            case -1:
+                                                <span class="red">审核失败</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>@(item.u_freeze == 0 ? "未冻结" : "已冻结")</td>
+                                    <td>
+                                        @if (item.u_state == 0 && item.u_freeze == 0)
+                                        {
+                                            <a href="javascript:void(0)" onclick="UpdateApp(@item.u_id)" class='blue edit'>编辑</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="10" class="nodata">暂无信息</td>
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+            </table>
+        </div>
+        @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+    </div>
+</section>
+<script type="text/javascript">
+
+    //分页
+    function ArticleManage(pageIndex, pageSize) {
+
+        var searchType = $.trim($("#searchType").val());
+        var banknumber = $.trim($("#banknumber").val());
+        var flag = $.trim($("#flag").val());
+        var state = $.trim($("#state").val());
+        var freeze = $.trim($("#freeze").val());
+
+        var url = "/User/BankCardList?pageIndexs=" + pageIndex + "&PageSize=" + pageSize + "&searchType=" + searchType + "&banknumber=" + banknumber + "&flag=" + flag + "&state=" + state + "&freeze=" + freeze;
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+    //查询
+    function btnUserBank() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //修改应用弹窗
+    function UpdateApp(u_id) {
+        window.location.href = "/User/BankCardUpdate?bkid=" + u_id;
+
+    }
+
+</script>

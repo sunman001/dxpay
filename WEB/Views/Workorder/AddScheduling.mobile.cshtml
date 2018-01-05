@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = "添加值班表";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_locuser>;
+    var model = ViewBag.model as JMP.MDL.jmp_scheduling;
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+@JMP.TOOL.UserHelper.js("mobile/Workorder/scheduling.mobile.js")
+<div class="mobile-popup mobile-container">
+    <div class="ui form">
+        <dl>
+            @if (DateTime.Parse(model.watchstartdate.ToString("yyyy-MM-dd")) >= DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd")) || model.id == 0)
+            {
+                <dt>值班人：</dt>
+                <dd>
+                    <div class="field">
+                        <select name="WatchId" id="WatchId" onblur="yzlx()" class="ui dropdown fluid">
+                            <option value='-1'>--请选择--</option>
+
+                            @foreach (var item in list)
+                            {
+                                <option value='@item.u_id' @(model.watchid == item.u_id ? "selected='selected" : "")>@item.u_realname</option>
+                            }
+                        </select>
+                        <div class="Validform_checktip" id="yywatch">* 值班人</div>
+                    </div>
+                </dd>
+            }
+            else
+            {
+                <dt>值班人：</dt>
+                <dd>
+                    <div class="field">
+                        <select name="WatchId" class="ui dropdown fluid" disabled="disabled">
+                            <option value='-1'>--请选择--</option>
+
+                            @foreach (var item in list)
+                            {
+                                <option value='@item.u_id' @(model.watchid == item.u_id ? "selected='selected" : "")>@item.u_realname</option>
+                            }
+                        </select>
+                        <div class="Validform_checktip" id="yywatch">* 值班人</div>
+                    </div>
+                </dd>
+            }
+        </dl>
+        <dl>
+            @if (DateTime.Parse(model.watchstartdate.ToString("yyyy-MM-dd")) >= DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd")) || model.id == 0)
+            {
+                <dt>值班开始日期：</dt>
+                <dd>
+                    <div class="field">
+                        <input name="stime" type="text" id="stime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'#F{\'@DateTime.Now.ToString("yyyy-MM-dd")\'}'})" value="@(model.watchstartdate.ToString("yyyy-MM-dd") == "0001-01-01" ? DateTime.Now.ToString("yyyy-MM-dd") : model.watchstartdate.ToString("yyyy-MM-dd"))" onblur="yzstart()" />
+
+                        <div class="Validform_checktip" id="yyTime">*请选择值班开始日期</div>
+                    </div>
+                </dd>
+            }
+            else
+            {
+                <dt>值班开始日期：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <span class="ie7-input-bug-start"></span>
+                        <input name="stime" type="text" disabled="disabled" class="dataipt txtipt" value="@(model.watchstartdate.ToString("yyyy-MM-dd") == "0001-01-01" ? DateTime.Now.ToString("yyyy-MM-dd") : model.watchstartdate.ToString("yyyy-MM-dd"))" />
+                        <span class="ie7-input-bug-end"></span>
+                    </div>
+                </dd>
+            }
+        </dl>
+        <dl>
+            <dt></dt>
+            <dd>
+                <input type="hidden" id="s_id" value="@(model.id == 0 ? 0 : model.id)" />
+            </dd>
+        </dl>
+        <dl>
+            @if (DateTime.Parse(model.watchstartdate.ToString("yyyy-MM-dd")) < DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd")) && model.id != 0)
+            {
+                <dt>友情提示：</dt>
+                <dd>
+                    <label style="color:red;">已完成值班，不能再进行修改</label>
+                </dd>
+            }
+        </dl>
+    </div>
+    <div class="page-footer">
+        @if (DateTime.Parse(model.watchstartdate.ToString("yyyy-MM-dd")) >= DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd")) || model.id == 0)
+        {
+            <input type="button" name="btnSave" value="保存" id="btnScheduling" class="btn btn-primary" />
+        }
+
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+</div>

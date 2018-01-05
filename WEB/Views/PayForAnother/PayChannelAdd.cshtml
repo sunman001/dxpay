@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "添加代付通道";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+
+<div class="main">
+    <div class="plate-form">
+        <dl>
+            <dt>代付接口名称：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input type="text" id="ChannelName" value="" onblur="ValidateName()" />
+                </div>
+                <div id="ChannelNameValidate" class="Validform_checktip">请输入代付接口名称！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>接口标识：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input type="text" id="ChannelIdentifier" value="" onblur="ValidateIdentifier()" />
+                </div>
+                <div id="ChannelIdentifierValidate" class="Validform_checktip">请输入接口标识！</div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="提交" id="PayChannel" onclick="btnPayChannel()" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn" />
+    </div>
+    <div class="clear"></div>
+</div>
+<script type="text/javascript">
+
+    //添加接口
+    function btnPayChannel() {
+
+        //接口名称
+        var ChannelName = $("#ChannelName").val();
+        if (isRequestNotNull(ChannelName)) {
+
+            $("#ChannelNameValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#ChannelNameValidate").html("请填写代付通道名称!");
+            return false;
+        }
+        else {
+            $("#ChannelNameValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#ChannelNameValidate").html("验证通过");
+        }
+
+        //接口标识
+        var ChannelIdentifier = $("#ChannelIdentifier").val();
+        if (isRequestNotNull(ChannelIdentifier)) {
+
+            $("#ChannelIdentifierValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#ChannelIdentifierValidate").html("请填写代付接口标识!");
+            return false;
+        }
+        else {
+            $("#ChannelIdentifierValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#ChannelIdentifierValidate").html("验证通过");
+        }
+
+      
+        var url = "/PayForAnother/InsertPayChannel";
+        var data = { ChannelName: $.trim(ChannelName), ChannelIdentifier: $.trim(ChannelIdentifier) };
+
+        $("#PayChannel").attr("disabled", "disabled");
+        $.post(url, data, function (retJson) {
+            if (retJson.success == 1) {
+                window.parent.ShowMsg(retJson.msg, "ok", function () { window.parent.global.reload(); window.parent.layer.closeAll(); });
+            }
+            else {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            }
+            $("#PayChannel").attr("disabled", false);
+        });
+
+    }
+
+    //验证接口名称
+    function ValidateName()
+    {
+        //接口名称
+        var ChannelName = $("#ChannelName").val();
+        if (isRequestNotNull(ChannelName)) {
+
+            $("#ChannelNameValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#ChannelNameValidate").html("请填写代付通道名称!");
+            return false;
+        }
+        else {
+            $("#ChannelNameValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#ChannelNameValidate").html("验证通过");
+        }
+    }
+
+    //验证接口标识
+    function ValidateIdentifier()
+    {
+        //接口标识
+        var ChannelIdentifier = $("#ChannelIdentifier").val();
+        if (isRequestNotNull(ChannelIdentifier)) {
+
+            $("#ChannelIdentifierValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#ChannelIdentifierValidate").html("请填写代付接口标识!");
+            return false;
+        }
+        else {
+            $("#ChannelIdentifierValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#ChannelIdentifierValidate").html("验证通过");
+        }
+
+    }
+</script>

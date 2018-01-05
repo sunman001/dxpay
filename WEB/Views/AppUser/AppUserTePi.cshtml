@@ -1,0 +1,33 @@
+﻿@model WEB.ViewModel.Developer.SpecialApprovalViewModel
+@{
+    ViewBag.Title = "特批";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+@JMP.TOOL.UserHelper.js("AppUser/appuser.js")
+<div class="main">
+    <form class="plate-form">
+        @Html.HiddenFor(m=>m.UserId)
+        <dl>
+            <dt style="width:170px;">特批服务费率(减少比例)：</dt>
+            <dd>
+                <div class="rule-single-select">
+                    @Html.DropDownListFor(m=>m.SpecialApproval,new SelectList(Model.SpecialApprovalDataSource,"Value","Text"))
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt style="width:170px;">状态：</dt>
+            <dd>
+                <input value="0" name="IsSpecialApproval" type="radio" @(Model.IsSpecialApproval == 0 ? "checked='checked'" : "")/><label for="u_stat2">取消特批</label>
+                <input value="1" name="IsSpecialApproval" type="radio" @(Model.IsSpecialApproval == 1 ? "checked='checked'" : "")/><label for="u_stat3">通过特批</label>
+            </dd>
+        </dl>
+    </form>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" onclick="UserUpdateTePi()" class="btn btn-primary" id="btn-save-add" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>

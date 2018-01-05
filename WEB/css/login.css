@@ -1,0 +1,61 @@
+﻿@charset "utf-8";
+
+/* CSS Document */
+*{margin:0px;padding:0px;box-sizing: border-box;}
+body {font-size: 14px;font-family: "微软雅黑";background: #f3f3f4;}
+dl, dt, dd, ol, ul, li, fieldset, form, label, legend {margin: 0px;padding: 0px; border: 0px;outline: 0px;vertical-align: baseline;background: transparent;list-style: none;list-style-type: none;}
+a{outline: 0;border:0px;text-decoration:none;}
+
+/*登录*/
+.login-pt{padding-top: 8%;}
+.login-cnt{width: 350px;margin:0px auto;position: relative;-webkit-box-shadow:0 0 20px rgba(0, 0, 0, 0.2);  -moz-box-shadow:0 0 20px rgba(0, 0, 0, 0.2);box-shadow:0 0 10px rgba(0, 0, 0, 0.2); }
+.logo{background:#3498db url(../images/logo.png) no-repeat center center;display: block;width: 350px;height: 100px;border-radius: 5px 5px 0px 0px;}
+.login-frm{background: #fff;border-top:0px;padding:40px 20px 20px 20px;border-radius: 0px 0px 5px 5px;position: relative;display: block;}
+.login-frm .sicon{border-right: 1px solid #e7ebee;height: 43px;width:45px;position: absolute;text-align: center;line-height: 45px;z-index: 50;color:#cecece;}
+.login-frm .fa-user{top:41px;}
+.login-frm .fa-lock{top:106px;}
+.login-frm .fa-shield{top:171px;}
+.login-frmu li{margin-bottom:20px;position:relative;}
+.login-frmu .txtipt{-webkit-appearance: none;-moz-appearance: none;outline:none;background-color: #fff;border-radius: 4px;color: #1f2d3d;display: block;font-size: inherit;height: 36px;line-height: 1;outline: 0;transition: border-color .2s cubic-bezier(.645,.045,.355,1);width: 100%;padding: 10px 10px 10px 55px;height: 45px;border: 1px solid #e7ebee;}
+.login-frmu .txtipt:hover,.login-frmu .txtipt:focus{border-color: #20a0ff;background:#fff;}
+.login-frmu .txtiptvlt{width:160px;}
+.login-frmu .text-code{position:absolute;right:0px;top:0px;}
+.login-frmu .text-code img{width: 110px;height: 45px;display: block;border-radius: 5px;cursor:pointer;}
+.login-frmu .btn-lgn{display: inline-block;line-height: 1;white-space: nowrap;cursor: pointer;background: #20a0ff;color: #fff;-webkit-appearance: none;text-align: center;box-sizing: border-box;outline: 0;padding: 14px 51px;width:100%;border-radius: 4px;}
+.login-frmu .btn-lgn:hover{background:#4db3ff;}
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {-webkit-box-shadow: 0 0 0px 1000px white inset;}
+
+
+
+
+/*手机版*/
+@media(max-width:750px) {
+	.login-pt{padding-top: 10%;padding-bottom:50px;}
+	.login-cnt{width: 90%;margin: 0px auto;}
+	.logo{width: 100%;height: 60px;}
+	.login-frm .el-button{padding: 14px 0;}
+	.el-button{width: 50%;}
+	.el-button--default{width: 44%;}
+}
+@media(max-width:320px) {
+    .login-frmu .txtiptvlt{width:130px;}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

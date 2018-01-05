@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "盾行支付平台-登录";
+   
+}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1" />
+    <title>盾行支付平台-登录</title>
+    <link rel="stylesheet" href="../mobile/asste/fa-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../mobile/asste/fa-awesome/css/font-awesome-ie7.min.css">
+    <link href="../mobile/css/logrit.css" rel="stylesheet" type="text/css">
+    @JMP.TOOL.UserHelper.js("jquery.js")
+    @JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+    @JMP.TOOL.UserHelper.js("plugin/layer/layer.js")
+</head>
+<body class="body-log">
+    <section class="head-logo">
+        <i class="logo"></i>
+        <span class="tit">开发者</span>
+    </section>
+    <section class="log-cnt">
+        <ul class="log-frm">
+            <li>
+                <i class="icon icon-user fl"></i>
+                <div class="d-cnt">
+                    <input type="text" class="txtipt txtipt-user" id="u_id" value="cs@jm.com" placeholder="请输入邮箱或者手机号码"  />
+                    <i class="fa fa-times-circle"></i>
+                </div>
+            </li>
+            <li>
+                <i class="icon icon-pwd fl"></i>
+                <div class="d-cnt">
+                    <input type="password" id="u_pass" class="txtipt txtipt-pwdp" value="123456" placeholder="请输入密码" />
+                    <input type="text" class="txtipt txtipt-pwdt" placeholder="请输入密码" />
+                    <i class="fa fa-eye-slash"></i>
+                    <i class="fa fa-eye"></i>
+                </div>
+            </li>
+            <li>
+                <i class="icon icon-d fl"></i>
+                <div class="d-cnt d-cnt-ta">
+                    <input id="code" type="text" name="vc" placeholder="请输入验证码" class="txtipt" value="123" />
+                    <div id="code" class="lgn-code" onclick="document.getElementById('verify').src = '/Home/GetValidateCode?height=60&k=' + new Date().toString();">
+                        <img id="verify" src="/Home/GetValidateCode?height=60" alt="看不清？换一张" title="看不清？换一张" />
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a href="#" class="btn"  id="btn_sub">立即登录</a>
+                <a href="/User/Register" class="btn btn-bor">马上注册</a>
+                <a href="/User/changepwd" class="btxt">忘记密码<i class="fa fa-question-circle"></i></a>
+            </li>
+        </ul>
+    </section>
+    <script type="text/javascript" src="../mobile/js/logrit.js"></script>
+    <script type="text/javascript" src="../mobile/js/home/login.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,355 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1BD901A1-D07D-465C-9989-A8305D3F8762}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JMALI</RootNamespace>
+    <AssemblyName>JMALI</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AopSdk">
+      <HintPath>C:\Users\Administrator\Downloads\alipay-sdk-NET-20171201160107\bin\Debug\AopSdk.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="cs.aspx" />
+    <Content Include="demo.aspx" />
+    <Content Include="GETNOTICE.aspx" />
+    <Content Include="GOTO.aspx" />
+    <Content Include="HY.aspx" />
+    <Content Include="NY.aspx" />
+    <Content Include="PAYNOTICE.aspx" />
+    <Content Include="PF.aspx" />
+    <Content Include="PfWxGzh.aspx" />
+    <Content Include="pfwxgzhorder.aspx" />
+    <Content Include="RMSM.aspx" />
+    <Content Include="Tb.aspx" />
+    <Content Include="VALIDATE.aspx" />
+    <Content Include="Web.config" />
+    <Content Include="WeChatNumber.aspx" />
+    <Content Include="WFTNOTICE.aspx" />
+    <Content Include="Wp.aspx" />
+    <Content Include="Ww.aspx" />
+    <Content Include="WXGZH.aspx" />
+    <Content Include="Xxb.aspx" />
+    <Content Include="xyyh.aspx" />
+    <Content Include="XZ.aspx" />
+    <Content Include="Yl.aspx" />
+    <Content Include="ZFNOTICE.aspx" />
+    <Content Include="Zq.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="cs.aspx.cs">
+      <DependentUpon>cs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="cs.aspx.designer.cs">
+      <DependentUpon>cs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="demo.aspx.cs">
+      <DependentUpon>demo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="demo.aspx.designer.cs">
+      <DependentUpon>demo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GETNOTICE.aspx.cs">
+      <DependentUpon>GETNOTICE.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GETNOTICE.aspx.designer.cs">
+      <DependentUpon>GETNOTICE.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GOTO.aspx.cs">
+      <DependentUpon>GOTO.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GOTO.aspx.designer.cs">
+      <DependentUpon>GOTO.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="HY.aspx.cs">
+      <DependentUpon>HY.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HY.aspx.designer.cs">
+      <DependentUpon>HY.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="notice\notice.cs" />
+    <Compile Include="notice\SelectInterface.cs" />
+    <Compile Include="NY.aspx.cs">
+      <DependentUpon>NY.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NY.aspx.designer.cs">
+      <DependentUpon>NY.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PAYNOTICE.aspx.cs">
+      <DependentUpon>PAYNOTICE.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PAYNOTICE.aspx.designer.cs">
+      <DependentUpon>PAYNOTICE.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF.aspx.cs">
+      <DependentUpon>PF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF.aspx.designer.cs">
+      <DependentUpon>PF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PfWxGzh.aspx.cs">
+      <DependentUpon>PfWxGzh.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PfWxGzh.aspx.designer.cs">
+      <DependentUpon>PfWxGzh.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pfwxgzhorder.aspx.cs">
+      <DependentUpon>pfwxgzhorder.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pfwxgzhorder.aspx.designer.cs">
+      <DependentUpon>pfwxgzhorder.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RMSM.aspx.cs">
+      <DependentUpon>RMSM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RMSM.aspx.designer.cs">
+      <DependentUpon>RMSM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Tb.aspx.cs">
+      <DependentUpon>Tb.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tb.aspx.designer.cs">
+      <DependentUpon>Tb.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="VALIDATE.aspx.cs">
+      <DependentUpon>VALIDATE.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VALIDATE.aspx.designer.cs">
+      <DependentUpon>VALIDATE.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WeChatNumber.aspx.cs">
+      <DependentUpon>WeChatNumber.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WeChatNumber.aspx.designer.cs">
+      <DependentUpon>WeChatNumber.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WeChat\WeChatOpenId.cs" />
+    <Compile Include="WFTNOTICE.aspx.cs">
+      <DependentUpon>WFTNOTICE.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WFTNOTICE.aspx.designer.cs">
+      <DependentUpon>WFTNOTICE.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Wp.aspx.cs">
+      <DependentUpon>Wp.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Wp.aspx.designer.cs">
+      <DependentUpon>Wp.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Ww.aspx.cs">
+      <DependentUpon>Ww.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Ww.aspx.designer.cs">
+      <DependentUpon>Ww.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WXGZH.aspx.cs">
+      <DependentUpon>WXGZH.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WXGZH.aspx.designer.cs">
+      <DependentUpon>WXGZH.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Xxb.aspx.cs">
+      <DependentUpon>Xxb.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Xxb.aspx.designer.cs">
+      <DependentUpon>Xxb.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="xyyh.aspx.cs">
+      <DependentUpon>xyyh.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="xyyh.aspx.designer.cs">
+      <DependentUpon>xyyh.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="XZ.aspx.cs">
+      <DependentUpon>XZ.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="XZ.aspx.designer.cs">
+      <DependentUpon>XZ.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Yl.aspx.cs">
+      <DependentUpon>Yl.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Yl.aspx.designer.cs">
+      <DependentUpon>Yl.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ZFNOTICE.aspx.cs">
+      <DependentUpon>ZFNOTICE.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ZFNOTICE.aspx.designer.cs">
+      <DependentUpon>ZFNOTICE.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Zq.aspx.cs">
+      <DependentUpon>Zq.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Zq.aspx.designer.cs">
+      <DependentUpon>Zq.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\alipay.pubxml" />
+    <None Include="Properties\PublishProfiles\api.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\JMALI.pubxml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ALIPAY\ALIPAY.csproj">
+      <Project>{97f47ba4-cc80-48db-9680-759f33931104}</Project>
+      <Name>ALIPAY</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{38d7aa58-c95b-449b-86c6-a8073a56e11f}</Project>
+      <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DBA\DBA.csproj">
+      <Project>{0988c62e-247f-471f-a183-db509c7a3839}</Project>
+      <Name>DBA</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DxPay.LogManager\DxPay.LogManager.csproj">
+      <Project>{C1BC675B-5FF5-4E22-9AF1-D34D88A8F630}</Project>
+      <Name>DxPay.LogManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MDL\MDL.csproj">
+      <Project>{53995dbb-9836-4647-ad22-865884fdeb9e}</Project>
+      <Name>MDL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pay.DinPay\Pay.DinPay.csproj">
+      <Project>{7e441973-6d11-4861-ab2b-1f1a7b0a9dc9}</Project>
+      <Name>Pay.DinPay</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOOL\TOOL.csproj">
+      <Project>{b6b4bf6d-e1d9-4585-abe0-c0a28fde0477}</Project>
+      <Name>TOOL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WFTPAY\WFTPAY.csproj">
+      <Project>{df53e03a-0a1d-4e1f-a8b3-11b4342afa79}</Project>
+      <Name>WFTPAY</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WXPAY\WXPAY.csproj">
+      <Project>{ecb24008-50fe-4c11-a3ef-545a4a811fc7}</Project>
+      <Name>WXPAY</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>60576</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:14942/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:14942/</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

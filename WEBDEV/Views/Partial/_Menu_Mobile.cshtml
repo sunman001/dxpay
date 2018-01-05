@@ -1,0 +1,54 @@
+﻿@using WEBDEV.Util
+@model IEnumerable<WEBDEV.Models.Login.MenuViewModel>
+@{
+    var currentAction = "";
+}
+<ul class="nav">
+
+    @foreach (var menu in Model)
+    {
+        if (menu.Children.Count > 0)
+        {
+            <li>
+                <a href="javascript:;">
+                    <i class="fa @(menu.Icon)"></i>
+                    <span class="name">@menu.Title</span>
+                    <i class="fa-add"></i>
+                </a>
+
+                <ul class="submenu">
+                    @foreach (var children in menu.Children)
+                    {
+                        var isCurrent = false;
+                        if (Html.IsCurrentPath(children.Href))
+                        {
+                            currentAction = children.Id;
+                            isCurrent = true;
+                        }
+                        <li  @(isCurrent? "class=active":"")>
+                            <a href="@children.Href" >
+                                <span id="@children.Id" class="ne">@children.Title</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+        else
+        {
+            <li class=active>
+
+                <a href="/Home/Default">
+                    <i class="fa fa-home  @menu.Icon"></i>
+                    <span class="name">@menu.Title</span>
+                </a>
+            </li>
+        }
+    }
+
+
+
+
+
+    
+</ul>

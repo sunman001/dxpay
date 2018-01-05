@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "角色管理列表";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_role>;
+    bool getEdit = false;
+    bool getEditRole = false;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("local/AgentLimit.js")
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" class="table-cnt">
+            <thead>
+                <tr>
+                    <th width="100">编号</th>
+                    <th>角色名</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (list.Count > 0)
+                {
+                    foreach (var item in list)
+                    {
+                        <tr>
+                            <td>@item.r_id</td>
+                            <td>@item.r_name</td>
+                            <td>@(item.r_state == 1 ? Html.Raw("<span class='green'>正常</span>") : Html.Raw("<span class='red'>锁定</span>"))</td>
+                            <td>
+                                @{
+                                    getEdit = bll_limit.GetLocUserLimitVoids("/ROTE/RoleUserUpdateAjax", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                    if (getEdit)
+                                    {
+                                        <a href='javascript:' class='blue' onclick='UpdateRoleDialog(@item.r_id)'>编辑</a>
+                                    }
+                                    getEditRole = bll_limit.GetLocUserLimitVoids("/ROTE/UpdateRoleLimitAjax", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                    if (getEditRole)
+                                    {
+                                        <a href='javascript:' class='blue' onclick='UpdateRoleLimitDialog(@item.r_id)'>权限设置</a>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td align="center" colspan="7" class="nodata">暂无记录</td>
+                                        </tr>
+                                    }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+<script type="text/javascript">
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/ROTE/AgentRoteList?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+</script>

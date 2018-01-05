@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "添加角色";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+}
+@JMP.TOOL.UserHelper.js("mobile/local/locals.mobile.js")
+<div class="mobile-popup mobile-container">
+    <div class="ui form">
+        <dl>
+            <dt>角色名：</dt>
+            <dd>
+                <div class="field">
+                    <input name="inputName" type="text" id="inputName" value="" onblur="inputCheckRoleName()" />
+                    <div class="Validform_checktip" id="checkName">* 角色名不能为空</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>状态：</dt>
+            <dd>
+                <table id="radOrvActnS">
+                    <tr>
+                        <td>
+                            <input id="radOrvActnS_0" type="radio" name="state" value="1" checked="checked" /><label for="radOrvActnS_0">开启</label>
+                        </td>
+                        <td>
+                            <span style="margin-left: 20px;">
+                                <input id="radOrvActnS_1" type="radio" name="state" value="0" /><label for="radOrvActnS_1">关闭</label>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" id="btnSave" class="ui button primary" onclick="addrole()" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="ui button" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>

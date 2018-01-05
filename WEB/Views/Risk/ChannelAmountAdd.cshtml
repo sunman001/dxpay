@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "通道池配置通道数据";
+    Layout = "~/Views/UI/dialog.cshtml";
+
+    var amountList = ViewBag.amountList as List<JMP.MDL.jmp_channel_amount_config>;
+}
+
+<div class="main">
+    <input type="hidden" id="cid" value="@ViewBag.id" />
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="apptable" class="table-cnt lay-table-cnt">
+            <thead>
+                <tr>
+                    <th width="100">小时</th>
+                    <th>配置通道数量</th>
+                </tr>
+            </thead>
+            <tbody id="fileList">
+                @{
+                    for (var i = 0; i < 24; i++)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>
+                                @if (amountList.Count > 0)
+                                {
+                                    <input type="text" name="Amount" id="Amount_@i" value="@amountList[i].Amount" onblur="yzAmount('Amount_@i')" class="lay-usersx" />
+                                }
+                                else
+                                {
+                                    <input type="text" name="Amount" id="Amount_@i" value="0" onblur="yzAmount('Amount_@i')" class="lay-usersx" />
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" class="btn btn-primary" id="btnSave" onclick="btnAmount()" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>
+
+<script type="text/javascript">
+
+    //提交方法
+    function btnAmount() {
+
+        var a = "";
+        var valArr = new Array;
+        $("#fileList").find("tr").each(function (i) {
+            var tdArr = $(this).children();
+            var WhichHourid = tdArr.eq(0).text();
+            var Amount = tdArr.find("input[name='Amount']").val();
+            var yz = yzAmount("Amount_" + WhichHourid);
+            if (yz == true) {
+                var str = WhichHourid + "," + Amount;
+                valArr[i] = str;
+
+            } else {
+
+                a += "通道数量只能为整数!";
+                return false;
+            }
+        });
+
+        var amountArr = valArr.join('|');
+        if (amountArr == "") {
+            window.parent.ShowMsg("请填写通道数量！", "error", "");
+            return false;
+        }
+
+        if (a == "") {
+
+            var cid = $("#cid").val();
+
+            var url = "/Risk/AmountAdd";
+            var data = { cid: $.trim(cid), amountArr: $.trim(amountArr) };
+
+            $("#btnSave").attr("disabled", "disabled");
+
+            $.post(url, data, function (retJson) {
+                if (retJson.success == 1) {
+                    window.parent.ShowMsg(retJson.msg, "ok", function () { window.parent.global.reload(); window.parent.layer.closeAll(); });
+                }
+                else {
+                    window.parent.ShowMsg(retJson.msg, "error", "");
+                    return false;
+                }
+                $("#btnSave").attr("disabled", false);
+            });
+        }
+    }
+
+
+
+
+    //验证数据是否合法
+    function yzAmount(obj) {
+        var rex = /^\+?(0|[1-9][0-9]*)$/;
+        var Amount = $("#" + obj).val();
+        if ($.trim(Amount) != "") {
+            if (!rex.test(Amount)) {
+                window.parent.ShowMsg("通道数量只能为整数！", "error", "");
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        else {
+            window.parent.ShowMsg("通道数量不能为空！", "error", "");
+            return false;
+        }
+    }
+
+</script>

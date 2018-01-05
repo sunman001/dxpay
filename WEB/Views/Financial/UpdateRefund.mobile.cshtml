@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "修改退款";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var model = ViewBag.model as JMP.MDL.jmp_refund;
+}
+@JMP.TOOL.UserHelper.js("mobile/Financial/RefundList.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="mobile-container mobile-popup">
+
+    <div class="plate-form  ui form ">
+        <div class="field">
+            <label>退款人姓名：</label>
+            <input name="inputName" type="text" id="r_name" onblur="yzname()" maxlength="20" sucmsg="验证成功" nullmsg="退款人姓名不超过20" errormsg="退款人姓名长度不超过20" value="@(string.IsNullOrEmpty(model.r_name) ? "" : model.r_name)" />
+            
+            <div class="Validform_checktip" id="nameyy">*退款人姓名长度不超过20</div>
+        </div>
+        <div class="field">
+            <label>退款人电话：</label>
+            <input name="r_tel" type="text" id="r_tel" onblur="CheckPhone()" value="@(string.IsNullOrEmpty(model.r_tel) ? "" : model.r_tel)" />
+            <div class="Validform_checktip" id="u_phone_tip">*11位手机号或固定电话(号码或区号-号码)！</div>
+        </div>
+
+        <div class="field">
+            <label>所属应用：</label>
+            <input name="r_appname" type="text" id="r_appname" readonly="readonly" onclick="shyy()" value="@(string.IsNullOrEmpty(model.a_name) ? "" : model.a_name)" />
+            <span class="ie7-input-bug-end"></span>
+            <input type="hidden" id="r_appid" name="r_appid" value="@(model.r_appid == 0 ? 0 : model.r_appid)" />
+            <div class="Validform_checktip" id="yzkfz">* 请选择应用</div>
+        </div>
+        <div class="field">
+            <label>所属商户：</label>
+            <input name="a_user_idyx" type="text" id="a_user_idyx" readonly="readonly" value="@(string.IsNullOrEmpty(model.u_realname) ? "" : model.u_realname)" />           
+                <span class="ie7-input-bug-end"></span>
+                <input type="hidden" id="a_user_id" name="a_user_id"  value="@(model.r_userid == 0 ? 0 : model.r_userid)"   />
+</div>
+        <div class="field">
+            <label> 支付流水号 </label>
+            <input name="r_tradeno" type="text" id="r_tradeno" onblur="CheckTradeno()" value="@(string.IsNullOrEmpty(model.r_tradeno) ? "" : model.r_tradeno)" />
+            <div id="yztradeno" class="Validform_checktip">*请输入支付流水号！</div>
+        </div>
+
+        <div class="field">
+            <label>订单编号</label>
+            <input name="r_code" type="text" id="r_code" onblur="CheckCode()" value="@(string.IsNullOrEmpty(model.r_code) ? "" : model.r_code)" />
+            <div id="yztraCode" class="Validform_checktip">*请输入订单编号！</div>
+        </div>
+        <div class="field">
+            <label>实际支付金额 </label>
+            <input name="r_money" type="text" id="r_money" onblur="CheckMoney()" value="@(model.r_money)" />
+            <div id="yztraMoney" class="Validform_checktip">*请输入实际支付金额！</div>
+        </div>
+
+        <div class="field">
+            <label>
+                退款金额
+            </label>
+            <input name="r_price" type="text" id="r_price" onblur="CheckPrice()" value="@(model.r_price)" />
+            <div id="yztrPrice" class="Validform_checktip">*请输入退款金额！</div>
+        </div>
+
+        <div class="field">
+            <label>用户付费时间: </label>
+            <input name="stime" type="text" id="r_date" onFocus="WdatePicker({maxDate:'@DateTime.Now.ToString("yyyy-MM-dd")'})" readonly="readonly" style="width:300px; height:25px;" value="@(model.r_date.ToString("yyyy-MM-dd"))" />
+        </div>
+        <input type="hidden" id="r_id" value="@(model.r_id == 0 ? 0 : model.r_id)" />
+        <input type="hidden" id="r_time" value="@(model.r_time == DateTime.Now ? DateTime.Now : model.r_time)" />
+        <input type="hidden" id="r_static" value="@(model.r_static == 0 ? 0 : model.r_static)" />
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" class="large ui primary button" name="btnSaveUpdateApp" value="保存" id="btnSaveUpdateApp" class="btn mr10" />
+            <a href="~/Financial/RefundList" class="large ui primary button"> 取消</a>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+
+    })
+</script>

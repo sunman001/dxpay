@@ -1,0 +1,172 @@
+﻿@{
+    ViewBag.Title = "添加代理商";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+
+}
+@JMP.TOOL.UserHelper.js("Authentication.js")
+<script src="~/mobile/js/Agent/Agent.js"></script>
+@JMP.TOOL.UserHelper.js("jquery.ajaxupload.js")
+
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">添加代理商</span>
+</header>
+<!--头部 end-->
+
+<section class="real">
+    <div id="frm-agent-add" method="post" enctype="multipart/form-data">
+        <ul class="frm-ul">
+            <li class="tit">
+                <p class="tcnt">基本信息</p>
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span> 类别</p>
+                    <div class="rule-singless-select">
+                        <select id="Classify" onchange="ChangeType(this)">
+                            <option value="0">个人</option>
+                            <option value="1">企业</option>
+                        </select>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="dbor">
+
+                    <p class="ptit"><span style="color: #ff0000">*</span>  登录名</p>
+                    <input type="text" name="LoginName" id="LoginName" class="txtipt"  value="" placeholder="请填写登录名" />
+                </div>
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span> 真实姓名或者公司名称</p>
+                    <input type="text" name="DisplayName" id="DisplayName" class="txtipt"  value="" placeholder="请填写真实姓名或者公司名称" />
+                </div>
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span> 登录密码</p>
+                    <input name="Password" type="password" id="Password" class="txtipt"  value="" placeholder="请输入登录密码" />
+                </div>
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span> 手机号码</p>
+                    <input type="text" name="MobilePhone" id="MobilePhone" class="txtipt"  value="" placeholder="请输入手机号码" />
+                </div>
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span>QQ号码</p>
+                    <input type="text" name="QQ" id="QQ" class="txtipt"  value="" placeholder="请输入QQ" />
+                </div>
+            </li>
+
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> 邮箱地址</p>
+                    <input type="text" name="EmailAddress" id="EmailAddress" class="txtipt" value="" placeholder="请输入邮箱地址" />
+                </div>
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> 网址</p>
+                    <input type="text" name="Website" id="Website" class="txtipt" value="" placeholder="请输入网址" />
+                </div>
+            </li>
+
+        </ul>
+        <ul class="frm-ul">
+            <li class="tit">
+                <p class="tcnt">详细信息</p>
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span>身份证</p>
+                    <input type="text" name="IDCardNumber" id="IDCardNumber" class="txtipt"  value="" placeholder="请输入身份证" />
+                </div>
+            </li>
+
+            <li id="user_yyzz" style="display: none;">
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span>营业执照编号</p>
+                    <input type="text" name="BusinessLicenseNumber" id="BusinessLicenseNumber" class="txtipt" value="" placeholder="请填写营业执照编号" />
+                </div>
+            </li>
+
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span>开户行全称</p>
+                    <input type="text" name="BankFullName" id="BankFullName" class="txtipt" value="" placeholder="请填写开户银行全称" />
+                </div>
+            </li>
+
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span>开户名</p>
+                    <input type="text" name="BankAccountName" id="BankAccountName" class="txtipt"  value="" placeholder="请填写开户名" />
+                </div>
+            </li>
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span>开户账号</p>
+                    <input type="text" name="BankAccount" id="BankAccount" class="txtipt" value="" placeholder="请填写开户账号" />
+                </div>
+            </li>
+
+            <li>
+                <div class="dbor">
+                    <p class="ptit"> <span style="color: #ff0000">*</span>联系地址</p>
+                    <input type="text" name="ContactAddress" id="ContactAddress"  class="txtipt" value="" placeholder="请填写联系地址" />
+                </div>
+            </li>
+
+        </ul>
+       
+        <ul class="frm-ul">
+            <li class="tit">
+                <p class="tcnt">证件认证</p>
+            </li>
+            <li class="nstar">
+                <dl class="rnatn-pic clearfix">
+                    <dd class="dfl fl">身份证照片</dd>
+                    <dd class="dfr fr">
+
+                        <span id="addphoto" class="sfa">
+
+                            <i class="fa fa-plus"></i>
+                            <i class="stxt">添加图片</i>
+                        </span>
+
+
+                        <img src="" id="certificate" width="100" height="100" class="simg">
+                        <input name="certificatefile" type="file" id="certificatefile" onchange="FileChange()" class="txtfile" />
+                        <input type="hidden" name="u_photo" id="u_photo" />
+                    </dd>
+                </dl>
+
+                <dl class="rnatn-pic clearfix " id="qysfz" style="display: none;">
+                    <dd class="dfl fl">营业执照照片</dd>
+
+                    <dd class="dfr fr">
+                        <span id="add" class="sfa">
+                            <i class="fa fa-plus"></i>
+                            <i class="stxt">添加图片</i>
+                        </span>
+                        <img src="" id="sfzficate" width="100" height="100" class="simg">
+                        <input name="sfzcertificatefile" type="file" id="sfzcertificatefile" onchange="FileChangeSfz()" class="txtfile" />
+                        <input type="hidden" name="u_blicense" id="u_blicense" />
+                    </dd>
+                </dl>
+
+
+            </li>
+        </ul>
+        <div class="frm-btn">
+            <a class="btn" onclick="SaveAgent()" id="btnyy">提交审核</a>
+        </div>
+    </div>
+</section>
+
+
+

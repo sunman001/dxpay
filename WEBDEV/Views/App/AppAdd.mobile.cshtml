@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "添加应用";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var glptdt = ViewBag.glptdt as List<JMP.MDL.jmp_platform>;
+    var yylist = ViewBag.yylist as List<JMP.MDL.jmp_apptype>;
+    var list = ViewBag.list as List<JMP.MDL.jmp_paymode>;
+
+}
+@JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+<script src="~/mobile/js/App/app.js"></script>
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">添加应用</span>
+</header>
+<!--头部 end-->
+<section class="real">
+    <input type="hidden" value="@ViewBag.auditstate" id="u_auditstate" />
+    <ul class="frm-ul">
+        <li class="tit">
+            <p class="tcnt">应用信息</p>
+        </li>
+        <li>
+            <div class="dbor">
+             
+                <p class="ptit"><span style="color: #ff0000">*</span>    应用名称</p>
+                <input type="text" class="txtipt" id="appname" placeholder="请输入应用名称" />
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit"> <span style="color: #ff0000">*</span> 请选择运行平台</p>
+                <div class="rule-singless-select" onclick="cjyz()">
+                    <select id="terrace">
+                        <option value="0">--请选择--</option>
+                        @{
+                            foreach (var pt in glptdt)
+                            {
+                                <option value="@pt.p_id">@pt.p_name</option>
+                            }
+                        }
+                    </select>
+                </div>
+                </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit"> <span style="color: #ff0000">*</span> 请选择应用类型</p>
+                <div class="rule-singless-select" onclick="xzyylx()">
+                    <select id="xzyylx">
+                        <option value="0">--请选择--</option>
+                        @{
+                            foreach (var yym in yylist)
+                            {
+                                <option value="@yym.t_id">@yym.t_name</option>
+                            }
+                        }
+                    </select>
+                    </div>
+                </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit"> <span style="color: #ff0000">*</span> 请选择应用子类</p>
+                <div class="rule-singless-select" id="ssss">
+                    <select id="zlyy">
+                        <option value="0">--请选择--</option>
+                    </select>
+                </div>
+                </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit"> <span style="color: #ff0000">*</span>应用下载地址</p>
+                <input type="text" class="txtipt" id="yyaddress" placeholder="请输入应用地址" maxlength="200" />
+            </div>
+        </li>
+    </ul>
+    <ul class="frm-ul">
+        <li class="tit">
+            <p class="tcnt">添加支付</p>
+        </li>
+        <li class="nstar frm-ck">
+        @foreach (var item in list)
+         {
+            <div class="checkbox">
+                <input type="checkbox" name="ck" id="paytype_@item.p_id" data-stat="@item.p_islocked" value="@item.p_id" @(item.p_islocked == 0 ? "disabled=\"disabled\"" : "")>
+                <label></label>
+                <span class="name">@item.p_name</span>
+            </div>
+       }
+        </li>
+    </ul>
+    <ul class="frm-ul">
+        <li class="tit">
+            <p class="tcnt">应用通知</p>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit"> <span style="color: #ff0000">*</span>异步通知地址</p>
+                <input type="text"   id="appurl"  class="txtipt"  placeholder="请输入异步通知地址" maxlength="200" />
+            </div>
+        </li>
+        <li id="tbdzxs" style="display:none;">
+            <div class="dbor">
+                <p class="ptit"> <span style="color: #ff0000">*</span>同步通知地址</p>
+                <input type="text" id="showurl"   class="txtipt" placeholder="请输入同步通知地址" maxlength="200" />
+            </div>
+        </li>
+       
+    </ul>
+    <ul class="frm-ul">
+        <li class="tit">
+            <p class="tcnt"> <span style="color: #ff0000">*</span>应用简介</p>
+        </li>
+        <li class="nstar">
+            <textarea class="tetaipt" id="a_appsynopsis" placeholder="最少输入30字"></textarea>
+        </li>
+    </ul>
+    <div class="frm-btn">
+        <a  class="btn"  id="btnyy">提交审核</a>
+    </div>
+</section>
+
+
+

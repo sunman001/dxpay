@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "ChannelAppMappingAdd";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+@JMP.TOOL.UserHelper.js("Risk/pool.js")
+<div class="main">
+    <input type="hidden" id="cid" value="@ViewBag.id" />
+    <div class="plate-form plate-form-lab">
+        <dl id="yyapp">
+            <dt>应用id：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="appName" type="text" id="appName" readonly="readonly" onclick="apptc()" onblur="yzCorporateName()" value="@ViewBag.appidstring" />
+                    <sp />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="appNameyy">*应用id</div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="提交" id="AddChannelAppMapping" onclick="onckAppMapping()" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn" />
+    </div>
+    <div class="clear"></div>
+</div>

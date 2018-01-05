@@ -1,0 +1,78 @@
+﻿@using WEB.Extensions
+@model  WEB.Models.Merchant.ListUserViewModel
+@{
+    ViewBag.Title = "选择商户列表";
+    Layout = "~/Views/UI/dialog.cshtml";
+
+}
+<div class="main">
+    <div class="layer-mt15">
+        <ul class="frm-ul clearfix">
+            <li>
+                <div class="rule-single-select">
+                    <select name="search_Type" id="search_Type">
+                        <option value="1" @(ViewBag.stype == "1" ? "selected='selected'" : "")>登录名</option>
+                        <option value="2" @(ViewBag.stype == "2" ? "selected='selected'" : "")>真实姓名</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <input name="s_keys" id="s_keys" type="text" placeholder="请输入关键字" value="@(Model.MerchantSearchModel.SearchKey)" class="txtipt" />
+            </li>
+            <li>
+                <div class="rule-single-select">
+                    <select name="s_sort" id="s_sort">
+                        <option value="1" @(Model.MerchantSearchModel.Sort == 1 ? "selected='selected'" : "")>降序</option>
+                        <option value="0" @(Model.MerchantSearchModel.Sort == 0 ? "selected='selected'" : "")>升序</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <a id="btn_user_query" class="btn btn-primary" href="javascript:" onclick="SearchMerchant()">查询</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt lay-table-cnt">
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>登录名称</th>
+                    <th>真实姓名</th>
+                    <th>登录次数</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Users.Any())
+                {
+                    foreach (var item in Model.Users)
+                    {
+                        <tr>
+                            <td>@item.u_id</td>
+                            <td>
+                                @item.u_loginname
+                            </td>
+                            <td>@item.u_realname</td>
+                            <td>@item.u_count</td>
+                            <td>@(item.u_state == 1 ? "正常" : "冻结")</td>
+                            <td>
+                                <a href="javascript:void(0)" class="blue" onclick="yxuzyhuser(@item.u_id,'@item.u_realname')">选择</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td align="center" colspan="7" class="nodata">暂无记录</td>
+                    </tr>}
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("LoadData", Model.CurrentPage, Model.PageSize, Model.PageCount)
+    <input id="curr_page" type="hidden" value="@Model.CurrentPage" />
+</div>
+@JMP.TOOL.UserHelper.js("merchant/selectMain.js")

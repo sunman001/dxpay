@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B6B4BF6D-E1D9-4585-ABE0-C0A28FDE0477}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TOOL</RootNamespace>
+    <AssemblyName>TOOL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="ThoughtWorks.QRCode">
+      <HintPath>..\packages\ThoughtWorks.QRCode.1.1.0\lib\ThoughtWorks.QRCode.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AddLocLog.cs" />
+    <Compile Include="AesHelper.cs" />
+    <Compile Include="Auditor\AppRequestAuditor.cs" />
+    <Compile Include="Auditor\IAuditor.cs" />
+    <Compile Include="Auditor\OrderAbnormalAuditor.cs" />
+    <Compile Include="CacheHelper.cs" />
+    <Compile Include="CloneObject.cs" />
+    <Compile Include="ConfigReader.cs" />
+    <Compile Include="DateTimeHelper.cs" />
+    <Compile Include="DecimalDigit.cs" />
+    <Compile Include="DESEncrypt.cs" />
+    <Compile Include="DEShelsp.cs" />
+    <Compile Include="md5\Digest.cs" />
+    <Compile Include="Encrypt.cs" />
+    <Compile Include="EnumUtil\EnumExtensions.cs" />
+    <Compile Include="EnumUtil\EnumHelper.cs" />
+    <Compile Include="Ex.cs" />
+    <Compile Include="Extensions\CompareExtensions.cs" />
+    <Compile Include="Extensions\PayExtension.cs" />
+    <Compile Include="Extensions\StateExtension.cs" />
+    <Compile Include="md5\HmacMD5.cs" />
+    <Compile Include="HtmlPage.cs" />
+    <Compile Include="IPAddress.cs" />
+    <Compile Include="IpProvince.cs" />
+    <Compile Include="JsonHelper.cs" />
+    <Compile Include="MailHelper.cs" />
+    <Compile Include="MD5.cs" />
+    <Compile Include="MdlList.cs" />
+    <Compile Include="Message\AudioMessage\ChuangLan\ChuangLanAudioMessageSender.cs" />
+    <Compile Include="Message\AudioMessage\ChuangLan\ChuangLanRequest.cs" />
+    <Compile Include="Message\AudioMessage\ChuangLan\ChuangLanResult.cs" />
+    <Compile Include="Message\AudioMessage\ChuangLan\RequestPayload.cs" />
+    <Compile Include="Message\AudioMessage\ChuangLan\ResponseCode.cs" />
+    <Compile Include="Message\AudioMessage\ChuangLan\ResponseModel.cs" />
+    <Compile Include="Message\AudioMessage\ChuangLan\ResponseResult.cs" />
+    <Compile Include="Message\AudioMessage\ChuangLan\Util.cs" />
+    <Compile Include="Message\MessageSender\AudioMessageSenderAbstract.cs" />
+    <Compile Include="Message\MessageSender\ChuangLanAudioMessageSender.cs" />
+    <Compile Include="Message\MessageSender\ChuangLanTextMessageSender.cs" />
+    <Compile Include="Message\MessageSender\TextMessageSenderAbstract.cs" />
+    <Compile Include="Message\TextMessage\ChuangLanTextMessageSender.cs" />
+    <Compile Include="Message\TextMessage\ChuangLan\ChuangLanResult.cs" />
+    <Compile Include="Message\TextMessage\ChuangLan\ChuangLanRequest.cs" />
+    <Compile Include="Message\TextMessage\ChuangLan\ChuangLanMessageSender.cs" />
+    <Compile Include="Message\TextMessage\ChuangLan\ResponseCode.cs" />
+    <Compile Include="Message\TextMessage\ChuangLan\ResponseModel.cs" />
+    <Compile Include="Message\TextMessage\ChuangLan\ResponseResult.cs" />
+    <Compile Include="Message\TextMessage\ChuangLan\Util.cs" />
+    <Compile Include="Message\IMessageSender.cs" />
+    <Compile Include="Message\TextMessage\TextMessageSender.cs" />
+    <Compile Include="Extensions\ObjectCopierExtensions.cs" />
+    <Compile Include="OrderProportion.cs" />
+    <Compile Include="PostJsonRequest.cs" />
+    <Compile Include="postxml.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PubImageUp.cs" />
+    <Compile Include="QRcode.cs" />
+    <Compile Include="RandomHelper.cs" />
+    <Compile Include="Regular.cs" />
+    <Compile Include="RequestExtension.cs" />
+    <Compile Include="RequestHelper.cs" />
+    <Compile Include="SelectOrder.cs" />
+    <Compile Include="Sql\IWhereContainer.cs" />
+    <Compile Include="Sql\WhereContainer.cs" />
+    <Compile Include="Sql\WhereContainerExtension.cs" />
+    <Compile Include="StringHelper.cs" />
+    <Compile Include="SystemConfig.cs" />
+    <Compile Include="UpdateOrder\OrderState.cs" />
+    <Compile Include="UrlStr.cs" />
+    <Compile Include="UserHelper.cs" />
+    <Compile Include="UserInfo.cs" />
+    <Compile Include="ValidateCode.cs" />
+    <Compile Include="WeekDateTime.cs" />
+    <Compile Include="Sql\WhereBuilder.cs" />
+    <Compile Include="xmlhelper.cs" />
+    <Compile Include="zfinterface.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{38d7aa58-c95b-449b-86c6-a8073a56e11f}</Project>
+      <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MDL\MDL.csproj">
+      <Project>{53995dbb-9836-4647-ad22-865884fdeb9e}</Project>
+      <Name>MDL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Message\TextMessage\ChuangLan\call-demo.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

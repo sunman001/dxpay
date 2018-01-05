@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "编辑角色";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var data = ViewBag.data as JMP.MDL.jmp_role;
+}
+@JMP.TOOL.UserHelper.js("local/locals.js")
+<div class="main">
+    <div class="clear10"></div>
+    <div class="plate-form">
+        <dl>
+            <dt>角色名：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="inputName" type="text" id="inputName" value="@data.r_name" onblur="inputCheckRoleName()" /><span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="checkName">* 角色名不能为空</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>状态：</dt>
+            <dd>
+                <table id="radOrvActnS">
+                    <tr>
+                        @Html.Raw(ViewBag.state)
+                    </tr>
+                </table>
+            </dd>
+        </dl>
+        <input name="inputRid" type="hidden" id="inputRid" value="@data.r_id" />
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnSave" class="btn btn-primary" onclick="updaterole()" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>

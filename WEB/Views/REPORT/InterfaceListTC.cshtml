@@ -1,0 +1,160 @@
+﻿@{
+    ViewBag.Title = "支付配置弹窗";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_interface>;
+}
+<div class="main">
+    <div class="layer-mt15">
+        <ul class="frm-ul clearfix">
+            <li>
+                <div class="rule-single-select">
+                    <select name="searchType" id="searchType">
+                        <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>编号</option>
+                        <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>支付名称</option>
+                        <option value="3" @(ViewBag.type == 3 ? "selected='selected'" : "")>申请公司</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+            </li>
+            <li>
+                <div class="rule-single-select">
+                    <select name="SelectState" id="SelectState">
+                        <option value="-1" @(ViewBag.SelectState == -1 ? "selected='selected'" : "")>状态</option>
+                        <option value="1" @(ViewBag.SelectState == 1 ? "selected='selected'" : "")>正常</option>
+                        <option value="0" @(ViewBag.SelectState == 0 ? "selected='selected'" : "")>冻结</option>
+                        <option value="2" @(ViewBag.SelectState == 2 ? "selected='selected'" : "")>可用</option>
+                        <option value="3" @(ViewBag.SelectState == 3 ? "selected='selected'" : "")>超出</option>
+                        <option value="4" @(ViewBag.SelectState == 4 ? "selected='selected'" : "")>备用</option>
+
+                    </select>
+                </div>
+            </li>
+            <li>
+                <div class="rule-single-select">
+                    <select name="searchDesc" id="searchDesc">
+                        <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                        <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <div class="rule-single-select">
+                    <select name="auditstate" id="auditstate">
+                        <option value="0" @(ViewBag.auditstate == 0 ? "selected='selected'" : "")>支付类型</option>
+                        <option value="1" @(ViewBag.auditstate == 1 ? "selected='selected'" : "")>支付宝</option>
+                        <option value="2" @(ViewBag.auditstate == 2 ? "selected='selected'" : "")>微信</option>
+                        <option value="3" @(ViewBag.auditstate == 3 ? "selected='selected'" : "")>银联</option>
+                        <option value="4" @(ViewBag.auditstate == 4 ? "selected='selected'" : "")>微信公众号</option>
+                        <option value="5" @(ViewBag.auditstate == 5 ? "selected='selected'" : "")>微信app</option>
+                        <option value="6" @(ViewBag.auditstate == 6 ? "selected='selected'" : "")>微信扫码</option>
+                        <option value="7" @(ViewBag.auditstate == 7 ? "selected='selected'" : "")>支付宝扫码</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlocuser()">查询</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt lay-table-cnt">
+            <thead>
+                <tr>
+                    <th width="100">编号</th>
+                    <th width="110">支付通道</th>
+                    <th width="110">支付类型</th>
+                    <th>申请公司</th>
+                    <th width="50">状态</th>
+                    <th width="50">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <td>@item.l_id</td>
+                                <td>@item.p_name</td>
+                                <td>
+                                    @item.zflxname
+                                </td>
+                                <td>@item.l_corporatename</td>
+                                <td>
+                                    @{
+                                        switch (item.l_isenable)
+                                        {
+                                            case 1:
+                                                <span class='green'>正常</span>
+                                                break;
+                                            case 2:
+                                                <span style="color:#3B84ED">可用</span>
+                                                break;
+                                            case 0:
+                                                <span class='red'>冻结</span>
+                                                break;
+                                            case 3:
+                                                <span style="color:#e212ef">超额</span>
+                                                break;
+                                            case 4:
+                                                <span style="color:blue">备用</span>
+                                                break;
+
+                                        }
+
+                                    }
+                                </td>
+                                <td>
+                                    <a href="javasript:void(0)" class="blue" onclick="yzappname(@item.l_id,'@item.l_corporatename')">选择</a>
+                                </td>
+                            </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="6" class="nodata">暂无记录</td>
+                                            </tr>
+                                        }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManageInter", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount, 4)
+</div>
+<script type="text/javascript">
+    //分页
+    function ArticleManageInter(pageIndex, pageSize) {
+        var url = "/REPORT/InterfaceListTC?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        var searchType = $("#searchType").val();
+        var sea_name = $("#sea_name").val();
+        var SelectState = $("#SelectState").val();
+        var searchDesc = $("#searchDesc").val();
+        var auditstate = $("#auditstate").val();
+        url += "&type=" + searchType + "&sea_name=" + sea_name + "&SelectState=" + SelectState + "&searchDesc=" + searchDesc + "&auditstate=" + auditstate;
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManageInter(1, PageSize);
+    }
+    //列表查询
+    function serchlocuser() {//查询
+        var PageSize = $("#pagexz").val();
+        ArticleManageInter(1, PageSize);
+    }
+
+    function yzappname(l_id, l_corporatename, index) {
+        window.parent.layer.getChildFrame("#c_payname", index).val(l_corporatename);
+        window.parent.layer.getChildFrame("#c_payid", index).val(l_id);
+        window.parent.layer.getChildFrame("#yzkfz1", index).attr("class", "Validform_checktip  Validform_right");
+        window.parent.layer.getChildFrame("#yzkfz1", index).html("验证通过");
+        var indexs = parent.layer.getFrameIndex(window.name);
+        window.top.layer.close(indexs);
+    }
+</script>

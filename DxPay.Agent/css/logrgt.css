@@ -1,0 +1,86 @@
+﻿@charset "utf-8";
+/* CSS Document */
+*{margin:0;padding:0;font-weight: normal;}
+h1,h2,h3,h4,h5,h6,button,input,textarea,select{font-size:100%;}
+fieldset,img{border:0;}
+table{border-collapse:collapse;border-spacing:0;width:100%;}
+caption,th{text-align:left;}
+li{list-style:none;}
+address,cite,code,dfn,var,em,th,i{font-style:normal;font-weight:normal;}
+button,input,textarea{outline:none;font-family:inherit;}
+body {font:14px/1.5 "Microsoft YaHei",\5b8b\4f53;color:#333;word-wrap:break-word;word-break:break-all;background:#fafafa;height: 100%;}
+h1,h2,h3,h4,h5,h6 {color:#666666;}
+a {text-decoration:none;color:#333;}
+a:hover {text-decoration:none;color:#318fd2;}
+select, dl {word-wrap:normal;}
+input,button{border:0px;}
+.clearfix:after {content:"";display:block;height:0;clear:both;}
+.clearfix {zoom:1;}
+.fl {float:left;}
+.fr {float:right;}
+.bg{background: url(../images/bg.png) no-repeat center bottom;position: absolute;bottom: 0px;left: 0px;width: 100%;height: 100%;z-index: -1;opacity: 0.3;}
+
+
+/*登录*/
+.lgn-head{height: 304px;position: relative;background: #444250 url(../images/logo.png) no-repeat center 98px;width: 100%;min-width: 1125px;text-align: center;}
+.lgn-head .tit{font-size: 26px;color: #fff;padding-top: 166px;opacity: 0.7;}
+.lgn-head .bor{border:2px solid rgba(255,255,255,0.5);width: 102px;height: 102px;border-radius: 50%;padding:6px 0px 0px 6px;position: absolute;right: 0px;left: 0px;margin:0px auto;bottom: -55px;}
+.lgn-head .btxt{width: 96px;height: 96px;text-align: center;line-height:95px;color: #ffffff;display: block;background: #9999cc;border-radius: 50%;font-size: 26px;}
+.lgn-frm{width: 1120px;margin: 0px auto;padding-top: 145px;display: block;padding-bottom:60px;}
+.lgn-frm-dc{margin-left: -48px;height: 182px;}
+.lgn-frm-dc li{position: relative;float: left;padding-left: 48px;}
+.lgn-tit{font-size: 18px;color: #666;display: block;padding-bottom: 4px;}
+.form-ctrl {display: block;width: 344px;height: 28px;padding: 15px 10px;color: #666;background: #fff;border: 1px solid #e4e4e4;font-size: 18px;}
+.form-ctl-vlte{width: 133px;padding:15px 145px 15px 10px;}
+.lgn-code {width: 134px;height: 58px;position: absolute;right: 1px;top: 32px;z-index: 22;cursor: pointer;border-left: 1px solid #e4e4e4;background: #444250;text-align: center;line-height: 56px;}
+.lgn-code img{width: 134px;height: 58px;}
+.form-ctrl:focus{border-color: #65aee3;box-shadow: 0px 0px 10px #a0d6fa;}
+.lgn-error{width:346px;height: 26px;line-height: 26px;background-color: #f26d6d;color: #fff;border-radius: 2px;opacity: 0;margin-top: 15px;padding:0px 10px;}
+.lgn-error.on{opacity: 1;}
+.lgn-ervlt{width: 270px;}
+.lgn-frm .dbtn,.reg-frm .dbtn{text-align: center;width: 100%;}
+.lgn-btn{display: block;width: 96px;height: 96px;background: #cfcfcf;border-radius: 50%;text-align: center;line-height: 96px;margin:0px auto;}
+.lgn-btn .icon-sj{background: url(../images/icon-sj.png) no-repeat center;width: 96px;height: 96px;display: inline-block;}
+.lgn-btn.on{background:  #444250;cursor: pointer;}
+.lgn-frm .rgt,.reg-frm .rgt{font-size: 18px;color: #666;margin-top: 18px;display: inline-block;border-bottom: 2px solid #fafafa;}
+.lgn-frm .rgt:hover,.reg-frm .rgt:hover{border-color: #444250;color: #444250;}
+/*商务*/
+.lgn-head-sw{background: #0189d5 url(../images/logo.png) no-repeat center 98px;}
+.lgn-head-sw .btxt{background: #ffd737;color: #440250;}
+.lgn-btn1.on{background:  #0189d5;cursor: pointer;}
+.lgn-code1{background: #0189d5;}
+.lgn-frm .rgt1:hover{border-color: #0189d5 ;color: #0189d5;}
+/*代理商*/
+.lgn-head-dl{background: #3fb4c6 url(../images/logo.png) no-repeat center 98px;}
+.lgn-head-dl .btxt{background: #339999;}
+.lgn-code2{background: #3fb4c6;}
+.lgn-btn2.on{background:  #3fb4c6;cursor: pointer;}
+.lgn-frm .rgt2:hover{border-color: #3fb4c6 ;color: #3fb4c6;}
+
+
+
+/*注册*/
+.reg-frm{width: 790px;margin: 0px auto;padding-top: 48px;display: block;}
+.reg-frm-dc{height: auto;}
+.reg-frm-dc .lgn-error{margin-top: 2px;}
+.reg-frm-dc li{height: 120px;}
+.reg-frm-dc .form-ctl-vlte{width: 209px;}
+.reg-frm-dc .lgn-code-txt{font-size: 36px;color: #fff;background: #cacaca;cursor: inherit;}
+.reg-frm-dc .lgn-code-txt.on{background: #444250;font-size: 18px;cursor: pointer;}
+.reg-selc{position: relative;color: #666;width: 364px;height: 58px;border:1px solid #e4e4e4;background: #fff;font-size: 18px;}
+.reg-selc .stxt{width: 344px;height: 28px;display: block;cursor:pointer;padding:15px 10px;position: relative;z-index: 10}
+.reg-selc .icon-sj{background: url(../images/icon-sj1.png) no-repeat;position: absolute;width: 19px;height: 11px;top: 25px;right: 26px;}
+.reg-selc-lst{display: none;background: #fff;border:1px solid #e4e4e4;position: absolute;top: 58px;left: -1px;width: 364px;z-index: 100;box-shadow: 0px 2px 5px #ccc;}
+.reg-selc-lst dd{padding:10px;color: #666;font-size: 14px;cursor: pointer;transition: all 0.3s;}
+.reg-selc-lst dd:hover,.reg-selc-lst dd.on{background: #444250;color: #fff;}
+
+
+
+
+
+
+
+
+
+
+

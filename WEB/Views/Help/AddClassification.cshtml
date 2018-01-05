@@ -1,0 +1,108 @@
+﻿@{
+    ViewBag.Title = "添加分类";
+    Layout = "~/Views/UI/dialog.cshtml";
+
+    var list = ViewBag.list as List<JMP.MDL.jmp_Help_Classification>;
+    var model = ViewBag.model as JMP.MDL.jmp_Help_Classification;
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+@JMP.TOOL.UserHelper.js("Help/help.js")
+<div class="main">
+ 
+    <div class="clear10"></div>
+    <div class="plate-form">
+        <dl>
+                <dt>父类：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <div class="rule-single-select">
+                            <select name="ParentID"id="ParentID" >
+                                <option value='0'>--请选择--</option>
+
+                                @foreach (var item in list)
+                                {
+                                    <option value='@item.ID' @(model.ParentID == item.ID ? "selected='selected" : "")>@item.ClassName</option>
+                                }
+
+                            </select>
+                        </div>
+                    </div>
+                </dd>
+        </dl>
+        <dl>
+            <dt>分类名称：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="ClassName" type="text" id="ClassName" onblur="yzname()" maxlength="10" sucmsg="验证成功" nullmsg="分类名称长度不超过20" errormsg="分类名称长度不超过20" value="@(model.ClassName!=""?model.ClassName :"")" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="nameyy">*分类名称超过10</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>类型 </dt>
+            <dd>
+                <div class="single-input normal">
+                    <div class="rule-single-select">
+                        <select name="Type" id="Type">
+                            <option value='0'  @(model.Type == 0 ? "selected='selected" : "")>帮助中心</option>
+                            <option value='1'  @(model.Type == 1 ? "selected='selected" : "")>开发中心</option>                            
+                        </select>
+                    </div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>图标</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="Icon" type="text" id="Icon" value="@(model.Icon!=""?model.Icon :"")" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>描述：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <div class="date-tool-input-text">
+                        <textarea name="Description" type="text" id="Description"  class="txt2" maxlength="100"> </textarea>
+                        @{
+                            if (!string.IsNullOrEmpty(model.Description))
+                            {
+                                <script type="text/javascript">
+                                    document.getElementById("Description").innerText = '@(model.Description)';
+                                </script>
+                            }
+                        }
+                    </div>
+                    <span class="ie7-input-bug-end"></span>
+                </div>           
+            </dd>
+        </dl>
+        <dl>
+            <dt>排序：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="Sort" type="text" id="Sort" value="@(model.Sort>0?model.Sort:0)" onblur="YzSort()" /><span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="SortValue">* 排序值不能为空</div>
+            </dd>
+        </dl>
+        <input type="text" id="ID" hidden value="@(model.ID>0?model.ID:0)"/>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+       
+      <input type="button" name="btnSave" value="保存" id="btnClass" class="btn btn-primary" />
+        
+     <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+
+    </div>
+    <div class="clear"></div>
+</div>

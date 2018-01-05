@@ -1,0 +1,183 @@
+﻿@{
+    ViewBag.Title = "通知短信分组信息管理";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_notificaiton_group>;
+    int pageCount = ViewBag.pageCount;
+    var bllLimit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("REPORT/Notify.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>分组名称</option>
+                    <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>编号</option>
+                    <option value="3" @(ViewBag.type == 3 ? "selected='selected'" : "")>描述</option>
+                    <option value="4" @(ViewBag.type == 4 ? "selected='selected'" : "")>通知手机号码</option>
+                    <option value="5" @(ViewBag.type == 5 ? "selected='selected'" : "")>短信模板</option>
+                    <option value="5" @(ViewBag.type == 5 ? "selected='selected'" : "")>周期</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="SelectState" id="SelectState">
+                    <option value="" @(ViewBag.SelectState == "" ? "selected='selected'" : "")>全部</option>
+                    <option value="1" @(ViewBag.SelectState == "1" ? "selected='selected'" : "")>正常</option>
+                    <option value="0" @(ViewBag.SelectState == "0" ? "selected='selected'" : "")>禁用</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="IntervalUnit" id="IntervalUnit">
+                    <option value="" @(ViewBag.IntervalUnit == "" ? "selected='selected'" : "")>全部</option>
+                    <option value="year" @(ViewBag.IntervalUnit == "year" ? "selected='selected'" : "")>year</option>
+                    <option value="minute" @(ViewBag.IntervalUnit == "minute" ? "selected='selected'" : "")>minute</option>
+                    <option value="hour" @(ViewBag.IntervalUnit == "hour" ? "selected='selected'" : "")>hour</option>
+                    <option value="day" @(ViewBag.IntervalUnit == "day" ? "selected='selected'" : "")>day</option>
+                    <option value="month" @(ViewBag.IntervalUnit == "month" ? "selected='selected'" : "")>month</option>
+                    <option value="year" @(ViewBag.IntervalUnit == "year" ? "selected='selected'" : "")>year</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                    <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlocuser()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th width="40">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th>展开</th>
+                    <th>分组名称</th>
+                    <th>类型</th>
+                    <th>任务分组描述</th>
+                    <th>创建时间</th>
+                    <th>创建者</th>
+                    <th>状态</th>
+                    <th>是否发送</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+
+                        var getEdit = bllLimit.GetLocUserLimitVoids("/REPORT/InsertUpdateNotificaiton", JMP.TOOL.UserInfo.UserId.ToString(), JMP.TOOL.UserInfo.UserRoleId);//编辑按钮
+                        var getEditMobile = bllLimit.GetLocUserLimitVoids("/REPORT/NotificaitonEditMobile", JMP.TOOL.UserInfo.UserId.ToString(),JMP.TOOL.UserInfo.UserRoleId);//编辑按钮(只允许修改手机号码)
+                        foreach (var item in list)
+                        {
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+
+                            <tr onclick="clickOpen(@id)">
+                                <td>
+                                    <input type="checkbox" name="child" class="checkall" value="@item.Id" />
+                                </td>
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                                <td style="white-space: nowrap">@item.Name</td>
+                                <td style="white-space: nowrap">@item.SendMode </td>
+                                <td>@item.Description</td>
+                                <td>@item.CreatedOn</td>
+                                <td>@item.CreatedByUser</td>
+                                <td>
+                                    @{
+                                        if (item.IsEnabled)
+                                        {
+                                            <span class='green'>正常</span>
+                                        }
+                                        else
+                                        {
+                                            <span class='red'>禁用</span>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        if (item.IsAllowSendMessage)
+                                        {
+                                            <span class='green'>是</span>
+                                        }
+                                        else
+                                        {
+                                            <span class='red'>否</span>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        if (getEdit)
+                                        {
+                                            <a href="javascript:" class='blue' onclick="UpdateComplaint(@item.Id)">编辑</a>
+                                        }
+                                        else if (getEditMobile)
+                                        {
+                                            <a href="javascript:" class='blue' onclick="UpdateMobile(@item.Id)">编辑通知手机</a>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                             <!--展开-->
+                                        <tr>
+                                            <td colspan="10" style="display:none;" name="Open" id="@Open">
+                                                <div class="dcnt-tab">
+                                                    <table class="table-lst">
+                                                        <tr>
+                                                            <td>接收者:@item.NotifyMobileList</td>
+                                                            <td>执行周期:@item.IntervalValue (@item.IntervalUnit)</td>
+                                                            <td title="@item.AudioTelTempContent">IP语音模板ID: @item.AudioTelTempId</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                编码:@item.Code
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                短信模板:@item.MessageTemplate
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="10" class="nodata"> 暂无记录 </td>
+                                            </tr>
+                                        }
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)
+</div>

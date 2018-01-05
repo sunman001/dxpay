@@ -1,0 +1,43 @@
+﻿@model WEBDEV.Models.Help.ArticleDetailsViewModel
+@using WEBDEV.Extensions
+@{
+    Layout = "~/views/shared/_layout_doc_center.cshtml";
+}
+<link href="~/asste/highlight/default.min.css" rel="stylesheet" />
+<div class="doc-content-box">
+    <div class="row">
+        <div id="sidebar_wrap" class="col-lg-3 col-sm-3">
+            <a id="doc_show_sidebar" class="doc-show-sidebar hidden-md hidden-sm hidden-lg">查看文档列表</a>
+            <div class="doc-sidebar-box hidden-xs">
+                @Html.CreateDocMenu(Model.SubCatalogId, Model.Id)
+            </div>
+        </div>
+        <div class="col-lg-9 col-sm-9">
+            <div class="doc-content-container">
+                <article class="">
+                    <h1>@Model.Title</h1>
+                    <div class="content">
+                        @(Html.Raw(string.IsNullOrEmpty(Model.Content) ? "" : Model.Content.Replace("/ueditor/net/upload/", "http://dxadm.dunxingpay.net/ueditor/net/upload/")))
+                    </div>
+                    @*<p class="publish-date">更新时间 @Model.CreatedOn @(string.IsNullOrEmpty(Model.UpdatedOn) ? "" : "• 更新于 " + Model.UpdatedOn) </p>*@
+                </article>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+<script src="~/asste/highlight/highlight.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".doc-content-container table").wrap('<div class="table-responsive"></div>').addClass("table table-hover table-striped table-bordered");
+            $(".doc-content-container img").addClass("img-responsive");
+            $('pre>code,pre').each(function (i, block) {
+                hljs.highlightBlock(block);
+            });
+
+            $("#doc_show_sidebar").click(function () {
+                $(".doc-sidebar-box").toggleClass("hidden-xs").slideDown();
+            });
+        });
+    </script>
+}

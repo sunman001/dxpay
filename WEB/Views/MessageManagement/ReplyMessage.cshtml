@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "消息回复";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_message>;
+    JMP.BLL.jmp_user bll = new JMP.BLL.jmp_user();
+    JMP.MDL.jmp_user mo = new JMP.MDL.jmp_user();
+    var username = "";
+}
+@JMP.TOOL.UserHelper.js("MessageManagement/message.js")
+<div class="main">
+    <div class="plate-form">
+        <dl>
+            <dt>消息内容：</dt>
+            <dd>
+                <div class="data-table-3">
+                    <table border="0" cellpadding="0" cellspacing="0" id="table" style="width: 100%;">
+                        @{
+                            foreach (var item in list)
+                            {
+                                if (item.m_type == 2)
+                                {
+
+                                    mo = bll.GetModel(@item.m_sender);
+                                    username = item.m_sender.ToString();  
+                            <tr>
+                                <td style="text-align: left;">
+                                    <div>@mo.u_email &nbsp;&nbsp;&nbsp;&nbsp;@item.m_time.ToString("yyyy-MM-dd HH:mm:ss")</div>
+                                    <div>@item.m_content</div>
+                                </td>
+                            </tr>
+                                }
+                                else if (item.m_type ==1 || item.m_type ==3)
+                                {
+                            <tr>
+                                <td style="text-align: left; color: red;">
+                                    <div>系统&nbsp;&nbsp;&nbsp;&nbsp;@item.m_time.ToString("yyyy-MM-dd HH:mm:ss")</div>
+                                    <div>@item.m_content</div>
+                                </td>
+                            </tr>
+                                }
+                            }
+                        }
+                    </table>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>回复：</dt>
+            <dd>
+                <textarea style="width: 700px; height: 300px;" id="contentname" name="contentname" onblur="yzcontentname()"></textarea>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <input type="hidden" id="topid" value="@ViewBag.topid" />
+                <input type="hidden" id="userid" value="@username" />
+            </dt>
+            <dd>
+                <input type="button" name="btnSave" value="回复" id="btnSaveRemessage" class="btn mr10" />
+            </dd>
+        </dl>
+    </div>
+</div>

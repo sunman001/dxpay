@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "申请提款";
+    Layout = "~/Views/UI/master.cshtml";
+
+    var ubklist = ViewBag.ubklist as List<JMP.MDL.jmp_userbank>;
+    var comodeT1 = ViewBag.comodeT1 as JMP.MDL.CoSettlementDeveloperOverview;//选中可提金额
+    var comodeT2 = ViewBag.comodeT2 as JMP.MDL.CoSettlementDeveloperOverview;//账单所有总金额
+    var WithdrawalsMinimum = System.Configuration.ConfigurationManager.AppSettings["WithdrawalsMinimum"];
+}
+
+@JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+@JMP.TOOL.UserHelper.js("financial/pays.js")
+@JMP.TOOL.UserHelper.js("PubMethod.js")
+
+<div class="rnatn-cnt">
+    <input type="hidden" id="payid" value="@ViewBag.payid" />
+    <input type="hidden" id="WithdrawalsType" value="2" />
+    <input type="hidden" id="WithdrawalsMinimum" value="@WithdrawalsMinimum" />
+    <ul class="rnatn-frm rnatn-adre clearfix">
+        <li>
+            <div class="dpt">
+                <div class="dtit">账单总金额</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" maxlength="20" value="@(string.IsNullOrEmpty(comodeT2.ketiMoney.ToString())?"0":TOOL.DecimalDigit.DecimalPlacesToString(comodeT2.ketiMoney)) " disabled="disabled" />
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="dpt">
+                <div class="dtit">冻结金额</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" maxlength="20" value="@(string.IsNullOrEmpty(comodeT2.FrozenMoney.ToString())?"0":TOOL.DecimalDigit.DecimalPlacesToString(comodeT2.FrozenMoney)) " disabled="disabled" />
+                </div>
+
+            </div>
+        </li>
+        <li>
+            <div class="dpt">
+                <div class="dtit">选中总金额</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" maxlength="20" value="@(string.IsNullOrEmpty(comodeT1.ketiMoney.ToString())?"0":TOOL.DecimalDigit.DecimalPlacesToString(comodeT1.ketiMoney)) " disabled="disabled" />
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="dpt">
+                <div class="dtit">提款金额</div>
+                <div class="dipt">
+                    @if (comodeT2.FrozenMoney == 0)
+                    {
+                    <input type="text" name="payMoney" id="payMoney" class="txtipt" maxlength="20" value="@(comodeT1.ketiMoney <= 0 ? 0 : TOOL.DecimalDigit.DecimalPlaces(comodeT1.ketiMoney))" onblur="yzPayMoney()" placeholder="请输入提款金额" />
+                    <input type="hidden" id="ketiMoney" value="@(comodeT1.ketiMoney <= 0 ? 0 : TOOL.DecimalDigit.DecimalPlaces(comodeT1.ketiMoney))" />
+                    }
+                    else if ((comodeT2.ketiMoney - comodeT2.FrozenMoney) > comodeT1.ketiMoney && comodeT1.ketiMoney > decimal.Parse(WithdrawalsMinimum))
+                    {
+                    <input type="text" name="payMoney" id="payMoney" class="txtipt" maxlength="20" value="@(comodeT1.ketiMoney <= 0 ? 0 : TOOL.DecimalDigit.DecimalPlaces(comodeT1.ketiMoney))" onblur="yzPayMoney()" placeholder="请输入提款金额" />
+                    <input type="hidden" id="ketiMoney" value="@(comodeT1.ketiMoney <= 0 ? 0 : TOOL.DecimalDigit.DecimalPlaces(comodeT1.ketiMoney))" />
+                    }
+                    else if ((comodeT2.ketiMoney - comodeT2.FrozenMoney) > decimal.Parse(WithdrawalsMinimum) && (comodeT2.ketiMoney - comodeT2.FrozenMoney) < comodeT1.ketiMoney)
+                    {
+                    <input type="text" name="payMoney" id="payMoney" class="txtipt" maxlength="20" value="@(comodeT1.ketiMoney <= 0 ? 0 : TOOL.DecimalDigit.DecimalPlaces(comodeT2.ketiMoney - comodeT2.FrozenMoney))" onblur="yzPayMoney()" placeholder="请输入提款金额" />
+                    <input type="hidden" id="ketiMoney" value="@(comodeT1.ketiMoney <= 0 ? 0 : TOOL.DecimalDigit.DecimalPlaces(comodeT2.ketiMoney - comodeT2.FrozenMoney))" />
+                    }
+                    else
+                    {
+                    <input type="text" name="payMoney" id="payMoney" class="txtipt" maxlength="20" value="0" onblur="yzPayMoney()" placeholder="请输入提款金额" />
+                    <input type="hidden" id="ketiMoney" value="0" />
+                    }
+                </div>
+                <span class="error" id="yz_payMoney"></span>
+            </div>
+        </li>
+        <li>
+            <div class="dpt">
+                <div class="dtit">请选择银行卡</div>
+                <div class="dipt">
+                    <input type="text" name="b_bankid" readonly="readonly" id="b_bankid" class="txtipt" value="" placeholder="请选择银行卡信息" onclick="CkAuditStatus()" />
+                </div>
+                <span class="error" id="yz_bankid"></span>
+            </div>
+        </li>
+        <li>
+            <div class="dpt">
+                <div class="dtit">支付密码</div>
+                <div class="dipt">
+                    <input type="password" name="PayPwd" id="PayPwd" class="txtipt" value="" maxlength="18" onblur="yzPayPwd()" placeholder="请输入支付密码" />
+                </div>
+                <span class="error" id="yz_PayPwd"></span>
+            </div>
+        </li>
+        <li style="width:100%;">
+            @if (comodeT2.ketiMoney <= comodeT2.FrozenMoney)
+            {
+                <h3 style="color:red;font-size:14px;text-align:center">温馨提示：冻结金额大于或等于账单总金额，无法提现!</h3>
+            }
+            else
+            {
+                <h3 style="color:red;font-size:14px;text-align:center">温馨提示：16点之前提交的申请当日打款,16点之后提交的申请次日打款。</h3>
+            }
+        </li>
+    </ul>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div style="width: 100%; text-align:center;position:fixed;bottom:10px; background-color: #fff; border-top: 1px solid #f7f7f7; height: 50px; line-height: 50px;">
+        <div class="page-footer">
+            @if (comodeT2.ketiMoney > comodeT2.FrozenMoney)
+            {
+                <input type="button" name="btnSave" value="保存" onclick="btn_pay()" class="btn btn-primary" id="btnPays" />
+            }
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>

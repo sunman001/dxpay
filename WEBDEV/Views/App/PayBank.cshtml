@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "收银台预览";
+    Layout = "~/Views/UI/master.cshtml";
+}
+<link href="~/asste/jquery.flipster/jquery.flipster.css" rel="stylesheet" />
+<div class="paybank">
+    <div class="cont">
+
+        <div id="Main-Content">
+            <div class="Container">
+                <div class="flipster">
+                    <ul class="flip-items">
+                        <li id="Coverflow-1">
+                            <img src="~/images/android.jpg" alt="android" title="android" />
+                        </li>
+                        <li id="Coverflow-2">
+                            <img src="~/images/ios.png" alt="ios" title="ios" />
+                        </li>
+                        <li id="Coverflow-3">
+                            <img src="~/images/H5.png" alt="H5" title="H5" />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <p class="botbg"></p>
+        <div class="paybank-botc">
+            <p class="on c0"><span class="icon icon2">安卓模式</span></p>
+            <p class="c1"><span class="icon icon1">ios模式</span></p>
+            <p class="c2"><span class="icon">H5</span></p>
+        </div>
+    </div>
+</div>
+
+<script src="~/asste/jquery.flipster/jquery.flipster.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".flipster").flipster({
+            style: 'carousel', // 3d旋转效果
+            start: 0, // 从那张图片开始
+            enableNavButtons: true, // 左右按钮
+            onItemSwitch: function () { // 回调函数
+            },
+        });
+    });
+</script>
+
+
+
+
+

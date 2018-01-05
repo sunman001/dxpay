@@ -1,0 +1,298 @@
+﻿@{
+    ViewBag.Title = "仪表盘";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>盾行平台管理系统</title>
+    <!-- css -->
+    @JMP.TOOL.UserHelper.css("/plugin/font-awesome/css/font-awesome.min.css")
+    <link href="~/assets/bootstrap.3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    @JMP.TOOL.UserHelper.css("base.css")
+    @JMP.TOOL.UserHelper.css("main.css")
+    @JMP.TOOL.UserHelper.css("theme.css")
+    @JMP.TOOL.UserHelper.js("jquery-1.12.4.min.js")
+    <script src="~/assets/bootstrap.3.3.7/js/bootstrap.min.js"></script>
+    @JMP.TOOL.UserHelper.js("layout.js")
+    @JMP.TOOL.UserHelper.js("JValidator.js")
+    @JMP.TOOL.UserHelper.js("layer/layer.js")
+    @JMP.TOOL.UserHelper.js("PubMethod.js")
+</head>
+<body>
+    <header class="header-wrapper clearfix">
+        <a href="javascript:void(0);" class="header-brand" title="logo">
+            <img src="../images/head_logo.png" alt="logo" class="logo-white">
+        </a>
+        <div class="header-nav clearfix">
+            <!---->
+            <a class="head-btn btn-bars">
+                <i class="fa fa-bars"></i>
+            </a>
+            <ul class="header-pull clearfix">
+                <li>
+                    <a href="javascript:" class="txt">最近五分钟成交：<span id="OrderNum" class="num"></span>  成功/订单数</a>
+                    <a href="javascript:" class="txt">最后一笔订单交易时间：<span id="TimeOrder" class="num"></span></a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" class="head-btn top-btn cnt head-btn-user">
+                        <span class="name">@ViewBag.UserName <i class="caret"></i></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a id="tcClick">修改密码</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a id="nav-right-exit" class="head-btn cnt">
+                        <i class="fa fa-power-off"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <!--顶部 end-->
+    <div class="">
+        <div class="idx-fl">
+            <div class="navbar-collapse">
+                @{
+                    try
+                    {
+                        Html.RenderAction("Menu", "Partial");
+                    }
+                    catch
+                    {
+                    }
+                }
+            </div>
+            <div class="idx-fl-bg"></div>
+        </div>
+        <div class="cont-wrapper">
+            <div class="cont-wrapper-pren">
+                <div class="cont-wrapper-min">
+                    <div class="tab-dvrep">
+                        <i class="fa fa-caret-left faicon" id="fa-caret-left"></i>
+                        <i class="fa fa-caret-right faicon" id="fa-caret-right"></i>
+                        <div id="btn_tab_close_action" class="btn-group" role="group">
+                            <button id="btnGroupVerticalDrop2" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 页签操作 <span class="caret"></span> </button>
+                            <ul class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop2">
+                                <li><a onclick="closeCurrentTab();">关闭当前页</a></li>
+                                <li><a onclick="closeAllTabs();">全部关闭</a></li>
+                                <li><a onclick="closeOtherTabs();">除此之外全部关闭</a></li>
+                            </ul>
+                        </div>
+                        <div class="tab-items-container">
+                            <ul id="tab-panel-menu-list" class="tab-panel">
+                                <li data-id="tab_home" data-closable="false" class="active">
+                                    <span onclick="tabmenu(this)">首页</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="tab-panel-content-wrapper" class="tab-panel-content">
+                        <div data-id="tab_home" class="cont active">
+                            <iframe src="/report/index"></iframe>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="cont-wrapper-min">
+                        <ul id="tab-panel-menu-list" class="tab-panel">
+
+                        </ul>
+                        <div id="tab-panel-content-wrapper" class="tab-panel-content"></div>
+                    </div>*@
+            </div>
+            <footer class="footer-bar">
+                Copyright ©2013-2020 AdJuMi.com All Rights Reserved.&nbsp;&nbsp;&nbsp;&nbsp;盾行支付平台 版权所有 ICP备13013448号-2
+            </footer>
+        </div>
+    </div>
+    <script src="~/js/com.js"></script>
+    <script src="~/js/index.js"></script>
+    <script>
+        $(function () {
+            //退出
+            $("#nav-right-exit").unbind("click").click(function () {
+                layer.confirm('您确定要退出吗？', {
+                    btn: ['确认', '取消'] //按钮
+                }, function () {
+                    $.post("/Login/LoginOut", { action: "exit" }, function (data) {
+                        if (data.success) {
+                            window.top.location.href = data.gourl;
+                        }
+                    });
+                });
+
+            });
+            $("#tcClick").click(function () {
+                window.parent.ShouwDiaLogWan("修改密码", 650, 350, "/Login/UpdatePwd");
+            })
+
+            //首页
+            $("#nav-right-index").unbind("click").click(function () {
+                $("#section-nav").find("ul").hide().eq(0).show().find("li").eq(0).find("a").click();
+
+            });
+            OrderCount();
+            //时钟效果
+            //setInterval("GetDate()", 1000);
+            setInterval("OrderCount()", 10000);
+
+            /**/
+            //tab选项卡-向左
+            var prd = $(".tab-dvrep").innerWidth() - 175;//tab-ul父级宽度；
+            var tab = $("#tab-panel-menu-list");//tab标题
+            var tnswh = 0;
+            var tnswhb = 0;
+            $("#fa-caret-left").click(function () {
+                var tns = 0;
+                var bigb = tab.innerWidth() - prd;//滑动最大的像素
+                var pageli = tab.find("li");
+                if (tab.innerWidth() > prd) {
+                    for (var i = 0; i < 3; i++) {
+                        tns += $(pageli[i]).outerWidth();
+                    }
+                    if (tnswh == 0) {
+                        tns = bigb - tns;
+                    } else {
+                        tns = tnswh - tns;
+                    }
+                    tnswh = tns;
+
+                    var nums = parseInt(tab.css("transform").substr(20, 5));
+                    if (tnswh < 64) {
+                        tab.css("transition", "all 2s ease-out 0s");
+                        tab.css("transform", "translate3d(0px, 0px, 0px)");
+                        window.parent.ShowMsg("已经到第一页了！", "", "提示");
+                        tnswh = 0;
+                        return;
+                    } else {
+                        tab.css("transform", "translate3d(-" + tns + "px, 0px, 0px)");
+                    }
+                    //debugger;
+                }
+            });
+            //tab选项卡-向右
+            $("#fa-caret-right").click(function () {
+                var tns = 0;
+                var bigb = tab.innerWidth() - prd;//滑动最大的像素
+                var pageli = tab.find("li");
+                if (tab.innerWidth() > prd) {
+                    for (var i = 0; i < 3; i++) {
+                        tns += $(pageli[i]).outerWidth();
+                    }
+                    if (tnswhb == 0) {
+                        tns = tns;
+                    } else {
+                        tns = tnswhb + tns;
+                    }
+                    tnswhb = tns;
+                    if (tnswhb < bigb) {
+                        tab.css("transition", "all 2s ease-out 0s");
+                        tab.css("transform", "translate3d(-" + tns + "px, 0px, 0px)");
+                    } else {
+                        tab.css("transition", "all 2s ease-out 0s");
+                        tab.css("transform", "translate3d(-" + (bigb - 1) + "px, 0px, 0px)");
+                        tnswhb = 0;
+                        window.parent.ShowMsg("已经到最后一页了！", "", "提示");
+                        return;
+                    }
+                }
+            });
+
+        });
+
+
+        //关闭当前选项卡
+        function closeCurrentTab() {
+            var currentTab = $("#tab-panel-menu-list").find("li.active");
+            var closable = currentTab.attr("data-closable") === "true";
+            //check current tab allow close
+            if (!closable) {
+                return false;
+            }
+            var prev = currentTab.prev();
+            currentTab.remove();
+            $("#tab-panel-content-wrapper").children("div.active").remove();
+            //var lastTabIndex = $("#tab-panel-menu-list").length-1;
+
+            
+            var id = prev.attr("data-id");
+            console.info(id);
+            $("#tab-panel-menu-list li[data-id='"+id+"']").addClass("active");
+            $("#tab-panel-content-wrapper div.cont[data-id='" + id + "']").addClass("active");
+
+            return false;
+        }
+
+        //关闭所有选项卡
+        function closeAllTabs() {
+            $("#tab-panel-menu-list li[data-closable!='false']").each(function (i) {
+                var target = $(this);
+                var id = target.attr("data-id");
+                target.remove();
+                $("#tab-panel-content-wrapper div.cont[data-id='" + id + "']").remove();
+            });
+
+            $("#tab-panel-menu-list li:last").addClass("active");
+            $("#tab-panel-content-wrapper div.cont:last").addClass("active");
+            $("#tab-panel-menu-list").css("transform", "translate3d(0px, 0px, 0px)");
+        }
+
+        //关闭其他选项卡
+        function closeOtherTabs() {
+            $("#tab-panel-menu-list li[data-closable!='false']").each(function (i) {
+                var target = $(this);
+                var closable = target.attr("data-closable") === "true";
+                var isActive = target.hasClass("active");
+                //check current tab allow close
+                if (closable && !isActive) {
+                    var id = target.attr("data-id");
+                    target.remove();
+                    $("#tab-panel-content-wrapper div.cont[data-id='" + id + "']").remove();
+                }
+            });
+            $("#tab-panel-menu-list").css("transform", "translate3d(0px, 0px, 0px)");
+            //$("#tab-panel-menu-list li:last").addClass("active");
+            //$("#tab-panel-content-wrapper div.cont:last").addClass("active");
+        }
+
+        function GetDate() {
+            var today = new Date();
+            var year = today.getFullYear();
+            var month = today.getMonth() + 1;
+            var day = today.getDate();
+            var hours = today.getHours();
+            var minutes = today.getMinutes();
+            var seconds = today.getSeconds();
+            //如果是单位数字，前面补0
+            month = month < 10 ? "0" + month : month;
+            day = day < 10 ? "0" + day : day;
+            hours = hours < 10 ? "0" + hours : hours;
+            hours = (hours <= 12 ? "上午" : "下午") + hours;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            //时间信息连成字符串
+            var str = year + "年" + month + "月" + day + "日 " + hours + ":" + minutes + ":" + seconds;
+            var obj = document.getElementById("header-head-time");
+            obj.innerHTML = str;
+        }
+        function OrderCount() {
+            $.post("/Login/SelectOrderList", function (order) {
+                $("#OrderNum").html(order);
+            })
+            $.post("/Login/SelectOrderTimes", function (order) {
+                $("#TimeOrder").html(order);
+            })
+
+        }
+
+        //function scolls() {//滚动条
+        //    $(".navbar-collapse").mCustomScrollbar();
+        // }
+    </script>
+</body>
+</html>

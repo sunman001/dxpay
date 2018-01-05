@@ -1,0 +1,221 @@
+﻿@{
+    ViewBag.Title = "账单管理";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.CoSettlementDeveloperOverview>;
+    var model = ViewBag.model as JMP.MDL.CoSettlementDeveloperOverview;
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(Request["s_type"] == "1" ? "selected=selected" : "")>用户名称</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["s_key"]" class="txtipt" />
+        </li>
+        <li>
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" value="@(string.IsNullOrEmpty(Request["s_begin"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : Request["s_begin"])" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}',minDate:'@DateTime.Now.ToString("yyyy-01-01")',dateFmt:'yyyy-MM-dd'})" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")',dateFmt:'yyyy-MM-dd'})" value="@(string.IsNullOrEmpty(Request["s_end"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : Request["s_end"])" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="relation_type" id="relation_type">
+                    <option value="-1" @(ViewBag.relation_type == -1 ? "selected='selected'" : "")>上级类型</option>
+                    <option value="1" @(ViewBag.relation_type == 1 ? "selected='selected'" : "")>商务</option>
+                    <option value="2" @(ViewBag.relation_type == 2 ? "selected='selected'" : "")>代理商</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="1" @(Request["s_sort"] == "1" ? "selected=selected" : "")>降序</option>
+                    <option value="0" @(Request["s_sort"] == "0" ? "selected=selected" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btn_search" class="btn btn-primary" href="javascript:" onclick="SerachUserReport()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th>用户名</th>
+                    <th>上级类型</th>
+                    <th>所属上级</th>
+                    <th>账单日期</th>
+                    <th>流水总金额</th>
+                    <th>接口费</th>
+                    <th>结算总金额</th>
+                    <th>退款金额</th>
+                    <th>已提金额</th>
+                    <th>已付金额</th>
+                    <th>可提金额</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+                        string DayOpen = "";
+
+                        foreach (var item in list)
+                        {
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+                            DayOpen = "DayOpen_" + id;
+
+                            <tr onclick="clickOpenS(@id,@item.DeveloperId,'@item.SettlementDay.ToString("yyyy-MM-dd")')">
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i></td>
+                                <td>@item.DeveloperName</td>
+                                <td>@(item.relation_type == 1 ? "商务" : "代理商")</td>
+                                <td>@(item.relation_type == 1 ? item.bpname : item.DisplayName)</td>
+                                <td>@item.SettlementDay.ToString("yyyy-MM-dd")</td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.TotalAmount)</td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.PortFee)</td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.KFZIncome)</td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.RefundAmount)</td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.p_money)</td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.yf_money)</td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.ketiMoney)</td>
+
+                            </tr>
+                                <!--展开-->
+                            <tr>
+                                <td colspan="12" style="display:none;" name="Open" id="@Open">
+                                    <div class="dcnt-tab">
+                                        <table class="table-lst">
+                                            <tr>
+                                                <td id="@DayOpen">
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                    </div>
+                                </td>
+                            </tr>
+                                                        }
+                                                        if (model != null)
+                                                        {
+                                                            <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td>合计：</td>
+                                                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(model.TotalAmount)</td>
+                                                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(model.PortFee)</td>
+                                                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(model.KFZIncome)</td>
+                                                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(model.RefundAmount)</td>
+                                                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(model.p_money)</td>
+                                                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(model.yf_money)</td>
+                                                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(model.ketiMoney)</td>
+                                                            </tr>
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr>
+
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td>合计：</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                            </tr>
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr>
+                                                                <td align="center" colspan="12" class="nodata">暂无记录</td>
+                                                            </tr>
+                                                        }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+<script type="text/javascript">
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/Financial/BillList?curr=" + pageIndex + "&psize=" + pageSize;
+        var types = $("#searchType option:selected").val();
+        var searchKey = $("#searchKey").val();
+        var stime = $("#stime").val();
+        var etime = $("#etime").val();
+        var sort = $("#searchDesc option:selected").val();
+        var searchTotal = $("#searchTotal option:selected").val();
+        var relation_type = $("#relation_type").val();
+        url += "&s_type=" + $.trim(types) + "&s_key=" + $.trim(searchKey) + "&s_sort=" + $.trim(sort) + "&s_begin=" + $.trim(stime) + "&s_end=" + $.trim(etime) + "&relation_type=" + $.trim(relation_type);
+        location.href = encodeURI(url);
+    }
+
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //查询
+    function SerachUserReport() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //列表展开关闭通用控制方法
+    function clickOpenS(clickId, usrid,time) {
+
+        var Icon = "Icon_" + clickId;
+        var Open = "Open_" + clickId;
+        var Opendisplay = $("#" + Open).css("display");
+        if (Opendisplay == "none") {
+            $("td[name='Open']").css("display", "none");
+            $("i[name='Icon']").removeClass("fa-minus-circle");
+            $("i[name='Icon']").addClass("fa-plus-circle");
+            $("#" + Open).css("display", "");
+            $("#" + Icon).removeClass("fa-plus-circle");
+            $("#" + Icon).addClass("fa-minus-circle");
+            var zkid = "DayOpen_" + clickId;
+            var data = { usrid: usrid, time: time };
+            var isDayOpen = $("#" + zkid).html();
+            if ($.trim(isDayOpen) == "") {
+                $.ajax({
+                    url: '/Financial/BillList_AppName',
+                    type: "post",
+                    data: data,
+                    success: function (retJson) {
+                        $("#" + zkid).html(retJson);
+                    }
+                });
+            }
+
+        } else {
+            $("#" + Open).css("display", "none");
+            $("#" + Icon).removeClass("fa-minus-circle");
+            $("#" + Icon).addClass("fa-plus-circle");
+
+        }
+    }
+
+</script>

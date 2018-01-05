@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>盾行支付后台登陆</title>
+    @JMP.TOOL.UserHelper.css("login.css")
+    @JMP.TOOL.UserHelper.js("jquery-1.7.2.min.js")
+    @JMP.TOOL.UserHelper.js("layer/layer.js")
+    @JMP.TOOL.UserHelper.js("PubMethod.js")
+
+
+    <!-- plugin -->
+    <link rel="stylesheet" href="../css/plugin/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/plugin/font-awesome/css/font-awesome-ie7.min.css">
+</head>
+<body>
+
+        <div class="login-pt">
+            <div class="login-cnt">
+                <i class="logo"></i>
+                <div class="login-frm">
+                    <i class="sicon fa fa-user"></i>
+                    <i class="sicon fa fa-lock"></i>
+                    <i class="sicon fa fa-shield"></i>
+                    <ul class="login-frmu">
+                        <li>
+                            <input type="text" id="username" name="username" placeholder="用户名" title="用户名" maxlength="20" value="jmadmin" class="txtipt" />
+                        </li>
+                        <li>
+                            <input type="password" id="userpass" name="userpass" placeholder="密码" title="密码" maxlength="20" value="123456" class="txtipt" />
+                        </li>
+                        <li>
+                            <input type="text" id="usercode" name="usercode" placeholder="验证码" title="验证码" maxlength="4" class="txtipt txtiptvlt" />
+                            <div id="text-code" class="text-code" onclick="document.getElementById('verify').src = '/Login/GetValidateCode?vh=30&vt=3&k='+new Date().toString();">
+                                <img id="verify" src="/Login/GetValidateCode?vh=30&vt=3" alt="看不清？换一张" title="看不清？换一张" />
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" id="btnLogin" class="btn-lgn">登录</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        document.onkeydown = function (e) {
+            var ev = document.all ? window.event : e;
+            if (ev.keyCode == 13) {
+                $("#btnLogin").click();
+            }
+        }
+    });
+
+    $("#btnLogin").click(function () {
+        var username = $("#username").val();
+        var userpass = $("#userpass").val();
+        var usercode = $("#usercode").val();
+        var status = true;
+        if (status == true && (username == "" || username == $("#username").attr("placeholder"))) {
+            ShowMsg("请输入用户名", "error", function () { $("#username").focus(); });
+            status = false;
+        }
+        if (status == true && (userpass == "" || userpass == $("#userpass").attr("placeholder"))) {
+            ShowMsg("请输入密码", "error", function () { $("#userpass").focus(); });
+            status = false;
+        }
+        //if (status == true && (usercode == "" || usercode == $("#usercode").attr("placeholder"))) {
+        //    ShowMsg("请输入验证码", "error", function () { $("#usercode").focus(); });
+        //    status = false;
+        //}
+        if (status == true) {
+            var frmdata = { action: 'login', userName: username, userPwd: userpass, valCode: usercode };
+            $.post("/Login/UserLogin", frmdata, function (msg) {
+                if (msg.status == "2") {
+                    ShowMsg("用户名或密码错误", "error", function () {
+                        $("#username").val("");
+                        $("#userpass").val("");
+                        $("#usercode").val("");
+                        $("#username").focus();
+                    });
+                }
+                else if (msg.status == "3") {
+                    ShowMsg("验证码错误", "error", function () {
+                        $("#usercode").val("");
+                        var numkey = Math.random();
+                        numkey = Math.round(numkey * 1);
+                        document.getElementById('verify').src = '/Login/GetValidateCode?vh=30&vt=3&k=' + new Date().toString();
+                        $("#usercode").focus();
+                    });
+                }
+                else if (msg.status == "4") {
+                    ShowMsg("权限不足", "error", function () {
+                    });
+                }
+                else {
+                    window.location.href = "/Login/Default";
+                }
+            });
+        }
+    });
+</script>

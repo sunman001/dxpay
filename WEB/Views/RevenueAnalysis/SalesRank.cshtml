@@ -1,0 +1,102 @@
+﻿@{
+    ViewBag.Title = "销售排行";
+    Layout = "~/Views/UI/master.cshtml";
+}
+@JMP.TOOL.UserHelper.js("fusionchart/fusioncharts.js")
+@JMP.TOOL.UserHelper.js("fusionchart/fusioncharts.theme.zune.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="sType" id="sType">
+                    <option value="0" @(Request["sType"] == "0" ? "selected=selected" : "")>应用名称</option>
+                    <option value="1" @(Request["sType"] == "1" ? "selected=selected" : "")>开发者邮箱</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="sKeys" type="text" id="sKeys" placeholder="请输入关键字" value="@Request["sKeys"]" class="txtipt" />
+        </li>
+        <li>
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" value="@(string.IsNullOrEmpty(Request["begin"]) ? DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd") : "")" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}',minDate:'@DateTime.Now.ToString("yyyy-01-01")',dateFmt:'yyyy-MM-dd'})" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")',dateFmt:'yyyy-MM-dd'})" value="@(string.IsNullOrEmpty(Request["end"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : "")" />
+        </li>
+        <li>
+            <a id="btn_search" class="btn btn-primary" href="javascript:">查询</a>
+        </li>
+    </ul>
+    <div class="plate">
+        <div class="tool">
+            交易额排行TOP10
+        </div>
+        <div class="plate-tab-wrap">
+            <div id="floatHead" class="plate-tab">
+                <div class="plate-tab-ul-wrap">
+                    <ul>
+                        <li><a id="type_0" href="javascript:;" class="selected">应用</a></li>
+                        <li><a id="type_1" href="javascript:;">商户</a></li>
+                        <li><a id="type_2" href="javascript:;">渠道</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="chartObj" class="chart-main">
+            <div id="chart"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var sumTypes = 0;
+
+    //top10
+    function ChartTopTen(type) {
+        var winHeight = $(window).height() - 280;
+        var stime = $("#stime").val();
+        var etime = $("#etime").val();
+        var sFields = $("#sType").val();
+        var sFvalue = $("#sKeys").val();
+        var queryStr = "begin=" + stime + "&end=" + etime + "&sumType=" + sumTypes + "&sType=" + sFields + "&sKeys=" + sFvalue;
+        $.ajax({
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            url: "/RevenueAnalysis/SalesTopTen?" + queryStr,
+            success: function (retJson) {
+                if (retJson == "0") {
+                    var childHtm = '<div style="font-size:14px;color:#5e788a;font-weight:lighter;text-align:center;width:100%;">未查询到符合条件的数据</div>';
+                    $("#chart").html(childHtm);
+                } else {
+                    var data = eval('(' + retJson + ')');
+                    var chart = new FusionCharts({
+                        type: "bar2d",
+                        renderAt: "chart",
+                        width: "100%",
+                        height: winHeight + "px",
+                        dataSource: data,
+                        dataFormat: "json"
+                    }).render();
+                }
+            }
+        });
+    }
+
+    $(function () {
+        //点击卡片切换样式
+        $(".plate-tab-ul-wrap a").each(function (index) {
+            $(this).click(function () {
+                $(".plate-tab-ul-wrap a").removeClass("selected");
+                $(this).addClass("selected");
+                sumTypes = this.id.substr(this.id.lastIndexOf("_") + 1, 1);
+                ChartTopTen();
+            });
+        });
+
+        //查询按钮
+        $("#btn_search").click(function () {
+            ChartTopTen();
+        });
+
+        ChartTopTen();
+    });
+</script>

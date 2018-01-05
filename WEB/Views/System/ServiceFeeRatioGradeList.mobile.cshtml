@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "服务费等级信息管理";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+
+    var list = ViewBag.list as List<JMP.MDL.CoServiceFeeRatioGrade>;
+    int pageCount = ViewBag.pageCount;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("mobile/System/CoServiceFeeRatioGrade.mobile.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main mobile-container">
+    <div class="toolbar-container">
+        <div id="ToolBar" class="frm-dcnt">
+            <ul class="frm-ul-tit frm-ul-tits clearfix">
+                @Html.Raw(ViewBag.locUrl)
+                <li>
+                    <a id="btn-show-search" class="btn" onclick="pop.showSearch('search-container')">查询</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="search-container">
+        <select name="searchType" id="searchType" class="ui dropdown fluid fluid-block">
+            <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>等级名称</option>
+            <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>提交人</option>
+        </select>
+        <div class="ui input fluid fluid-block">
+            <input name="searchKey" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </div>
+        <select name="searchDesc" id="searchDesc" class="ui dropdown fluid fluid-block">
+            <option value="1" @(Request["s_sort"] == "1" ? "selected=selected" : "")>降序</option>
+            <option value="0" @(Request["s_sort"] == "0" ? "selected=selected" : "")>升序</option>
+        </select>
+        <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="serchlocuser()">查询</a>
+    </div>
+    <div class="data-table-2 table-container table-responsive">
+        <table class="ui celled striped white table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th>服务费等级名称</th>
+                    <th>开发者的服务费比例</th>
+                    <th>直客提成比例</th>
+                    <th>商务对代理商的提成比列</th>
+                    <th>代理商提成比列</th>
+                    <th>描述信息</th>
+                    <th>创建时间</th>
+                    <th>创建者</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                <tr>
+                    <td>
+
+                        @item.Name
+                    </td>
+                    <td>
+                        @Html.Raw(string.Format(" " + (item.ServiceFeeRatio * 100).ToString("f2") + " %"))
+                    </td>
+                    <td>
+                        @Html.Raw(string.Format(" " + (item.CustomerWithoutAgentRatio * 100).ToString("f2") + " %"))
+                       
+                    </td>
+                    <td>
+                        @Html.Raw(string.Format(" " + (item.BusinessPersonnelAgentRatio * 100).ToString("f2") + " %"))
+                    </td>
+                    <td>
+                        @Html.Raw(string.Format(" " + (item.AgentPushMoneyRatio * 100).ToString("f2") + " %"))
+                    </td>
+                    <td>
+                        @item.Description
+                    </td>
+                    <td>@item.CreatedOn.ToString("yyyy-MM-dd")</td>
+                    <td>@item.CreatedByName</td>
+                    <td>
+                        @{
+                                        bool getEdit = bll_limit.GetLocUserLimitVoids("/System/InsertUpdateSerViceFeeRationGrade", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑按钮
+                                        if (getEdit)
+                                        {
+                                    <a href="javascript:" class='blue' onclick="Update(@item.Id)">编辑</a>
+
+                                        }
+                        }
+                    </td>
+                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                <tr>
+                    <td align="center" colspan="9" class="nodata"> 暂无记录 </td>
+                </tr>
+                                        }
+
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)
+</div>

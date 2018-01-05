@@ -1,0 +1,160 @@
+﻿@{
+    ViewBag.Title = "应用手续费设置以及扣量设置";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_apprate>;
+    var paylist = ViewBag.paylist as List<JMP.MDL.jmp_paymode>;
+}
+<div class="main">
+    @{
+        if (list.Count > 0)
+        {
+            <div class="tab-dcnt">
+                <table border="0" cellpadding="0" cellspacing="0" id="apptable" class="table-cnt lay-table-cnt">
+                    <thead>
+                        <tr>
+                            <th width="100">编号</th>
+                            <th>支付类型</th>
+                            <th>通道费率比例</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fileList">
+                        @{
+                            foreach (var pay in list)
+                            {
+                                <tr>
+                                    <td>@pay.p_id</td>
+                                    <td>@pay.p_name</td>
+                                    <td>
+                                        <input type="text" name="klbl" id="klbl_@pay.p_id" value="@(pay.r_proportion>0 ? pay.r_proportion:0)" onblur="yzklbl('klbl_@pay.p_id')" class="lay-usersx" />                                     
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td colspan="3" style="color:red;">备注（10%，请填写0.1 ，只能是1位整数或者保留四位小数） </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="page-footer" style="width: 100%;">
+                    <div class="btn-listbtn">
+                        <input type="button" name="btnSave" value="保存" class="btn btn-primary" id="btn-save-edit" />
+                        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+                            }
+    }
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        $("#btn-save-edit").click(function () {
+            var appid = '@ViewBag.appid';
+            var valArr = new Array;
+            $("#fileList").find("tr").each(function (i) {
+                var tdArr = $(this).children();
+                var zfid = tdArr.eq(0).text();
+                var klbl = tdArr.find("input[name='klbl']").val();
+                var yzkl = xyzklbl(klbl);
+                if (  yzkl == true) {
+                    var str = zfid + "," + klbl;
+                    valArr[i] = str;
+                } else {
+                    return false;
+                }
+            });
+            var vals = valArr.join('|');
+            if (vals == "") {
+                window.parent.ShowMsg("请填写比例！", "error", "");
+                return false;
+            }
+            var url = "/App/Inserkl";
+            var data = { str: vals, appid: appid };
+            $.post(url, data, function (retJson) {
+                if (retJson.success == 1) {
+                    window.parent.ShowMsg(retJson.msg, "ok", function () {
+                        window.parent.global.reload();
+                        window.parent.layer.closeAll();
+                    });
+                }
+                else if (retJson.success == 9998) {
+                    window.parent.ShowMsg(retJson.msg, "error", "");
+                    return false;
+                } else if (retJson.success == 9999) {
+                    window.parent.ShowMsg(retJson.msg, "error", "");
+                    window.top.location.href = retJson.Redirect;
+                    return false;
+                } else if (retJson.success == 9997) {
+                    window.top.location.href = retJson.Redirect;
+                    return false;
+                }
+                else {
+                    window.parent.ShowMsg(retJson.msg, "error", "");
+                    return false;
+                }
+            });
+        })
+    })
+    //验证手续费
+    function yzsxfbl(obj) {
+        var rex = /^\d{1}(\.\d{1,4})?$/;
+        var bl = $("#" + obj).val();
+        if ($.trim(bl) != "") {
+            if (!rex.test(bl)) {
+                window.parent.ShowMsg("手续费只能是1位整数或者保留四位小数！", "error", "");
+                return false;
+            }
+        } else {
+            window.parent.ShowMsg("手续费比例不能为空！", "error", "");
+            return false;
+        }
+    }
+    //验证扣量比例
+    function yzklbl(obj) {
+        var rex = /^\d{1}(\.\d{1,4})?$/;
+        var bl = $("#" + obj).val();
+        if ($.trim(bl) != "") {
+            if (!rex.test(bl)) {
+                window.parent.ShowMsg("手续费只能是1位整数或者保留四位小数！", "error", "");
+                return false;
+            }
+        } else {
+            window.parent.ShowMsg("手续费比例不能为空！", "error", "");
+            return false;
+        }
+    }
+
+    //验证手续费
+    function xyzsxfbl(obj) {
+        var rex = /^\d{1}(\.\d{1,4})?$/;
+        if ($.trim(obj) != "") {
+            if (!rex.test(obj)) {
+                window.parent.ShowMsg("手续费只能是1位整数或者保留四位小数！", "error", "");
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            window.parent.ShowMsg("手续费比例不能为空！", "error", "");
+            return false;
+        }
+    }
+    //验证扣量比例
+    function xyzklbl(obj) {
+        var rex = /^\d{1}(\.\d{1,4})?$/;
+        if ($.trim(obj) != "") {
+            if (!rex.test(obj)) {
+                window.parent.ShowMsg("扣量比例只能是1位整数或者保留四位小数！", "error", "");
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            window.parent.ShowMsg("扣量比例不能为空！", "error", "");
+            return false;
+        }
+    }
+</script>

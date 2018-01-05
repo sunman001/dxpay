@@ -1,0 +1,135 @@
+﻿@{
+    ViewBag.Title = "商务信息列表";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+
+    var bll_list = ViewBag.list as List<JMP.MDL.CoBusinessPersonnel>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("mobile/BusinessPersonnel/BusinessPersonnel.mobile.js")
+<div class="mobile-container">
+    <div class="toolbar-container">
+        <div id="ToolBar" class="frm-dcnt">
+            <ul class="frm-ul-tit clearfix">
+                @Html.Raw(ViewBag.locUrl)
+                <li>
+                    <a id="btn-show-search" class="btn" onclick="pop.showSearch('search-container')">查询</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="search-container">
+        <div class="ui input fluid fluid-block">
+            <select name="s_type" id="s_type" class="ui dropdown fluid fluid-block">
+                <option value="0" @(ViewBag.stype == "0" ? "selected='selected'" : "")>邮箱</option>
+                <option value="1" @(ViewBag.stype == "1" ? "selected='selected'" : "")>真实姓名</option>
+            </select>
+        </div>
+        <div class="ui input fluid fluid-block">
+            <input name="s_keys" id="s_keys" type="text" placeholder="请输入关键字" value="@(!string.IsNullOrEmpty(ViewBag.skeys) ? ViewBag.skeys : "")" class="txtipt" />
+        </div>
+        <div class="ui input fluid fluid-block">
+            <select name="s_state" id="s_state" class="ui dropdown fluid fluid-block">
+                <option value="" @(ViewBag.state == "" ? "selected='selected'" : "")>账户状态</option>
+                <option value="0" @(ViewBag.state == "0" ? "selected='selected'" : "")>正常</option>
+                <option value="1" @(ViewBag.state == "1" ? "selected='selected'" : "")>冻结</option>
+            </select>
+        </div>
+        <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="selectBusinessPersonnel()">查 询</a>
+    </div>
+    <div class="table-container table-responsive">
+        <table class="ui celled striped table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="all" onclick="checkAll(this)" value="0" />
+                    </th>
+                    <th>展开</th>
+                    <th>登录账号名</th>
+                    <th>姓名</th>
+                    <th>邮箱</th>
+                    <th>手机号码</th>
+                    <th>QQ</th>
+                    <th>网址</th>
+                    <th>账户状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (bll_list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+
+                        foreach (var item in bll_list)
+                        {
+
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+
+                            <tr onclick="clickOpen(@id)">
+                                <td>
+                                    @{
+                                        bool getUidT = bll_limit.GetLocUserLimitVoids("/BusinessPersonnel/CoAll(0)", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        if (getUidT)
+                                        {
+                                            <input type="checkbox" name="child" class="checkall" value="@item.Id" />
+                                        }
+                                    }
+                                </td>
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                                <td>@item.LoginName</td>
+
+                                <td>@item.DisplayName</td>
+                                <td>@item.EmailAddress</td>
+                                <td>@item.MobilePhone</td>
+                                <td>@item.QQ</td>
+                                <td>@item.Website</td>
+                                <td>
+                                    @(item.State == 1 ? Html.Raw("<span class='red'>冻结</span>") : Html.Raw("<span class='green'>正常</span>"))
+                                </td>
+                                <td>
+                                    @{
+                                        bool getEdit = bll_limit.GetLocUserLimitVoids("/BusinessPersonnel/InsertOrUpdateBusinessPersonnel", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        if (getEdit)
+                                        {
+                                            <a href="javascript:" class="blue" onclick="UpdateSW(@item.Id)">编辑</a>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+
+                             <!--展开-->
+                                        <tr>
+                                            <td colspan="10" style="display:none;" name="Open" id="@Open">
+                                                <div class="dcnt-tab">
+                                                    <table class="table-lst">
+                                                        <tr>
+
+                                                            <td>创建人:@item.CreatedByName</td>
+                                                            <td>创建时间:@item.CreatedOn.ToString("yyyy-MM-dd")</td>
+                                                            <td>
+                                                                登录次数:@item.LoginCount 次
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="10" class="nodata">暂无记录</td>
+                                            </tr>
+                                        }
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>

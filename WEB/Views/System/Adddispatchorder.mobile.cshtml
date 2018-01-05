@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "掉单设置";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+    var yylist = ViewBag.yylist as List<JMP.MDL.jmp_apptype>;
+    var mode = ViewBag.mode as JMP.MDL.jmp_dispatchorder;
+}
+@JMP.TOOL.UserHelper.js("mobile/System/dispatchorder.mobile.js")
+<div class="mobile-popup mobile-container">
+    <div class="ui form">
+        <dl>
+            <dt>应用类型：</dt>
+            <dd>
+                <div class="field">
+                    <select id="apptyeid" name="apptyeid" onchange="yytype()" class="ui dropdown fluid">
+                        <option value="0">--请选择类型--</option>
+                        @{
+                            foreach (var item in yylist)
+                            {
+                                <option value="@item.t_id" @(mode.d_apptyeid == item.t_id ? "selected='selected'" : "")>@item.t_name</option>
+                            }
+                        }
+                    </select>
+                    <div class="Validform_checktip" id="yytypeyy">*支付类型</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>调单比列：</dt>
+            <dd>
+                <div class="field">
+                    <input name="ratio" type="text" id="ratio" onblur="ratio()" maxlength="7" value="@(mode.d_ratio > 0 ? String.Format("{0:N4}", mode.d_ratio) : "")" />
+                    <div class="Validform_checktip" id="ratioYz">*掉单比列</div>
+                </div>
+                
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <input type="hidden" id="did" value="@(mode.d_id == 0 ? 0 : mode.d_id)" />
+            </dt>
+            <dd>
+                <div style="color: red;">掉单比列请换算比例后填写（如：10%，换算后就是0.1,不要直接写10）</div>
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer">
+            <input type="button" name="btnSave" value="保存" id="btnSaveAddorUpdatddorder" class="ui button primary" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="ui button" />
+    </div>
+</div>

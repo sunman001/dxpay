@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "报表统计";
+    Layout = "~/Views/UI/master.cshtml";
+}
+@JMP.TOOL.UserHelper.js("fusionchart/fusioncharts.js")
+@JMP.TOOL.UserHelper.js("fusionchart/fusioncharts.theme.zune.js")
+<div class="main">
+    <div class="plate">
+        <div class="tool">
+            24小时交易走势图 
+            <span class="tool-fr">
+                <a id="date_0" class="selected" href="javascript:FusionChart(0)">今天(@ViewBag.moneycount/交易金额)</a>
+                          <i>|</i>
+                <a id="date_1" href="javascript:FusionChart(1)">昨天</a>
+                          <i>|</i>
+                <a id="date_2" href="javascript:FusionChart(2)">前天</a>
+                          <i>|</i>
+                <a id="date_3" href="javascript:FusionChart(3)">支付量走势图</a>
+            </span>
+        </div>
+        <div id="chartObj" class="chart-main">
+            <div id="chart"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function FusionChart(thatDay) {
+        var winHeight = $(window).height() - 160;
+        $.ajax({
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            url: "/REPORT/DeviceTrend?days=" + thatDay,
+            success: function (retJson) {
+                if (retJson == "0") {
+                    var childHtm = '<div style="font-size:14px;color:#5e788a;font-weight:lighter;text-align:center;width:100%;">未查询到符合条件的数据</div>';
+                    $("#chart").html(childHtm);
+                } else {
+                    var data = eval('(' + retJson + ')');
+                    var chart = new FusionCharts({
+                        type: "msline",
+                        renderAt: "chart",
+                        width: "100%",
+                        height: winHeight + "px",
+                        dataSource: data,
+                        dataFormat: "json"
+                    }).render();
+                }
+            }
+        });
+        //移除所有的样式
+        $("#date_0").removeClass("selected");
+        $("#date_1").removeClass("selected");
+        $("#date_2").removeClass("selected");
+        $("#date_3").removeClass("selected");
+        //为当前选中添加样式
+        if (thatDay == 0) {
+            $("#date_0").addClass("selected");
+        }
+        else if (thatDay == 1) {
+            $("#date_1").addClass("selected");
+        }
+        else if (thatDay == 2) {
+            $("#date_2").addClass("selected");
+        }
+        else if (thatDay == 3) {
+            $("#date_3").addClass("selected");
+        }
+    }
+
+    $(window).resize(function () {
+        mainHeightAuto();
+    });
+
+    $(function () {
+        mainHeightAuto();
+        FusionChart(0);
+    });
+</script>

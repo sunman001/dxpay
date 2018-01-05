@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "公共发布";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var mo = ViewBag.mo as JMP.MDL.jmp_notice;
+}
+@JMP.TOOL.UserHelper.js("MessageManagement/notice.js")
+<div class="main">
+    <div class="plate-form">
+        <dl>
+            <dt>置顶：</dt>
+            <dd>
+                <label><input type="checkbox" id="topname" name="topname" @(mo.n_top == 1 ? "checked='checked'" : "") value="1" /></label>
+                <input type="hidden" id="n_id" name="n_id" value="@(mo.n_id == 0 ? 0 : mo.n_id)" />
+            </dd>
+        </dl>
+        <dl>
+            <dt>公告标题：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="titleName" type="text" id="titleName" onblur="yztitleName()" maxlength="20" value="@(string.IsNullOrEmpty(mo.n_title) ? "" : mo.n_title)" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="titleNameyy">*公告标题长度不超过20</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>公告内容：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <textarea id="contentname" name="contentname" onblur="yzcontentname()" class="txt1">@(string.IsNullOrEmpty(mo.n_content) ? "" : mo.n_content)</textarea>
+                </div>
+                <div class="Validform_checktip" id="contentnameyy">*公告内容</div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="发布" id="btnSaveAddApp" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>

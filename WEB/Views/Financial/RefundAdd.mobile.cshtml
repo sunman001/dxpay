@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "添加退款";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+}
+@JMP.TOOL.UserHelper.js("mobile/Financial/RefundList.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="mobile-container mobile-popup">
+   
+    <div class="plate-form  ui form ">
+        <div class="field">
+            <label>退款人姓名：</label>
+            <input name="inputName" type="text" id="r_name" onblur="yzname()" maxlength="20" sucmsg="验证成功" nullmsg="退款人姓名不超过20" errormsg="退款人姓名长度不超过20" value="" />
+            <div class="Validform_checktip" id="nameyy">*退款人姓名长度不超过20</div>
+            </div>
+        <div class="field">
+            <label>退款人电话：</label>
+            <input name="r_tel" type="text" id="r_tel" onblur="CheckPhone()"/>
+            <div class="Validform_checktip" id="u_phone_tip">*11位手机号或固定电话(号码或区号-号码)！</div>
+        </div>
+          
+        <div class="field">
+            <label>所属应用：</label>
+            <input name="r_appname" type="text" id="r_appname" readonly="readonly" onclick="shyy()" value="" /><span class="ie7-input-bug-end"></span>
+            <input type="hidden" id="r_appid" name="r_appid" />
+            <div class="Validform_checktip" id="yzkfz">* 请选择应用</div>
+        </div>
+         <div class="field">
+             <label>所属商户：</label>
+             <input name="a_user_idyx" type="text" id="a_user_idyx" readonly="readonly" value="" /><span class="ie7-input-bug-end"></span>
+             <input type="hidden" id="a_user_id" name="a_user_id" />
+         </div>
+        <div class="field">
+         <label > 支付流水号 </label>
+          <input name="r_tradeno" type="text" id="r_tradeno" onblur="CheckTradeno()"/>
+          <div id="yztradeno" class="Validform_checktip">*请输入支付流水号！</div>
+        </div>
+
+          <div class="field">
+             <label>订单编号</label>
+              <input name="r_code" type="text" id="r_code" onblur="CheckCode()" />
+              <div id="yztraCode" class="Validform_checktip">*请输入订单编号！</div>
+          </div>
+         <div class="field">
+             <label>实际支付金额 </label>  
+             <input name="r_money" type="text" id="r_money" onblur="CheckMoney()" />
+             <div id="yztraMoney" class="Validform_checktip">*请输入实际支付金额！</div>
+         </div>
+           
+          <div class="field">
+              <label >
+                  退款金额
+              </label>
+              <input name="r_price" type="text" id="r_price" onblur="CheckPrice()" />
+              <div id="yztrPrice" class="Validform_checktip">*请输入退款金额！</div>
+          </div>
+           
+           <div class="field">
+            <label>用户付费时间: </label>
+               <input name="stime" type="text" id="r_date" value="@DateTime.Now.ToString("yyyy-MM-dd")" onFocus="WdatePicker({maxDate:'@DateTime.Now.ToString("yyyy-MM-dd")'})" readonly="readonly" style="width:300px; height:25px;" />
+           </div>
+         
+        </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" class="large ui primary button"  name="btnSave" value="保存" id="btnSaveAddRefund" class="btn mr10" />
+            <a   href="~/Financial/RefundList"  class="large ui primary button" > 取消</a> 
+        </div>
+        <div class="clear"></div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+
+    })
+</script>

@@ -1,0 +1,206 @@
+﻿@using TOOL.EnumUtil;
+@{
+    ViewBag.Title = "添加通知短信分组信息";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var mode = ViewBag.model as JMP.MDL.jmp_notificaiton_group;
+
+}
+@JMP.TOOL.UserHelper.js("REPORT/Notify.js")
+    <form id="frm-user-edit" class="ui form" method="post" enctype="multipart/form-data">
+        <input name="Id" id="Id" type="hidden" value="@(mode.Id == 0 ? 0 : mode.Id)" />
+        <div class="main">
+            <div class="plate-form plate-form-hunt">
+                <dl>
+                    <dt>类型：</dt>
+                    <dd>
+                        @if (mode.Id <= 0)
+                        {
+                            
+                            <div class="ejzldiv-nb">
+                                <input type="checkbox" name="zflx" class="inputChck" value="短信" checked='checked'  /> 短信
+                                <input type="checkbox" name="zflx" class="inputChck" value="语音" /> 语音
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="ejzldiv-nb">
+                                @Html.Raw(ViewBag.zf)
+                            </div>
+                        }
+
+                        
+                  </dd>
+              </dl>
+
+                <dl>
+                    <dt>是否允许发送：</dt>
+                    <dd>
+                        <div class="rule-single-select">
+                            <select name="IsAllowSendMessage" id="IsAllowSendMessage" class="ui dropdown fluid">
+                                @{
+                                    if (mode.Id > 0)
+                                    {
+                                        <option value=false @(mode.IsAllowSendMessage == false ? "selected='selected'" : "")>否</option>
+                                        <option value=true @(mode.IsAllowSendMessage == true ? "selected='selected'" : "")>是</option>
+
+                                    }
+                                    else
+                                    {
+                                        <option value=false>否</option>
+                                        <option value=true selected='selected'>是</option>
+                                   }
+                                }
+                            </select>
+                        </div>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>任务执行周期单位：</dt>
+                    <dd>
+                        <div class="rule-single-select">
+                            <select name="IntervalUnit" id="IntervalUnit" class="ui dropdown fluid">
+                                <option value="second" @(mode.IntervalUnit == "second" ? "selected='selected'" : "")>second</option>
+                                <option value="minute" @(mode.IntervalUnit == "minute" ? "selected='selected'" : "")>minute</option>
+                                <option value="hour" @(mode.IntervalUnit == "hour" ? "selected='selected'" : "")>hour</option>
+                                <option value="day" @(mode.IntervalUnit == "day" ? "selected='selected'" : "")>day</option>
+                                <option value="month" @(mode.IntervalUnit == "month" ? "selected='selected'" : "")>month</option>
+                                <option value="year" @(mode.IntervalUnit == "year" ? "selected='selected'" : "")>year</option>
+                            </select>
+                        </div>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>执行周期：</dt>
+                    <dd>
+                        <div class="single-input normal">
+                            <input name="IntervalValue" type="text" id="IntervalValue" onblur="yzIntervalValue()" value="@(mode.IntervalValue>0 ? mode.IntervalValue :0)" />
+
+                        </div>
+                        <div class="Validform_checktip" id="IntervalValueyy">请填写执行周期</div>
+                    </dd>
+                </dl>
+                
+                  @if (mode.Id > 0)
+                  {
+                    <dl>
+                        <dt>分组名称：</dt>
+                        <dd>
+                            <div class="single-input normal">
+                                <input name="Name" type="text" id="Name" onblur="yzName()" value="@(!string.IsNullOrEmpty(mode.Name) ? mode.Name : "")" />
+                            </div>
+                            <div class="Validform_checktip" id="Nameyy">*请填写分组名称</div>
+                        </dd>
+                    </dl>
+                  }
+                <dl>
+                    <dt>编码：</dt>
+                    <dd>
+                        <div class="single-input normal">
+                            <div class="rule-single-select">
+                                <select name="Code" id="Code" class="ui dropdown fluid">
+                                    @{
+                                        var groups = Enum.GetValues(typeof(ScheduleGroupCode));
+                                        foreach (ScheduleGroupCode item in groups)
+                                        {
+                                            var desc = item.GetDescription();
+                                            var value = item.ToString();
+                                            var index = (int)item;
+                                            <option value="@value" @(mode.Code == value ? "selected='selected'" : "")>@desc</option>
+                                        }
+                                    }
+                                   
+                                </select>
+                            </div>
+                        </div>
+                        @*<div class="Validform_checktip" id="Codetyy">请填写编码</div>*@
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>任务分组描述：</dt>
+                    <dd>
+                        <div class="single-input normal">
+                            <div class="date-tool-input">
+                                <div class="date-tool-input-text">
+                                    <textarea name="Description" type="text" id="Description" onblur="yzDescription()" class="txt1"> </textarea>
+                                    @{
+                                        if (!string.IsNullOrEmpty(mode.Description))
+                                        {
+                                            <script type="text/javascript">
+                                                document.getElementById("Description").innerText = ' @mode.Description';
+                                            </script>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="Validform_checktip" id="Descriptionyy">*请填写任务分组描述</div>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>通知手机号码：</dt>
+                    <dd>
+                        <div class="single-input normal">
+                            <div class="date-tool-input">
+                                <div class="date-tool-input-text">
+                                    <textarea name="NotifyMobileList" type="text" id="NotifyMobileList" onblur="yzNotifyMobileList()" class="txt1"> </textarea>
+                                    @{
+                                        if (!string.IsNullOrEmpty(mode.NotifyMobileList))
+                                        {
+                                            <script type="text/javascript">
+                                            document.getElementById("NotifyMobileList").innerText = ' @mode.NotifyMobileList';
+                                            </script>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="Validform_checktip" id="NotifyMobileListyy">*请填写通知手机号码（多个手机号码以逗号(,)分隔）</div>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>短信模板：</dt>
+                    <dd>
+                        <div class="single-input normal">
+                            <div class="date-tool-input">
+                                <div class="date-tool-input-text">
+                                    <textarea name="MessageTemplate" type="text" id="MessageTemplate" onblur="yzMessageTemplate()" class="txt1"> </textarea>
+                                    @{
+                                        if (!string.IsNullOrEmpty(mode.MessageTemplate))
+                                        {
+                                            <script type="text/javascript">
+                                                document.getElementById("MessageTemplate").innerText = ' @mode.MessageTemplate';
+                                            </script>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="Validform_checktip" id="MessageTemplateyy">*请填写短信模板</div>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>语音模板ID：</dt>
+                    <dd>
+                        <div class="single-input normal">
+                            <input name="AudioTelTempId" type="text" id="AudioTelTempId" value="@(mode.AudioTelTempId>0 ? mode.AudioTelTempId :0)" />
+                        </div>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>语音模板内容：</dt>
+                    <dd>
+                        <div class="single-input normal">
+                            <input name="AudioTelTempContent" type="text" id="AudioTelTempContent" value="@mode.AudioTelTempContent" />
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="page-footer" style="width: 100%;">
+            <div class="btn-listbtn">
+                <input type="button" name="btnSave" value="保存" id="btnSaveAdd" class="btn btn-primary" />
+                <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+            </div>
+        </div>
+    </form>
+    

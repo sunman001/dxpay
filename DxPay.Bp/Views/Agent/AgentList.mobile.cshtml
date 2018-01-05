@@ -1,0 +1,199 @@
+﻿@{
+    ViewBag.Title = "代理商管理";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.CoAgent>;
+    int pageCount = ViewBag.pageCount;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+
+<script src="~/mobile/js/Agent/AgentList.js"></script>
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">代理商管理</span>
+</header>
+<!--头部 end-->
+<section>
+    <ul class="frm-ul-tit clearfix">
+        <li onclick="javascript:Updatestate(0)"><i class='fa fa-check-square-o'></i>一键启用</li>
+        <li onclick="javascript:Updatestate(1);"><i class='fa fa-check-square-o'></i>一键禁用</li>
+        <li>
+            <a id="btn-show-search" onclick="pop.showSearch('search-container')" class="sle-btn">查询</a>
+        </li>
+    </ul>
+    <div class="search-container" style="display:none">
+        <div class="rule-single-select">
+            <select name="s_type" id="s_type">
+                <option value="1" @(ViewBag.stype == 1 ? "selected='selected'" : "")>登录名称</option>
+                <option value="2" @(ViewBag.stype == 2 ? "selected='selected'" : "")>真实姓名</option>
+                <option value="3" @(ViewBag.stype == 3 ? "selected='selected'" : "")>手机号码</option>
+            </select>
+        </div>
+        <div class="srch-dipt">
+            <input name="s_keys" id="s_keys" type="text" placeholder="请输入关键字" value="@(!string.IsNullOrEmpty(ViewBag.skeys) ? ViewBag.skeys : "")" class="txtipt" />
+        </div>
+        <div class="rule-single-select">
+            <select name="status" id="status">
+                <option value="" @(ViewBag.status == "" ? "selected='selected'" : "")>账户状态</option>
+                <option value="0" @(ViewBag.status == "0" ? "selected='selected'" : "")>正常</option>
+                <option value="1" @(ViewBag.status == "1" ? "selected='selected'" : "")>冻结</option>
+            </select>
+        </div>
+        
+        <div class="rule-single-select">
+            <select name="AuditState" id="AuditState">
+                <option value="" @(ViewBag.AuditState == "" ? "selected='selected'" : "")>审核状态</option>
+                <option value="0" @(ViewBag.AuditState == "0" ? "selected='selected'" : "")>等待审核</option>
+                <option value="1" @(ViewBag.AuditState == "1" ? "selected='selected'" : "")>通过</option>
+                <option value="-1" @(ViewBag.AuditState == "-1" ? "selected='selected'" : "")>未通过</option>
+            </select>
+        </div>
+        <div class="rule-single-select">
+            <select name="searchDesc" id="searchDesc">
+                <option value="-1" @(ViewBag.searchDesc == -1 ? "selected='selected'" : "")>排序</option>
+                <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>倒序</option>
+                <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>正序</option>
+            </select>
+        </div>
+        <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="selectBusinessPersonnel()">查询</a>
+    </div>
+    <div class="table-dcnt">
+        <div class="table-container">
+            <table class="table-cnt" id="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="all" onclick="checkAll(this)" value="0" />
+                        </th>
+                        <th>展开</th>
+                        <th>登录账号名</th>
+                        <th>类别</th>
+                        <th>姓名</th>
+                        <th>邮箱</th>
+                        <th>手机号码</th>
+                        <th>QQ</th>
+                        <th>网址</th>
+                        <th>费率比例</th>
+                        <th>账户状态</th>
+                        <th>审核状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (list.Count > 0)
+                        {
+                            int id = 0;
+                            string Icon = "Icon_";
+                            string Open = "Open_";
+
+                            foreach (var item in list)
+                            {
+
+                                id = id + 1;
+                                Icon = "Icon_" + id;
+                                Open = "Open_" + id;
+                                var AgentPushMoneyRatio = (item.AgentPushMoneyRatio * 100).ToString("f2") + "%";
+                                <tr onclick="clickOpen(@id)">
+                                    <td>
+                                        <input type="checkbox" name="child" class="checkall" value="@item.Id" />
+                                    </td>
+                                    <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                                    <td><a href="@ViewBag.Agenturl/Login/UserLoginbyadm?qs=@(JMP.TOOL.DESEncrypt.Encrypt(item.LoginName +";"+ item.Password +";"+ JMP.TOOL.UserInfo.UserName+";"+ System.DateTime.Now.ToString()))" target="_blank" class="blue">@(string.IsNullOrEmpty(item.LoginName) ? "---" : item.LoginName)</a></td>
+
+
+                                    <td>
+                                        @{
+                                            if (item.Classify == 0)
+                                            {
+                                                <font>个人</font>
+                                            }
+                                            else
+                                            {
+                                                <font>企业</font>
+                                            }
+                                        }
+                                    </td>
+                                    <td>@item.DisplayName</td>
+                                    <td>@item.EmailAddress</td>
+                                    <td>@item.MobilePhone</td>
+                                    <td>@item.QQ</td>
+                                    <td>@item.Website</td>
+                                    <td>
+                                        @{
+                                            if (item.ServiceFeeRatioGradeId > 0)
+                                            {
+                                                <font>@AgentPushMoneyRatio</font>
+                                            }
+                                            else
+                                            {
+                                                <font>0 </font>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @(item.State == 1 ? Html.Raw("<span class='red'>冻结</span>") : Html.Raw("<span class='green'>正常</span>"))
+                                    </td>
+                                    <td>@(item.AuditState == 0 ? Html.Raw("<span class='orange'>等待审核</span>") : item.AuditState == 1 ? Html.Raw("<span class='green'>通过</span>") : Html.Raw("<span class='red'>未通过</span>"))</td>
+                                    <td>
+                                        @{
+                                            <a href="javascript:void(0)" onclick="Update(@item.Id)" class='blue edit'>编辑</a>
+                                            <a href="javascript:" class="blue" onclick="UpdateUserKfZ(@item.Id)">设置服务费</a>
+                                        }
+                                    </td>
+                                </tr>
+                            <!--展开-->
+                                            <tr>
+                                                <td colspan="13" style="display:none;" name="Open" id="@Open">
+                                                    <div class="dcnt-tab">
+                                                        <table class="table-lst">
+                                                            <tr>
+                                                                <td>创建人:@item.CreatedByName</td>
+                                                                <td>创建时间:@item.CreatedOn.ToString("yyyy-MM-dd")</td>
+                                                                <td>所属商务:@item.OwnerName</td>
+                                                                <td>
+                                                                    登录次数:@item.LoginCount 次
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>开户银行全称:@item.BankFullName</td>
+                                                                <td>开户名:@item.BankAccountName</td>
+                                                                <td>开户账号:@item.BankAccount</td>
+                                                                <td>
+                                                                    联系地址:@item.ContactAddress
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td align="center" colspan="13" class="nodata">暂无记录</td>
+                                                </tr>
+                                            }
+                    }
+                </tbody>
+            </table>
+        </div>
+        @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+        
+    </div>
+</section>
+<!--内容 end-->
+<script type="text/javascript">
+    //tab套用-编辑
+    function Update(id) {
+        window.location.href = "/Agent/AgentUpdate?id=" + id;
+
+    }
+    //设置直客开发者费率
+    function UpdateUserKfZ(id) {
+
+        window.location.href = "/Agent/ServiceChargeAdd?id=" + id//链接
+    }
+
+</script>

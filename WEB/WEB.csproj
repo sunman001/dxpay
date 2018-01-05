@@ -1,0 +1,1548 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BF64730C-4903-4E40-AFCB-E0B56FF7E45D}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WEB</RootNamespace>
+    <AssemblyName>WEB</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.0\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20715.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\AgentController.cs" />
+    <Compile Include="Controllers\AppChannelReportController.cs" />
+    <Compile Include="Controllers\APPController.cs" />
+    <Compile Include="Controllers\AppUserBankController.cs" />
+    <Compile Include="Controllers\AppUserController.cs" />
+    <Compile Include="Controllers\BusinessPersonnelController.cs" />
+    <Compile Include="Controllers\CustomServiceController.cs" />
+    <Compile Include="Controllers\DemoController.cs" />
+    <Compile Include="Controllers\FinancialController.cs" />
+    <Compile Include="Controllers\GlobalLogErrorController.cs" />
+    <Compile Include="Controllers\HelpController.cs" />
+    <Compile Include="Controllers\LIMITController.cs" />
+    <Compile Include="Controllers\LOCLOGController.cs" />
+    <Compile Include="Controllers\LOCUSERController.cs" />
+    <Compile Include="Controllers\LogCoSettlementController.cs" />
+    <Compile Include="Controllers\LogForApiController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MerchantController.cs" />
+    <Compile Include="Controllers\MessageManagementController.cs" />
+    <Compile Include="Controllers\MonitorChannelController.cs" />
+    <Compile Include="Controllers\PartialController.cs" />
+    <Compile Include="Controllers\PayForAnotherController.cs" />
+    <Compile Include="Controllers\paymentController.cs" />
+    <Compile Include="Controllers\PaymentMonitorController.cs" />
+    <Compile Include="Controllers\NewsReleaseController.cs" />
+    <Compile Include="Controllers\REPORTController.cs" />
+    <Compile Include="Controllers\RevenueAnalysisController.cs" />
+    <Compile Include="Controllers\RiskController.cs" />
+    <Compile Include="Controllers\ROTEController.cs" />
+    <Compile Include="Controllers\SystemController.cs" />
+    <Compile Include="Controllers\UserReportController.cs" />
+    <Compile Include="Controllers\WorkorderController.cs" />
+    <Compile Include="Extensions\CompareExtensions.cs" />
+    <Compile Include="Extensions\Html\PermissionControlExtension.cs" />
+    <Compile Include="Extensions\PanChannelMonitor\IPayChannelMonitor.cs" />
+    <Compile Include="Extensions\PanChannelMonitor\PayChannelFactory.cs" />
+    <Compile Include="Extensions\PanChannelMonitor\ZhiFuBaoPayChannelMonitor.cs" />
+    <Compile Include="Extensions\PayExtension.cs" />
+    <Compile Include="Extensions\StateExtension.cs" />
+    <Compile Include="Extensions\PanChannelMonitor\WeiXinPayChannelMonitor.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AppUser\MerchantListViewModel.cs" />
+    <Compile Include="Models\HtmlToText.cs" />
+    <Compile Include="Models\JsonResponseModel.cs" />
+    <Compile Include="Models\Limit\ZtreeModel.cs" />
+    <Compile Include="Models\ValueTextModel.cs" />
+    <Compile Include="Models\Login\MenuViewModel.cs" />
+    <Compile Include="Models\Merchant\ListUserViewModel.cs" />
+    <Compile Include="Models\Merchant\ListViewModel.cs" />
+    <Compile Include="Models\Pagination.cs" />
+    <Compile Include="Models\PaymentTypeConfig.cs" />
+    <Compile Include="Models\Temp.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ueditor\net\App_Code\Config.cs" />
+    <Compile Include="ueditor\net\App_Code\ConfigHandler.cs" />
+    <Compile Include="ueditor\net\App_Code\CrawlerHandler.cs" />
+    <Compile Include="ueditor\net\App_Code\Handler.cs" />
+    <Compile Include="ueditor\net\App_Code\ListFileHandler.cs" />
+    <Compile Include="ueditor\net\App_Code\NotSupportedHandler.cs" />
+    <Compile Include="ueditor\net\App_Code\PathFormater.cs" />
+    <Compile Include="ueditor\net\App_Code\UploadHandler.cs" />
+    <Compile Include="Util\CacheManager\RoleCacheManager.cs" />
+    <Compile Include="Util\CacheManager\PermissionCacheManager.cs" />
+    <Compile Include="Util\DeviceDetector.cs" />
+    <Compile Include="Util\DropdownDataSource\SpecialApprovalDataSource.cs" />
+    <Compile Include="Util\Logger\DeveloperGlobalErrorLogger.cs" />
+    <Compile Include="Util\Logger\ILogWriter.cs" />
+    <Compile Include="Util\Logger\GlobalErrorLogger.cs" />
+    <Compile Include="Util\Logger\LogWriterManager.cs" />
+    <Compile Include="Util\Logger\LogWriter.cs" />
+    <Compile Include="Util\Logger\ILog.cs" />
+    <Compile Include="Util\Logger\LogManager.cs" />
+    <Compile Include="Util\Logger\VisitLogger.cs" />
+    <Compile Include="Util\Logger\OperateLogger.cs" />
+    <Compile Include="Util\MenuHelper.cs" />
+    <Compile Include="Util\MenuLoader.cs" />
+    <Compile Include="Util\PaymentTypeConfigExtension.cs" />
+    <Compile Include="Util\RateLogger\IRateLog.cs" />
+    <Compile Include="Util\RateLogger\IRateLogWriter.cs" />
+    <Compile Include="Util\RateLogger\RateLogManager.cs" />
+    <Compile Include="Util\RateLogger\RateLogWriter.cs" />
+    <Compile Include="Util\RateLogger\RateLogWriterManager.cs" />
+    <Compile Include="Util\RateLogger\RateOperateLogger.cs" />
+    <Compile Include="Util\SystemConfigReader.cs" />
+    <Compile Include="ViewModel\Developer\SpecialApprovalViewModel.cs" />
+    <Compile Include="ViewModel\Monitoringconfig\jmpchannelfilterconfigView.cs" />
+    <Compile Include="ViewModel\Monitoringconfig\MonitoringconfigViewModel.cs" />
+    <Compile Include="ViewModel\Scheduler\CreateScheduleViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="403.html" />
+    <Content Include="assets\bootstrap.3.3.7\css\bootstrap-theme.css" />
+    <Content Include="assets\bootstrap.3.3.7\css\bootstrap-theme.min.css" />
+    <Content Include="assets\bootstrap.3.3.7\css\bootstrap.css" />
+    <Content Include="assets\bootstrap.3.3.7\css\bootstrap.min.css" />
+    <Content Include="assets\bootstrap.3.3.7\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="assets\bootstrap.3.3.7\js\bootstrap.js" />
+    <Content Include="assets\bootstrap.3.3.7\js\bootstrap.min.js" />
+    <Content Include="assets\bootstrap.3.3.7\js\npm.js" />
+    <Content Include="assets\jPushMenu\jPushMenu.js" />
+    <Content Include="assets\jPushMenu\jPushMenu.css" />
+    <Content Include="assets\jquery-confirm\jquery-confirm.js" />
+    <Content Include="assets\layer3.0.3\layer.js" />
+    <Content Include="assets\layer3.0.3\mobile\layer.js" />
+    <Content Include="assets\layer3.0.3\mobile\need\layer.css" />
+    <Content Include="assets\layer3.0.3\skin\default\icon-ext.png" />
+    <Content Include="assets\layer3.0.3\skin\default\icon.png" />
+    <Content Include="assets\layer3.0.3\skin\default\layer.css" />
+    <Content Include="assets\layer3.0.3\skin\default\loading-0.gif" />
+    <Content Include="assets\layer3.0.3\skin\default\loading-1.gif" />
+    <Content Include="assets\layer3.0.3\skin\default\loading-2.gif" />
+    <Content Include="assets\layer_mobile\layer.js" />
+    <Content Include="assets\layer_mobile\need\layer.css" />
+    <Content Include="assets\semantic-ui-icon\assets\fonts\icons.svg" />
+    <Content Include="assets\semantic-ui-icon\icon.min.css" />
+    <Content Include="assets\semantic-ui\components\accordion.css" />
+    <Content Include="assets\semantic-ui\components\accordion.js" />
+    <Content Include="assets\semantic-ui\components\accordion.min.css" />
+    <Content Include="assets\semantic-ui\components\accordion.min.js" />
+    <Content Include="assets\semantic-ui\components\ad.css" />
+    <Content Include="assets\semantic-ui\components\ad.min.css" />
+    <Content Include="assets\semantic-ui\components\api.js" />
+    <Content Include="assets\semantic-ui\components\api.min.js" />
+    <Content Include="assets\semantic-ui\components\breadcrumb.css" />
+    <Content Include="assets\semantic-ui\components\breadcrumb.min.css" />
+    <Content Include="assets\semantic-ui\components\button.css" />
+    <Content Include="assets\semantic-ui\components\button.min.css" />
+    <Content Include="assets\semantic-ui\components\card.css" />
+    <Content Include="assets\semantic-ui\components\card.min.css" />
+    <Content Include="assets\semantic-ui\components\checkbox.css" />
+    <Content Include="assets\semantic-ui\components\checkbox.js" />
+    <Content Include="assets\semantic-ui\components\checkbox.min.css" />
+    <Content Include="assets\semantic-ui\components\checkbox.min.js" />
+    <Content Include="assets\semantic-ui\components\colorize.js" />
+    <Content Include="assets\semantic-ui\components\colorize.min.js" />
+    <Content Include="assets\semantic-ui\components\comment.css" />
+    <Content Include="assets\semantic-ui\components\comment.min.css" />
+    <Content Include="assets\semantic-ui\components\container.css" />
+    <Content Include="assets\semantic-ui\components\container.min.css" />
+    <Content Include="assets\semantic-ui\components\dimmer.css" />
+    <Content Include="assets\semantic-ui\components\dimmer.js" />
+    <Content Include="assets\semantic-ui\components\dimmer.min.css" />
+    <Content Include="assets\semantic-ui\components\dimmer.min.js" />
+    <Content Include="assets\semantic-ui\components\divider.css" />
+    <Content Include="assets\semantic-ui\components\divider.min.css" />
+    <Content Include="assets\semantic-ui\components\dropdown.css" />
+    <Content Include="assets\semantic-ui\components\dropdown.js" />
+    <Content Include="assets\semantic-ui\components\dropdown.min.css" />
+    <Content Include="assets\semantic-ui\components\dropdown.min.js" />
+    <Content Include="assets\semantic-ui\components\embed.css" />
+    <Content Include="assets\semantic-ui\components\embed.js" />
+    <Content Include="assets\semantic-ui\components\embed.min.css" />
+    <Content Include="assets\semantic-ui\components\embed.min.js" />
+    <Content Include="assets\semantic-ui\components\feed.css" />
+    <Content Include="assets\semantic-ui\components\feed.min.css" />
+    <Content Include="assets\semantic-ui\components\flag.css" />
+    <Content Include="assets\semantic-ui\components\flag.min.css" />
+    <Content Include="assets\semantic-ui\components\form.css" />
+    <Content Include="assets\semantic-ui\components\form.js" />
+    <Content Include="assets\semantic-ui\components\form.min.css" />
+    <Content Include="assets\semantic-ui\components\form.min.js" />
+    <Content Include="assets\semantic-ui\components\grid.css" />
+    <Content Include="assets\semantic-ui\components\grid.min.css" />
+    <Content Include="assets\semantic-ui\components\header.css" />
+    <Content Include="assets\semantic-ui\components\header.min.css" />
+    <Content Include="assets\semantic-ui\components\icon.css" />
+    <Content Include="assets\semantic-ui\components\icon.min.css" />
+    <Content Include="assets\semantic-ui\components\image.css" />
+    <Content Include="assets\semantic-ui\components\image.min.css" />
+    <Content Include="assets\semantic-ui\components\input.css" />
+    <Content Include="assets\semantic-ui\components\input.min.css" />
+    <Content Include="assets\semantic-ui\components\item.css" />
+    <Content Include="assets\semantic-ui\components\item.min.css" />
+    <Content Include="assets\semantic-ui\components\label.css" />
+    <Content Include="assets\semantic-ui\components\label.min.css" />
+    <Content Include="assets\semantic-ui\components\list.css" />
+    <Content Include="assets\semantic-ui\components\list.min.css" />
+    <Content Include="assets\semantic-ui\components\loader.css" />
+    <Content Include="assets\semantic-ui\components\loader.min.css" />
+    <Content Include="assets\semantic-ui\components\menu.css" />
+    <Content Include="assets\semantic-ui\components\menu.min.css" />
+    <Content Include="assets\semantic-ui\components\message.css" />
+    <Content Include="assets\semantic-ui\components\message.min.css" />
+    <Content Include="assets\semantic-ui\components\modal.css" />
+    <Content Include="assets\semantic-ui\components\modal.js" />
+    <Content Include="assets\semantic-ui\components\modal.min.css" />
+    <Content Include="assets\semantic-ui\components\modal.min.js" />
+    <Content Include="assets\semantic-ui\components\nag.css" />
+    <Content Include="assets\semantic-ui\components\nag.js" />
+    <Content Include="assets\semantic-ui\components\nag.min.css" />
+    <Content Include="assets\semantic-ui\components\nag.min.js" />
+    <Content Include="assets\semantic-ui\components\popup.css" />
+    <Content Include="assets\semantic-ui\components\popup.js" />
+    <Content Include="assets\semantic-ui\components\popup.min.css" />
+    <Content Include="assets\semantic-ui\components\popup.min.js" />
+    <Content Include="assets\semantic-ui\components\progress.css" />
+    <Content Include="assets\semantic-ui\components\progress.js" />
+    <Content Include="assets\semantic-ui\components\progress.min.css" />
+    <Content Include="assets\semantic-ui\components\progress.min.js" />
+    <Content Include="assets\semantic-ui\components\rail.css" />
+    <Content Include="assets\semantic-ui\components\rail.min.css" />
+    <Content Include="assets\semantic-ui\components\rating.css" />
+    <Content Include="assets\semantic-ui\components\rating.js" />
+    <Content Include="assets\semantic-ui\components\rating.min.css" />
+    <Content Include="assets\semantic-ui\components\rating.min.js" />
+    <Content Include="assets\semantic-ui\components\reset.css" />
+    <Content Include="assets\semantic-ui\components\reset.min.css" />
+    <Content Include="assets\semantic-ui\components\reveal.css" />
+    <Content Include="assets\semantic-ui\components\reveal.min.css" />
+    <Content Include="assets\semantic-ui\components\search.css" />
+    <Content Include="assets\semantic-ui\components\search.js" />
+    <Content Include="assets\semantic-ui\components\search.min.css" />
+    <Content Include="assets\semantic-ui\components\search.min.js" />
+    <Content Include="assets\semantic-ui\components\segment.css" />
+    <Content Include="assets\semantic-ui\components\segment.min.css" />
+    <Content Include="assets\semantic-ui\components\shape.css" />
+    <Content Include="assets\semantic-ui\components\shape.js" />
+    <Content Include="assets\semantic-ui\components\shape.min.css" />
+    <Content Include="assets\semantic-ui\components\shape.min.js" />
+    <Content Include="assets\semantic-ui\components\sidebar.css" />
+    <Content Include="assets\semantic-ui\components\sidebar.js" />
+    <Content Include="assets\semantic-ui\components\sidebar.min.css" />
+    <Content Include="assets\semantic-ui\components\sidebar.min.js" />
+    <Content Include="assets\semantic-ui\components\site.css" />
+    <Content Include="assets\semantic-ui\components\site.js" />
+    <Content Include="assets\semantic-ui\components\site.min.css" />
+    <Content Include="assets\semantic-ui\components\site.min.js" />
+    <Content Include="assets\semantic-ui\components\state.js" />
+    <Content Include="assets\semantic-ui\components\state.min.js" />
+    <Content Include="assets\semantic-ui\components\statistic.css" />
+    <Content Include="assets\semantic-ui\components\statistic.min.css" />
+    <Content Include="assets\semantic-ui\components\step.css" />
+    <Content Include="assets\semantic-ui\components\step.min.css" />
+    <Content Include="assets\semantic-ui\components\sticky.css" />
+    <Content Include="assets\semantic-ui\components\sticky.js" />
+    <Content Include="assets\semantic-ui\components\sticky.min.css" />
+    <Content Include="assets\semantic-ui\components\sticky.min.js" />
+    <Content Include="assets\semantic-ui\components\tab.css" />
+    <Content Include="assets\semantic-ui\components\tab.js" />
+    <Content Include="assets\semantic-ui\components\tab.min.css" />
+    <Content Include="assets\semantic-ui\components\tab.min.js" />
+    <Content Include="assets\semantic-ui\components\table.css" />
+    <Content Include="assets\semantic-ui\components\table.min.css" />
+    <Content Include="assets\semantic-ui\components\transition.css" />
+    <Content Include="assets\semantic-ui\components\transition.js" />
+    <Content Include="assets\semantic-ui\components\transition.min.css" />
+    <Content Include="assets\semantic-ui\components\transition.min.js" />
+    <Content Include="assets\semantic-ui\components\video.css" />
+    <Content Include="assets\semantic-ui\components\video.js" />
+    <Content Include="assets\semantic-ui\components\video.min.css" />
+    <Content Include="assets\semantic-ui\components\video.min.js" />
+    <Content Include="assets\semantic-ui\components\visibility.js" />
+    <Content Include="assets\semantic-ui\components\visibility.min.js" />
+    <Content Include="assets\semantic-ui\components\visit.js" />
+    <Content Include="assets\semantic-ui\components\visit.min.js" />
+    <Content Include="assets\semantic-ui\semantic.css" />
+    <Content Include="assets\semantic-ui\semantic.js" />
+    <Content Include="assets\semantic-ui\semantic.min.css" />
+    <Content Include="assets\semantic-ui\semantic.min.js" />
+    <Content Include="assets\semantic-ui\themes\basic\assets\fonts\icons.svg" />
+    <Content Include="assets\semantic-ui\themes\default\assets\fonts\icons.svg" />
+    <Content Include="assets\semantic-ui\themes\default\assets\images\flags.png" />
+    <Content Include="assets\semantic-ui\themes\github\assets\fonts\octicons.svg" />
+    <Content Include="assets\semantic-ui\themes\material\assets\fonts\icons.svg" />
+    <Content Include="assets\semantic-ui\theme\amazon.css" />
+    <Content Include="assets\semantic-ui\theme\github.css" />
+    <Content Include="assets\semantic-ui\theme\material.css" />
+    <Content Include="assets\semantic-ui\theme\twitter.css" />
+    <Content Include="css\base.css" />
+    <Content Include="css\error.css" />
+    <Content Include="css\login.css" />
+    <Content Include="css\default.css" />
+    <Content Include="css\main.css" />
+    <Content Include="css\mobile\main.css" />
+    <Content Include="css\plugin\font-awesome\css\font-awesome-ie7.min.css" />
+    <Content Include="css\plugin\font-awesome\css\font-awesome.css" />
+    <Content Include="css\plugin\font-awesome\css\font-awesome.min.css" />
+    <Content Include="css\plugin\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="css\plugin\slimscroll\jquery.slimscroll.min.js" />
+    <Content Include="css\theme.css" />
+    <Content Include="css\zTreeStyle\img\diy\1_close.png" />
+    <Content Include="css\zTreeStyle\img\diy\1_open.png" />
+    <Content Include="css\zTreeStyle\img\diy\2.png" />
+    <Content Include="css\zTreeStyle\img\diy\3.png" />
+    <Content Include="css\zTreeStyle\img\diy\4.png" />
+    <Content Include="css\zTreeStyle\img\diy\5.png" />
+    <Content Include="css\zTreeStyle\img\diy\6.png" />
+    <Content Include="css\zTreeStyle\img\diy\7.png" />
+    <Content Include="css\zTreeStyle\img\diy\8.png" />
+    <Content Include="css\zTreeStyle\img\diy\9.png" />
+    <Content Include="css\zTreeStyle\img\line_conn.gif" />
+    <Content Include="css\zTreeStyle\img\loading.gif" />
+    <Content Include="css\zTreeStyle\img\zTreeStandard.gif" />
+    <Content Include="css\zTreeStyle\img\zTreeStandard.png" />
+    <Content Include="css\zTreeStyle\zTreeStyle.css" />
+    <Content Include="Document\20170523\支付项目流程图.jpg" />
+    <Content Include="Document\20170523\数据库表结构_dx_base.html" />
+    <Content Include="Global.asax" />
+    <Content Include="images\background.png" />
+    <Content Include="images\bg.png" />
+    <Content Include="images\bgBntImg_.png" />
+    <Content Include="images\btn-blue.png" />
+    <Content Include="images\btn-white.jpg" />
+    <Content Include="images\btn-yellow.png" />
+    <Content Include="images\btn.png" />
+    <Content Include="images\btnLogin.png" />
+    <Content Include="images\close.gif" />
+    <Content Include="images\form.png" />
+    <Content Include="images\head_background.png" />
+    <Content Include="images\head_logo.png" />
+    <Content Include="images\icon-01.png" />
+    <Content Include="images\icon-02.png" />
+    <Content Include="images\icon-03.png" />
+    <Content Include="images\icon-04.png" />
+    <Content Include="images\icon-05.png" />
+    <Content Include="images\icon-06.png" />
+    <Content Include="images\icon-07.png" />
+    <Content Include="images\icon-08.png" />
+    <Content Include="images\icon-09.png" />
+    <Content Include="images\icon-1.png" />
+    <Content Include="images\icon-10.png" />
+    <Content Include="images\icon-11.png" />
+    <Content Include="images\icon-2.png" />
+    <Content Include="images\icon-3.png" />
+    <Content Include="images\icon-4.png" />
+    <Content Include="images\icon-5.png" />
+    <Content Include="images\icon-6.png" />
+    <Content Include="images\icon-7.png" />
+    <Content Include="images\icon-8.png" />
+    <Content Include="images\icon-9.png" />
+    <Content Include="images\icon-adress.jpg" />
+    <Content Include="images\icon-android.jpg" />
+    <Content Include="images\icon-code.jpg" />
+    <Content Include="images\icon-pass.png" />
+    <Content Include="images\icon-user-big.png" />
+    <Content Include="images\icon-user.png" />
+    <Content Include="images\icon-xls.png" />
+    <Content Include="images\icon_left.jpg" />
+    <Content Include="images\icon_onload.gif" />
+    <Content Include="images\icon_right.jpg" />
+    <Content Include="images\logo.png" />
+    <Content Include="images\logo1.png" />
+    <Content Include="images\nav-bg.png" />
+    <Content Include="images\new.gif" />
+    <Content Include="images\open.gif" />
+    <Content Include="images\skin_icons.png" />
+    <Content Include="images\status-1.png" />
+    <Content Include="images\status-2.png" />
+    <Content Include="images\status-3.png" />
+    <Content Include="images\t-m.jpg" />
+    <Content Include="images\tab-child-selected.png" />
+    <Content Include="images\tab-child.png" />
+    <Content Include="images\valid_icons.png" />
+    <Content Include="js\Agent\Agent.js" />
+    <Content Include="js\Agent\AgentList.js" />
+    <Content Include="js\Agent\CoServiceList.js" />
+    <Content Include="js\Agent\userList.js" />
+    <Content Include="js\AppUser\AppUserAddBpTc.js" />
+    <Content Include="js\APP\APP.js" />
+    <Content Include="js\APP\AppType.js" />
+    <Content Include="js\AppUser\AppUserAddTc.js" />
+    <Content Include="js\APP\goods.js" />
+    <Content Include="js\Authentication.js" />
+    <Content Include="js\base64.js" />
+    <Content Include="js\AppUser\appuser.js" />
+    <Content Include="js\BusinessPersonnel\BusinessPersonnel.js" />
+    <Content Include="js\com.js" />
+    <Content Include="js\CustomService\ComplainOrderList.js" />
+    <Content Include="js\CustomService\ComplainType.js" />
+    <Content Include="js\CustomService\ComplainTypeAdd.js" />
+    <Content Include="js\CustomService\ComplainTypeTc.js" />
+    <Content Include="js\CustomService\OrderList.js" />
+    <Content Include="js\Financial\RefundList.js" />
+    <Content Include="js\Financial\ManualList.js" />
+    <Content Include="js\Financial\PayMentList.js" />
+    <Content Include="js\form-validation-common.js" />
+    <Content Include="js\Help\help.js" />
+    <Content Include="js\index.js" />
+    <Content Include="js\jquery-1.12.4.min.js" />
+    <Content Include="js\jquery-3.1.1.min.js" />
+    <Content Include="js\jquery-validation\dist\additional-methods.js" />
+    <Content Include="js\jquery-validation\dist\jquery.validate.js" />
+    <Content Include="js\jquery-validation\dist\jquery.validate.min.js" />
+    <Content Include="js\jquery-validation\dist\localization\messages_zh.js" />
+    <Content Include="js\jquery.ajaxupload.mobile.js" />
+    <Content Include="js\jquery.ztree.core.js" />
+    <Content Include="js\jquery.ztree.excheck.js" />
+    <Content Include="js\jquery.ztree.excheck.min.js" />
+    <Content Include="js\layer3.0.3\layer.js" />
+    <Content Include="js\layer3.0.3\mobile\layer.js" />
+    <Content Include="js\layer3.0.3\mobile\need\layer.css" />
+    <Content Include="js\layer3.0.3\skin\default\icon-ext.png" />
+    <Content Include="js\layer3.0.3\skin\default\icon.png" />
+    <Content Include="js\layer3.0.3\skin\default\layer.css" />
+    <Content Include="js\layer3.0.3\skin\default\loading-0.gif" />
+    <Content Include="js\layer3.0.3\skin\default\loading-1.gif" />
+    <Content Include="js\layer3.0.3\skin\default\loading-2.gif" />
+    <Content Include="js\local\AgentLimit.js" />
+    <Content Include="js\local\BusinessLimit.js" />
+    <Content Include="js\local\UserLimit.js" />
+    <Content Include="js\local\Ztree.js" />
+    <Content Include="js\merchant\selectMain.js" />
+    <Content Include="js\merchant\main.js" />
+    <Content Include="js\MessageManagement\message.js" />
+    <Content Include="js\MessageManagement\notice.js" />
+    <Content Include="js\mobile\Agent\AgentList.mobile.js" />
+    <Content Include="js\mobile\AppUser\appuser.mobile.js" />
+    <Content Include="js\mobile\AppUser\AppUserAddBpTc.mobile.js" />
+    <Content Include="js\mobile\AppUser\AppUserAddTc.mobile.js" />
+    <Content Include="js\mobile\BusinessPersonnel\BusinessPersonnel.mobile.js" />
+    <Content Include="js\mobile\Financial\ManualList.js" />
+    <Content Include="js\mobile\Financial\PayMentList.js" />
+    <Content Include="js\mobile\Financial\RefundList.js" />
+    <Content Include="js\mobile\APP\APP.mobile.js" />
+    <Content Include="js\mobile\APP\AppType.mobile.js" />
+    <Content Include="js\mobile\APP\goods.mobile.js" />
+    <Content Include="js\mobile\global.js" />
+    <Content Include="js\mobile\local\locals.mobile.js" />
+    <Content Include="js\mobile\local\UserLimit.js" />
+    <Content Include="js\mobile\MessageManagement\message.js" />
+    <Content Include="js\mobile\MessageManagement\notice.mobile.js" />
+    <Content Include="js\mobile\MonitorChannel\index.js" />
+    <Content Include="js\mobile\payment\Interface.mobile.js" />
+    <Content Include="js\mobile\payment\paymenttype.mobile.js" />
+    <Content Include="js\mobile\payment\typeconfig.mobile.js" />
+    <Content Include="js\mobile\PubMethod.mobile.js" />
+    <Content Include="js\mobile\REPORT\Appmonitor.js" />
+    <Content Include="js\mobile\REPORT\AppRequestAuditList.js" />
+    <Content Include="js\mobile\REPORT\Complaint.js" />
+    <Content Include="js\mobile\REPORT\Notify.js" />
+    <Content Include="js\mobile\REPORT\Order.js" />
+    <Content Include="js\mobile\REPORT\OrderAuditList.js" />
+    <Content Include="js\mobile\REPORT\report.js" />
+    <Content Include="js\mobile\REPORT\terminal.js" />
+    <Content Include="js\mobile\REPORT\Appmonitor.js" />
+    <Content Include="js\mobile\REPORT\AppRequestAuditList.js" />
+    <Content Include="js\mobile\REPORT\Complaint.js" />
+    <Content Include="js\mobile\REPORT\Notify.mobile.js" />
+    <Content Include="js\mobile\REPORT\Order.js" />
+    <Content Include="js\mobile\REPORT\OrderAuditList.js" />
+    <Content Include="js\mobile\REPORT\report.js" />
+    <Content Include="js\mobile\REPORT\terminal.js" />
+    <Content Include="js\mobile\System\CoServiceFeeRatioGrade.mobile.js" />
+    <Content Include="js\mobile\System\dictionary.mobile.js" />
+    <Content Include="js\mobile\System\dispatchorder.mobile.js" />
+    <Content Include="js\mobile\System\Paymode.mobile.js" />
+    <Content Include="js\mobile\System\Settlement.js" />
+    <Content Include="js\mobile\Workorder\Workorder.mobile.js" />
+    <Content Include="js\MonitorChannel\index.js" />
+    <Content Include="js\my97datepicker\skin\twoer\datepicker-dev.css" />
+    <Content Include="js\my97datepicker\skin\twoer\datepicker.css" />
+    <Content Include="js\my97datepicker\skin\twoer\img.gif" />
+    <Content Include="js\my97datepicker\skin\twoer\img.png" />
+    <Content Include="js\NewsRelease\Complaint.js" />
+    <Content Include="js\NewsRelease\NewsRelease.js" />
+    <Content Include="js\payment\Interface.js" />
+    <Content Include="js\payment\paymenttype.js" />
+    <Content Include="js\payment\risklevel.js" />
+    <Content Include="js\payment\typeconfig.js" />
+    <Content Include="js\REPORT\Notify.js" />
+    <Content Include="js\REPORT\AppRequestAuditList.js" />
+    <Content Include="js\REPORT\Appmonitor.js" />
+    <Content Include="js\REPORT\OrderAuditList.js" />
+    <Content Include="js\REPORT\Complaint.js" />
+    <Content Include="js\Risk\Monitoringconfig.js" />
+    <Content Include="js\Risk\pool.js" />
+    <Content Include="js\System\CoServiceFeeRatioGrade.js" />
+    <Content Include="js\System\dictionary.js" />
+    <Content Include="js\System\dispatchorder.js" />
+    <Content Include="js\System\Paymode.js" />
+    <Content Include="js\fusionchart\fusioncharts.charts.js" />
+    <Content Include="js\fusionchart\fusioncharts.gantt.js" />
+    <Content Include="js\fusionchart\fusioncharts.js" />
+    <Content Include="js\fusionchart\fusioncharts.maps.js" />
+    <Content Include="js\fusionchart\fusioncharts.powercharts.js" />
+    <Content Include="js\fusionchart\fusioncharts.theme.zune.js" />
+    <Content Include="js\fusionchart\fusioncharts.widgets.js" />
+    <Content Include="js\fusionchart\maps\fusioncharts.usa.js" />
+    <Content Include="js\fusionchart\maps\fusioncharts.world.js" />
+    <Content Include="js\fusionchart\maps\readme.txt" />
+    <Content Include="js\fusionchart\themes\fusioncharts.theme.carbon.js" />
+    <Content Include="js\fusionchart\themes\fusioncharts.theme.fint.js" />
+    <Content Include="js\fusionchart\themes\fusioncharts.theme.ocean.js" />
+    <Content Include="js\fusionchart\themes\fusioncharts.theme.zune.js" />
+    <Content Include="js\jquery-1.7.2.min.js" />
+    <Content Include="js\jquery.ajaxupload.js" />
+    <Content Include="js\JValidator.js" />
+    <Content Include="js\layer\extend\layer.ext.js" />
+    <Content Include="js\layer\layer.js" />
+    <Content Include="js\layer\skin\default\icon-ext.png" />
+    <Content Include="js\layer\skin\default\icon.png" />
+    <Content Include="js\layer\skin\default\loading-2.gif" />
+    <Content Include="js\layer\skin\default\loading-1.gif" />
+    <Content Include="js\layer\skin\default\loading-0.gif" />
+    <Content Include="js\layer\skin\layer.css" />
+    <Content Include="js\layer\skin\layer.ext.css" />
+    <Content Include="js\layout.js" />
+    <Content Include="js\local\locals.js" />
+    <Content Include="js\my97datepicker\calendar.js" />
+    <Content Include="js\my97datepicker\config.js" />
+    <Content Include="js\my97datepicker\lang\en.js" />
+    <Content Include="js\my97datepicker\lang\zh-cn.js" />
+    <Content Include="js\my97datepicker\lang\zh-tw.js" />
+    <Content Include="js\my97datepicker\My97DatePicker.htm" />
+    <Content Include="js\my97datepicker\skin\datePicker.gif" />
+    <Content Include="js\my97datepicker\skin\default\datepicker.css" />
+    <Content Include="js\my97datepicker\skin\default\img.gif" />
+    <Content Include="js\my97datepicker\skin\WdatePicker.css" />
+    <Content Include="js\my97datepicker\skin\whyGreen\bg.jpg" />
+    <Content Include="js\my97datepicker\skin\whyGreen\datepicker.css" />
+    <Content Include="js\my97datepicker\skin\whyGreen\img.gif" />
+    <Content Include="js\my97datepicker\WdatePicker.js" />
+    <Content Include="js\PubMethod.js" />
+    <Content Include="js\REPORT\Order.js" />
+    <Content Include="js\REPORT\report.js" />
+    <Content Include="js\REPORT\terminal.js" />
+    <Content Include="js\System\Settlement.js" />
+    <Content Include="assets\semantic-ui\themes\basic\assets\fonts\icons.eot" />
+    <Content Include="assets\semantic-ui\themes\basic\assets\fonts\icons.ttf" />
+    <Content Include="assets\semantic-ui\themes\basic\assets\fonts\icons.woff" />
+    <Content Include="assets\semantic-ui\themes\default\assets\fonts\icons.eot" />
+    <Content Include="assets\semantic-ui\themes\default\assets\fonts\icons.otf" />
+    <Content Include="assets\semantic-ui\themes\default\assets\fonts\icons.ttf" />
+    <Content Include="assets\semantic-ui\themes\default\assets\fonts\icons.woff" />
+    <Content Include="assets\semantic-ui\themes\default\assets\fonts\icons.woff2" />
+    <Content Include="assets\semantic-ui\themes\github\assets\fonts\octicons-local.ttf" />
+    <Content Include="assets\semantic-ui\themes\github\assets\fonts\octicons.ttf" />
+    <Content Include="assets\semantic-ui\themes\github\assets\fonts\octicons.woff" />
+    <Content Include="assets\semantic-ui\themes\material\assets\fonts\icons.eot" />
+    <Content Include="assets\semantic-ui\themes\material\assets\fonts\icons.ttf" />
+    <Content Include="assets\semantic-ui\themes\material\assets\fonts\icons.woff" />
+    <Content Include="assets\semantic-ui-icon\assets\fonts\icons.eot" />
+    <Content Include="assets\semantic-ui-icon\assets\fonts\icons.ttf" />
+    <Content Include="assets\semantic-ui-icon\assets\fonts\icons.woff" />
+    <Content Include="assets\semantic-ui-icon\assets\fonts\icons.woff2" />
+    <Content Include="js\mobile\Workorder\scheduling.mobile.js" />
+    <Content Include="assets\bootstrap.3.3.7\css\bootstrap-theme.css.map" />
+    <Content Include="assets\bootstrap.3.3.7\css\bootstrap-theme.min.css.map" />
+    <Content Include="assets\bootstrap.3.3.7\css\bootstrap.css.map" />
+    <Content Include="assets\bootstrap.3.3.7\css\bootstrap.min.css.map" />
+    <Content Include="assets\bootstrap.3.3.7\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="assets\bootstrap.3.3.7\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="assets\bootstrap.3.3.7\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="assets\bootstrap.3.3.7\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="js\jquery-validation\changelog.md" />
+    <Content Include="js\jquery-validation\LICENSE.md" />
+    <Content Include="js\jquery-validation\package.json" />
+    <Content Include="js\jquery-validation\README.md" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Scripts\jquery-1.12.4.intellisense.js" />
+    <Content Include="js\Workorder\Respond.js" />
+    <Content Include="js\Workorder\scheduling.js" />
+    <Content Include="js\Workorder\Workorder.js" />
+    <Content Include="loading.html" />
+    <Content Include="Scripts\jquery-1.12.4.js" />
+    <Content Include="Scripts\jquery-1.12.4.min.js" />
+    <Content Include="ueditor\dialogs\anchor\anchor.html" />
+    <Content Include="ueditor\dialogs\attachment\attachment.css" />
+    <Content Include="ueditor\dialogs\attachment\attachment.html" />
+    <Content Include="ueditor\dialogs\attachment\attachment.js" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_chm.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_default.png" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_doc.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_exe.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_jpg.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_mp3.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_mv.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_pdf.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_ppt.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_psd.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_rar.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_txt.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_xls.gif" />
+    <Content Include="ueditor\dialogs\attachment\images\alignicon.gif" />
+    <Content Include="ueditor\dialogs\attachment\images\alignicon.png" />
+    <Content Include="ueditor\dialogs\attachment\images\bg.png" />
+    <Content Include="ueditor\dialogs\attachment\images\file-icons.gif" />
+    <Content Include="ueditor\dialogs\attachment\images\file-icons.png" />
+    <Content Include="ueditor\dialogs\attachment\images\icons.gif" />
+    <Content Include="ueditor\dialogs\attachment\images\icons.png" />
+    <Content Include="ueditor\dialogs\attachment\images\image.png" />
+    <Content Include="ueditor\dialogs\attachment\images\progress.png" />
+    <Content Include="ueditor\dialogs\attachment\images\success.gif" />
+    <Content Include="ueditor\dialogs\attachment\images\success.png" />
+    <Content Include="ueditor\dialogs\background\background.css" />
+    <Content Include="ueditor\dialogs\background\background.html" />
+    <Content Include="ueditor\dialogs\background\background.js" />
+    <Content Include="ueditor\dialogs\background\images\bg.png" />
+    <Content Include="ueditor\dialogs\background\images\success.png" />
+    <Content Include="ueditor\dialogs\charts\chart.config.js" />
+    <Content Include="ueditor\dialogs\charts\charts.css" />
+    <Content Include="ueditor\dialogs\charts\charts.html" />
+    <Content Include="ueditor\dialogs\charts\charts.js" />
+    <Content Include="ueditor\dialogs\charts\images\charts0.png" />
+    <Content Include="ueditor\dialogs\charts\images\charts1.png" />
+    <Content Include="ueditor\dialogs\charts\images\charts2.png" />
+    <Content Include="ueditor\dialogs\charts\images\charts3.png" />
+    <Content Include="ueditor\dialogs\charts\images\charts4.png" />
+    <Content Include="ueditor\dialogs\charts\images\charts5.png" />
+    <Content Include="ueditor\dialogs\emotion\emotion.css" />
+    <Content Include="ueditor\dialogs\emotion\emotion.html" />
+    <Content Include="ueditor\dialogs\emotion\emotion.js" />
+    <Content Include="ueditor\dialogs\emotion\images\0.gif" />
+    <Content Include="ueditor\dialogs\emotion\images\bface.gif" />
+    <Content Include="ueditor\dialogs\emotion\images\cface.gif" />
+    <Content Include="ueditor\dialogs\emotion\images\fface.gif" />
+    <Content Include="ueditor\dialogs\emotion\images\jxface2.gif" />
+    <Content Include="ueditor\dialogs\emotion\images\neweditor-tab-bg.png" />
+    <Content Include="ueditor\dialogs\emotion\images\tface.gif" />
+    <Content Include="ueditor\dialogs\emotion\images\wface.gif" />
+    <Content Include="ueditor\dialogs\emotion\images\yface.gif" />
+    <Content Include="ueditor\dialogs\gmap\gmap.html" />
+    <Content Include="ueditor\dialogs\help\help.css" />
+    <Content Include="ueditor\dialogs\help\help.html" />
+    <Content Include="ueditor\dialogs\help\help.js" />
+    <Content Include="ueditor\dialogs\image\image.css" />
+    <Content Include="ueditor\dialogs\image\image.html" />
+    <Content Include="ueditor\dialogs\image\image.js" />
+    <Content Include="ueditor\dialogs\image\images\alignicon.jpg" />
+    <Content Include="ueditor\dialogs\image\images\bg.png" />
+    <Content Include="ueditor\dialogs\image\images\icons.gif" />
+    <Content Include="ueditor\dialogs\image\images\icons.png" />
+    <Content Include="ueditor\dialogs\image\images\image.png" />
+    <Content Include="ueditor\dialogs\image\images\progress.png" />
+    <Content Include="ueditor\dialogs\image\images\success.gif" />
+    <Content Include="ueditor\dialogs\image\images\success.png" />
+    <Content Include="ueditor\dialogs\insertframe\insertframe.html" />
+    <Content Include="ueditor\dialogs\internal.js" />
+    <Content Include="ueditor\dialogs\link\link.html" />
+    <Content Include="ueditor\dialogs\map\map.html" />
+    <Content Include="ueditor\dialogs\map\show.html" />
+    <Content Include="ueditor\dialogs\music\music.css" />
+    <Content Include="ueditor\dialogs\music\music.html" />
+    <Content Include="ueditor\dialogs\music\music.js" />
+    <Content Include="ueditor\dialogs\preview\preview.html" />
+    <Content Include="ueditor\dialogs\scrawl\images\addimg.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\brush.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\delimg.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\delimgH.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\empty.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\emptyH.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\eraser.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\redo.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\redoH.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\scale.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\scaleH.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\size.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\undo.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\undoH.png" />
+    <Content Include="ueditor\dialogs\scrawl\scrawl.css" />
+    <Content Include="ueditor\dialogs\scrawl\scrawl.html" />
+    <Content Include="ueditor\dialogs\scrawl\scrawl.js" />
+    <Content Include="ueditor\dialogs\searchreplace\searchreplace.html" />
+    <Content Include="ueditor\dialogs\searchreplace\searchreplace.js" />
+    <Content Include="ueditor\dialogs\snapscreen\snapscreen.html" />
+    <Content Include="ueditor\dialogs\spechars\spechars.html" />
+    <Content Include="ueditor\dialogs\spechars\spechars.js" />
+    <Content Include="ueditor\dialogs\table\dragicon.png" />
+    <Content Include="ueditor\dialogs\table\edittable.css" />
+    <Content Include="ueditor\dialogs\table\edittable.html" />
+    <Content Include="ueditor\dialogs\table\edittable.js" />
+    <Content Include="ueditor\dialogs\table\edittd.html" />
+    <Content Include="ueditor\dialogs\table\edittip.html" />
+    <Content Include="ueditor\dialogs\template\config.js" />
+    <Content Include="ueditor\dialogs\template\images\bg.gif" />
+    <Content Include="ueditor\dialogs\template\images\pre0.png" />
+    <Content Include="ueditor\dialogs\template\images\pre1.png" />
+    <Content Include="ueditor\dialogs\template\images\pre2.png" />
+    <Content Include="ueditor\dialogs\template\images\pre3.png" />
+    <Content Include="ueditor\dialogs\template\images\pre4.png" />
+    <Content Include="ueditor\dialogs\template\template.css" />
+    <Content Include="ueditor\dialogs\template\template.html" />
+    <Content Include="ueditor\dialogs\template\template.js" />
+    <Content Include="ueditor\dialogs\video\images\bg.png" />
+    <Content Include="ueditor\dialogs\video\images\center_focus.jpg" />
+    <Content Include="ueditor\dialogs\video\images\file-icons.gif" />
+    <Content Include="ueditor\dialogs\video\images\file-icons.png" />
+    <Content Include="ueditor\dialogs\video\images\icons.gif" />
+    <Content Include="ueditor\dialogs\video\images\icons.png" />
+    <Content Include="ueditor\dialogs\video\images\image.png" />
+    <Content Include="ueditor\dialogs\video\images\left_focus.jpg" />
+    <Content Include="ueditor\dialogs\video\images\none_focus.jpg" />
+    <Content Include="ueditor\dialogs\video\images\progress.png" />
+    <Content Include="ueditor\dialogs\video\images\right_focus.jpg" />
+    <Content Include="ueditor\dialogs\video\images\success.gif" />
+    <Content Include="ueditor\dialogs\video\images\success.png" />
+    <Content Include="ueditor\dialogs\video\video.css" />
+    <Content Include="ueditor\dialogs\video\video.html" />
+    <Content Include="ueditor\dialogs\video\video.js" />
+    <Content Include="ueditor\dialogs\webapp\webapp.html" />
+    <Content Include="ueditor\dialogs\wordimage\fClipboard_ueditor.swf" />
+    <Content Include="ueditor\dialogs\wordimage\imageUploader.swf" />
+    <Content Include="ueditor\dialogs\wordimage\tangram.js" />
+    <Content Include="ueditor\dialogs\wordimage\wordimage.html" />
+    <Content Include="ueditor\dialogs\wordimage\wordimage.js" />
+    <Content Include="ueditor\index.html" />
+    <Content Include="ueditor\lang\en\en.js" />
+    <Content Include="ueditor\lang\en\images\addimage.png" />
+    <Content Include="ueditor\lang\en\images\alldeletebtnhoverskin.png" />
+    <Content Include="ueditor\lang\en\images\alldeletebtnupskin.png" />
+    <Content Include="ueditor\lang\en\images\background.png" />
+    <Content Include="ueditor\lang\en\images\button.png" />
+    <Content Include="ueditor\lang\en\images\copy.png" />
+    <Content Include="ueditor\lang\en\images\deletedisable.png" />
+    <Content Include="ueditor\lang\en\images\deleteenable.png" />
+    <Content Include="ueditor\lang\en\images\listbackground.png" />
+    <Content Include="ueditor\lang\en\images\localimage.png" />
+    <Content Include="ueditor\lang\en\images\music.png" />
+    <Content Include="ueditor\lang\en\images\rotateleftdisable.png" />
+    <Content Include="ueditor\lang\en\images\rotateleftenable.png" />
+    <Content Include="ueditor\lang\en\images\rotaterightdisable.png" />
+    <Content Include="ueditor\lang\en\images\rotaterightenable.png" />
+    <Content Include="ueditor\lang\en\images\upload.png" />
+    <Content Include="ueditor\lang\zh-cn\images\copy.png" />
+    <Content Include="ueditor\lang\zh-cn\images\localimage.png" />
+    <Content Include="ueditor\lang\zh-cn\images\music.png" />
+    <Content Include="ueditor\lang\zh-cn\images\upload.png" />
+    <Content Include="ueditor\lang\zh-cn\zh-cn.js" />
+    <Content Include="ueditor\net\net.sln" />
+    <Content Include="ueditor\themes\default\css\ueditor.css" />
+    <Content Include="ueditor\themes\default\css\ueditor.min.css" />
+    <Content Include="ueditor\themes\default\dialogbase.css" />
+    <Content Include="ueditor\themes\default\images\anchor.gif" />
+    <Content Include="ueditor\themes\default\images\arrow.png" />
+    <Content Include="ueditor\themes\default\images\arrow_down.png" />
+    <Content Include="ueditor\themes\default\images\arrow_up.png" />
+    <Content Include="ueditor\themes\default\images\button-bg.gif" />
+    <Content Include="ueditor\themes\default\images\cancelbutton.gif" />
+    <Content Include="ueditor\themes\default\images\charts.png" />
+    <Content Include="ueditor\themes\default\images\cursor_h.gif" />
+    <Content Include="ueditor\themes\default\images\cursor_h.png" />
+    <Content Include="ueditor\themes\default\images\cursor_v.gif" />
+    <Content Include="ueditor\themes\default\images\cursor_v.png" />
+    <Content Include="ueditor\themes\default\images\dialog-title-bg.png" />
+    <Content Include="ueditor\themes\default\images\filescan.png" />
+    <Content Include="ueditor\themes\default\images\highlighted.gif" />
+    <Content Include="ueditor\themes\default\images\icons-all.gif" />
+    <Content Include="ueditor\themes\default\images\icons.gif" />
+    <Content Include="ueditor\themes\default\images\icons.png" />
+    <Content Include="ueditor\themes\default\images\loaderror.png" />
+    <Content Include="ueditor\themes\default\images\loading.gif" />
+    <Content Include="ueditor\themes\default\images\lock.gif" />
+    <Content Include="ueditor\themes\default\images\neweditor-tab-bg.png" />
+    <Content Include="ueditor\themes\default\images\pagebreak.gif" />
+    <Content Include="ueditor\themes\default\images\scale.png" />
+    <Content Include="ueditor\themes\default\images\sortable.png" />
+    <Content Include="ueditor\themes\default\images\spacer.gif" />
+    <Content Include="ueditor\themes\default\images\sparator_v.png" />
+    <Content Include="ueditor\themes\default\images\table-cell-align.png" />
+    <Content Include="ueditor\themes\default\images\tangram-colorpicker.png" />
+    <Content Include="ueditor\themes\default\images\toolbar_bg.png" />
+    <Content Include="ueditor\themes\default\images\unhighlighted.gif" />
+    <Content Include="ueditor\themes\default\images\upload.png" />
+    <Content Include="ueditor\themes\default\images\videologo.gif" />
+    <Content Include="ueditor\themes\default\images\word.gif" />
+    <Content Include="ueditor\themes\default\images\wordpaste.png" />
+    <Content Include="ueditor\themes\iframe.css" />
+    <Content Include="ueditor\third-party\codemirror\codemirror.css" />
+    <Content Include="ueditor\third-party\codemirror\codemirror.js" />
+    <Content Include="ueditor\third-party\highcharts\adapters\mootools-adapter.js" />
+    <Content Include="ueditor\third-party\highcharts\adapters\mootools-adapter.src.js" />
+    <Content Include="ueditor\third-party\highcharts\adapters\prototype-adapter.js" />
+    <Content Include="ueditor\third-party\highcharts\adapters\prototype-adapter.src.js" />
+    <Content Include="ueditor\third-party\highcharts\adapters\standalone-framework.js" />
+    <Content Include="ueditor\third-party\highcharts\adapters\standalone-framework.src.js" />
+    <Content Include="ueditor\third-party\highcharts\highcharts-more.js" />
+    <Content Include="ueditor\third-party\highcharts\highcharts-more.src.js" />
+    <Content Include="ueditor\third-party\highcharts\highcharts.js" />
+    <Content Include="ueditor\third-party\highcharts\highcharts.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\annotations.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\annotations.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\canvas-tools.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\canvas-tools.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\data.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\data.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\drilldown.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\drilldown.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\exporting.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\exporting.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\funnel.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\funnel.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\heatmap.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\heatmap.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\map.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\map.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\no-data-to-display.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\no-data-to-display.src.js" />
+    <Content Include="ueditor\third-party\highcharts\themes\dark-blue.js" />
+    <Content Include="ueditor\third-party\highcharts\themes\dark-green.js" />
+    <Content Include="ueditor\third-party\highcharts\themes\gray.js" />
+    <Content Include="ueditor\third-party\highcharts\themes\grid.js" />
+    <Content Include="ueditor\third-party\highcharts\themes\skies.js" />
+    <Content Include="ueditor\third-party\jquery-1.10.2.js" />
+    <Content Include="ueditor\third-party\jquery-1.10.2.min.js" />
+    <Content Include="ueditor\third-party\snapscreen\UEditorSnapscreen.exe" />
+    <Content Include="ueditor\third-party\SyntaxHighlighter\shCore.js" />
+    <Content Include="ueditor\third-party\SyntaxHighlighter\shCoreDefault.css" />
+    <Content Include="ueditor\third-party\video-js\font\vjs.svg" />
+    <Content Include="ueditor\third-party\video-js\video-js.css" />
+    <Content Include="ueditor\third-party\video-js\video-js.min.css" />
+    <Content Include="ueditor\third-party\video-js\video-js.swf" />
+    <Content Include="ueditor\third-party\video-js\video.dev.js" />
+    <Content Include="ueditor\third-party\video-js\video.js" />
+    <Content Include="ueditor\third-party\webuploader\Uploader.swf" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.css" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.custom.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.custom.min.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.flashonly.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.flashonly.min.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.html5only.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.html5only.min.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.min.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.withoutimage.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.withoutimage.min.js" />
+    <Content Include="ueditor\third-party\zeroclipboard\ZeroClipboard.js" />
+    <Content Include="ueditor\third-party\zeroclipboard\ZeroClipboard.min.js" />
+    <Content Include="ueditor\third-party\zeroclipboard\ZeroClipboard.swf" />
+    <Content Include="ueditor\ueditor.all.js" />
+    <Content Include="ueditor\ueditor.all.min.js" />
+    <Content Include="ueditor\ueditor.config.help.js" />
+    <Content Include="ueditor\ueditor.config.js" />
+    <Content Include="ueditor\ueditor.parse.js" />
+    <Content Include="ueditor\ueditor.parse.min.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Partial\_Menu_Mobile.cshtml" />
+    <Content Include="Views\REPORT\OrderList.mobile.cshtml" />
+    <Content Include="Views\APP\AppTypeList.mobile.cshtml" />
+    <Content Include="Views\MessageManagement\messagelist.mobile.cshtml" />
+    <Content Include="Views\MessageManagement\message.mobile.cshtml" />
+    <Content Include="Views\MessageManagement\UserList.mobile.cshtml" />
+    <Content Include="Views\UI\dialog.mobile.cshtml" />
+    <Content Include="Views\REPORT\UserReport.mobile.cshtml" />
+    <Content Include="Views\AppUser\AppUserLogNotice.mobile.cshtml" />
+    <Content Include="Views\AppUser\AppUserLog.mobile.cshtml" />
+    <Content Include="Views\AppUser\AppUserList.mobile.cshtml" />
+    <Content Include="Views\AppUser\AppUserEdit.mobile.cshtml" />
+    <Content Include="Views\AppUser\AppUserAdd.mobile.cshtml" />
+    <Content Include="Views\AppUser\UserSxF.mobile.cshtml" />
+    <Content Include="Views\REPORT\AppReportDay.mobile.cshtml" />
+    <Content Include="Views\REPORT\AppReport.mobile.cshtml" />
+    <Content Include="Views\REPORT\FlowReport.mobile.cshtml" />
+    <Content Include="Views\REPORT\paychannel.mobile.cshtml" />
+    <Content Include="Views\Financial\RefundList.mobile.cshtml" />
+    <Content Include="Views\Financial\RefundAdd.mobile.cshtml" />
+    <Content Include="Views\APP\AppListTC.mobile.cshtml" />
+    <Content Include="Views\Financial\UpdateRefund.mobile.cshtml" />
+    <Content Include="Views\Financial\AuditorRefund.mobile.cshtml" />
+    <Content Include="Views\REPORT\InterfaceListTC.mobile.cshtml" />
+    <Content Include="Views\REPORT\ComplaintList.mobile.cshtml" />
+    <Content Include="Views\REPORT\ComplaintAdd.mobile.cshtml" />
+    <Content Include="Views\REPORT\ComplaintCL.mobile.cshtml" />
+    <Content Include="Views\APP\AppTypeAdd.mobile.cshtml" />
+    <Content Include="Views\APP\GOODSList.mobile.cshtml" />
+    <Content Include="Views\APP\AppList.mobile.cshtml" />
+    <Content Include="Views\APP\APPAdd.mobile.cshtml" />
+    <Content Include="Views\APP\UpdateAPP.mobile.cshtml" />
+    <Content Include="Views\payment\PaymenttypeList.mobile.cshtml" />
+    <Content Include="Views\payment\PaymentUpdate.mobile.cshtml" />
+    <Content Include="Views\LOCUSER\UsersList.mobile.cshtml" />
+    <Content Include="Views\LOCUSER\AddUsers.mobile.cshtml" />
+    <Content Include="Views\LOCUSER\UpdateUsers.mobile.cshtml" />
+    <Content Include="Views\LOCLOG\LogList.mobile.cshtml" />
+    <Content Include="Views\MessageManagement\noticeList.mobile.cshtml" />
+    <Content Include="Views\MessageManagement\notice.mobile.cshtml" />
+    <Content Include="Views\REPORT\NotificaitonList.mobile.cshtml" />
+    <Content Include="Views\REPORT\NotificaitonEditMobile.mobile.cshtml" />
+    <Content Include="Views\System\dispatchorderLsit.mobile.cshtml" />
+    <Content Include="Views\System\Adddispatchorder.mobile.cshtml" />
+    <Content Include="Views\System\PaymodeList.mobile.cshtml" />
+    <Content Include="Views\REPORT\AppRequestAuditList.mobile.cshtml" />
+    <Content Include="Views\REPORT\AppRequestAuditCL.mobile.cshtml" />
+    <Content Include="Views\REPORT\AppmonitorList.mobile.cshtml" />
+    <Content Include="Views\REPORT\AppmonitorAdd.mobile.cshtml" />
+    <Content Include="Views\REPORT\AppmonitorEdit.mobile.cshtml" />
+    <Content Include="Views\payment\AppListTC.mobile.cshtml" />
+    <Content Include="Views\REPORT\OrderAuditList.mobile.cshtml" />
+    <Content Include="Views\REPORT\OrderAuditCL.mobile.cshtml" />
+    <Content Include="Views\ROTE\RoteList.mobile.cshtml" />
+    <Content Include="Views\ROTE\RoleUpdate.mobile.cshtml" />
+    <Content Include="Views\ROTE\AddRole.mobile.cshtml" />
+    <Content Include="Views\ROTE\UpdateRoleLimit.mobile.cshtml" />
+    <Content Include="Views\REPORT\Index.mobile.cshtml" />
+    <Content Include="Views\RevenueAnalysis\RevenueProfile.mobile.cshtml" />
+    <Content Include="Views\REPORT\Trends.mobile.cshtml" />
+    <Content Include="Views\payment\typeconfiglist.cshtml" />
+    <Content Include="Views\payment\typeconfigAdd.cshtml" />
+    <Content Include="Views\RevenueAnalysis\SalesRank.mobile.cshtml" />
+    <Content Include="Views\REPORT\Terminal.mobile.cshtml" />
+    <Content Include="Views\REPORT\terminalList.mobile.cshtml" />
+    <Content Include="Views\Financial\BillList.mobile.cshtml" />
+    <Content Include="Views\UserReport\NewUser.mobile.cshtml" />
+    <Content Include="Views\UserReport\active.mobile.cshtml" />
+    <Content Include="Views\UserReport\keep.mobile.cshtml" />
+    <Content Include="Views\UserReport\defect.mobile.cshtml" />
+    <Content Include="Views\LIMIT\LimitList.mobile.cshtml" />
+    <Content Include="Views\payment\InterfaceList.mobile.cshtml" />
+    <Content Include="Views\payment\InterfaceAdd.mobile.cshtml" />
+    <Content Include="Views\payment\typeconfiglist.mobile.cshtml" />
+    <Content Include="Views\payment\typeconfigAdd.mobile.cshtml" />
+    <Content Include="Views\APP\UserList.mobile.cshtml" />
+    <Content Include="Views\LOCLOG\LogOperList.cshtml" />
+    <Content Include="Views\LOCLOG\LogOperList.mobile.cshtml" />
+    <Content Include="Views\LIMIT\AddLimit.mobile.cshtml" />
+    <Content Include="Views\LIMIT\UpdateLimit.mobile.cshtml" />
+    <Content Include="Views\REPORT\AppReportDayMinute.cshtml" />
+    <Content Include="Views\REPORT\AppReportDayMinute.mobile.cshtml" />
+    <Content Include="Views\MonitorChannel\Create.cshtml" />
+    <Content Include="Views\MonitorChannel\List.cshtml" />
+    <Content Include="Views\MonitorChannel\List.mobile.cshtml" />
+    <Content Include="Views\MonitorChannel\Create.mobile.cshtml" />
+    <Content Include="Views\REPORT\NotificaitonEdit.mobile.cshtml" />
+    <Content Include="Views\AppUser\UserKl.cshtml" />
+    <Content Include="Views\AppUser\UserKl.mobile.cshtml" />
+    <Content Include="Views\Workorder\AddScheduling.cshtml" />
+    <Content Include="Views\Workorder\SchedulingList.cshtml" />
+    <Content Include="Views\Workorder\WorkorderAdd.cshtml" />
+    <Content Include="Views\Workorder\WorkorderCL.cshtml" />
+    <Content Include="Views\Workorder\WorkorderCLSHS.cshtml" />
+    <Content Include="Views\Workorder\WorkorderGB.cshtml" />
+    <Content Include="Views\Workorder\WorkorderInfo.cshtml" />
+    <Content Include="Views\Workorder\WorkorderList.cshtml" />
+    <Content Include="Views\Workorder\WorkorderPF.cshtml" />
+    <Content Include="Views\Workorder\WorkorderTJSHS.cshtml" />
+    <Content Include="Views\Workorder\WorkorderWC.cshtml" />
+    <Content Include="Views\Workorder\SchedulingList.mobile.cshtml" />
+    <Content Include="Views\Workorder\AddScheduling.mobile.cshtml" />
+    <Content Include="Views\Workorder\WorkorderPF.mobile.cshtml" />
+    <Content Include="Views\Workorder\WorkorderTJSHS.mobile.cshtml" />
+    <Content Include="Views\Workorder\WorkorderList.mobile.cshtml" />
+    <Content Include="Views\Workorder\WorkorderWC.mobile.cshtml" />
+    <Content Include="Views\Workorder\WorkorderGB.mobile.cshtml" />
+    <Content Include="Views\Workorder\WorkorderAdd.mobile.cshtml" />
+    <Content Include="Views\Workorder\WorkorderCLSHS.mobile.cshtml" />
+    <Content Include="Views\Workorder\WorkorderInfo.mobile.cshtml" />
+    <Content Include="Views\Workorder\WorkorderCL.mobile.cshtml" />
+    <Content Include="Views\Workorder\WorkorderTJ.cshtml" />
+    <Content Include="Views\Workorder\WorkorderCLlist.cshtml" />
+    <Content Include="Views\Workorder\WorkorderTJ.mobile.cshtml" />
+    <Content Include="Views\Workorder\WorkorderCLlist.mobile.cshtml" />
+    <Content Include="Views\Merchant\MerchLog.mobile.cshtml" />
+    <Content Include="Views\System\ServiceFeeRatioGradeList.cshtml" />
+    <Content Include="Views\System\SerViceFeeRationGradeAdd.cshtml" />
+    <Content Include="Views\BusinessPersonnel\BusinessPersonnelAdd.cshtml" />
+    <Content Include="Views\BusinessPersonnel\BusinessPersonnelAdd.mobile.cshtml" />
+    <Content Include="Views\BusinessPersonnel\BusinessPersonnelList.cshtml" />
+    <Content Include="Views\BusinessPersonnel\BusinessPersonnelList.mobile.cshtml" />
+    <Content Include="Views\LOCLOG\RateLogList.cshtml" />
+    <Content Include="Views\LOCLOG\RateLogList.mobile.cshtml" />
+    <Content Include="Views\payment\PayMenttypeCostRatio.cshtml" />
+    <Content Include="Views\payment\PayMenttypeCostRatio.mobile.cshtml" />
+    <Content Include="Views\Agent\CooperationApplicationList.cshtml" />
+    <Content Include="Views\System\PaymodeRartAdd.cshtml" />
+    <Content Include="Views\System\PaymodeRartAdd.mobile.cshtml" />
+    <Content Include="Views\Agent\MyCooperationApplicationList.cshtml" />
+    <Content Include="Views\Agent\AgentList.cshtml" />
+    <Content Include="Views\Agent\userList.cshtml" />
+    <Content Include="Views\Agent\ServiceChargeAdd.cshtml" />
+    <Content Include="Views\GlobalLogError\Index.cshtml" />
+    <Content Include="Views\Agent\CoServiceList.cshtml" />
+    <Content Include="Views\Agent\AgentAdd.cshtml" />
+    <Content Include="Views\Agent\AgentUpdate.cshtml" />
+    <Content Include="Views\ROTE\BusinessRoteList.cshtml" />
+    <Content Include="Views\ROTE\AddBusinessRote.cshtml" />
+    <Content Include="Views\ROTE\RoleBusinessUpdate.cshtml" />
+    <Content Include="Views\LIMIT\BusinessLimit.cshtml" />
+    <Content Include="Views\LIMIT\InsertBusinessLimit.cshtml" />
+    <Content Include="Views\LIMIT\BusinessUpdateLimit.cshtml" />
+    <Content Include="Views\ROTE\AgentRoteList.cshtml" />
+    <Content Include="Views\ROTE\AddAgentRote.cshtml" />
+    <Content Include="Views\ROTE\RoleAgentUpdate.cshtml" />
+    <Content Include="Views\LIMIT\AgentLimit.cshtml" />
+    <Content Include="Views\LIMIT\InsertAgentLimit.cshtml" />
+    <Content Include="Views\LIMIT\AgentUpdateLimit.cshtml" />
+    <Content Include="Views\payment\RisklevelList.cshtml" />
+    <Content Include="Views\payment\RisklevelAddOrUpdate.cshtml" />
+    <Content Include="Views\payment\RisklevelListTc.cshtml" />
+    <Content Include="Views\Financial\BillList_Details.cshtml" />
+    <Content Include="Views\payment\RisklevelListTc.mobile.cshtml" />
+    <Content Include="Views\AppUser\AppUserAddTc.cshtml" />
+    <Content Include="Views\AppUser\AppUserAuditing.cshtml" />
+    <Content Include="Views\AppUser\AppUserAddBpTc.cshtml" />
+    <Content Include="Views\Agent\AgentAuditing.cshtml" />
+    <Content Include="Views\APP\AppAuditing.cshtml" />
+    <Content Include="Views\AppUser\AppUserAuditing.mobile.cshtml" />
+    <Content Include="Views\APP\AppAuditing.mobile.cshtml" />
+    <Content Include="Views\AppUser\AppUserAddTc.mobile.cshtml" />
+    <Content Include="Views\AppUser\AppUserAddBpTc.mobile.cshtml" />
+    <Content Include="Views\Agent\AgentAddBpTc.cshtml" />
+    <Content Include="Views\Financial\BillAgentList.cshtml" />
+    <Content Include="Views\Financial\BillBpList.cshtml" />
+    <Content Include="Views\Financial\BillAgentList_Details.cshtml" />
+    <Content Include="Views\Financial\BillBpList_Details.cshtml" />
+    <Content Include="Views\LogForApi\Index.cshtml" />
+    <Content Include="Views\LOCLOG\dbloglist.cshtml" />
+    <Content Include="Views\LOCLOG\dbloglist.mobile.cshtml" />
+    <Content Include="Views\AppUser\AppUserTePi.cshtml" />
+    <Content Include="Views\AppUser\AppUserTePi.mobile.cshtml" />
+    <Content Include="Views\LogCoSettlement\Index.cshtml" />
+    <Content Include="Views\Agent\AgentList.mobile.cshtml" />
+    <Content Include="Views\Agent\AgentAuditing.mobile.cshtml" />
+    <Content Include="Views\Financial\BillAgentList.mobile.cshtml" />
+    <Content Include="Views\Financial\BillBpList.mobile.cshtml" />
+    <Content Include="Views\System\ServiceFeeRatioGradeList.mobile.cshtml" />
+    <Content Include="Views\System\SerViceFeeRationGradeAdd.mobile.cshtml" />
+    <Content Include="Views\Agent\AgentAdd.mobile.cshtml" />
+    <Content Include="Views\Agent\AgentUpdate.mobile.cshtml" />
+    <Content Include="Views\Agent\AgentAddBpTc.mobile.cshtml" />
+    <Content Include="Views\Login\UpdatePwd.cshtml" />
+    <Content Include="Views\CustomService\ComplainType.cshtml" />
+    <Content Include="Views\CustomService\ComplainTypeAdd.cshtml" />
+    <Content Include="Views\CustomService\ComplainOrderList.cshtml" />
+    <Content Include="Views\CustomService\ComplainOrderAdd.cshtml" />
+    <Content Include="Views\CustomService\ComplainOrderTc.cshtml" />
+    <Content Include="Views\CustomService\ComplainTypeTc.cshtml" />
+    <Content Include="Views\CustomService\OrderList.cshtml" />
+    <Content Include="Views\CustomService\ComplainOrderUpdate.cshtml" />
+    <Content Include="Views\CustomService\ComplainHandler.cshtml" />
+    <Content Include="Views\CustomService\ComplainArchiveList.cshtml" />
+    <Content Include="Views\CustomService\ComplainArchiveList_details.cshtml" />
+    <Content Include="Views\LOCLOG\AgentLogList.cshtml" />
+    <Content Include="Views\LOCLOG\BpLogList.cshtml" />
+    <Content Include="Views\APP\AppKl.cshtml" />
+    <Content Include="Views\AppUserBank\Index.cshtml" />
+    <Content Include="Views\AppUserBank\AppUserBankAuditing.cshtml" />
+    <Content Include="Views\Financial\BankPlaymoneyList.cshtml" />
+    <Content Include="Views\Financial\BankPlayAuditing.cshtml" />
+    <Content Include="Views\REPORT\AppChannelReport.cshtml" />
+    <Content Include="Views\Financial\HandMovementAuditing.cshtml" />
+    <Content Include="Views\Financial\RefundAuditing.cshtml" />
+    <Content Include="Views\REPORT\AppChannelReport.mobile.cshtml" />
+    <Content Include="Views\APP\AppKl.mobile.cshtml" />
+    <Content Include="Views\payment\RisklevelList.mobile.cshtml" />
+    <Content Include="Views\payment\RisklevelAddOrUpdate.mobile.cshtml" />
+    <Content Include="Views\AppUserBank\Index.mobile.cshtml" />
+    <Content Include="Views\AppUserBank\AppUserBankAuditing.mobile.cshtml" />
+    <Content Include="Views\Workorder\RespondList.cshtml" />
+    <Content Include="Views\Workorder\RespondAdd.cshtml" />
+    <Content Include="Views\Workorder\ResponseReport.cshtml" />
+    <Content Include="Views\Workorder\SroceReport.cshtml" />
+    <Content Include="Views\Workorder\HandleDetails.cshtml" />
+    <Content Include="Views\Workorder\RespondStatus.cshtml" />
+    <Content Include="Views\Workorder\AuditStatus.cshtml" />
+    <Content Include="Views\Workorder\RespondDetails.cshtml" />
+    <Content Include="Views\Workorder\CreateSchedule.cshtml" />
+    <Content Include="Views\Workorder\EidtScheduling.cshtml" />
+    <Content Include="Views\Workorder\HandelGradeReport.cshtml" />
+    <Content Include="Views\Risk\MonitoringconfigList.cshtml" />
+    <Content Include="Views\Risk\AddMonitoringconfig.cshtml" />
+    <Content Include="Views\Risk\ChannelPoolAdd.cshtml" />
+    <Content Include="Views\Risk\ChannelPoolList.cshtml" />
+    <Content Include="Views\Risk\ChannelAppMappingAdd.cshtml" />
+    <Content Include="Views\Risk\AppListTc.cshtml" />
+    <Content Include="Views\payment\ChannelPoolTC.cshtml" />
+    <Content Include="Views\payment\ChannelPoolTC.mobile.cshtml" />
+    <Content Include="Views\Risk\ChannelAmountAdd.cshtml" />
+    <Content Include="Views\Demo\Permission.cshtml" />
+    <Content Include="Views\Help\ClassificationList.cshtml" />
+    <Content Include="Views\Help\AddClassification.cshtml" />
+    <Content Include="Views\Risk\PoolInterfaceList.cshtml" />
+    <Content Include="Views\Help\AddContent.cshtml" />
+    <Content Include="Views\Help\ContentList.cshtml" />
+    <Content Include="Views\AppChannelReport\syChannelReport.cshtml" />
+    <Content Include="Views\AppChannelReport\xyChannelReport.cshtml" />
+    <Content Include="Views\AppUser\UpdateFrozenMoney.cshtml" />
+    <Content Include="Views\PayForAnother\PayForAnotherList.cshtml" />
+    <Content Include="Views\PayForAnother\PayForAnotherAdd.cshtml" />
+    <Content Include="Views\PayForAnother\PayChannelList.cshtml" />
+    <Content Include="Views\PayForAnother\PayChannelAdd.cshtml" />
+    <Content Include="Views\Financial\SelectionChannel.cshtml" />
+    <Content Include="Views\PayForAnother\PayForAnotherList.mobile.cshtml" />
+    <Content Include="Views\PayForAnother\PayChannelList.mobile.cshtml" />
+    <Content Include="Views\AppUser\AppUserRiskSh.cshtml" />
+    <Content Include="Views\Financial\BillSummaryList.cshtml" />
+    <Content Include="Views\Financial\BillSummaryList_Details.cshtml" />
+    <Content Include="Views\Financial\BillList_AppName.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="js\NewsRelease\payment\" />
+    <Folder Include="upload\img\" />
+    <Folder Include="Views\Shared\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Login\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ALIPAY\ALIPAY.csproj">
+      <Project>{97f47ba4-cc80-48db-9680-759f33931104}</Project>
+      <Name>ALIPAY</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{38d7aa58-c95b-449b-86c6-a8073a56e11f}</Project>
+      <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DBA\DBA.csproj">
+      <Project>{0988c62e-247f-471f-a183-db509c7a3839}</Project>
+      <Name>DBA</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DbName\DbName.csproj">
+      <Project>{c189a46c-7582-4b85-a110-d211f3cbdd36}</Project>
+      <Name>DbName</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DxPay.LogManager\DxPay.LogManager.csproj">
+      <Project>{c1bc675b-5ff5-4e22-9af1-d34d88a8f630}</Project>
+      <Name>DxPay.LogManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MDL\MDL.csproj">
+      <Project>{53995dbb-9836-4647-ad22-865884fdeb9e}</Project>
+      <Name>MDL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PayForAnother\PayForAnother.csproj">
+      <Project>{c002ffa9-9811-4f93-9d0d-1e2ab6e7eae9}</Project>
+      <Name>PayForAnother</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOOL\TOOL.csproj">
+      <Project>{b6b4bf6d-e1d9-4585-abe0-c0a28fde0477}</Project>
+      <Name>TOOL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WFTPAY\WFTPAY.csproj">
+      <Project>{df53e03a-0a1d-4e1f-a8b3-11b4342afa79}</Project>
+      <Name>WFTPAY</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\UI\master.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Login\Default.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Login\Error.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="404.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\APP\AppList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\LIMIT\LimitList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\LIMIT\AddLimit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\UI\dialog.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\LIMIT\UpdateLimit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\LOCUSER\UsersList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\APP\APPAdd.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AppUser\AppUserList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\LOCUSER\AddUsers.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\APP\UpdateAPP.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\APP\GOODSList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AppUser\AppUserAdd.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\LOCUSER\UpdateUsers.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ROTE\AddRole.cshtml" />
+    <Content Include="Views\ROTE\RoleUpdate.cshtml" />
+    <Content Include="Views\ROTE\RoteList.cshtml" />
+    <Content Include="Views\ROTE\UpdateRoleLimit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\LOCLOG\LogList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\APP\AppTypeList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\APP\AppTypeAdd.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\REPORT\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AppUser\AppUserLog.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AppUser\AppUserEdit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\REPORT\UserReport.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\APP\UserList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\REPORT\AppReport.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\REPORT\FlowReport.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\REPORT\OrderList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\REPORT\terminalList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\APP\GoodsListEJ.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\System\PaymodeList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\System\PaymodeAddOrUpdate.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\System\dictionary.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\System\SettlementList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\System\SettlementAddOrUpdate.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Financial\BillList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Financial\PaymentList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\REPORT\Terminal.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\RevenueAnalysis\RevenueProfile.cshtml" />
+    <Content Include="Views\RevenueAnalysis\SalesRank.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\REPORT\Trends.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\UserReport\NewUser.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\UserReport\active.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\UserReport\keep.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\UserReport\defect.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MessageManagement\notice.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MessageManagement\noticeList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MessageManagement\messagelist.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MessageManagement\message.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MessageManagement\UserList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\LIMIT\UserLimit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\LIMIT\InsertUserLimit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\LIMIT\UserUpdateLimit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ROTE\UserRoteList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ROTE\AddUserRote.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ROTE\RoleUserUpdate.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MessageManagement\ReplyMessage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\payment\InterfaceList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\payment\InterfaceAdd.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\System\SelectInterface.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="css\plugin\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="css\plugin\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="css\plugin\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="css\plugin\font-awesome\fonts\FontAwesome.otf" />
+    <None Include="Properties\PublishProfiles\web.pubxml" />
+    <Content Include="Views\payment\PaymenttypeList.cshtml" />
+    <Content Include="Views\REPORT\AppReportDay.cshtml" />
+    <Content Include="Views\Merchant\List.cshtml" />
+    <Content Include="Views\Merchant\Create.cshtml" />
+    <Content Include="Views\Merchant\Edit.cshtml" />
+    <Content Include="Views\REPORT\paychannel.cshtml" />
+    <Content Include="Views\Financial\ManualList.cshtml" />
+    <Content Include="Views\Financial\UserList.cshtml" />
+    <Content Include="Views\System\dispatchorderLsit.cshtml" />
+    <Content Include="Views\System\Adddispatchorder.cshtml" />
+    <Content Include="Views\Merchant\MerchLog.cshtml" />
+    <Content Include="Views\Merchant\ChoiceMerchantList.cshtml" />
+    <Content Include="Views\Financial\RefundList.cshtml" />
+    <Content Include="Views\Financial\RefundAdd.cshtml" />
+    <Content Include="Views\Financial\UpdateRefund.cshtml" />
+    <Content Include="Views\Financial\AuditorRefund.cshtml" />
+    <Content Include="Views\REPORT\ComplaintList.cshtml" />
+    <Content Include="Views\REPORT\ComplaintAdd.cshtml" />
+    <Content Include="Views\REPORT\InterfaceListTC.cshtml" />
+    <Content Include="Views\APP\AppListTC.cshtml" />
+    <Content Include="Views\REPORT\ComplaintCL.cshtml" />
+    <Content Include="Views\payment\AppListTC.cshtml" />
+    <Content Include="Views\payment\PaymentUpdate.cshtml" />
+    <Content Include="Views\REPORT\OrderAuditList.cshtml" />
+    <Content Include="Views\REPORT\OrderAuditCL.cshtml" />
+    <Content Include="Views\REPORT\AppRequestAuditList.cshtml" />
+    <Content Include="Views\REPORT\AppRequestAuditCL.cshtml" />
+    <Content Include="Views\AppUser\AppUserLogNotice.cshtml" />
+    <Content Include="Views\REPORT\AppmonitorList.cshtml" />
+    <Content Include="Views\REPORT\AppmonitorAdd.cshtml" />
+    <Content Include="Views\REPORT\AppListTC.cshtml" />
+    <Content Include="Views\REPORT\NotificaitonEdit.cshtml" />
+    <Content Include="ueditor\net\config.json" />
+    <Content Include="ueditor\net\controller.ashx" />
+    <Content Include="ueditor\net\README.md" />
+    <Content Include="ueditor\net\Web.config" />
+    <Content Include="ueditor\third-party\.DS_Store" />
+    <Content Include="ueditor\third-party\jquery-1.10.2.min.map" />
+    <Content Include="ueditor\third-party\video-js\font\vjs.eot" />
+    <Content Include="ueditor\third-party\video-js\font\vjs.ttf" />
+    <Content Include="ueditor\third-party\video-js\font\vjs.woff" />
+    <Content Include="Views\NewsRelease\NewsReleaseList.cshtml" />
+    <Content Include="Views\NewsRelease\NewsReleaseAdd.cshtml" />
+    <Content Include="ueditor\.DS_Store" />
+    <Content Include="Views\REPORT\NotificaitonList.cshtml" />
+    <Content Include="Views\REPORT\AppmonitorEdit.cshtml" />
+    <Content Include="Views\REPORT\NotificaitonEditMobile.cshtml" />
+    <Content Include="Views\NewsRelease\GwComplaintList.cshtml" />
+    <Content Include="Views\NewsRelease\ComplaintCL.cshtml" />
+    <Content Include="Views\AppUser\UserSxF.cshtml" />
+    <Content Include="Views\Partial\_Menu.cshtml" />
+    <Content Include="Views\UI\master.mobile.cshtml" />
+    <Content Include="Views\Login\default.mobile.cshtml" />
+    <Content Include="Scripts\jquery-1.12.4.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>26127</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:26127/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

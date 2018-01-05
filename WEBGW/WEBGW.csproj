@@ -1,0 +1,481 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BC8333E1-B140-4064-A6F4-7871D1C41C5F}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WEBGW</RootNamespace>
+    <AssemblyName>WEBGW</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http">
+      <HintPath>..\WEB\bin\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="404.html" />
+    <Content Include="asste\jquery.countup\jquery.countup.js" />
+    <Content Include="asste\jquery.countup\jquery.waypoints.min.js" />
+    <Content Include="asste\jquery.fullPage\jquery.fullPage.css" />
+    <Content Include="asste\jquery.fullPage\jquery.fullPage.js" />
+    <Content Include="asste\jquery.fullPage\jquery.fullPage.min.js" />
+    <Content Include="asste\PicCarousel.js" />
+    <Content Include="base.js" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="css\animate.min.css" />
+    <Content Include="css\base.css" />
+    <Content Include="css\login.css" />
+    <Content Include="css\main.css" />
+    <Content Include="Global.asax" />
+    <Content Include="images\bg.png" />
+    <Content Include="images\bg1.jpg" />
+    <Content Include="images\bg1.png" />
+    <Content Include="images\bg2.jpg" />
+    <Content Include="images\bg2.png" />
+    <Content Include="images\bg3.jpg" />
+    <Content Include="images\bg3.png" />
+    <Content Include="images\bg4.jpg" />
+    <Content Include="images\bg5.jpg" />
+    <Content Include="images\bg6.jpg" />
+    <Content Include="images\bor.png" />
+    <Content Include="images\device-frame-iphone.png" />
+    <Content Include="images\erweima.png" />
+    <Content Include="images\erweima1.png" />
+    <Content Include="images\icon-bg1.png" />
+    <Content Include="images\icon-bg2.png" />
+    <Content Include="images\icon-bg3.png" />
+    <Content Include="images\icon-bg4.png" />
+    <Content Include="images\icon-circle.png" />
+    <Content Include="images\icon-close.png" />
+    <Content Include="images\icon-close1.png" />
+    <Content Include="images\icon-cont.png" />
+    <Content Include="images\icon-email.png" />
+    <Content Include="images\icon-f1.png" />
+    <Content Include="images\icon-f2.png" />
+    <Content Include="images\icon-f3.png" />
+    <Content Include="images\icon-img1.jpg" />
+    <Content Include="images\icon-img2.jpg" />
+    <Content Include="images\icon-img3.jpg" />
+    <Content Include="images\icon-img4.jpg" />
+    <Content Include="images\icon-s1.png" />
+    <Content Include="images\icon-s2.png" />
+    <Content Include="images\icon-s3.png" />
+    <Content Include="images\icon-s4.png" />
+    <Content Include="images\icon-s5.png" />
+    <Content Include="images\icon-s6.png" />
+    <Content Include="images\icon-s7.png" />
+    <Content Include="images\icon-s8.png" />
+    <Content Include="images\icon-sj.png" />
+    <Content Include="images\icon-sj1.png" />
+    <Content Include="images\icon-time.png" />
+    <Content Include="images\icon-time1.png" />
+    <Content Include="images\icon-wx1.png" />
+    <Content Include="images\icon1.png" />
+    <Content Include="images\icon10.png" />
+    <Content Include="images\icon11.png" />
+    <Content Include="images\icon12.png" />
+    <Content Include="images\icon13.png" />
+    <Content Include="images\icon14.png" />
+    <Content Include="images\icon15.png" />
+    <Content Include="images\icon16.png" />
+    <Content Include="images\icon17.png" />
+    <Content Include="images\icon18.png" />
+    <Content Include="images\icon19.png" />
+    <Content Include="images\icon2.png" />
+    <Content Include="images\icon20.png" />
+    <Content Include="images\icon21.png" />
+    <Content Include="images\icon22.png" />
+    <Content Include="images\icon23.png" />
+    <Content Include="images\icon24.png" />
+    <Content Include="images\icon25.png" />
+    <Content Include="images\icon26.png" />
+    <Content Include="images\icon27.png" />
+    <Content Include="images\icon28.png" />
+    <Content Include="images\icon29.png" />
+    <Content Include="images\icon3.png" />
+    <Content Include="images\icon30.png" />
+    <Content Include="images\icon31.png" />
+    <Content Include="images\icon32.png" />
+    <Content Include="images\icon33.png" />
+    <Content Include="images\icon4.png" />
+    <Content Include="images\icon5.png" />
+    <Content Include="images\icon6.png" />
+    <Content Include="images\icon7.png" />
+    <Content Include="images\icon8.png" />
+    <Content Include="images\icon9.png" />
+    <Content Include="images\img1.jpg" />
+    <Content Include="images\img1.png" />
+    <Content Include="images\img2.jpg" />
+    <Content Include="images\img2.png" />
+    <Content Include="images\img3.jpg" />
+    <Content Include="images\img3.png" />
+    <Content Include="images\img4.jpg" />
+    <Content Include="images\img4.png" />
+    <Content Include="images\img5.jpg" />
+    <Content Include="images\img5.png" />
+    <Content Include="images\img6.jpg" />
+    <Content Include="images\img6.png" />
+    <Content Include="images\img7.jpg" />
+    <Content Include="images\img7.png" />
+    <Content Include="images\img8.png" />
+    <Content Include="images\img9.png" />
+    <Content Include="images\lanrenzhijia.png" />
+    <Content Include="images\loading.gif" />
+    <Content Include="images\login-btn.png" />
+    <Content Include="images\login-btn1.png" />
+    <Content Include="images\login-icons.png" />
+    <Content Include="images\logo.png" />
+    <Content Include="images\online.png" />
+    <Content Include="images\pad.png" />
+    <Content Include="images\white-icon.png" />
+    <Content Include="index.html" />
+    <Content Include="js\base.js" />
+    <Content Include="js\CooperationApplication.js" />
+    <Content Include="js\index.js" />
+    <Content Include="js\jquery-1.8.1.min.js" />
+    <Content Include="js\jquery.SuperSlide.2.1.1.js" />
+    <Content Include="js\JValidator.js" />
+    <Content Include="js\login.js" />
+    <Content Include="js\plugin\Authentication.js" />
+    <Content Include="js\plugin\fusionchart\fusioncharts.charts.js" />
+    <Content Include="js\plugin\fusionchart\fusioncharts.gantt.js" />
+    <Content Include="js\plugin\fusionchart\fusioncharts.js" />
+    <Content Include="js\plugin\fusionchart\fusioncharts.maps.js" />
+    <Content Include="js\plugin\fusionchart\fusioncharts.powercharts.js" />
+    <Content Include="js\plugin\fusionchart\fusioncharts.theme.zune.js" />
+    <Content Include="js\plugin\fusionchart\fusioncharts.widgets.js" />
+    <Content Include="js\plugin\fusionchart\maps\fusioncharts.usa.js" />
+    <Content Include="js\plugin\fusionchart\maps\fusioncharts.world.js" />
+    <Content Include="js\plugin\fusionchart\maps\readme.txt" />
+    <Content Include="js\plugin\fusionchart\themes\fusioncharts.theme.carbon.js" />
+    <Content Include="js\plugin\fusionchart\themes\fusioncharts.theme.fint.js" />
+    <Content Include="js\plugin\fusionchart\themes\fusioncharts.theme.ocean.js" />
+    <Content Include="js\plugin\fusionchart\themes\fusioncharts.theme.zune.js" />
+    <Content Include="js\plugin\jquery.ajaxupload.js" />
+    <Content Include="js\plugin\JValidator.js" />
+    <Content Include="js\plugin\layer\extend\layer.ext.js" />
+    <Content Include="js\plugin\layer\layer.js" />
+    <Content Include="js\plugin\layer\skin\default\icon-ext.png" />
+    <Content Include="js\plugin\layer\skin\default\icon.png" />
+    <Content Include="js\plugin\layer\skin\default\loading-0.gif" />
+    <Content Include="js\plugin\layer\skin\default\loading-1.gif" />
+    <Content Include="js\plugin\layer\skin\default\loading-2.gif" />
+    <Content Include="js\plugin\layer\skin\layer.css" />
+    <Content Include="js\plugin\layer\skin\layer.ext.css" />
+    <Content Include="js\plugin\my97datepicker\calendar.js" />
+    <Content Include="js\plugin\my97datepicker\config.js" />
+    <Content Include="js\plugin\my97datepicker\lang\en.js" />
+    <Content Include="js\plugin\my97datepicker\lang\zh-cn.js" />
+    <Content Include="js\plugin\my97datepicker\lang\zh-tw.js" />
+    <Content Include="js\plugin\my97datepicker\My97DatePicker.htm" />
+    <Content Include="js\plugin\my97datepicker\skin\datePicker.gif" />
+    <Content Include="js\plugin\my97datepicker\skin\default\datepicker.css" />
+    <Content Include="js\plugin\my97datepicker\skin\default\img.gif" />
+    <Content Include="js\plugin\my97datepicker\skin\WdatePicker.css" />
+    <Content Include="js\plugin\my97datepicker\skin\whyGreen\bg.jpg" />
+    <Content Include="js\plugin\my97datepicker\skin\whyGreen\datepicker.css" />
+    <Content Include="js\plugin\my97datepicker\skin\whyGreen\img.gif" />
+    <Content Include="js\plugin\my97datepicker\WdatePicker.js" />
+    <Content Include="main.css" />
+    <Content Include="mobile\css\base.css" />
+    <Content Include="mobile\css\main.css" />
+    <Content Include="mobile\css\stlye.css" />
+    <Content Include="mobile\images\abt-back.png" />
+    <Content Include="mobile\images\cnt_us_1.png" />
+    <Content Include="mobile\images\cnt_us_1_1.png" />
+    <Content Include="mobile\images\cnt_us_2.png" />
+    <Content Include="mobile\images\cnt_us_2_1.png" />
+    <Content Include="mobile\images\cnt_us_3.png" />
+    <Content Include="mobile\images\cnt_us_3_1.png" />
+    <Content Include="mobile\images\cnt_us_4.png" />
+    <Content Include="mobile\images\cnt_us_4_1.png" />
+    <Content Include="mobile\images\qtzf_1.png" />
+    <Content Include="mobile\images\qtzf_ico_1.png" />
+    <Content Include="mobile\images\qtzf_ico_2.png" />
+    <Content Include="mobile\images\qtzf_ico_3.png" />
+    <Content Include="mobile\images\qtzf_ico_4.png" />
+    <Content Include="mobile\images\qtzf_ico_5.png" />
+    <Content Include="mobile\images\qtzf_ico_6.png" />
+    <Content Include="mobile\images\qtzf_ico_7.png" />
+    <Content Include="mobile\images\qtzf_ico_8.png" />
+    <Content Include="mobile\images\topxxxx.png" />
+    <Content Include="mobile\images\wxzf_1.png" />
+    <Content Include="mobile\images\wxzf_ico_1.png" />
+    <Content Include="mobile\images\wxzf_ico_2.png" />
+    <Content Include="mobile\images\wxzf_ico_3.png" />
+    <Content Include="mobile\images\wxzf_ico_4.png" />
+    <Content Include="mobile\images\wxzf_ico_5.png" />
+    <Content Include="mobile\images\wxzf_list_1.png" />
+    <Content Include="mobile\images\wxzf_list_2.png" />
+    <Content Include="mobile\images\wxzf_list_3.png" />
+    <Content Include="mobile\images\ylzf_1.png" />
+    <Content Include="mobile\images\ylzf_ico_1.png" />
+    <Content Include="mobile\images\ylzf_ico_2.png" />
+    <Content Include="mobile\images\ylzf_ico_3.png" />
+    <Content Include="mobile\images\ylzf_ico_4.png" />
+    <Content Include="mobile\images\ylzf_list_1.png" />
+    <Content Include="mobile\images\ylzf_list_2.png" />
+    <Content Include="mobile\images\ylzf_list_3.png" />
+    <Content Include="mobile\images\zfb_1.png" />
+    <Content Include="mobile\images\zfb_ico_1.png" />
+    <Content Include="mobile\images\zfb_ico_2.png" />
+    <Content Include="mobile\images\zfb_ico_3.png" />
+    <Content Include="mobile\images\zfb_list_1.png" />
+    <Content Include="mobile\images\zfb_list_2.png" />
+    <Content Include="mobile\images\zfb_list_3.png" />
+    <Content Include="mobile\img\1.png" />
+    <Content Include="mobile\img\2.png" />
+    <Content Include="mobile\img\address1.jpg" />
+    <Content Include="mobile\img\address2.jpg" />
+    <Content Include="mobile\img\address3.jpg" />
+    <Content Include="mobile\img\address4.jpg" />
+    <Content Include="mobile\img\address5.jpg" />
+    <Content Include="mobile\img\cons1.jpg" />
+    <Content Include="mobile\img\cons2.jpg" />
+    <Content Include="mobile\img\cons3.jpg" />
+    <Content Include="mobile\img\cons4.jpg" />
+    <Content Include="mobile\img\cons5.jpg" />
+    <Content Include="mobile\img\device-frame-iphone.png" />
+    <Content Include="mobile\img\icon-bg1.png" />
+    <Content Include="mobile\img\icon-bg2.png" />
+    <Content Include="mobile\img\icon-bg3.png" />
+    <Content Include="mobile\img\icon-bg4.png" />
+    <Content Include="mobile\img\icon-img1.jpg" />
+    <Content Include="mobile\img\icon-img2.jpg" />
+    <Content Include="mobile\img\icon-img3.jpg" />
+    <Content Include="mobile\img\icon-img4.jpg" />
+    <Content Include="mobile\img\img2.jpg" />
+    <Content Include="mobile\img\img6.jpg" />
+    <Content Include="mobile\img\img7.jpg" />
+    <Content Include="mobile\img\ind1_03.png" />
+    <Content Include="mobile\img\ind1_06.png" />
+    <Content Include="mobile\img\ind1_09.png" />
+    <Content Include="mobile\img\ind1_13.png" />
+    <Content Include="mobile\img\ind1_15.png" />
+    <Content Include="mobile\img\ind1_17.png" />
+    <Content Include="mobile\img\ind3_03.png" />
+    <Content Include="mobile\img\ind3_05.png" />
+    <Content Include="mobile\img\ind3_09.png" />
+    <Content Include="mobile\img\ind3_10.png" />
+    <Content Include="mobile\img\nav_03.png" />
+    <Content Include="mobile\img\nav_05.png" />
+    <Content Include="mobile\img\nav_10.png" />
+    <Content Include="mobile\img\nav_13.png" />
+    <Content Include="mobile\img\pay2_04.jpg" />
+    <Content Include="mobile\img\pay2_05.jpg" />
+    <Content Include="mobile\img\pay2_07.jpg" />
+    <Content Include="mobile\img\pay2_09.jpg" />
+    <Content Include="mobile\img\pay2_15.jpg" />
+    <Content Include="mobile\img\pay2_16.jpg" />
+    <Content Include="mobile\img\pay2_17.jpg" />
+    <Content Include="mobile\img\pay2_18.jpg" />
+    <Content Include="mobile\img\pay_04.jpg" />
+    <Content Include="mobile\img\pay_05.jpg" />
+    <Content Include="mobile\img\pay_07.jpg" />
+    <Content Include="mobile\img\pay_09.jpg" />
+    <Content Include="mobile\img\pay_15.jpg" />
+    <Content Include="mobile\img\pay_16.jpg" />
+    <Content Include="mobile\img\pay_17.jpg" />
+    <Content Include="mobile\img\pay_18.jpg" />
+    <Content Include="mobile\js\client_slide.js" />
+    <Content Include="mobile\js\CooperationApplication.js" />
+    <Content Include="mobile\js\jquery-3.2.1.min.js" />
+    <Content Include="mobile\js\jquery.touchSwipe.min.js" />
+    <Content Include="mobile\js\main.js" />
+    <Content Include="mobile\upload\2017\05\21\201706201025355478.png" />
+    <Content Include="mobile\upload\2017\05\21\201706201152418954.png" />
+    <Content Include="mobile\upload\2017\05\21\201706201245.jpg" />
+    <Content Include="mobile\upload\2017\05\21\201706201321451254.png" />
+    <Content Include="mobile\upload\2017\05\21\201706201536451269.png" />
+    <Content Include="mobile\upload\2017\05\21\n_banner_1.png" />
+    <Content Include="mobile\upload\2017\05\21\n_banner_2.png" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Views\Index\consultation.html" />
+    <Content Include="Views\Index\product.html" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\HtmlToText .cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\DeviceDetector.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="packages.config" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\UI\master.cshtml" />
+    <Content Include="Views\Index\Index.cshtml" />
+    <Content Include="Views\Index\About.cshtml" />
+    <Content Include="Views\Index\product.cshtml" />
+    <Content Include="Views\Index\NewDetil.cshtml" />
+    <None Include="Properties\PublishProfiles\webgw.pubxml" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Index\loading.cshtml" />
+    <Content Include="Views\Index\Index.mobile.cshtml" />
+    <Content Include="Views\UI\master.mobile.cshtml" />
+    <Content Include="Views\Index\About.mobile.cshtml" />
+    <Content Include="Views\Index\New.mobile.cshtml" />
+    <Content Include="Views\Index\NewDetil.mobile.cshtml" />
+    <Content Include="Views\Index\contact.mobile.cshtml" />
+    <Content Include="Views\Index\product.mobile.cshtml" />
+    <Content Include="Views\Index\consultation.mobile.cshtml" />
+    <Content Include="Views\Index\News.cshtml" />
+    <Content Include="Views\UI\masters.cshtml" />
+    <Content Include="Views\Index\Zixun.cshtml" />
+    <Content Include="Views\UI\MaseterNewdetil.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{38d7aa58-c95b-449b-86c6-a8073a56e11f}</Project>
+      <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{9fe00521-3a8b-42b1-814e-585e99407b2e}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MDL\MDL.csproj">
+      <Project>{53995dbb-9836-4647-ad22-865884fdeb9e}</Project>
+      <Name>MDL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOOL\TOOL.csproj">
+      <Project>{b6b4bf6d-e1d9-4585-abe0-c0a28fde0477}</Project>
+      <Name>TOOL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>60806</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:58489/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

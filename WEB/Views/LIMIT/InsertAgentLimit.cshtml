@@ -1,0 +1,82 @@
+﻿@{
+    ViewBag.Title = "添加代理商权限";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+@JMP.TOOL.UserHelper.js("local/AgentLimit.js")
+<div class="main">
+    <div class="plate-form">
+        <dl>
+            <dt>权限从属：</dt>
+            <dd>
+                <div class="rule-single-select">
+                    <select name="sellimit_id" id="sellimit_id" onchange="updateLimitTopid()">
+                        @Html.Raw(ViewBag.selectTopid)
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>状态：</dt>
+            <dd id="radOrvActnS">
+                <label for="radOrvActnS_0"><input id="radOrvActnS_0" type="radio" name="state" value="1" checked="checked" />开启</label>
+                <label for="radOrvActnS_1"><input id="radOrvActnS_1" type="radio" name="state" value="0" />关闭</label>
+            </dd>
+        </dl>
+        <dl>
+            <dt>权限名称：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="inputName" type="text" id="inputName" value="" onblur="changeName()" /><span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="checkName">* 权限名称不能为空</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>权限页面：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="inputUrl" type="text" id="inputUrl" value="" onblur="changeUrl()" /><span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="checkUrl">* 权限页面不能为空</div>
+            </dd>
+        </dl>
+        <dl id="Voids" style="display: none;">
+            <dt>权限方法：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="inputVoid" type="text" id="inputVoid" onblur="changes()" /><span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="checkCode">* 权限方法不能为空</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>排序：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="inputValue" type="text" id="inputValue" value="" onblur="changeValue()" /><span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="checkValue">* 权限值不能为空</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>图标样式：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="inputIcnn" type="text" id="inputIcnn" value="" /><span class="ie7-input-bug-end"></span>
+                </div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width:100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnSave" class="btn btn-primary" onclick="addlimits()" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>

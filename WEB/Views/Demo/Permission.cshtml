@@ -1,0 +1,19 @@
+﻿@using WEB.Extensions.Html
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Permission</title>
+</head>
+<body>
+    <div>
+        @Html.ButtonPermission("/Workorder/ResponseReport", "一键启用", "methodName()")
+        <p>判断是否有权限:@Html.ButtonHasPermission("/Workorder/ResponseReport")</p>
+    </div>
+</body>
+</html>

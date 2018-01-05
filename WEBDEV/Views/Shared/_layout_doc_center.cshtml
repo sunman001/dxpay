@@ -1,0 +1,44 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>开发者中心 | 盾行云计费</title>
+    @Styles.Render("~/bundles/help/css")
+</head>
+<body>
+    <div class="main">
+        <section id="large-header" class="doc-header">
+            <div class="doc-header-bg"></div>
+            <canvas id="canvas-header"></canvas>
+            <div class="container pt15 header-wrap">
+                <div class="header-nav">
+                    <a href="http://dunxingpay.com"><img src="http://developer.dunxingpay.com/images/logo.png" height="36" /></a>
+                    <a class="dh-logo-doc current" href="~/doc/index">开发者中心</a> • <a class="dh-logo-doc" style="margin-left: 0;" href="~/doc/download">资源下载</a> • <a class="dh-logo-doc" style="margin-left: 0;" href="~/help/index">帮助中心</a>
+                    <div class="pull-right hidden-xs">
+                        <a class="btn-radr" href="~/home/login">登录</a>
+                        
+                        <a class="btn-radr" href="~/user/register">注册</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-10 col-md-8 col-lg-push-1 col-md-push-2">
+                        <div class="wrap center-block sloganbox">
+                            <h1>盾行云计费 <span class="flag">•</span> <span>开发者中心</span></h1>
+                            @*<h2>让移动支付更便捷，轻松畅游云世界</h2>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="doc-content-wrap content-wrap">
+            <div class="container">
+                @RenderBody()
+            </div>
+        </div>
+        <script src="~/asste/canvas/001.js"></script>
+        @Scripts.Render("~/bundles/help/js")
+        @RenderSection("scripts",false)
+    </div>
+</body>
+</html>

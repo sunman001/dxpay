@@ -1,0 +1,86 @@
+﻿@using WEB.Extensions
+@{
+    ViewBag.Title = "支付通道";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_paymenttype>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("payment/paymenttype.js")
+<div class="main">
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th width="100">编号</th>
+                    <th>通道名称</th>
+                    <th>所属支付类型</th>
+                    <th>关联平台</th>
+                    <th>是否禁用</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <td>@item.p_id</td>
+                                <td>@item.p_name</td>
+                                <td>
+                                    @item.zflxname
+                                </td>
+                                <td>
+                                    @item.p_platform.ConvertRelatedPlatformToString()
+                                </td>
+                                <td>
+                                    @Html.Raw(item.p_forbidden == 0 ? "<span class='green'> 正常 </span>" : "<span color='red'>冻结</span>")
+                                </td>
+                                <td>
+                                    @{
+                                        bool getupdate = bll_limit.GetLocUserLimitVoids("/payment/UpdatePaymentType", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        if (getupdate)
+                                        {
+                                            <a onclick="UpdatePaymentType(@item.p_id)" href="javascript:;" class="blue">编辑</a>
+                                        }
+                                    }
+                                    @{
+
+                                        bool getcostratio = bll_limit.GetLocUserLimitVoids("/payment/Payqydj", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+
+                                        if (getcostratio)
+                                        {
+
+                                            if (item.p_forbidden == 0)
+                                            {
+                                                <a onclick="Updatestate(1,@item.p_id)" href="javascript:;" class="blue">冻结</a>
+
+                                            }
+                                            else
+                                            {
+                                                <a onclick="Updatestate(0,@item.p_id)" href="javascript:;" class="blue">启用</a>
+                                            }
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="6">暂无记录</td>
+                                            </tr>
+                                        }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+<script type="text/javascript">
+
+
+</script>

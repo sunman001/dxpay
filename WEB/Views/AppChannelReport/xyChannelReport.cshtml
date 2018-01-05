@@ -1,0 +1,115 @@
+﻿@{
+    ViewBag.Title = "应用通道报表";
+    Layout = "~/Views/UI/master.cshtml";
+    var ddt = ViewBag.ddt as System.Data.DataTable;
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(Request["s_type"] == "1" ? "selected=selected" : "")>应用名称</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["s_key"]" class="txtipt" />
+        </li>
+        <li>
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" value="@(string.IsNullOrEmpty(Request["s_begin"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : Request["s_begin"])" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')||\'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")\'}'})" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")'})" value="@(string.IsNullOrEmpty(Request["s_end"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : Request["s_end"])" />
+        </li>
+        <li>
+            <a id="btn_search" class="btn btn-primary" href="javascript:" onclick="SearchAppReport()">查询</a>
+        </li>
+        <li>
+            <a id="btn_today" class="btn btn-primary" href="javascript:" onclick="SearcgAppToday()">查询今日</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>应用名称</th>
+                    <th>总请求量</th>
+                    <th>订单重复数量</th>
+                    <th>重复支付数量</th>
+                    <th>其他错误</th>
+                    <th>订单重复比率</th>
+                    <th>重复支付比率</th>
+                    <th>其他错误比率</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Rows.Count > 0)
+                {
+                    int id = 0;
+                    string Icon = "Icon_";
+                    string Open = "Open_";
+
+                    foreach (System.Data.DataRow dr in Model.Rows)
+                    {
+                        var ordercountrato = (decimal.Parse(dr["ordercountrato"].ToString()) * 100).ToString("f0") + "%";
+                        var paymentcountrato = (decimal.Parse(dr["paymentcountrato"].ToString()) * 100).ToString("f0") + "%";
+                        var othercountrato = (decimal.Parse(dr["othercountrato"].ToString()) * 100).ToString("f0") + "%";
+                        id = id + 1;
+                        Icon = "Icon_" + id;
+                        Open = "Open_" + id;
+                        <tr>
+                            <td>@(!string.IsNullOrEmpty(dr["CreatedOn"].ToString()) ? DateTime.Parse(dr["CreatedOn"].ToString()).ToString("yyyy-MM-dd") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_name"].ToString()) ? dr["a_name"].ToString().ToString() : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_count"].ToString()) ? Convert.ToDecimal( dr["a_count"].ToString()).ToString("f0") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["ordercount"].ToString()) ? dr["ordercount"].ToString() : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["paymentcount"].ToString()) ? dr["paymentcount"].ToString() : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["othercount"].ToString()) ? dr["othercount"].ToString() : "---")</td>
+                            <td> @ordercountrato</td>
+                            <td> @paymentcountrato</td>
+                            <td> @othercountrato</td>
+                        </tr>
+
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td align="center" colspan="9" class="nodata">暂无记录</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+<script type="text/javascript">
+    function ArticleManage(pageIndex, pageSize, ptype) {
+        if (ptype == null || ptype == "" || ptype == undefined)
+            ptype = "total";
+        var url = "/AppChannelReport/xyChannelReport?curr=" + pageIndex + "&psize=" + pageSize + "&rtype=" + ptype;;
+        var types = $("#searchType option:selected").val();
+        var searchKey = $("#searchKey").val();
+        var stime = $("#stime").val();
+        var etime = $("#etime").val();
+        url += "&s_type=" + types + "&s_key=" + searchKey  + "&s_begin=" + stime + "&s_end=" + etime
+        location.href = encodeURI(url);
+    }
+
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    function SearchAppReport() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize, "total");
+    }
+
+    function SearcgAppToday() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize, "today");
+    }
+</script>

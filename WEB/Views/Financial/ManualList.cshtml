@@ -1,0 +1,106 @@
+﻿@{
+    ViewBag.Title = "手动提款管理";
+    // Layout = "~/Views/UI/master.cshtml";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <div class="date-tool">
+        <div id="ToolBar" class=" help">
+            @Html.Raw(ViewBag.locUrl)
+        </div>
+    </div>
+    <div class="clear10"></div>
+    <div class="date-tool">
+        <div class="date-tool-input mr10">
+            <div class="date-tool-input-text">
+                <input name="username" type="text" onclick="xzuser()" id="username" readOnly="true" placeholder="用户名" value="@Request["username"]" />
+                <input type="hidden" id="userid" name="userid" value="@Request["userid"]"/>
+            </div>
+        </div>
+        <div class="rule-single-select mr10">
+            <select name="s_state" id="s_state">
+                <option value="" @(Request["s_state"] == "" ? "selected='selected'" : "")>账单状态</option>
+                <option value="0" @(Request["s_state"] == "0" ? "selected='selected'" : "")>生成</option>
+                <option value="1" @(Request["s_state"] == "1" ? "selected='selected'" : "")>已提款</option>
+            </select>
+        </div>
+        <div class="rule-single-select ml10">
+            <select name="searchDesc" id="searchDesc">
+                <option value="1" @(Request["s_sort"] == "1" ? "selected=selected" : "")>降序</option>
+                <option value="0" @(Request["s_sort"] == "0" ? "selected=selected" : "")>升序</option>
+            </select>
+        </div>
+        <a id="btn_search" class="btn-search ml10" href="javascript:" onclick="SerachUserReport()">查询</a>
+    </div>
+    <div class="clear10"></div>
+    <div class="data-table-2">
+        <table border="0" cellpadding="0" cellspacing="0" id="table">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="all" onclick="checkAll(this)" /></th>
+                    <th>用户名</th>
+                    <th>生成日期</th>
+                    <th>账单日期</th>
+                    <th>流水金额</th>
+                    <th>账单金额</th>
+                    <th>服务费</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{if (Model.Rows.Count > 0)
+                  {
+                      foreach (System.Data.DataRow dr in Model.Rows)
+                      {
+                    <tr>
+                        <td>
+                            @{
+                          if (dr["b_state"].ToString() == "0")
+                          {
+                                <input type="checkbox" name="child" class="checkall" value="@(!string.IsNullOrEmpty(dr["b_id"].ToString()) ? dr["b_id"] : "0")" />
+                          }
+                            }
+                        </td>
+                        <td>@(!string.IsNullOrEmpty(dr["u_realname"].ToString()) ? dr["u_realname"].ToString() : "---")</td>
+                        <td>@(!string.IsNullOrEmpty(dr["b_ctime"].ToString()) ? DateTime.Parse(dr["b_ctime"].ToString()).ToString("yyyy-MM-dd HH:mm:ss") : "---")</td>
+                        <td>@(!string.IsNullOrEmpty(dr["b_stime"].ToString()) ? DateTime.Parse(dr["b_stime"].ToString()).ToString("yyyy-MM-dd") : "---")</td>
+                        <td>@(!string.IsNullOrEmpty(dr["b_poundage"].ToString()) && !string.IsNullOrEmpty(dr["b_money"].ToString()) ? (decimal.Parse(dr["b_poundage"].ToString()) + decimal.Parse(dr["b_money"].ToString())).ToString("f2") : "---")</td>
+                        <td>@(!string.IsNullOrEmpty(dr["b_money"].ToString()) ? decimal.Parse(dr["b_money"].ToString()).ToString("f2") : "---")</td>
+                        <td>@(!string.IsNullOrEmpty(dr["b_poundage"].ToString()) ? decimal.Parse(dr["b_poundage"].ToString()).ToString("f2") : "---")</td>
+                        <td>
+                            @{if (!string.IsNullOrEmpty(dr["b_state"].ToString()))
+                              {
+                                  if (dr["b_state"].ToString() == "0")
+                                  {
+                                <span style="color: blue;">生成</span>
+                                  }
+                                  else if (dr["b_state"].ToString() == "1")
+                                  {
+                                <span style="color: green;">已提款</span>
+                                  }
+                              }
+                              else
+                              {
+                                <span style="color: black;">---</span>
+                              }
+                            }
+                        </td>
+                    </tr>
+                      }
+                  }
+                  else
+                  { 
+                    <tr>
+                        <td align="center" colspan="8">暂无记录</td>
+                    </tr>
+                  }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+@JMP.TOOL.UserHelper.js("Financial/ManualList.js")

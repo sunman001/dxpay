@@ -1,0 +1,606 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="gb2312" />
+    <title>数据库结构—动软自动生成器</title>
+    <style type="text/css">
+        body {
+            font-size: 9pt;
+        }
+
+        .styledb {
+            font-size: 14px;
+        }
+
+        .styletab {
+            font-size: 14px;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align: center">
+        <div class="styledb">数据库名：dx_base</div>
+        <div class="styletab">表名：CoAgent</div>
+        <div align="left">代理商信息表</div>
+        <div>
+            <table border="0" cellpadding="5" cellspacing="0" width="90%">
+                <tr>
+                    <td bgcolor="#FBFBFB">
+                        <table cellspacing="0" cellpadding="5" border="1" width="100%" bordercolorlight="#D7D7E5" bordercolordark="#D3D8E0">
+                            <tr bgcolor="#F0F0F0">
+                                <td>序号</td>
+                                <td>列名</td>
+                                <td>数据类型</td>
+                                <td>长度</td>
+                                <td>小数位</td>
+                                <td>标识</td>
+                                <td>主键</td>
+                                <td>允许空</td>
+                                <td>默认值</td>
+                                <td>说明</td>
+                            </tr>
+                            <tr><td>1</td><td>Id</td><td>int</td><td>4</td><td>0</td><td>是</td><td>是</td><td>否</td><td>&nbsp;</td><td align="left">&nbsp;</td></tr>
+                            <tr><td>2</td><td>LoginName</td><td>nvarchar</td><td>50</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>''</td><td align="left">登录名称</td></tr>
+                            <tr><td>3</td><td>Password</td><td>nvarchar</td><td>255</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>''</td><td align="left">加密的密码字符串</td></tr>
+                            <tr><td>4</td><td>DisplayName</td><td>nvarchar</td><td>50</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>''</td><td align="left">显示姓名</td></tr>
+                            <tr><td>5</td><td>EmailAddress</td><td>nvarchar</td><td>255</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>''</td><td align="left">邮箱地址</td></tr>
+                            <tr><td>6</td><td>MobilePhone</td><td>nvarchar</td><td>20</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">手机号码</td></tr>
+                            <tr><td>7</td><td>QQ</td><td>nvarchar</td><td>15</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">QQ号码</td></tr>
+                            <tr><td>8</td><td>Website</td><td>nvarchar</td><td>255</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">网址</td></tr>
+                            <tr><td>9</td><td>CreatedOn</td><td>datetime</td><td>8</td><td>3</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>getdate</td><td align="left">创建时间</td></tr>
+                            <tr><td>10</td><td>CreatedById</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">创建者ID</td></tr>
+                            <tr><td>11</td><td>CreatedByName</td><td>nvarchar</td><td>50</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">创建者姓名</td></tr>
+                            <tr><td>12</td><td>OwnerId</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">所属商务ID</td></tr>
+                            <tr><td>13</td><td>OwnerName</td><td>nvarchar</td><td>50</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">所属商务姓名</td></tr>
+                            <tr><td>14</td><td>LoginCount</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">登录次数</td></tr>
+                            <tr><td>15</td><td>State</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">状态[0:正常,1:冻结]</td></tr>
+                            <tr><td>16</td><td>BankFullName</td><td>nvarchar</td><td>255</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">开户银行全称</td></tr>
+                            <tr><td>17</td><td>BankAccountName</td><td>nvarchar</td><td>255</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">开户名</td></tr>
+                            <tr><td>18</td><td>BankAccount</td><td>nvarchar</td><td>255</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">开户账号</td></tr>
+                            <tr><td>19</td><td>Classify</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">类别：0 个人 1 企业</td></tr>
+                            <tr><td>20</td><td>IDCardNumber</td><td>nvarchar</td><td>30</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">身份证号</td></tr>
+                            <tr><td>21</td><td>PersonalPhotoPath</td><td>nvarchar</td><td>255</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">持证照片地址</td></tr>
+                            <tr><td>22</td><td>BusinessLicensePhotoPath</td><td>nvarchar</td><td>255</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">营业执照照片</td></tr>
+                            <tr><td>23</td><td>BusinessLicenseNumber</td><td>nvarchar</td><td>255</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">营业执照编号</td></tr>
+                            <tr><td>24</td><td>ContactAddress</td><td>nvarchar</td><td>0</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">联系地址</td></tr>
+                            <tr><td>25</td><td>AuditState</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">审核状态：-1 未通过 0 等待审核</td></tr>
+                            <tr><td>26</td><td>RoleId</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">用户角色ID</td></tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div><div class="styletab">表名：CoBusinessPersonnel</div>
+        <div align="left">商务信息表</div>
+        <div>
+            <table border="0" cellpadding="5" cellspacing="0" width="90%">
+                <tr>
+                    <td bgcolor="#FBFBFB">
+                        <table cellspacing="0" cellpadding="5" border="1" width="100%" bordercolorlight="#D7D7E5" bordercolordark="#D3D8E0">
+                            <tr bgcolor="#F0F0F0">
+                                <td>序号</td>
+                                <td>列名</td>
+                                <td>数据类型</td>
+                                <td>长度</td>
+                                <td>小数位</td>
+                                <td>标识</td>
+                                <td>主键</td>
+                                <td>允许空</td>
+                                <td>默认值</td>
+                                <td>说明</td>
+                            </tr>
+                            <tr><td>1</td><td>Id</td><td>int</td><td>4</td><td>0</td><td>是</td><td>是</td><td>否</td><td>&nbsp;</td><td align="left">&nbsp;</td></tr>
+                            <tr><td>2</td><td>LoginName</td><td>nvarchar</td><td>50</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>''</td><td align="left">登录名称</td></tr>
+                            <tr><td>3</td><td>Password</td><td>nvarchar</td><td>255</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>''</td><td align="left">加密的密码字符串</td></tr>
+                            <tr><td>4</td><td>DisplayName</td><td>nvarchar</td><td>50</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>''</td><td align="left">显示姓名</td></tr>
+                            <tr><td>5</td><td>EmailAddress</td><td>nvarchar</td><td>255</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>''</td><td align="left">邮箱地址</td></tr>
+                            <tr><td>6</td><td>MobilePhone</td><td>nvarchar</td><td>20</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">手机号码</td></tr>
+                            <tr><td>7</td><td>QQ</td><td>nvarchar</td><td>15</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">QQ号码</td></tr>
+                            <tr><td>8</td><td>Website</td><td>nvarchar</td><td>255</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">网址</td></tr>
+                            <tr><td>9</td><td>CreatedOn</td><td>datetime</td><td>8</td><td>3</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>getdate</td><td align="left">创建时间</td></tr>
+                            <tr><td>10</td><td>CreatedById</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">创建者ID</td></tr>
+                            <tr><td>11</td><td>CreatedByName</td><td>nvarchar</td><td>50</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">创建者姓名</td></tr>
+                            <tr><td>12</td><td>LoginCount</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">登录次数</td></tr>
+                            <tr><td>13</td><td>State</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">状态[0:正常,1:冻结]</td></tr>
+                            <tr><td>14</td><td>RoleId</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">用户角色ID</td></tr>
+                            <tr><td>15</td><td>LogintTime</td><td>datetime</td><td>0</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">最后登录时间</td></tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="styletab">表名：CoCooperationApplication</div>
+        <div align="left">合作申请表</div>
+        <div>
+            <table border="0" cellpadding="5" cellspacing="0" width="90%">
+                <tr>
+                    <td bgcolor="#FBFBFB">
+                        <table cellspacing="0" cellpadding="5" border="1" width="100%" bordercolorlight="#D7D7E5" bordercolordark="#D3D8E0">
+                            <tr bgcolor="#F0F0F0"><td>序号</td><td>列名</td><td>数据类型</td><td>长度</td><td>小数位</td><td>标识</td><td>主键</td><td>允许空</td><td>默认值</td><td>说明</td></tr>
+                            <tr><td>1</td><td>Id</td><td>int</td><td>4</td><td>0</td><td>是</td><td>是</td><td>否</td><td>&nbsp;</td><td align="left">&nbsp;</td></tr>
+                            <tr><td>2</td><td>Name</td><td>nvarchar</td><td>50</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>''</td><td align="left">联系人姓名</td></tr>
+                            <tr><td>3</td><td>EmailAddress</td><td>nvarchar</td><td>255</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>''</td><td align="left">邮箱地址</td></tr>
+                            <tr><td>4</td><td>MobilePhone</td><td>nvarchar</td><td>20</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>''</td><td align="left">手机号码</td></tr>
+                            <tr><td>5</td><td>QQ</td><td>nvarchar</td><td>15</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>''</td><td align="left">QQ号码</td></tr>
+                            <tr><td>6</td><td>Website</td><td>nvarchar</td><td>255</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">网址[可选]</td></tr>
+                            <tr><td>7</td><td>RequestContent</td><td>nvarchar</td><td>0</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">合作描述[可选]</td></tr>
+                            <tr><td>8</td><td>CreatedOn</td><td>datetime</td><td>8</td><td>3</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>getdate</td><td align="left">创建时间</td></tr>
+                            <tr><td>9</td><td>ReadCount</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">被查看次数</td></tr>
+                            <tr><td>10</td><td>LatestReadTime</td><td>datetime</td><td>8</td><td>3</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>&nbsp;</td><td align="left">最近一次被查看时间</td></tr>
+                            <tr><td>11</td><td>GrabbedDate</td><td>datetime</td><td>8</td><td>3</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>&nbsp;</td><td align="left">抢单者时间</td></tr>
+                            <tr><td>12</td><td>GrabbedById</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">抢单者ID</td></tr>
+                            <tr><td>13</td><td>GrabbedByName</td><td>nvarchar</td><td>50</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">抢单者姓名</td></tr>
+                            <tr><td>14</td><td>State</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">合作表单状态[-1:已关闭,0:新建,1:已抢,2:已分配]</td></tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="styletab">表名：CoOperationLog</div>
+        <div align="left">有关费率等的操作日志</div>
+        <div>
+            <table border="0" cellpadding="5" cellspacing="0" width="90%">
+                <tr>
+                    <td bgcolor="#FBFBFB">
+                        <table cellspacing="0" cellpadding="5" border="1" width="100%" bordercolorlight="#D7D7E5" bordercolordark="#D3D8E0">
+                            <tr bgcolor="#F0F0F0">
+                                <td>序号</td>
+                                <td>列名</td>
+                                <td>数据类型</td>
+                                <td>长度</td>
+                                <td>小数位</td>
+                                <td>标识</td>
+                                <td>主键</td>
+                                <td>允许空</td>
+                                <td>默认值</td>
+                                <td>说明</td>
+                            </tr>
+                            <tr><td>1</td><td>Id</td><td>int</td><td>4</td><td>0</td><td>是</td><td>是</td><td>否</td><td>&nbsp;</td><td align="left">&nbsp;</td></tr>
+                            <tr><td>2</td><td>Summary</td><td>nvarchar</td><td>255</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">摘要</td></tr>
+                            <tr><td>3</td><td>Message</td><td>nvarchar</td><td>0</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">详细信息</td></tr>
+                            <tr><td>4</td><td>CreatedOn</td><td>datetime</td><td>8</td><td>3</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>getdate</td><td align="left">创建时间</td></tr>
+                            <tr><td>5</td><td>CreatedById</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">创建者ID</td></tr>
+                            <tr><td>6</td><td>CreatedByName</td><td>nvarchar</td><td>50</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">创建者</td></tr>
+                            <tr><td>7</td><td>IpAddress</td><td>nvarchar</td><td>32</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">IP地址</td></tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="styletab">表名：CoServiceFeeRatioGrade</div>
+        <div align="left">服务费/提成等级信息表</div>
+        <div>
+            <table border="0" cellpadding="5" cellspacing="0" width="90%">
+                <tr>
+                    <td bgcolor="#FBFBFB">
+                        <table cellspacing="0" cellpadding="5" border="1" width="100%" bordercolorlight="#D7D7E5" bordercolordark="#D3D8E0">
+                            <tr bgcolor="#F0F0F0">
+                                <td>序号</td>
+                                <td>列名</td>
+                                <td>数据类型</td>
+                                <td>长度</td>
+                                <td>小数位</td>
+                                <td>标识</td>
+                                <td>主键</td>
+                                <td>允许空</td>
+                                <td>默认值</td>
+                                <td>说明</td>
+                            </tr>
+                            <tr><td>1</td><td>Id</td><td>int</td><td>4</td><td>0</td><td>是</td><td>是</td><td>否</td><td>&nbsp;</td><td align="left">&nbsp;</td></tr>
+                            <tr><td>2</td><td>Name</td><td>nvarchar</td><td>50</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>''</td><td align="left">服务费等级名称</td></tr>
+                            <tr><td>3</td><td>ServiceFeeRatio</td><td>decimal</td><td>5</td><td>4</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>0</td><td align="left">开发者的服务费比例</td></tr>
+                            <tr><td>4</td><td>CustomerWithoutAgentRatio</td><td>decimal</td><td>5</td><td>4</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>0</td><td align="left">直客提成比例</td></tr>
+                            <tr><td>5</td><td>BusinessPersonnelAgentRatio</td><td>decimal</td><td>5</td><td>4</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>0</td><td align="left">商务对代理商的提成比例</td></tr>
+                            <tr><td>6</td><td>AgentPushMoneyRatio</td><td>decimal</td><td>5</td><td>4</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>0</td><td align="left">代理商提成比例[小数]</td></tr>
+                            <tr><td>7</td><td>Description</td><td>nvarchar</td><td>0</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">描述信息</td></tr>
+                            <tr><td>8</td><td>CreatedOn</td><td>datetime</td><td>8</td><td>3</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>getdate</td><td align="left">创建时间</td></tr>
+                            <tr><td>9</td><td>CreatedById</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">创建者ID</td></tr>
+                            <tr><td>10</td><td>CreatedByName</td><td>nvarchar</td><td>50</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>''</td><td align="left">创建者姓名</td></tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="styletab">表名：jmp_paymenttype</div>
+        <div align="left"></div>
+        <div>
+            <table border="0" cellpadding="5" cellspacing="0" width="90%">
+                <tr>
+                    <td bgcolor="#FBFBFB">
+                        <table cellspacing="0" cellpadding="5" border="1" width="100%" bordercolorlight="#D7D7E5" bordercolordark="#D3D8E0">
+                            <tr bgcolor="#F0F0F0">
+                                <td>序号</td>
+                                <td>列名</td>
+                                <td>数据类型</td>
+                                <td>长度</td>
+                                <td>小数位</td>
+                                <td>标识</td>
+                                <td>主键</td>
+                                <td>允许空</td>
+                                <td>默认值</td>
+                                <td>说明</td>
+                            </tr>
+                            <tr><td>1</td><td>p_id</td><td>int</td><td>4</td><td>0</td><td>是</td><td>是</td><td>否</td><td>&nbsp;</td><td align="left">&nbsp;</td></tr>
+                            <tr><td>2</td><td>p_name</td><td>nvarchar</td><td>0</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>&nbsp;</td><td align="left">&nbsp;</td></tr>
+                            <tr><td>3</td><td>p_type</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>&nbsp;</td><td align="left">&nbsp;</td></tr>
+                            <tr><td>4</td><td>p_extend</td><td>nvarchar</td><td>0</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>&nbsp;</td><td align="left">&nbsp;</td></tr>
+                            <tr><td>5</td><td>p_priority</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>&nbsp;</td><td align="left">&nbsp;</td></tr>
+                            <tr><td>6</td><td>p_forbidden</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>&nbsp;</td><td align="left">&nbsp;</td></tr>
+                            <tr><td>7</td><td>p_platform</td><td>nvarchar</td><td>50</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>&nbsp;</td><td align="left">&nbsp;</td></tr>
+                            <tr><td>8</td><td>CostRatio</td><td>decimal</td><td>5</td><td>4</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>0</td><td align="left">成本费率</td></tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="styletab">表名：jmp_paymode</div>
+        <div align="left"></div>
+        <div>
+            <table border="0" cellpadding="5" cellspacing="0" width="90%">
+                <tr>
+                    <td bgcolor="#FBFBFB">
+                        <table cellspacing="0" cellpadding="5" border="1" width="100%" bordercolorlight="#D7D7E5" bordercolordark="#D3D8E0">
+                            <tr bgcolor="#F0F0F0">
+                                <td>序号</td>
+                                <td>列名</td>
+                                <td>数据类型</td>
+                                <td>长度</td>
+                                <td>小数位</td>
+                                <td>标识</td>
+                                <td>主键</td>
+                                <td>允许空</td>
+                                <td>默认值</td>
+                                <td>说明</td>
+                            </tr>
+                            <tr><td>1</td><td>p_id</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>是</td><td>否</td><td>&nbsp;</td><td align="left">支付类型ID</td></tr>
+                            <tr><td>2</td><td>p_name</td><td>nvarchar</td><td>0</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>否</td><td>&nbsp;</td><td align="left">支付名称</td></tr>
+                            <tr><td>3</td><td>p_rate</td><td>decimal</td><td>5</td><td>4</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>&nbsp;</td><td align="left">接口费率</td></tr>
+                            <tr><td>4</td><td>p_value</td><td>nvarchar</td><td>0</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>&nbsp;</td><td align="left">支付值</td></tr>
+                            <tr><td>5</td><td>p_state</td><td>int</td><td>4</td><td>0</td><td>&nbsp;</td><td>是</td><td>否</td><td>&nbsp;</td><td align="left">是否启用</td></tr>
+                            <tr><td>6</td><td>p_interface</td><td>nvarchar</td><td>0</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td>&nbsp;</td><td align="left">&nbsp;</td></tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="styletab">表名：jmp_user</div>
+        <div align="left"></div>
+        <div>
+            <table border="0" cellpadding="5" cellspacing="0" width="90%">
+                <tr>
+                    <td bgcolor="#FBFBFB">
+                        <table cellspacing="0" cellpadding="5" border="1" width="100%" bordercolorlight="#D7D7E5" bordercolordark="#D3D8E0">
+                            <tr bgcolor="#F0F0F0">
+                                <td>序号</td>
+                                <td>列名</td>
+                                <td>数据类型</td>
+                                <td>长度</td>
+                                <td>小数位</td>
+                                <td>标识</td>
+                                <td>主键</td>
+                                <td>允许空</td>
+                                <td>默认值</td>
+                                <td>说明</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>u_id</td>
+                                <td>int</td>
+                                <td>4</td>
+                                <td>0</td>
+                                <td>是</td>
+                                <td>是</td>
+                                <td>否</td>
+                                <td>&nbsp;</td>
+                                <td align="left">用户ID</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>u_email</td>
+                                <td>nvarchar</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>否</td>
+                                <td>&nbsp;</td>
+                                <td align="left">登录邮件地址</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>u_password</td>
+                                <td>nvarchar</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>否</td>
+                                <td>&nbsp;</td>
+                                <td align="left">登录密码</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>u_realname</td>
+                                <td>nvarchar</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>否</td>
+                                <td>&nbsp;</td>
+                                <td align="left">真实姓名</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>u_phone</td>
+                                <td>nvarchar</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>否</td>
+                                <td>&nbsp;</td>
+                                <td align="left">联系电话</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>u_qq</td>
+                                <td>nvarchar</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>否</td>
+                                <td>&nbsp;</td>
+                                <td align="left">联系qq</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>u_bankname</td>
+                                <td>nvarchar</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>是</td>
+                                <td>&nbsp;</td>
+                                <td align="left">开户银行全称</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>u_name</td>
+                                <td>nvarchar</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>是</td>
+                                <td>&nbsp;</td>
+                                <td align="left">开户名</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>u_account</td>
+                                <td>nvarchar</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>是</td>
+                                <td>&nbsp;</td>
+                                <td align="left">开户账号</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>u_category</td>
+                                <td>int</td>
+                                <td>4</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>否</td>
+                                <td>&nbsp;</td>
+                                <td align="left">类别：0 个人 1 企业</td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td>u_idnumber</td>
+                                <td>nvarchar</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>是</td>
+                                <td>&nbsp;</td>
+                                <td align="left">身份证号码</td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td>u_photo</td>
+                                <td>nvarchar</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>是</td>
+                                <td>&nbsp;</td>
+                                <td align="left">持证照片地址</td>
+                            </tr>
+                            <tr>
+                                <td>13</td>
+                                <td>u_blicense</td>
+                                <td>nvarchar</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>是</td>
+                                <td>&nbsp;</td>
+                                <td align="left">营业执照照片</td>
+                            </tr>
+                            <tr>
+                                <td>14</td>
+                                <td>u_blicensenumber</td>
+                                <td>nvarchar</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>是</td>
+                                <td>&nbsp;</td>
+                                <td align="left">营业执照编号</td>
+                            </tr>
+                            <tr>
+                                <td>15</td>
+                                <td>u_count</td>
+                                <td>int</td>
+                                <td>4</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>否</td>
+                                <td>&nbsp;</td>
+                                <td align="left">用户登录次数</td>
+                            </tr>
+                            <tr>
+                                <td>16</td>
+                                <td>u_state</td>
+                                <td>int</td>
+                                <td>4</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>是</td>
+                                <td>否</td>
+                                <td>&nbsp;</td>
+                                <td align="left">账户状态：0 冻结 1 正常</td>
+                            </tr>
+                            <tr>
+                                <td>17</td>
+                                <td>u_auditstate</td>
+                                <td>int</td>
+                                <td>4</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>否</td>
+                                <td>&nbsp;</td>
+                                <td align="left">审核状态：-1 未通过 0 等待审核</td>
+                            </tr>
+                            <tr>
+                                <td>18</td>
+                                <td>u_topid</td>
+                                <td>int</td>
+                                <td>4</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>否</td>
+                                <td>&nbsp;</td>
+                                <td align="left">父级用户ID(0:父级)</td>
+                            </tr>
+                            <tr>
+                                <td>19</td>
+                                <td>u_address</td>
+                                <td>nvarchar</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>否</td>
+                                <td>&nbsp;</td>
+                                <td align="left">联系地址</td>
+                            </tr>
+                            <tr>
+                                <td>20</td>
+                                <td>u_role_id</td>
+                                <td>int</td>
+                                <td>4</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>是</td>
+                                <td>是</td>
+                                <td>&nbsp;</td>
+                                <td align="left">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>21</td>
+                                <td>u_drawing</td>
+                                <td>int</td>
+                                <td>4</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>是</td>
+                                <td>&nbsp;</td>
+                                <td align="left">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>22</td>
+                                <td>u_merchant_id</td>
+                                <td>int</td>
+                                <td>4</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>是</td>
+                                <td>&nbsp;</td>
+                                <td align="left">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>23</td>
+                                <td>relation_type</td>
+                                <td>int</td>
+                                <td>4</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>是</td>
+                                <td>0</td>
+                                <td align="left">关联关系[0:未指定,1:商务,2:代理商]</td>
+                            </tr>
+                            <tr>
+                                <td>24</td>
+                                <td>relation_person_id</td>
+                                <td>int</td>
+                                <td>4</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>是</td>
+                                <td>0</td>
+                                <td align="left">关联的关系人ID</td>
+                            </tr>
+                            <tr>
+                                <td>27</td>
+                                <td>ServiceFeeRatioGradeId</td>
+                                <td>int</td>
+                                <td>4</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>是</td>
+                                <td>&nbsp;</td>
+                                <td align="left">开发者服务费关联表ID(商务或者代理商设置此项,根据relation_type字段)</td>
+                            </tr>
+                            <tr>
+                                <td>28</td>
+                                <td>IsSpecialApproval</td>
+                                <td>bit</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>是</td>
+                                <td>0</td>
+                                <td align="left">是否特批(如果是特批,读取系统表[jmp_system]中的CO_SPECIAL_SERVICE_FEE_RATIO选项的值)</td>
+                            </tr>
+                            <tr><td>29</td><td>BusinessEntity</td><td>nvarchar</td><td>0</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td></td><td align="left">企业法人</td></tr>
+                            <tr><td>30</td><td>RegisteredAddress</td><td>nvarchar</td><td>0</td><td>0</td><td>&nbsp;</td><td>&nbsp;</td><td>是</td><td></td><td align="left">企业注册地址</td></tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

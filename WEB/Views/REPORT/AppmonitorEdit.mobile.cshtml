@@ -1,0 +1,181 @@
+﻿@{
+    ViewBag.Title = "修改应用";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var mode = ViewBag.model as JMP.MDL.appmonitor;
+}
+@JMP.TOOL.UserHelper.js("mobile/REPORT/Appmonitor.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="mobile-container mobile-popup">
+    <input name="a_id" id="a_id" type="hidden" value="@(mode.a_id == 0 ? 0 : mode.a_id)" />
+    <div class="plate-form  ui form ">
+        <div class="field">
+            <label>所属应用：</label>
+            <input name="c_appname" type="text" id="r_appname" readonly="readonly" value="@(!string.IsNullOrEmpty(mode.a_name) ? mode.a_name : "")"/>
+              <input type="hidden" id="r_appid" name="r_appid" value="@(mode.a_appid)" />
+            <div class="Validform_checktip" id="yzkfz">*请选择所属应用</div>
+        </div>
+        <div class="field">
+            <label>请求率：</label>
+            <input name="a_request" type="text" id="a_request" onblur="yzrequest()" value="@( mode.a_request)" />
+            <font color='red'>%</font>
+            <div class="Validform_checktip" id="requestyy">*请求率只能为数字</div>
+        </div>
+
+        <div class="field">
+            <label>时间段一从：</label>
+            <select name="StartDay " id="StartDay" class="ui dropdown fluid fluid-block">
+                <option value="">请选择</option>
+                <option value="1" @(mode.StartDay == 1 ? "selected='selected'" : "")>01</option>
+                <option value="2" @(mode.StartDay == 2 ? "selected='selected'" : "")>02</option>
+                <option value="3" @(mode.StartDay == 3 ? "selected='selected'" : "")>03</option>
+                <option value="4" @(mode.StartDay == 4 ? "selected='selected'" : "")>04</option>
+                <option value="5" @(mode.StartDay == 5 ? "selected='selected'" : "")>05</option>
+                <option value="6" @(mode.StartDay == 6 ? "selected='selected'" : "")>06</option>
+                <option value="7" @(mode.StartDay == 7 ? "selected='selected'" : "")>07</option>
+                <option value="8" @(mode.StartDay == 8 ? "selected='selected'" : "")>08</option>
+                <option value="9" @(mode.StartDay == 9 ? "selected='selected'" : "")>09</option>
+                <option value="10" @(mode.StartDay == 10 ? "selected='selected'" : "")>10</option>
+                <option value="11" @(mode.StartDay == 11 ? "selected='selected'" : "")>11</option>
+                <option value="12" @(mode.StartDay == 12 ? "selected='selected'" : "")>12</option>
+                <option value="13" @(mode.StartDay == 13 ? "selected='selected'" : "")>13</option>
+                <option value="14" @(mode.StartDay == 14 ? "selected='selected'" : "")>14</option>
+                <option value="15" @(mode.StartDay == 15 ? "selected='selected'" : "")>15</option>
+                <option value="16" @(mode.StartDay == 16 ? "selected='selected'" : "")>16</option>
+                <option value="17" @(mode.StartDay == 17 ? "selected='selected'" : "")>17</option>
+                <option value="18" @(mode.StartDay == 18 ? "selected='selected'" : "")>18</option>
+                <option value="19" @(mode.StartDay == 19 ? "selected='selected'" : "")>19</option>
+                <option value="20" @(mode.StartDay == 20 ? "selected='selected'" : "")>20</option>
+                <option value="21" @(mode.StartDay == 21 ? "selected='selected'" : "")>21</option>
+                <option value="22" @(mode.StartDay == 22 ? "selected='selected'" : "")>22</option>
+                <option value="23" @(mode.StartDay == 23 ? "selected='selected'" : "")>23</option>
+                <option value="24" @(mode.StartDay == 24 ? "selected='selected'" : "")>24</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>到：</label>
+            <select name="EndDay" id="EndDay" class="ui dropdown fluid fluid-block">
+                <option value="">请选择</option>
+                <option value="1" @(mode.EndDay == 1 ? "selected='selected'" : "")>01</option>
+                <option value="2" @(mode.EndDay == 2 ? "selected='selected'" : "")>02</option>
+                <option value="3" @(mode.EndDay == 3 ? "selected='selected'" : "")>03</option>
+                <option value="4" @(mode.EndDay == 4 ? "selected='selected'" : "")>04</option>
+                <option value="5" @(mode.EndDay == 5 ? "selected='selected'" : "")>05</option>
+                <option value="6" @(mode.EndDay == 6 ? "selected='selected'" : "")>06</option>
+                <option value="7" @(mode.EndDay == 7 ? "selected='selected'" : "")>07</option>
+                <option value="8" @(mode.EndDay == 8 ? "selected='selected'" : "")>08</option>
+                <option value="9" @(mode.EndDay == 9 ? "selected='selected'" : "")>09</option>
+                <option value="10" @(mode.EndDay == 10 ? "selected='selected'" : "")>10</option>
+                <option value="11" @(mode.EndDay == 11 ? "selected='selected'" : "")>11</option>
+                <option value="12" @(mode.EndDay == 12 ? "selected='selected'" : "")>12</option>
+                <option value="13" @(mode.EndDay == 13 ? "selected='selected'" : "")>13</option>
+                <option value="14" @(mode.EndDay == 14 ? "selected='selected'" : "")>14</option>
+                <option value="15" @(mode.EndDay == 15 ? "selected='selected'" : "")>15</option>
+                <option value="16" @(mode.EndDay == 16 ? "selected='selected'" : "")>16</option>
+                <option value="17" @(mode.EndDay == 17 ? "selected='selected'" : "")>17</option>
+                <option value="18" @(mode.EndDay == 18 ? "selected='selected'" : "")>18</option>
+                <option value="19" @(mode.EndDay == 19 ? "selected='selected'" : "")>19</option>
+                <option value="20" @(mode.EndDay == 20 ? "selected='selected'" : "")>20</option>
+                <option value="21" @(mode.EndDay == 21 ? "selected='selected'" : "")>21</option>
+                <option value="22" @(mode.EndDay == 22 ? "selected='selected'" : "")>22</option>
+                <option value="23" @(mode.EndDay == 23 ? "selected='selected'" : "")>23</option>
+                <option value="24" @(mode.EndDay == 24 ? "selected='selected'" : "")>24</option>
+            </select>
+
+        </div>
+        <div class="field">
+            <label> 分钟数 </label>
+            <input name="a_minute" type="text" id="a_minute" onblur="yzMinute()" value="@mode.DayMinute" />
+            <div class="Validform_checktip" id="OtherMinteyy">*分钟数只能为数字</div>
+        </div>
+
+        <div class="field">
+            <label>时间段二:从</label>
+            <select name="StartNight " id="StartNight" class="ui dropdown fluid fluid-block">
+                <option value="">请选择</option>
+                <option value="1" @(mode.StartNight == 1 ? "selected='selected'" : "")>01</option>
+                <option value="2" @(mode.StartNight == 2 ? "selected='selected'" : "")>02</option>
+                <option value="3" @(mode.StartNight == 3 ? "selected='selected'" : "")>03</option>
+                <option value="4" @(mode.StartNight == 4 ? "selected='selected'" : "")>04</option>
+                <option value="5" @(mode.StartNight == 5 ? "selected='selected'" : "")>05</option>
+                <option value="6" @(mode.StartNight == 6 ? "selected='selected'" : "")>06</option>
+                <option value="7" @(mode.StartNight == 7 ? "selected='selected'" : "")>07</option>
+                <option value="8" @(mode.StartNight == 8 ? "selected='selected'" : "")>08</option>
+                <option value="9" @(mode.StartNight == 9 ? "selected='selected'" : "")>09</option>
+                <option value="10" @(mode.StartNight == 10 ? "selected='selected'" : "")>10</option>
+                <option value="11" @(mode.StartNight == 11 ? "selected='selected'" : "")>11</option>
+                <option value="12" @(mode.StartNight == 12 ? "selected='selected'" : "")>12</option>
+                <option value="13" @(mode.StartNight == 13 ? "selected='selected'" : "")>13</option>
+                <option value="14" @(mode.StartNight == 14 ? "selected='selected'" : "")>14</option>
+                <option value="15" @(mode.StartNight == 15 ? "selected='selected'" : "")>15</option>
+                <option value="16" @(mode.StartNight == 16 ? "selected='selected'" : "")>16</option>
+                <option value="17" @(mode.StartNight == 17 ? "selected='selected'" : "")>17</option>
+                <option value="18" @(mode.StartNight == 18 ? "selected='selected'" : "")>18</option>
+                <option value="19" @(mode.StartNight == 19 ? "selected='selected'" : "")>19</option>
+                <option value="20" @(mode.StartNight == 20 ? "selected='selected'" : "")>20</option>
+                <option value="21" @(mode.StartNight == 21 ? "selected='selected'" : "")>21</option>
+                <option value="22" @(mode.StartNight == 22 ? "selected='selected'" : "")>22</option>
+                <option value="23" @(mode.StartNight == 23 ? "selected='selected'" : "")>23</option>
+                <option value="24" @(mode.StartNight == 24 ? "selected='selected'" : "")>24</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>到 </label>
+            <select name="EndNight" id="EndNight" class="ui dropdown fluid fluid-block">
+                <option value="">请选择</option>
+                <option value="1" @(mode.EndNight == 1 ? "selected='selected'" : "")>01</option>
+                <option value="2" @(mode.EndNight == 2 ? "selected='selected'" : "")>02</option>
+                <option value="3" @(mode.EndNight == 3 ? "selected='selected'" : "")>03</option>
+                <option value="4" @(mode.EndNight == 4 ? "selected='selected'" : "")>04</option>
+                <option value="5" @(mode.EndNight == 5 ? "selected='selected'" : "")>05</option>
+                <option value="6" @(mode.EndNight == 6 ? "selected='selected'" : "")>06</option>
+                <option value="7" @(mode.EndNight == 7 ? "selected='selected'" : "")>07</option>
+                <option value="8" @(mode.EndNight == 8 ? "selected='selected'" : "")>08</option>
+                <option value="9" @(mode.EndNight == 9 ? "selected='selected'" : "")>09</option>
+                <option value="10" @(mode.EndNight == 10 ? "selected='selected'" : "")>10</option>
+                <option value="11" @(mode.EndNight == 11 ? "selected='selected'" : "")>11</option>
+                <option value="12" @(mode.EndNight == 12 ? "selected='selected'" : "")>12</option>
+                <option value="13" @(mode.EndNight == 13 ? "selected='selected'" : "")>13</option>
+                <option value="14" @(mode.EndNight == 14 ? "selected='selected'" : "")>14</option>
+                <option value="15" @(mode.EndNight == 15 ? "selected='selected'" : "")>15</option>
+                <option value="16" @(mode.EndNight == 16 ? "selected='selected'" : "")>16</option>
+                <option value="17" @(mode.EndNight == 17 ? "selected='selected'" : "")>17</option>
+                <option value="18" @(mode.EndNight == 18 ? "selected='selected'" : "")>18</option>
+                <option value="19" @(mode.EndNight == 19 ? "selected='selected'" : "")>19</option>
+                <option value="20" @(mode.EndNight == 20 ? "selected='selected'" : "")>20</option>
+                <option value="21" @(mode.EndNight == 21 ? "selected='selected'" : "")>21</option>
+                <option value="22" @(mode.EndNight == 22 ? "selected='selected'" : "")>22</option>
+                <option value="23" @(mode.EndNight == 23 ? "selected='selected'" : "")>23</option>
+                <option value="24" @(mode.EndNight == 24 ? "selected='selected'" : "")>24</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label>
+                分钟数
+            </label>
+            <input name="NightMinute" type="text" id="NightMinute" onblur="yzNightMinute()" value="@mode.NightMinute" />
+            <div class="Validform_checktip" id="NightMinuteyy">*分钟数只能为数字</div>
+        </div>
+
+        <div class="field">
+            <label>其他时间段: 分钟数 </label>
+            <input name="OtherMinte" type="text" id="OtherMinte" onblur="yzOtherMinte()" value="@mode.OtherMinte " />
+            <div class="Validform_checktip" id="OtherMinteyy">*分钟数只能为数字</div>
+        </div>
+
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" class="large ui primary button" name="btnSave" value="保存" id="btnSaveAddAppmonitor" />
+            <a href="~/REPORT/AppmonitorList" class="large ui primary button"> 取消</a>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+
+    })
+</script>

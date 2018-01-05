@@ -1,0 +1,83 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+*{margin:0;padding:0;font-weight: normal;}
+h1,h2,h3,h4,h5,h6,button,input,textarea,select{font-size:100%;}
+fieldset,img{border:0;}
+table{border-collapse:collapse;border-spacing:0;width:100%;}
+caption,th{text-align:left;}
+li{list-style:none;}
+address,cite,code,dfn,var,em,th,i{font-style:normal;font-weight:normal;}
+button,input,textarea{outline:none;font-family:inherit;}
+body {font:14px/1.5 "Microsoft YaHei",\5b8b\4f53;color:#333;word-wrap:break-word;word-break:break-all;background:#fff;}
+h1,h2,h3,h4,h5,h6 {color:#666666;}
+a {text-decoration:none;color:#333;}
+a:hover {text-decoration:none;color:#318fd2;}
+select, dl {word-wrap:normal;}
+input,button{border:0px;}
+.clearfix:after {content:"";display:block;height:0;clear:both;}
+.clearfix {zoom:1;}
+.fl {float:left;}
+.fr {float:right;}
+.wrap{width:1120px;margin:0 auto;}
+.body-gray{background: #fdfdfd;}
+
+
+
+/*背景图*/
+.full-page-bg {width: 100%;height: 100%;background: url(../images/bg.png) no-repeat center;margin: 0px;}
+
+
+/*头部 */
+.login-menu{width: 100%;height: 80px;background: transparent;position: fixed;top: 0px;z-index: 100;transition: ease-in 0.3s;}
+.login-menu.on{background: #fff;transition: ease-in 0.3s;box-shadow: 0px 0px 8px #909090;}
+.login-menu .dlogo{width: 508px;height: 80px;padding-left: 120px;}
+.login-menu .logo{width: 166px;height: 80px;background: url(../images/logo.png) no-repeat no-repeat 0px center;display: block;}
+.login-menu .pcnt{font-size: 16px;color: #999999;height: 30px;border-left: 1px solid #bbbbbb;line-height: 30px;margin-left: 10px;padding-left: 10px;margin-top: 25px;}
+.nav{padding-right: 216px;position: relative;}
+.nav-lst{}
+.nav-lst li{float: left;position: relative;padding-top: 28px;width: 120px;text-align: center;height: 38px;-webkit-transition: all 0.6s; transition: all 0.6s;}
+.nav-lst > li > a{font-size: 15px;color: #666666;}
+.nav-dcnt{display: none;-webkit-transition: all 0.6s; transition: all 0.6s;}
+.nav-smart{position: absolute;width: 120px;left: 0px;top: 65px;border-top: 2px solid #318fd2;box-shadow: 0px 0 10px #e3e3e3;background: #fff;}
+.nav-smart dd{border-bottom: 1px solid #dcdcdc;}
+.nav-smart a{display: block;color: #666;height: 34px;line-height: 34px;font-size: 12px;letter-spacing: 2px;}
+.nav-lst .icon-sj{background: url(../images/icon-sj.png) no-repeat center;position: absolute;width: 120px;top: 54px;left: 0px;height: 11px;z-index: 200;}
+.nav-lst > li > a:hover,.nav-lst > li.on > a,.nav-smart a:hover,.nav-smart dd.on a{color: #318fd2;}
+.nav .btn-bor{position: absolute;right: 120px;top:20px;}
+
+
+/*内容*/
+.section .content {position: relative;top: 340px;opacity: 0;height: 100%;border: 1px solid transparent;overflow: hidden;}
+
+
+/*按钮*/
+.btn,.btn-radr{width: 96px;height: 38px;background: #35c8e6;text-align: center;line-height: 38px;color: #fff;border-radius: 40px;display: inline-block;cursor:pointer;transition: all 0.3s;}
+.btn-radr{border-radius: 5px;width:80px;}
+.btn:hover,.btn-radr:hover{background: #00b3d8;color: #fff;}
+.btn-bor{width: 94px;height: 38px;text-align: center;line-height: 36px;border-radius: 40px;display: inline-block;cursor:pointer;border:1px solid #35c8e6;color: #35c8e6;transition: all 0.3s;}
+.btn-bor:hover{background: #35c8e6;color: #fff;}
+
+
+/*分页*/
+.pagelist{text-align:center;padding:40px 0px;}
+.pagelist a,.pagelist span{color:#666;font-size:16px;display:inline-block;width: 30px;line-height: 30px;height: 30px;text-align: center;margin:0px 5px;}
+.pagelist a.active,.pagelist a:hover{background:#318fd2;color:#fff;}
+
+
+
+
+
+@media (max-width:1200px){
+    .login-menu .dlogo{padding-left:0;}
+    .nav{padding-right: 20px; float:none !important;}
+    .nav-lst li{max-width:90px;}
+    .nav .btn-bor{right:10px;}
+}
+
+
+
+
+
+
+

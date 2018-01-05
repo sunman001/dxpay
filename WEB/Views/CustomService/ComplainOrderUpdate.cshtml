@@ -1,0 +1,143 @@
+﻿@{
+    ViewBag.Title = "添加投诉";
+    Layout = "~/Views/UI/dialog.cshtml";
+
+    var cscomod = ViewBag.cscomod as JMP.MDL.CsComplainOrder;
+    string[] Envidence = ViewBag.Envidence;
+    string qt_url = (string)ViewBag.UploadUrl;
+}
+@JMP.TOOL.UserHelper.js("CustomService/OrderList.js")
+@JMP.TOOL.UserHelper.js("jquery.ajaxupload.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+
+<form id="frm-user-add" method="post" enctype="multipart/form-data">
+    <div class="main">
+        <input type="hidden" id="Id" value="@(string.IsNullOrEmpty(cscomod.Id.ToString()) ? 0 : cscomod.Id)" />
+        <input type="hidden" id="TableName" value="@(string.IsNullOrEmpty(cscomod.OrderTable) ? "" : cscomod.OrderTable)" />
+        <div class="plate-form">
+            <dl>
+                <dt>投诉订单：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="OrderNumber" type="text" id="OrderNumber" value="@(string.IsNullOrEmpty(cscomod.OrderNumber) ? "" : cscomod.OrderNumber)" disabled="disabled" />
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>投诉类型：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="ComplainTypeName" type="text" id="ComplainTypeName" onclick="ComplainTypeNameaAdd()" value="@(string.IsNullOrEmpty(cscomod.ComplainTypeName) ? "" : cscomod.ComplainTypeName)" />
+                        <input name="ComplainTypeId" type="hidden" id="ComplainTypeId" value="@(string.IsNullOrEmpty(cscomod.ComplainTypeId.ToString()) ? 0 : cscomod.ComplainTypeId)" />
+                    </div>
+                    <div class="Validform_checktip" id="ComplainTypeyz">* 投诉类型</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>投诉时间：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="stime" type="text" id="stime" onFocus="WdatePicker({maxDate:'#F{\'@DateTime.Now.ToString("yyyy-MM-dd")\'}'})" readonly="readonly" class="dataipt txtipt" value="@(string.IsNullOrEmpty(cscomod.ComplainDate.ToString()) ? DateTime.Now.ToString("yyyy-MM-dd") : cscomod.ComplainDate.ToString("yyyy-MM-dd"))" />
+                    </div>
+                    <div class="Validform_checktip" id="stimeyz">* 投诉时间</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>下游接手时间：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="DownstreamStartTime" type="text" id="DownstreamStartTime" onFocus="WdatePicker({maxDate:'#F{\'@DateTime.Now.ToString("yyyy-MM-dd")\'}'})" readonly="readonly" class="dataipt txtipt" value="@(string.IsNullOrEmpty(cscomod.DownstreamStartTime.ToString()) ? "" :(Convert.ToDateTime(cscomod.DownstreamStartTime)).ToString("yyyy-MM-dd"))" />
+                    </div>
+                    <div class="Validform_checktip" id="stimeyz">* 投诉时间</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>下游处理完成时间：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="DownstreamEndTime" type="text" id="DownstreamEndTime" onFocus="WdatePicker({maxDate:'#F{\'@DateTime.Now.ToString("yyyy-MM-dd")\'}'})" readonly="readonly" class="dataipt txtipt" value="@(string.IsNullOrEmpty(cscomod.DownstreamEndTime.ToString()) ? "":(Convert.ToDateTime( cscomod.DownstreamEndTime)).ToString("yyyy-MM-dd"))" />
+                    </div>
+                    <div class="Validform_checktip" id="stimeyz">* 投诉时间</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>投诉证据：</dt>
+                <dd>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width:300px; height:200px;">
+                            @{
+                                var url = "";
+                                var urls = "";
+                                if (Envidence.Length > 1)
+                                {
+                                    url = qt_url + Envidence[0];
+                                    urls = Envidence[0];
+                                }
+                            }
+                            <img src="@url" id="EnvidenceXS1" style="width:100%;" />
+                        </div>
+                        <input name="certificatefile1" type="file" id="certificatefile1" onchange="FileChange1()" />
+                        <input type="hidden" name="Envidence1" id="Envidence1" value="@urls" />
+                    </div>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width:300px; height:200px;">
+                            @{
+                                var url1 = "";
+                                var urls1 = "";
+                                if (Envidence.Length > 2)
+                                {
+                                    url1 = qt_url + Envidence[1];
+                                    urls1 = Envidence[1];
+                                }
+                            }
+                            <img src="@url1" id="EnvidenceXS2" style="width:100%;" />
+                        </div>
+                        <input name="certificatefile2" type="file" id="certificatefile2" onchange="FileChange2()" />
+                        <input type="hidden" name="Envidence2" id="Envidence2" value="@urls1" />
+
+                    </div>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width:300px; height:200px;">
+                            @{
+                                var url2 = "";
+                                var urls2 = "";
+                                if (Envidence.Length > 3)
+                                {
+                                    url2 = qt_url + Envidence[2];
+                                    urls2 = Envidence[2];
+                                }
+                            }
+                            <img src="@url2" id="EnvidenceXS3" style="width:100%;" />
+                        </div>
+                        <input name="certificatefile3" type="file" id="certificatefile3" onchange="FileChange3()" />
+                        <input type="hidden" name="Envidence3" id="Envidence3" value="@urls2" />
+
+                    </div>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width:300px; height:200px;">
+                            @{
+                                var url3 = "";
+                                var urls3 = "";
+                                if (Envidence.Length > 4)
+                                {
+                                    url3 = qt_url + Envidence[3];
+                                    urls3 = Envidence[3];
+                                }
+                            }
+                            <img src="@url3" id="EnvidenceXS4" style="width:100%;" />
+                        </div>
+                        <input name="certificatefile4" type="file" id="certificatefile4" onchange="FileChange4()" />
+                        <input type="hidden" name="Envidence4" id="Envidence4" value="@urls3" />
+                    </div>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" onclick="btnSaveAddCustom()" class="btn btn-primary" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</form>

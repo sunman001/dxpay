@@ -1,0 +1,188 @@
+﻿@{
+    ViewBag.Title = "添加应用";
+    Layout = "~/Views/UI/master.cshtml";
+    var glptdt = ViewBag.glptdt as List<JMP.MDL.jmp_platform>;
+    var yylist = ViewBag.yylist as List<JMP.MDL.jmp_apptype>;
+    var list = ViewBag.list as List<JMP.MDL.jmp_paymode>;
+    var userlist = ViewBag.userlist as List<JMP.MDL.jmp_user>;
+}
+@JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+@JMP.TOOL.UserHelper.js("App/app.js")
+@JMP.TOOL.UserHelper.js("jquery.combo.select.js")
+<link href="~/css/combo.select.css" rel="stylesheet" />
+
+<input type="hidden" id="a_id" value="" />
+<div class="rnatn-cnt">
+    <ul class="rnatn-frm clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">应用信息</span>
+            </p>
+        </li>
+        <li>
+            <i class="star fl">*</i>
+            <div class="dpt fl">
+                <div class="dtit">开发者</div>
+                <div class="dipt">
+                    <div class="rule-singless-select">
+                        <select id="user">
+                            @{
+                                foreach (var pt in userlist)
+                                {
+                                    <option value="@pt.u_id">@pt.u_realname</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <span class="error"></span>
+            </div>
+        </li>
+        <li>
+            <i class="star fl">*</i>
+            <div class="dpt fl">
+                <div class="dtit">应用名称</div>
+                <div class="dipt">
+                    <input type="text" name="appname" id="appname" onblur="yzappname()" class="txtipt" placeholder="请输入应用名称" />
+                </div>
+                <span class="error" id="yz_appname"></span>
+            </div>
+        </li>
+        <li>
+            <i class="star fl">*</i>
+            <div class="dpt fl">
+                <div class="dtit">应用下载地址</div>
+                <div class="dipt">
+                    <input type="text" id="yyaddress" class="txtipt" placeholder="请输入应用下载地址" onblur="yzyyads()" maxlength="200" />
+                </div>
+                <span class="error" id="yz_yyaddress"></span>
+            </div>
+        </li>
+        <li>
+            <i class="star fl">*</i>
+            <div class="dpt fl">
+                <div class="dtit">请选择使用场景</div>
+                <div class="dipt">
+                    <div class="rule-singless-select" onclick="cjyz()">
+                    <select id="terrace" >
+                        <option value="0">--请选择--</option>
+                        @{
+                            foreach (var pt in glptdt)
+                            {
+                                <option value="@pt.p_id">@pt.p_name</option>
+                            }
+                        }
+                    </select>
+                    </div>
+                </div>
+                <span class="error"></span>
+            </div>
+        </li>
+        <li style="float:left">
+            <i class="star fl">*</i>
+            <div class="dpt">
+                <div class="dtit">请选择应用类型</div>
+                <div class="dipt">
+                    <div class="rule-singless-select"  onclick="xzyylx()">
+                    <select id="xzyylx">
+                        <option value="0">--请选择--</option>
+                        @{
+                            foreach (var yym in yylist)
+                            {
+                                <option value="@yym.t_id">@yym.t_name</option>
+                            }
+                        }
+                    </select>
+                    </div>
+                </div>
+                <span class="error"></span>
+            </div>
+        </li>
+        <li>
+            <i class="star fl">*</i>
+            <div class="dpt">
+                <div class="dtit">请选择应用子类</div>
+                <div class="dipt">
+                    <div class="rule-singless-select">
+                    <select id="zlyy">
+                        <option value="0">--请选择--</option>
+                    </select>
+                    </div>
+                </div>
+                <span class="error"></span>
+            </div>
+        </li>
+    </ul>
+    <ul class="rnatn-frm rnatn-buy clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">添加支付</span>
+            </p>
+        </li>
+
+        @foreach (var item in list)
+        {
+            <li>
+                <div class="checkbox">
+                    <input type="checkbox" name="ck"  id="paytype_@item.p_id" onchange="change()" data-stat="@item.p_islocked" value="@item.p_id"  @(item.p_islocked == 0 ? "disabled=\"disabled\"" : "")  />
+                    <label></label>
+                    <span class="name">@item.p_name</span>
+                </div>
+            </li>
+
+        }
+        <li class="lst-error"><span class="error" id="idtype"></span></li>
+    </ul>
+    <ul class="rnatn-frm rnatn-adre clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">应用通知</span>
+            </p>
+        </li>
+
+        <li>
+            <div class="dpt">
+                <div class="dtit">异步通知地址</div>
+                <div class="dipt dipt-fa">
+                    <input type="text" id="appurl" class="txtipt" placeholder="请输入异步通知地址" onblur="yzurl()" maxlength="200" />
+                </div>
+                <span class="error" id="yz_appurl"></span>
+            </div>
+        </li>
+        <li>
+            <div class="dpt" id="tbdzxs" style="display:none;">
+                <div class="dtit">同步通知地址</div>
+                <div class="dipt dipt-fa">
+                    <input type="text" id="showurl" class="txtipt" placeholder="请输入同步通知地址" onblur="tbyzurl()" maxlength="200" />
+                </div>
+                <span class="error" id="yz_showurl"></span>
+            </div>
+        </li>
+
+    </ul>
+    <ul class="rnatn-frm rnatn-frm-tra clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">应用简介</span>
+            </p>
+        </li>
+        <li class="ty">
+            <div class="dipt">
+                <textarea class="ipttaea" id="a_appsynopsis" placeholder="最少输入30字" onblur="yzappsynopsis()" ></textarea>
+            </div>
+            <span id="yz_appsynopsis"  class="error"></span>
+        </li>
+    </ul>
+    <div class="div-btn">
+        <a class="btn btn-primary" id="btnyy">提交审核</a>
+    </div>
+</div>
+<script>
+$(function() {
+	$('select').comboSelect();
+});
+</script>

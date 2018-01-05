@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "详情";
+    var colist = ViewBag.colist as List<JMP.MDL.CoSettlementDeveloperAppDetails>;
+}
+@{
+    <table border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>支付方式</th>
+                <th>流水金额</th>
+                <th>接口费</th>
+                <th>接口费率</th>
+                <th>结算金额</th>
+                <th>退款金额</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in colist)
+            {
+                if (item != null)
+                {
+                    <tr>
+                        <td>@item.PayModeName</td>
+                        <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.TotalAmount)</td>
+                        <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.PortFee)</td>
+                        <td>@String.Format("{0:N2}", (item.PortFeeRatio * 100)) % </td>
+                        <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.KFZIncome)</td>
+                        <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.ChannelRefundAmount)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}

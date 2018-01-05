@@ -1,0 +1,66 @@
+﻿@model List<JMP.MDL.jmp_system>
+@{
+    ViewBag.Title = "字典管理";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+@JMP.TOOL.UserHelper.js("System/dictionary.js")
+<style type="text/css">
+    .select-tit {
+        min-width: 200px !important;
+    }
+</style>
+<div class="main">
+    <div class="plate">
+        <div class="tool">
+            系统设置
+        </div>
+        <div class="table-main frm-ul" style="padding: 15px; ">
+            <div class="rule-single-select single-select" style="display: inline-block; line-height: 24px; vertical-align: middle; min-width: 200px;">
+                <select id="option_dict">
+                    @foreach (var op in Model)
+                    {
+                        if (op.s_name == "password")
+                        {
+                            <option value="@op.s_id" title="@op.s_remarks" data-name="@op.s_name" data-value="@JMP.TOOL.DESEncrypt.Decrypt(op.s_value)" data-remarks="@op.s_remarks">@op.s_remarks</option>
+                        }
+                        else
+                        {
+                            <option value="@op.s_id" title="@op.s_remarks" data-name="@op.s_name" data-value="@op.s_value" data-remarks="@op.s_remarks">@op.s_remarks</option>
+                        }
+
+                    }
+                </select>
+            </div>
+            <input type="text" id="txt_s_value" value="" class="txtipt" placeholder="请选择系统选项进行设置" style="line-height: 24px; vertical-align: middle; min-width: 150px;" />
+            <button type="button" id="btn_save_system_config" class="btn btn-primary">保 存</button>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    var _dict = { "s_id": 0, "s_name": "", "s_value": "", "s_state": 1, "s_remarks": "请选择" };
+    $(function () {
+        $("#option_dict").change(function () {
+            var target = $(this);
+            _dict.s_id = target.val();
+            _dict.s_name = target.find(':selected').attr('data-name');
+            _dict.s_remarks = target.find(':selected').attr('data-remarks');
+            _dict.s_value = target.find(':selected').attr('data-value');
+            $("#txt_s_value").val(_dict.s_value);
+        });
+
+        $("#option_dict").val(@Model[0].s_id).change();
+
+        $("#btn_save_system_config").click(function () {
+            _dict.s_value = $("#txt_s_value").val();
+            $.post("/system/InsertOrUpdateSystem", _dict, function (data) {
+                if (data.success === 1) {
+                    $("#option_dict").find(':selected').attr('data-value', _dict.s_value);
+                    window.top._alert(data.msg, 'ok', 3000);
+                } else {
+                    window.top.alert(data.msg, "error", 3000);
+                }
+            });
+        });
+    });
+</script>

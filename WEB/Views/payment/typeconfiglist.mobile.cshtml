@@ -1,0 +1,141 @@
+﻿@using WEB.Util
+@{
+    ViewBag.Title = "支付参数管理";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_payment_type_config>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("mobile/payment/typeconfig.mobile.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main mobile-container">
+    <div class="toolbar-container">
+        <div id="ToolBar" class="frm-dcnt">
+            <ul class="frm-ul-tit clearfix">
+                @Html.Raw(ViewBag.locUrl)
+                <li>
+                    <a id="btn-show-search" class="btn" onclick="pop.showSearch('search-container')">查询</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="search-container">
+        <select name="searchType" id="searchType"  class="ui dropdown fluid fluid-block">
+            <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>支付通道</option>
+            <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>标签名称</option>
+            <option value="3" @(ViewBag.type == 3 ? "selected='selected'" : "")>字段名称</option>
+            <option value="4" @(ViewBag.type == 4 ? "selected='selected'" : "")>文本类型</option>
+        </select>
+
+        <div class="ui input fluid fluid-block">
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </div>
+        <select name="SelectState" id="SelectState" class="ui dropdown fluid fluid-block">
+            <option value="-1" @(ViewBag.SelectState == -1 ? "selected='selected'" : "")>状态</option>
+            <option value="0" @(ViewBag.SelectState == 0 ? "selected='selected'" : "")>正常</option>
+            <option value="1" @(ViewBag.SelectState == 1 ? "selected='selected'" : "")>冻结</option>
+        </select>
+        <select name="searchDesc" id="searchDesc" class="ui dropdown fluid fluid-block">
+            <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+            <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+        </select>
+        
+        <select name="auditstate" id="auditstate" class="ui dropdown fluid fluid-block">
+            <option value="0" @(ViewBag.auditstate == 0 ? "selected='selected'" : "")>支付类型</option>
+            <option value="1" @(ViewBag.auditstate == 1 ? "selected='selected'" : "")>支付宝</option>
+            <option value="2" @(ViewBag.auditstate == 2 ? "selected='selected'" : "")>微信</option>
+            <option value="3" @(ViewBag.auditstate == 3 ? "selected='selected'" : "")>银联</option>
+            <option value="4" @(ViewBag.auditstate == 4 ? "selected='selected'" : "")>微信公众号</option>
+            <option value="5" @(ViewBag.auditstate == 5 ? "selected='selected'" : "")>微信app</option>
+            <option value="6" @(ViewBag.auditstate == 6 ? "selected='selected'" : "")>微信扫码</option>
+            <option value="7" @(ViewBag.auditstate == 7 ? "selected='selected'" : "")>支付宝扫码</option>
+        </select>
+
+       
+        <a id="btnSearch" class="btn btn-primary"  href="javascript:" onclick="serchlocuser()">查询</a>
+
+    </div>
+    <div class="data-table-2 table-container table-responsive">
+        <table class="ui celled striped table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th width="40">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th width="100">支付类型</th>
+                    <th>支付通道</th>
+                    <th>标签名称</th>
+                    <th>字段名称</th>
+                    <th>文本类型</th>
+                    <th>描述</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        bool getEdit = bll_limit.GetLocUserLimitVoids("/payment/typeconfigAddOrUpdate", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑按钮
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="child" class="checkall" value="@item.Id" />
+                                </td>
+                                <td>
+                                    @item.paymodeName
+                                </td>
+                                <td>
+                                    @item.paymenttypeName
+                                </td>
+                                <td>
+                                    @item.Label
+                                </td>
+                                <td>
+                                    @item.FieldName
+                                </td>
+                                <td>
+                                    @item.InputType
+                                </td>
+                                <td>
+                                    @item.Description
+                                </td>
+                                <td>
+                                    @{
+                                        switch (item.Status)
+                                        {
+                                            case 1:
+                                                <span class='red'>结冻</span>
+                                                break;
+                                            case 0:
+                                                <span class='green'>正常</span>
+                                                break;
+
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        if (getEdit)
+                                        {
+                                            <a href="javascript:" class='blue' onclick="UpdatetypeConfig(@item.Id)">编辑</a>
+                                        }
+
+                                    }
+                                </td>
+                            </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="9" class="nodata">暂无记录</td>
+                                            </tr>
+                                        }
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+
+</div>

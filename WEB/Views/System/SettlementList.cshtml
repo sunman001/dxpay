@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "结算设置";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_poundage>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("System/Settlement.js")
+<div class="main">
+
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+    </ul>
+
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.searchType == 1 ? "selected='selected'" : "")>编号</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="SelectState" id="SelectState">
+                    <option value="-1" @(ViewBag.SelectState == -1 ? "selected='selected'" : "")>状态</option>
+                    <option value="1" @(ViewBag.SelectState == 1 ? "selected='selected'" : "")>正常</option>
+                    <option value="0" @(ViewBag.SelectState == 0 ? "selected='selected'" : "")>冻结</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                    <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlocuser()">查询</a>
+        </li>
+    </ul>
+
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th width="100">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th width="100">编号</th>
+                    <th>区间价格开始</th>
+                    <th>区间价格结束</th>
+                    <th>手续费率</th>
+                    <th>状态</th>
+                    <th width="300">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="child" class="checkall" value="@item.p_id" />
+                                </td>
+                                <td>@item.p_id</td>
+                                <td>@item.p_sprice</td>
+                                <td>@item.p_eprice</td>
+                                <td>@String.Format("{0:N2}", item.p_rate * 100)%</td>
+                                <td>
+                                    @{
+                                        if (item.p_state == 1)
+                                        {
+                                            <font color='green'>正常</font>
+                                        }
+                                        else
+                                        {
+                                            <font color='red'>冻结</font>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        bool getEdit = bll_limit.GetLocUserLimitVoids("/System/AddOrUpdateSettlement", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑按钮
+                                        if (getEdit)
+                                        {
+                                            <a href="javascript:" class='icon icon-edit' onclick="Updatepoundage(@item.p_id)">编辑</a><label>&nbsp;&nbsp;</label>
+
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="7" class="nodata">暂无记录</td>
+                                            </tr>
+                                        }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>

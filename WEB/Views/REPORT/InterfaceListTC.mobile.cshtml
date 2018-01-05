@@ -1,0 +1,146 @@
+﻿@{
+    ViewBag.Title = "支付配置弹窗";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_interface>;
+}
+@JMP.TOOL.UserHelper.js("mobile/Financial/RefundList.js")
+<div class="mobile-popup mobile-container">
+    <div class="search-container-show">
+        <select name="searchType" id="searchType" class="ui dropdown fluid fluid-block">
+            <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>编号</option>
+            <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>支付名称</option>
+            <option value="3" @(ViewBag.type == 3 ? "selected='selected'" : "")>申请公司</option>
+        </select>
+        <div class="ui input fluid fluid-block">
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" />
+        </div>
+
+        <select name="SelectState" id="SelectState" class="ui dropdown fluid fluid-block">
+            <option value="-1" @(ViewBag.SelectState == -1 ? "selected='selected'" : "")>状态</option>
+            <option value="1" @(ViewBag.SelectState == 1 ? "selected='selected'" : "")>正常</option>
+            <option value="0" @(ViewBag.SelectState == 0 ? "selected='selected'" : "")>冻结</option>
+            <option value="2" @(ViewBag.SelectState == 2 ? "selected='selected'" : "")>可用</option>
+            <option value="3" @(ViewBag.SelectState == 3 ? "selected='selected'" : "")>超出</option>
+            <option value="4" @(ViewBag.SelectState == 4 ? "selected='selected'" : "")>备用</option>
+        </select>
+        <select name="searchDesc" id="searchDesc" class="ui dropdown fluid fluid-block">
+            <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+            <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+        </select>
+        <select name="auditstate" id="auditstate" class="ui dropdown fluid fluid-block">
+            <option value="0" @(ViewBag.auditstate == 0 ? "selected='selected'" : "")>支付类型</option>
+            <option value="1" @(ViewBag.auditstate == 1 ? "selected='selected'" : "")>支付宝</option>
+            <option value="2" @(ViewBag.auditstate == 2 ? "selected='selected'" : "")>微信</option>
+        </select>
+
+        <a id="btn_user_query" class="ui button fluid fluid-block" href="javascript:" onclick="serchlocuser()">查询</a>
+    </div>
+
+    <div class="table-container table-responsive">
+        <table class="ui celled striped " id="tableUser">
+          
+                <thead>
+                    <tr>
+                        <th width="100">编号</th>
+                        <th>支付通道</th>
+                        <th>支付类型</th>
+                        <th>申请公司</th>
+                        <th>状态</th>
+                        <th width="300">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (list.Count > 0)
+                        {
+                            foreach (var item in list)
+                            {
+                                <tr>
+                                    <td>@item.l_id</td>
+                                    <td>@item.p_name</td>
+                                    <td>
+                                        @item.zflxname
+                                    </td>
+                                    <td>@item.l_corporatename</td>
+                                    <td>
+                                        @{
+                                            switch (item.l_isenable)
+                                            {
+                                                case 1:
+                                                    <span class='green'>正常</span>
+                                                    break;
+                                                case 2:
+                                                    <span style="color:#3B84ED">可用</span>
+                                                    break;
+                                                case 0:
+                                                    <span class='red'>冻结</span>
+                                                    break;
+                                                case 3:
+                                                    <span style="color:#e212ef">超额</span>
+                                                    break;
+                                                case 4:
+                                                    <span style="color:blue">备用</span>
+                                                    break;
+
+                                            }
+
+                                        }
+                                    </td>
+                                    <td>
+                                        <a style="cursor:pointer" onclick="yzappname(@item.l_id,'@item.l_corporatename')">选择</a>
+                                    </td>
+                                </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td align="center" colspan="6">暂无记录</td>
+                                                </tr>
+                                            }
+                    }
+                </tbody>
+            </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManageInter", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount, 4)
+
+    <input id="curr_page" type="hidden" value="@ViewBag.CurrPage" />
+</div>
+<script type="text/javascript">
+    //分页
+    function ArticleManageInter(pageIndex, pageSize) {
+        var url = "/REPORT/InterfaceListTC?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        var searchType = $("#searchType").val();
+        var sea_name = $("#sea_name").val();
+        var SelectState = $("#SelectState").val();
+        var searchDesc = $("#searchDesc").val();
+        var auditstate = $("#auditstate").val();
+        url += "&type=" + searchType + "&sea_name=" + sea_name + "&SelectState=" + SelectState + "&searchDesc=" + searchDesc + "&auditstate=" + auditstate;
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManageInter(1, PageSize);
+    }
+    //列表查询
+    function serchlocuser() {//查询
+        var PageSize = $("#pagexz").val();
+        ArticleManageInter(1, PageSize);
+    }
+
+    function yzappname(l_id, l_corporatename, index) {
+
+        parent.$('#c_payname', index).val(l_corporatename);
+        parent.$('#c_payid', index).val(l_id);
+        window.parent.layer.getChildFrame("#yzkfz1", index).attr("class", "Validform_checktip  Validform_right");
+        window.parent.layer.getChildFrame("#yzkfz1", index).html("验证通过");
+        var indexs = parent.layer.getFrameIndex(window.name);
+        window.top.layer.close(indexs);
+        parent.document.getElementById("c_payname").value = l_corporatename;
+        parent.document.getElementById("c_payid").value = l_id;
+    
+
+       
+    }
+</script>

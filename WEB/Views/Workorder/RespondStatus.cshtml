@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "更新状态";
+    Layout = "~/Views/UI/dialog.cshtml";
+
+    var mode = ViewBag.mode as JMP.MDL.CsCustomerServiceRecord;
+}
+
+<div class="main">
+    <input type="hidden" id="id" value="@mode.Id" />
+    <div class="plate-form">
+        <dl>
+            <dt>状态：</dt>
+            <dd>
+                <div class="rule-single-select">
+                    <select id="Status">
+                        <option value="1" @(mode.Status == 1 ? "selected=selected" : "")>处理中</option>
+                        <option value="2" @(mode.Status == 2 ? "selected=selected" : "")>处理完成</option>
+                    </select>
+                </div>
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" class="btn btn-primary" onclick="onckRespondStatus()" id="btn-save-add" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    //更新状态
+    function onckRespondStatus() {
+        var id = $("#id").val();
+        var Status = $("#Status").val();
+
+        var url = "/Workorder/UpdateRespondStatus";
+        var data = { id: $.trim(id), Status: $.trim(Status) };
+
+        $("#btn-save-add").attr("disabled", "disabled");
+
+        $.post(url, data, function (retJson) {
+
+            $("#btn-save-add").attr("disabled", false);
+            if (retJson.success == 1) {
+
+                window.parent.global.reload();
+                window.parent.ShowMsg(retJson.msg, "ok", function () { window.parent.layer.closeAll(); });
+            }
+            else {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            }
+        })
+    }
+
+</script>

@@ -1,0 +1,27 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="perifo">
+    @RenderBody()
+</div>
+<script type="text/javascript">
+    $(function () {
+        var hei = document.documentElement.clientHeight;//浏览器高度
+        var wh = document.documentElement.clientWidth;//浏览器宽度
+        var ifrhei = hei - 144;//iframe可见高度
+        if (wh < 1450) {
+            ifrhei = hei// - 215;//iframe可见高度
+        }
+        $(".perifo").css("height", ifrhei);
+
+        $(".perifo").niceScroll({
+            cursorcolor: "#000", //滚动条颜色
+            cursoropacitymax: 0.5,//滚动条透明度
+            touchbehavior: false,
+            cursorwidth: "5px",  //滚动条大小
+            cursorborder: "0",
+            cursorborderradius: "10px"
+        });
+    });
+</script>

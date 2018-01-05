@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "详情";
+    var list = ViewBag.list as List<JMP.MDL.CoSettlementDeveloperOverview>;
+}
+@{
+    <table border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>账单日期</th>
+                <th>流水总金额</th>
+                <th>接口费</th>
+                <th>结算总金额</th>
+                <th>退款金额</th>
+                <th>已提金额</th>
+                <th>已付金费</th>
+                <th>可提金额</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in list)
+            {
+                if (item != null)
+                {
+                    <tr>
+                        <td style="text-align:center;">@item.SettlementDay.ToString("yyyy-MM-dd")</td>
+                        <td style="text-align:center;">@TOOL.DecimalDigit.DecimalPlacesToString(item.TotalAmount)</td>
+                        <td style="text-align:center;">@TOOL.DecimalDigit.DecimalPlacesToString(item.PortFee)</td>
+                        <td style="text-align:center;">@TOOL.DecimalDigit.DecimalPlacesToString(item.KFZIncome)</td>
+                        <td style="text-align:center;">@TOOL.DecimalDigit.DecimalPlacesToString(item.RefundAmount)</td>
+                        <td style="text-align:center;">@TOOL.DecimalDigit.DecimalPlacesToString(item.p_money)</td>
+                        <td style="text-align:center;">@TOOL.DecimalDigit.DecimalPlacesToString(item.yf_money)</td>
+                        <td style="text-align:center;">@TOOL.DecimalDigit.DecimalPlacesToString(item.ketiMoney)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}

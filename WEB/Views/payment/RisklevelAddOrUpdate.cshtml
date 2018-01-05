@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "添加风险配置";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_risklevel>;
+    var applist = ViewBag.applist as List<JMP.MDL.jmp_apptype>;
+    var mo = ViewBag.mo as JMP.MDL.jmp_risklevelallocation;
+}
+@JMP.TOOL.UserHelper.js("payment/risklevel.js")
+<div class="main">
+    <div class="plate-form plate-form-lab">
+        <dl>
+            <dt>应用类型：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <div class="rule-single-select">
+                        <select id="apptypeid" name="apptypeid" onchange="xzapptype()">
+                            <option value="0">--请选择类型--</option>
+                            @{
+                                foreach (var m in applist)
+                                {
+                                    <option value="@m.t_id" @(mo.r_apptypeid == m.t_id ? "selected='selected'" : "")>@m.t_name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="Validform_checktip" id="apptypeidyy">*应用类型</div>
+            </dd>
+        </dl>
+
+        <dl>
+            <dt>风险等级：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <div class="rule-single-select">
+                        <select id="risklevelid" name="risklevelid" onchange="Selectrisklevel()">
+                            <option value="0">--请选择风险等级--</option>
+                            @{
+                                foreach (var item in list)
+                                {
+                                    <option value="@item.r_id" @(mo.r_risklevel == item.r_id ? "selected='selected'" : "") >@item.r_name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="Validform_checktip" id="risklevelyy">*应用类型</div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="hidden" value="@mo.r_id" id="rid" />
+         <input type="button" name="btnSave" value="保存" id="btnSavefxpz" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>

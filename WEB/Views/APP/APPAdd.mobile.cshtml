@@ -1,0 +1,168 @@
+﻿@{
+    ViewBag.Title = "添加应用";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+    var glptdt = ViewBag.glptdt as List<JMP.MDL.jmp_platform>;
+    int glptdtpd = 0;
+    var zflist = ViewBag.zflist as List<JMP.MDL.jmp_paymode>;
+    int zf = 0;
+    var yylist = ViewBag.yylist as List<JMP.MDL.jmp_apptype>;
+    int yy = 0;
+    string yyid = "";
+    string szmrdj = "";
+    var mo = ViewBag.mo as JMP.MDL.jmp_app;
+    var modelapptype = ViewBag.modelapptype as JMP.MDL.jmp_apptype;
+}
+@JMP.TOOL.UserHelper.js("mobile/APP/APP.mobile.js")
+<div class="mobile-popup mobile-container">
+    <div class="plate-form ui form">
+        <dl>
+            <dt>应用名称：</dt>
+            <dd>
+                <div class="field">
+                    <input name="inputName" type="text" id="inputName" onblur="yzname()" maxlength="20" sucmsg="验证成功" nullmsg="应用名称长度不超过20" errormsg="应用名称长度不超过20" value="" />
+                    <div class="Validform_checktip" id="nameyy">*应用名长度不超过20</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>关联平台：</dt>
+            <dd>
+                <div class="field">
+                    <select name="a_platform_id" id="a_platform_id" onchange="glpt()" sucmsg="请选择关联平台" nullmsg="请选择关联平台" errormsg="请选择关联平台" class="ui dropdown fluid fluid-block">
+                        @{
+                            foreach (var item in glptdt)
+                            {
+                                if (glptdtpd == 0)
+                                {
+                                    <option value="@item.p_id" selected="selected">@item.p_name</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.p_id">@item.p_name</option>
+                                }
+                                glptdtpd = glptdtpd + 1;
+                            }
+                        }
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>支付类型：</dt>
+            <dd>
+                <div class="inline field">
+                    @{
+                        foreach (var im in zflist)
+                        {
+                            if (zf == 0)
+                            {
+                                    <input tabindex="0" class="hidden inputChck"  type="checkbox" name="zflx" id="paytype_@im.p_id"  data-stat="@im.p_islocked"  value="@im.p_id" checked="checked">
+                                    <label>@im.p_name</label>
+                            }
+                            else
+                            {
+                                    <input tabindex="0" type="checkbox" name="zflx" class="hidden inputChck" id="paytype_@im.p_id"  data-stat="@im.p_islocked"   value="@im.p_id" />
+                                    <label>@im.p_name</label>
+                            }
+                            zf = zf + 1;
+                        }
+
+                    }
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>关联应用：</dt>
+            <dd>
+                <div class="field inline">
+                    @{
+                        foreach (var yym in yylist)
+                        {
+                            yyid = "yy" + yym.t_id;
+                            if (yy == 0)
+                            {
+                                szmrdj = yyid;
+                                <input type="button" id="@yyid" name="yyname" onclick="xzyylx(this.id, 0)" class="xzinput" value="@yym.t_name" />
+                            }
+                            else
+                            {
+                                <input type="button" id="@yyid" name="yyname" class="inpuwxz" onclick="xzyylx(this.id, 0)" value="@yym.t_name" />
+                            }
+                            yy = yy + 1;
+                        }
+                    }
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>应用子类型:</dt>
+            <dd>
+                <div class="ejzldiv" id="zlyy">
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>回调地址：</dt>
+            <dd>
+                <div class="field">
+                    <input name="aurl" type="text" id="aurl" onblur="dzyz()" maxlength="200" value="" />
+                    <div class="Validform_checktip" id="yzdz">* 回调地址(必须以http://或者https://开头)</div>
+                </div>
+            </dd>
+        </dl>
+        <dl id="tbhddz" style="display:none;">
+            <dt>同步回调地址：</dt>
+            <dd>
+                <div class="field">
+                    <input name="o_showaddress" type="text" id="o_showaddress"  maxlength="200" onblur="tbdzyz()" value="" />
+                    <div class="Validform_checktip" id="yzo_showaddress">* 回调地址(必须以http://或者https://开头)</div>
+                </div>
+
+            </dd>
+        </dl>
+        <dl>
+            <dt>开发者：</dt>
+            <dd>
+                <div class="field">
+                    <input name="a_user_idyx" type="text" id="a_user_idyx" readonly="readonly" onclick="xzuser()" onblur="kfz()" value="" />
+                    <input type="hidden" id="a_user_id" name="a_user_id" />
+                    <div class="Validform_checktip" id="yzkfz">* 请选择开发者</div>
+                </div>
+
+            </dd>
+        </dl>
+        <dl>
+            <dt>应用地址：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="a_appurl" type="text" id="a_appurl" onblur="a_appurlyz()" maxlength="200" value="" /><span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="yz_a_appurl">* 应用地址(必须以http://或者https://开头)</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>应用简介：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <textarea style="width: 400px; height:50px;" id="a_appsynopsis" onblur="yza_appsynopsis()"></textarea>
+                </div>
+                <div class="Validform_checktip" id="yz_a_appsynopsis">* 应用简介</div>
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" id="btnSaveAddApp" class="ui button primary" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="ui button" />
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+        var szmrdj = '@szmrdj';
+        xzyylx(szmrdj, 0);
+        glpt()
+    })
+</script>

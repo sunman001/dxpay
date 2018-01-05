@@ -1,0 +1,134 @@
+﻿@{
+    ViewBag.Title = "权限列表";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_limit>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+    bool getEdit = false;
+}
+<div class="mobile-container">
+    <div class="toolbar-container">
+        <div id="ToolBar" class="frm-dcnt">
+            <ul class="frm-ul-tit clearfix">
+                @Html.Raw(ViewBag.locUrlHtml)
+                <li>
+                    <a id="btn-show-search" class="btn" onclick="pop.showSearch('search-container')">查询</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <ul class="search-container">
+        <li class="ui input fluid fluid-block">
+            <select name="searchType" id="searchType" class="ui dropdown fluid fluid-block">
+                <option value="1" @(string.IsNullOrEmpty(Request["type"]) ? "" : "selected=selected") @(Request["type"] == "1" ? "selected=selected" : "")>权限编号</option>
+                <option value="2" @(Request["type"] == "2" ? "selected=selected" : "")>权限名称</option>
+                <option value="3" @(Request["type"] == "3" ? "selected=selected" : "")>权限页面</option>
+            </select>
+        </li>
+        <li class="ui input fluid fluid-block">
+            <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["name"]" class="txtipt" />
+        </li>
+        <li class="ui input fluid fluid-block">
+            <select name="searchTopid" id="searchTopid" class="ui dropdown fluid fluid-block">
+                @Html.Raw(ViewBag.selectTopid)
+            </select>
+        </li>
+        <li class="ui input fluid fluid-block">
+            <select name="searchState" id="searchState" class="ui dropdown fluid fluid-block">
+                <option value="-1" @(string.IsNullOrEmpty(Request["state"]) ? "" : "selected=selected") @(Request["state"] == "-1" ? "selected=selected" : "")>状态</option>
+                <option value="1" @(Request["state"] == "1" ? "selected=selected" : "")>正常</option>
+                <option value="0" @(Request["state"] == "0" ? "selected=selected" : "")>锁定</option>
+            </select>
+        </li>
+        <li class="ui input fluid fluid-block">
+            <select name="searchDesc" id="searchDesc" class="ui dropdown fluid fluid-block">
+                <option value="1" @(string.IsNullOrEmpty(Request["sort"]) ? "" : "selected=selected") @(Request["sort"] == "1" ? "selected=selected" : "")>降序</option>
+                <option value="0" @(Request["sort"] == "0" ? "selected=selected" : "")>升序</option>
+            </select>
+        </li>
+        <li class="ui input fluid fluid-block">
+            <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="serchlimit()">查询</a>
+        </li>
+    </ul>
+    <div class="table-container table-responsive">
+        <table class="ui celled striped white table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th width="40">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th width="100">编号</th>
+                    <th>权限名称</th>
+                    <th>权限页面</th>
+                    <th>权限值</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (list.Count > 0)
+            {
+                getEdit = bll_limit.GetLocUserLimitVoids("/LIMIT/AjaxUpdateLimit", JMP.TOOL.UserInfo.UserId.ToString(), JMP.TOOL.UserInfo.UserRoleId);
+                foreach (var item in list)
+                {
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="child" class="checkall" value="@item.l_id" />
+                            </td>
+                            <td>@item.l_id</td>
+                            <td>@(string.IsNullOrEmpty(item.l_name) ? "---" : item.l_name)</td>
+                            <td>@(string.IsNullOrEmpty(item.l_url) ? "---" : item.l_url)</td>
+                            <td>@item.l_sort</td>
+                            <td>@(item.l_state == 1 ? Html.Raw("<span class='green'>正常</span>") : Html.Raw("<span class='red'>锁定</span>"))</td>
+                            <td>
+                                @{
+
+
+                                    if (getEdit)
+                                    {
+                                        <a href='javascript:' class='blue' onclick='UpdateLimitDialog(@item.l_id)'>编辑</a>
+                                    }
+
+                                }
+                            </td>
+                        </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td align="center" colspan="7" class="nodata">暂无记录</td>
+                                        </tr>
+                                    }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+
+
+
+@JMP.TOOL.UserHelper.js("mobile/local/locals.mobile.js")
+<script type="text/javascript">
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/LIMIT/LimitList?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        var typeId = $("#searchType  option:selected").val();
+        var state = $("#searchState  option:selected").val();
+        var sort = $("#searchDesc  option:selected").val();
+        var name = $("#searchKey").val();
+        var topid = $("#searchTopid  option:selected").val();
+        url += "&name=" + name + "&type=" + typeId + "&state=" + state + "&sort=" + sort + "&topid=" + topid;
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //搜索权限列表
+    function serchlimit() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+</script>

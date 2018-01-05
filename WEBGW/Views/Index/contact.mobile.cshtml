@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "联系我们";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+}
+
+<header>
+    <section class="banner">
+        <img src="~/mobile/upload/2017/05/21/n_banner_1.png" width="100%" alt="联系我们" title="联系我们" />
+    </section>
+</header>
+<section class="center-box cntus-box">
+    <ul>
+        <li class="line-1">
+            <figure>
+                <img src="~/mobile/images/cnt_us_1.png" alt="在线客服" title="在线客服" />
+                <figcaption>在线客服</figcaption>
+            </figure>
+            <p>7x24小时在线服务<br />无需安装，直接交谈<br />实时为您解决问题</p>
+        </li>
+        <li class="line-2">
+            <figure>
+                <img src="~/mobile/images/cnt_us_2_1.png" alt="电话客服" title="电话客服" />
+                <figcaption>电话客服</figcaption>
+            </figure>
+            <p>7x24小时客服热线<br />+86-755-26910992<br />如遇坐席忙请稍后再拨</p>
+        </li>
+        <li class="line-3">
+            <figure>
+                <img src="~/mobile/images/cnt_us_3_1.png" alt="微信客服" title="微信客服" />
+                <figcaption>微信客服</figcaption>
+            </figure>
+            <p>dunxing001<br />移动终端自动查询功能<br />迅速查单</p>
+        </li>
+        <li class="line-4">
+            <figure>
+                <img src="~/mobile/images/cnt_us_4_1.png" alt="客户投诉" title="客户投诉" />
+                <figcaption>客户投诉</figcaption>
+            </figure>
+            <p>说出你的困惑<br />我们第一时间帮你解决</p>
+        </li>
+    </ul>
+</section>
+<script>
+			$(".cntus-box").find("li").each(function(i){
+				$(this).click(function(){
+					$(".cntus-box").find("img").each(function(j){
+					    $(this).attr("src", "/mobile/images/cnt_us_" + (j + 1) + "_1.png");
+					});
+					var src = $(this).find("img").attr("src");
+					src = src.replace("/mobile/images/cnt_us_", "");
+					src = src.replace(".png","");
+					if(src.length==3){
+					    $(this).find("img").attr("src", "/mobile/images/cnt_us_" + parseInt(src) + ".png");
+					}
+				});
+			});
+
+</script>
+
+

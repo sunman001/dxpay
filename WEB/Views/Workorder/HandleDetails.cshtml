@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "追加详情";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+
+<div class="main">
+    <input type="hidden" id="hdid" value="@ViewBag.id" />
+    <div class="plate-form">
+        <dl>
+            <dt>处理详情：</dt>
+            <dd>
+                <div>
+                    <textarea id="HandleDetails"></textarea>
+                </div>
+                <div class="Validform_checktip" id="HandleDetailsYz">* 处理详情</div>
+            </dd>
+        </dl>
+
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" class="btn btn-primary" onclick="onckHD()" id="btn-save-add" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    //保存
+    function onckHD() {
+
+        var id = $("#hdid").val();
+        var HandleDetails = $("#HandleDetails").val();
+
+        if ($.trim(HandleDetails) == "") {
+            $("#HandleDetailsYz").attr("class", "Validform_checktip Validform_wrong");
+            $("#HandleDetailsYz").html("请填写追加详情！");
+            return false;
+        }
+        else {
+            $("#HandleDetailsYz").attr("class", "Validform_checktip  Validform_right");
+            $("#HandleDetailsYz").html("验证通过");
+        }
+
+        var url = "/Workorder/UpdateHandleDetails";
+        var data = { id: $.trim(id), HandleDetails: $.trim(HandleDetails) };
+
+        $("#btn-save-add").attr("disabled", "disabled");
+
+        $.post(url, data, function (retJson) {
+
+            $("#btn-save-add").attr("disabled", false);
+            if (retJson.success == 1) {
+
+                window.parent.global.reload();
+                window.parent.ShowMsg(retJson.msg, "ok", function () { window.parent.layer.closeAll(); });
+            }
+            else {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            }
+        })
+
+    }
+
+</script>

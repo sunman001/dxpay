@@ -1,0 +1,164 @@
+﻿@{
+    ViewBag.Title = "支付配置界面";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var mo = ViewBag.mo as JMP.MDL.jmp_interface;
+    var paylist = ViewBag.paylist as List<JMP.MDL.jmp_paymode>;
+    var yylist = ViewBag.yylist as List<JMP.MDL.jmp_apptype>;
+}
+@JMP.TOOL.UserHelper.js("payment/Interface.js")
+<div class="main">
+    <div class="plate-form plate-form-lab">
+        <dl>
+            <dt>通道状态：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <div class="rule-single-select">
+                        <select id="l_isenable">
+                            <option value="0" @(mo.l_isenable == 0 ? "selected='selected'" : "")>--通道状态--</option>
+                            <option value="1" @(mo.l_isenable == 1 ? "selected='selected'" : "")>正常</option>
+                            <option value="4" @(mo.l_isenable == 4 ? "selected='selected'" : "")>备用</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="Validform_checktip" id="l_isenableyy">*通道状态</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>风控类型：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <div class="rule-single-select">
+                        <select id="l_risk" onchange="empty()">
+                            <option value="-1" @(mo.l_risk == -1 ? "selected='selected'" : "")>--风控类型--</option>
+                            <option value="0" @(mo.l_risk == 0 ? "selected='selected'" : "")>风险等级</option>
+                            <option value="1" @(mo.l_risk == 1 ? "selected='selected'" : "")>应用ID</option>
+                            <option value="2" @(mo.l_risk == 2 ? "selected='selected'" : "")>通道池</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="Validform_checktip" id="l_riskyy">*风控类型</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>支付类型：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <div class="rule-single-select">
+                        <select id="paymodeid" name="paymodeid" onchange="zflxtype()">
+                            <option value="0">--请选择类型--</option>
+                            @{
+                                foreach (var item in paylist)
+                                {
+                                    <option value="@item.p_id" @(mo.p_type == item.p_id ? "selected='selected'" : "")>@item.p_name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="Validform_checktip" id="zftypeyy">*支付类型</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>支付通道：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <div class="rule-single-select" id="paymenttypeht">
+                        <select name="paymenttype" id="paymenttype" onchange="xzzfpztype()">
+                            <option value="0">--请选择类型--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="Validform_checktip" id="zftdyy">*支付通道</div>
+            </dd>
+        </dl>
+        <dl id="yyapp">
+            <dt>应用id或风险等级：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="appName" type="text" id="appName" readonly="readonly" onclick="apptc()" onblur="yzCorporateName()" value="@(string.IsNullOrEmpty(mo.l_apptypeid) ? " ":mo.l_apptypeid)" />
+                    <sp />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="appNameyy">*应用id或风险等级</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>申请公司名称：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="zfbName" type="text" id="corporateName" onblur="yzCorporateName()" value="@(string.IsNullOrEmpty(mo.l_corporatename) ? " ":mo.l_corporatename)" />
+                    <spa />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="corporateNameyy">*公司名称</div>
+            </dd>
+        </dl>
+        <div id="payconfig">
+
+        </div>
+
+        <dl>
+            <dt>日最大金额(元)：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input type="text" maxlength="20" id="l_daymoney" name="l_daymoney" MaxLenth="12" onblur="yzdaymoney()" value="@(mo.l_daymoney > 0 ? mo.l_daymoney.ToString("f0") : "")"  />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="daymoneyyy">*日最大金额</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>单笔最小金额(元)：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input type="text" maxlength="20" id="l_minimum" name="l_minimum" MaxLenth="12" onblur="yzl_minimum()" value="@(mo.l_minimum.ToString()!=""?mo.l_minimum.ToString("f2"):"")" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="l_minimumyy">*单笔最小金额</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>单笔最大金额(元)：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input type="text" maxlength="20" id="l_maximum" name="l_maximum" MaxLenth="12" onblur="yzl_maximum()" value="@(mo.l_maximum>=0?mo.l_maximum.ToString("f0"):"")" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="l_maximumyy">*单笔最大金额</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>排序：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input type="text" maxlength="20" id="paypx" name="paypx" onblur="yzpaypx()" value="@(mo.l_sort>0?mo.l_sort.ToString():" ")" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="paypxyy">*排序</div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="hidden" id="lid" value="@(mo.l_id > 0 ? mo.l_id : 0)" />
+        <input type="hidden" id="zftdid" value="@(mo.l_paymenttype_id > 0 ? mo.l_paymenttype_id : 0)" />
+        <input type="hidden" id="jsonstr" value="@(!string.IsNullOrEmpty(mo.l_jsonstr)?mo.l_jsonstr:"" )" />
+        <input type="button" name="btnSave" value="保存" id="btnSavezfpz" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        if(@mo.l_id > 0){
+            zflxtype();
+        }
+    })
+</script>

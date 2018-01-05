@@ -1,0 +1,170 @@
+﻿@{
+    ViewBag.Title = "风险等级配置";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_risklevelallocation>;
+    var rilist = ViewBag.rilist as List<JMP.MDL.jmp_risklevel>;
+    var applist = ViewBag.applist as List<JMP.MDL.jmp_apptype>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+<div class="mobile-container">
+    <div class="toolbar-container">
+        <div id="ToolBar" class="frm-dcnt">
+            <ul class="frm-ul-tit clearfix">
+                @Html.Raw(ViewBag.locUrl)
+                <li>
+                    <a id="btn-show-search" class="btn" onclick="pop.showSearch('search-container')">查询</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="search-container">
+        <div class="ui input fluid fluid-block">
+            <select id="apptypeid" class="ui dropdown fluid fluid-block">
+                <option value="0" @(ViewBag.apptypeid == 0 ? "selected='selected'" : "")>--应用类型--</option>
+                @{
+                    foreach (var im in applist)
+                    {
+                        <option value="@im.t_id" @(ViewBag.apptypeid == im.t_id ? "selected='selected'" : "")>@im.t_name</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="ui input fluid fluid-block">
+            <select id="risklevelid" class="ui dropdown fluid fluid-block">
+                <option value="0" @(ViewBag.risklevelid == 0 ? "selected='selected'" : "")>--风险等级--</option>
+                @{
+                    foreach (var item in rilist)
+                    {
+                        <option value="@item.r_id" @(ViewBag.risklevelid == item.r_id ? "selected='selected'" : "")>@item.r_name</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="ui input fluid fluid-block">
+            <select id="state" class="ui dropdown fluid fluid-block">
+                <option value="-1" @(ViewBag.state == -1 ? "selected='selected'" : "")>--状态--</option>
+                <option value="0" @(ViewBag.state == 0 ? "selected='selected'" : "")>正常</option>
+                <option value="1" @(ViewBag.state == 1 ? "selected='selected'" : "")>冻结</option>
+            </select>
+        </div>
+        <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="serchlocuser()">查 询</a>
+    </div>
+    <div class="table-container table-responsive">
+        <table class="ui celled striped white" id="table">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th>编号</th>
+                    <th>应用类型</th>
+                    <th>风险等级</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    bool getEdit = bll_limit.GetLocUserLimitVoids("/payment/AddRisklevel", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑按钮
+                    foreach (var item in list)
+                    {
+                        <tr>
+                            <td><input type="checkbox" name="child" class="checkall" value="@item.r_id" /></td>
+                            <td>@item.r_id</td>
+                            <td>@item.t_name</td>
+                            <td>@item.r_name</td>
+                            <td>
+                                @{
+                                    if (item.r_state == 0)
+                                    {
+                                        <span class='green'>正常</span>
+                                    }
+                                    else
+                                    {
+                                        <span class='red'>冻结</span>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @{
+                                    if (getEdit)
+                                    {
+                                        <a href="javascript:" class='blue' onclick="UpdateEdit(@item.r_id)">编辑</a>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                     }
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+    <script>
+      
+        //添加风险配置
+        function AddRisklevel() {
+            window.parent.ShouwDiaLogWan("添加风险配置", 500, 350, "/payment/RisklevelAddOrUpdate");
+        }
+        //编辑
+        function UpdateEdit(type) {
+            window.parent.ShouwDiaLogWan("添加风险配置", 500, 350, "/payment/RisklevelAddOrUpdate?rid=" + type);
+        }
+        //一键启用或禁用
+        function Updatestate(state) {
+            var valArr = new Array;
+            $("#table :checkbox[checked]").each(function (i) {
+                valArr[i] = $(this).val();
+            });
+            var vals = valArr.join(',');
+            if (vals == "") {
+                window.parent.ShowMsg("请选风险配置！", "error", "");
+                return;
+            }
+            var url = "/payment/RisklevelUpdateState";
+            var data = { state: state, ids: vals };
+            $.post(url, data, function (retJson) {
+                if (retJson.success == 1) {
+                    window.parent.ShowMsg(retJson.msg, "ok", function () {
+                        window.location.href = "/payment/RisklevelList";
+                    });
+                }
+                else if (retJson.success == 9998) {
+                    window.parent.ShowMsg(retJson.msg, "error", "");
+                    return false;
+                } else if (retJson.success == 9999) {
+                    window.parent.ShowMsg(retJson.msg, "error", "");
+                    window.top.location.href = retJson.Redirect;
+                    return false;
+                } else if (retJson.success == 9997) {
+                    window.top.location.href = retJson.Redirect;
+                    return false;
+                }
+                else {
+                    window.parent.ShowMsg(retJson.msg, "error", "");
+                    return false;
+                }
+            });
+        }
+        //分页
+        function ArticleManage(pageIndex, pageSize) {
+            var url = "/payment/RisklevelList?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+            var apptypeid = $.trim($("#apptypeid").val());
+            var risklevelid = $.trim($("#risklevelid").val());
+            var state = $.trim($("#state").val());
+            url += "&apptypeid=" + apptypeid + "&risklevelid=" + risklevelid + "&state=" + state;
+            location.href = encodeURI(url);
+        }
+        //选择每页显示数量
+        function pagexz() {
+            var PageSize = $("#pagexz").val();
+            ArticleManage(1, PageSize);
+        }
+        //列表查询
+        function serchlocuser() {//查询
+            var PageSize = $("#pagexz").val();
+            ArticleManage(1, PageSize);
+        }
+    </script>                                                                                                    
+

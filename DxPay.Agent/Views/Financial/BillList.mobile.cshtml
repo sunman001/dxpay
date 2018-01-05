@@ -1,0 +1,104 @@
+﻿@{
+    ViewBag.Title = "账单管理";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.CoSettlementDeveloperOverview>;
+}
+@JMP.TOOL.UserHelper.js("plugin/my97datepicker/WdatePicker.js")
+<script src="~/mobile/js/financial/BillList.js"></script>
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">账单管理</span>
+</header>
+<section>
+    <ul class="frm-ul-tit clearfix">
+        <li>
+            <a id="btn-show-search" onclick="pop.showSearch('search-container')" class="sle-btn">查询</a>
+        </li>
+    </ul>
+    <div class="search-container" style="display:none">
+        <div class="date-tool-input-text">
+            <input name="stime" type="text" id="stime" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')||\'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")\'}'})" readonly="readonly" class="dataipt txtipt time" value="@ViewBag.stime" />
+        </div>
+        <div class="date-tool-input-text">
+            <input name="etime" type="text" id="etime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")'})" readonly="readonly" class="dataipt txtipt" value="@ViewBag.etime" />
+        </div>
+
+        <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="SerachBillList()">查询</a>
+    </div>
+    <div class="table-dcnt">
+        <div class="table-container">
+            <table class="table-cnt">
+                <thead>
+                    <tr>
+                        <th>展开</th>
+                        <th>账单日期</th>
+                        <th>流水金额</th>
+                        <th>服务费</th>
+                        <th>提成金额</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (list.Count > 1)
+                        {
+                            int id = 0;
+                            string Icon = "Icon_";
+                            string Open = "Open_";
+
+                            foreach (var item in list.Where(x => x.DeveloperName != "合计"))
+                            {
+
+                                id = id + 1;
+                                Icon = "Icon_" + id;
+                                Open = "Open_" + id;
+
+                                <tr onclick="clickOpen(@id)">
+                                    <td><i class="fa fa-plus-circle greenz" name="Icon" id="@Icon"></i>&nbsp;&nbsp; </td>
+                                    <td><a onclick="ysBillList('@JMP.TOOL.DESEncrypt.Encrypt(@item.SettlementDay.ToString("yyyy-MM-dd"))')">@item.SettlementDay.ToString("yyyy-MM-dd")</a></td>
+                                    <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.TotalAmount)</td>
+                                    <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.ServiceFee)</td>
+                                    <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.AgentPushMoney)</td>
+                                </tr>
+                               <!--展开-->
+                                <tr>
+                                    <td colspan="5" style="display:none;" name="Open" id="@Open">
+                                        <div class="dcnt-tab">
+                                            <table class="table-lst">
+                                                <tr>
+                                                    <td>
+                                                        @{Html.RenderAction("BillList_Details", "Financial", new { SettlementDay = item.SettlementDay.ToString("yyyy-MM-dd") });}
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                                            }
+
+                                                            if (ViewBag.total > 0)
+                                                            {
+                                                                var sum = list.FirstOrDefault(x => x.DeveloperName == "合计");
+                                                                <tr>
+                                                                    <td></td>
+                                                                    <td>合计：</td>
+                                                                    <td>@(!string.IsNullOrEmpty(sum.TotalAmount.ToString()) ? TOOL.DecimalDigit.DecimalPlacesToString(sum.TotalAmount) : "---")</td>
+                                                                    <td>@(!string.IsNullOrEmpty(sum.ServiceFee.ToString()) ? TOOL.DecimalDigit.DecimalPlacesToString(sum.ServiceFee) : "---")</td>
+                                                                    <td>@(!string.IsNullOrEmpty(sum.AgentPushMoney.ToString()) ? TOOL.DecimalDigit.DecimalPlacesToString(sum.AgentPushMoney) : "---")</td>
+
+                                                                </tr>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <tr>
+                                                                    <td align="center" colspan="5" class="nodata">暂无记录</td>
+                                                                </tr>
+                                                            }
+                    }
+                </tbody>
+            </table>
+        </div>
+        @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+    </div>
+</section>

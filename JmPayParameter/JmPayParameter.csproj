@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5A1B3247-43E0-4425-8B52-9E606E629B04}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JmPayParameter</RootNamespace>
+    <AssemblyName>JmPayParameter</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Apprate.cs" />
+    <Compile Include="ErrorCode.cs" />
+    <Compile Include="EXC.cs" />
+    <Compile Include="IChannelLoader.cs" />
+    <Compile Include="InfoErrorCode.cs" />
+    <Compile Include="InfoInterface.cs" />
+    <Compile Include="InnerResponse.cs" />
+    <Compile Include="JsonStr.cs" />
+    <Compile Include="JudgeMoney.cs" />
+    <Compile Include="Models\BanlModels.cs" />
+    <Compile Include="Models\Initialization.cs" />
+    <Compile Include="Models\OrderCode.cs" />
+    <Compile Include="Models\PayBankModels.cs" />
+    <Compile Include="Models\PreOrdeModel.cs" />
+    <Compile Include="Models\QueryModels.cs" />
+    <Compile Include="Models\RequestParameter.cs" />
+    <Compile Include="Models\SelectInterface.cs" />
+    <Compile Include="PayChannelAbstract.cs" />
+    <Compile Include="PayChannel\SelectPayChannel.cs" />
+    <Compile Include="PayChannel\UpdateOrde.cs" />
+    <Compile Include="PayTypeFactory\PayTypeAbstract.cs" />
+    <Compile Include="PayTypeFactory\PayTypeFactory.cs" />
+    <Compile Include="PayType\PayAlPaySm.cs" />
+    <Compile Include="PayType\PayQQWap.cs" />
+    <Compile Include="PayType\PayTypeForAliPay.cs" />
+    <Compile Include="PayType\PayWxApp.cs" />
+    <Compile Include="PayType\PayWxGzh.cs" />
+    <Compile Include="PayType\PayWxSm.cs" />
+    <Compile Include="PayType\PayWxWap.cs" />
+    <Compile Include="PayType\UnionPay.cs" />
+    <Compile Include="PlaceOrder\AlPaySmType\IAliPaySm.cs" />
+    <Compile Include="PlaceOrder\AlPaySmType\PfAlPaySm.cs" />
+    <Compile Include="PlaceOrder\AlPaySmType\RmAlPaySm.cs" />
+    <Compile Include="PlaceOrder\AlPaySmType\WftAlPaySm.cs" />
+    <Compile Include="PlaceOrder\AlpayType\HyZfbPay.cs" />
+    <Compile Include="PlaceOrder\AlpayType\IAliPay.cs" />
+    <Compile Include="BankOrder.cs" />
+    <Compile Include="PlaceOrder\AlpayType\IAlPaySmPacking.cs" />
+    <Compile Include="PlaceOrder\AlpayType\PfAliPay.cs" />
+    <Compile Include="PlaceOrder\AlpayType\WftAlPay.cs" />
+    <Compile Include="PlaceOrder\AlpayType\WpAliPay.cs" />
+    <Compile Include="PlaceOrder\AlpayType\XdAliPay.cs" />
+    <Compile Include="PlaceOrder\AlpayType\XxbAliPay.cs" />
+    <Compile Include="PlaceOrder\PlaceOrderFactory.cs" />
+    <Compile Include="PlaceOrder\AlPaySmType\TbAlPaySm.cs" />
+    <Compile Include="PlaceOrder\QQPayType\HyQQPay.cs" />
+    <Compile Include="PlaceOrder\QQPayType\TbQQPay.cs" />
+    <Compile Include="PlaceOrder\QQPayType\WftQQPay.cs" />
+    <Compile Include="PlaceOrder\QQPayType\YlQQPay.cs" />
+    <Compile Include="PlaceOrder\UnionPayType\HyPay.cs" />
+    <Compile Include="PlaceOrder\UnionPayType\ZfPay.cs" />
+    <Compile Include="PlaceOrder\WxAppType\NyPayApp.cs" />
+    <Compile Include="PlaceOrder\WxAppType\WftWxAppPay.cs" />
+    <Compile Include="PlaceOrder\WxAppType\WxPay.cs" />
+    <Compile Include="PlaceOrder\WxAppType\XyyhpayApp.cs" />
+    <Compile Include="PlaceOrder\WxPayGzhType\NYGZH.cs" />
+    <Compile Include="PlaceOrder\WxPayGzhType\PfWxGzhPay.cs" />
+    <Compile Include="PlaceOrder\WxPayGzhType\TbWxGzhPay.cs" />
+    <Compile Include="PlaceOrder\WxPayGzhType\WftWxGzhPay.cs" />
+    <Compile Include="PlaceOrder\WxPayGzhType\WxPayGzh.cs" />
+    <Compile Include="PlaceOrder\WxPayGzhType\YlWxGzhPay.cs" />
+    <Compile Include="PlaceOrder\WxPaySmType\PfWxSmPay.cs" />
+    <Compile Include="PlaceOrder\WxPaySmType\NyWxSmPay.cs" />
+    <Compile Include="PlaceOrder\WxPaySmType\RmWXSmPay.cs" />
+    <Compile Include="PlaceOrder\WxPaySmType\TbWxSmPay.cs" />
+    <Compile Include="PlaceOrder\WxPaySmType\WftWxSm.cs" />
+    <Compile Include="PlaceOrder\WxPaySmType\WxServiceSmPay.cs" />
+    <Compile Include="PlaceOrder\WxPaySmType\WxSmType.cs" />
+    <Compile Include="PlaceOrder\WxPayType\HyWxPay.cs" />
+    <Compile Include="PlaceOrder\WxPayType\LmsjWxPay.cs" />
+    <Compile Include="PlaceOrder\WxPayType\TbWxPay.cs" />
+    <Compile Include="PlaceOrder\WxPayType\WftWxPay.cs" />
+    <Compile Include="PlaceOrder\WxPayType\WpWxPay.cs" />
+    <Compile Include="PlaceOrder\WxPayType\WwWxPay.cs" />
+    <Compile Include="PlaceOrder\WxPayType\YlWxPay.cs" />
+    <Compile Include="PlaceOrder\WxPayType\ZqWxPay.cs" />
+    <Compile Include="PlaceOrder\WxPayType\ZxYhWxPay.cs" />
+    <Compile Include="PreOrder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query.cs" />
+    <Compile Include="QueryErrorCode.cs" />
+    <Compile Include="QueryRespon.cs" />
+    <Compile Include="SelectAPP.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ALIPAY\ALIPAY.csproj">
+      <Project>{97f47ba4-cc80-48db-9680-759f33931104}</Project>
+      <Name>ALIPAY</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{38d7aa58-c95b-449b-86c6-a8073a56e11f}</Project>
+      <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DxPay.LogManager\DxPay.LogManager.csproj">
+      <Project>{C1BC675B-5FF5-4E22-9AF1-D34D88A8F630}</Project>
+      <Name>DxPay.LogManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MDL\MDL.csproj">
+      <Project>{53995DBB-9836-4647-AD22-865884FDEB9E}</Project>
+      <Name>MDL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pay.DinPay\Pay.DinPay.csproj">
+      <Project>{7e441973-6d11-4861-ab2b-1f1a7b0a9dc9}</Project>
+      <Name>Pay.DinPay</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOOL\TOOL.csproj">
+      <Project>{b6b4bf6d-e1d9-4585-abe0-c0a28fde0477}</Project>
+      <Name>TOOL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WFTPAY\WFTPAY.csproj">
+      <Project>{df53e03a-0a1d-4e1f-a8b3-11b4342afa79}</Project>
+      <Name>WFTPAY</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WXPAY\WXPAY.csproj">
+      <Project>{ecb24008-50fe-4c11-a3ef-545a4a811fc7}</Project>
+      <Name>WXPAY</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

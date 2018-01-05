@@ -1,0 +1,175 @@
+﻿@{
+    ViewBag.Title = "应用投诉管理";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_complaint>;
+    int pageCount = ViewBag.pageCount;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("REPORT/Complaint.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>所属应用</option>
+                    <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>所属用户</option>
+                    <option value="3" @(ViewBag.type == 3 ? "selected='selected'" : "")>支付渠道</option>
+                    <option value="4" @(ViewBag.type == 4 ? "selected='selected'" : "")>交易流水号</option>
+                    <option value="5" @(ViewBag.type == 5 ? "selected='selected'" : "")>提交人</option>
+                    <option value="6" @(ViewBag.type == 6 ? "selected='selected'" : "")>处理人</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </li>
+        <li>
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" value="@(string.IsNullOrEmpty(ViewBag.stime)? DateTime.Now.ToString("yyyy-MM-dd"):ViewBag.stime)" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}',minDate:'@DateTime.Now.ToString("yyyy-01-01")',dateFmt:'yyyy-MM-dd'})" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.ToString("yyyy-MM-dd")',dateFmt:'yyyy-MM-dd'})" value="@(string.IsNullOrEmpty(ViewBag.etime)? DateTime.Now.ToString("yyyy-MM-dd"):ViewBag.etime)" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                    <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="auditstate" id="auditstate">
+                    <option value="" @(ViewBag.auditstate == "" ? "selected='selected'" : "")>审核状态</option>
+                    <option value="0" @(ViewBag.auditstate == "0" ? "selected='selected'" : "")>未处理</option>
+                    <option value="1" @(ViewBag.auditstate == "1" ? "selected='selected'" : "")>已处理</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary btn-mgn" href="javascript:" onclick="serchlocuser()">查询</a>
+            <a id="btnSearchdc" class="btn btn-primary" href="javascript:" onclick="Searchdc()">导出</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th width="40">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th>展开</th>
+                    <th>所属应用</th>
+                    <th>所属用户</th>
+                    <th>支付渠道</th>
+                    <th>处理人</th>
+                    <th>处理时间</th>
+                    <th>处理结果</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+
+                        foreach (var item in list)
+                        {
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+
+                            <tr onclick="clickOpen(@id)">
+                                <td>
+                                    @if (Convert.ToInt32(item.c_state) == 0)
+                                    {
+                                        <input type="checkbox" name="child" class="checkall" value="@item.c_id" />
+                                    }
+                                </td>
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                                <td>@item.a_name</td>
+                                <td>@item.u_realname</td>
+                                <td>@item.l_corporatename</td>
+                                <td>@(!string.IsNullOrEmpty(item.c_clname) ? item.c_clname : "--")</td>
+                                <td>@item.c_cltimes</td>
+                                <td>@(!string.IsNullOrEmpty(item.c_result) ? item.c_result : "--")</td>
+                                <td>
+                                    @{
+                                        bool getEdit = bll_limit.GetLocUserLimitVoids("/REPORT/InsertUpdateComplaint", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑按钮
+                                        if (getEdit)
+                                        {
+
+                                            if (Convert.ToInt32(item.c_state) == 0)
+                                            {
+                                                <a href="javascript:" class='blue' onclick="UpdateComplaint(@item.c_id)">编辑</a>
+                                                <a href="javascript:" class='blue' onclick="complaintLC(@item.c_id)">处理</a>
+                                            }
+                                            else
+                                            {
+                                                <a>---</a>
+                                            }
+
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                            <!--展开部分-->
+                            <tr>
+                                <td colspan="9" style="display:none;" name="Open" id="@Open">
+                                    <div class="dcnt-tab">
+                                        <table class="table-lst">
+                                            <tr>
+                                                <td>交易流水号:@item.c_tradeno</td>
+                                                <td>订单编号:@item.c_code</td>
+                                                <td>付款金额:@item.c_money</td>
+                                                <td>付款时间:@item.c_times.ToString("yyyy-MM-dd")</td>
+                                            </tr>
+                                            <tr>
+                                                <td>投诉时间:@item.c_datimes.ToString("yyyy-MM-dd")</td>
+                                                <td>
+                                                    投诉原因:@(!string.IsNullOrEmpty(item.c_reason) ? item.c_reason : "--")
+                                                </td>
+                                                <td>
+                                                    状态:@{
+                                                        switch (Convert.ToInt32(item.c_state))
+                                                        {
+
+                                                            case 0:
+                                                                <span class="red">未处理</span>
+                                                                break;
+                                                            case 1:
+                                                                <span class="green">已处理</span>
+                                                                break;
+                                                        }
+                                                    }
+                                                </td>
+                                                <td>
+                                                    提交人:@(!string.IsNullOrEmpty(item.c_tjname) ? item.c_tjname : "--")
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr>
+                                                                <td align="center" colspan="9" class="nodata"> 暂无记录 </td>
+                                                            </tr>
+                                                        }
+
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)
+</div>

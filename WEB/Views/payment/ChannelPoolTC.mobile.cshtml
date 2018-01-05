@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "ChannelPoolTC.mobile";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_channel_pool>;
+}
+@JMP.TOOL.UserHelper.js("mobile/payment/Interface.mobile.js")
+<div class="mobile-popup mobile-container">
+    <div class="search-container-show">
+        <select name="searchType" id="searchType" class="ui dropdown fluid fluid-block">
+            <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>编号</option>
+            <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "" )>通道池名称</option>
+        </select>
+        <div class="ui input fluid fluid-block">
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? " " : ViewBag.sea_name)" />
+        </div>
+        <a id="btnSearch" class="ui button fluid fluid-block" href="javascript:" onclick="serchlocuser()">查询</a>
+        @*<a id="btn_user_select" class="ui button fluid fluid-block" href="javascript:" onclick="selectxzuser()">确认选择</a>*@
+    </div>
+    <div class="table-container table-responsive">
+        <table border="0" cellpadding="0" cellspacing="0" id="apptable" class="ui celled striped ">
+            <thead>
+                <tr>
+                    <th width="100">编号</th>
+                    <th>通道池名称</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.PoolName</td>
+                                <td>
+                                    @{
+                                        if (item.IsEnabled)
+                                        {
+                                            <font color='green'>正常</font>
+                                        }
+                                        else
+                                        {
+                                            <font color='red'>冻结</font>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    <a href="javasript:void(0)" class="blue" onclick="yzappname(@item.Id,'@item.PoolName')">选择</a>
+                                </td>
+                            </tr>
+                                            }
+                                        }
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+<script type="text/javascript">
+    //分页
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/payment/ChannelPoolTC?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        var searchType = $("#searchType").val();
+        var sea_name = $("#sea_name").val();
+        url += "&type=" + searchType + "&sea_name=" + $.trim(sea_name);
+        if (searchType == "1" && isNaN(sea_name)) {
+            window.parent.ShowMsg("只能输入数字！", "error", "");
+            return false;
+        }
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+    //列表查询
+    function serchlocuser() {//查询
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+    function yzappname(l_id, l_corporatename, index) {
+        var SelectName = '@ViewBag.SelectName';
+        if ($.trim(SelectName) != "") {
+            parent.$("#" + SelectName, index).val(l_corporatename);
+        }
+        var SelectId = '@ViewBag.SelectId';
+        if ($.trim(SelectId) != "") {
+            parent.$("#" + SelectId, index).val(l_id);
+        }
+        var judge = '@ViewBag.judge';
+        if ($.trim(judge) != "") {
+            window.parent.layer.getChildFrame("#" + judge, index).attr("class", "Validform_checktip  Validform_right");
+            window.parent.layer.getChildFrame("#" + judge, index).html("验证通过");
+        }
+        var indexs = parent.layer.getFrameIndex(window.name);
+        window.top.layer.close(indexs);
+    }
+</script>

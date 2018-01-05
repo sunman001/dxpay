@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.Title = "代理商管理";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.CoAgent>;
+}
+
+@JMP.TOOL.UserHelper.js("AppUser/AppUserAddTc.js")
+@JMP.TOOL.UserHelper.js("AppUser/appuser.js")
+
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="s_type" id="s_type">
+                    <option value="2" @(ViewBag.stype == 2 ? "selected='selected'" : "")>真实姓名</option>
+                    <option value="3" @(ViewBag.stype == 3 ? "selected='selected'" : "")>手机号码</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="s_keys" id="s_keys" type="text" placeholder="请输入关键字" value="@(!string.IsNullOrEmpty(ViewBag.skeys) ? ViewBag.skeys : "")" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="status" id="status">
+                    <option value="" @(ViewBag.status == "" ? "selected='selected'" : "")>账户状态</option>
+                    <option value="0" @(ViewBag.status == "0" ? "selected='selected'" : "")>正常</option>
+                    <option value="1" @(ViewBag.status == "1" ? "selected='selected'" : "")>冻结</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="AuditState" id="AuditState">
+                    <option value="" @(ViewBag.AuditState == "" ? "selected='selected'" : "")>审核状态</option>
+                    <option value="0" @(ViewBag.AuditState == "0" ? "selected='selected'" : "")>等待审核</option>
+                    <option value="1" @(ViewBag.AuditState == "1" ? "selected='selected'" : "")>通过</option>
+                    <option value="-1" @(ViewBag.AuditState == "-1" ? "selected='selected'" : "")>未通过</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="-1" @(ViewBag.searchDesc == -1 ? "selected='selected'" : "")>排序</option>
+                    <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>倒序</option>
+                    <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>正序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="AppUserSelect()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>手机号码</th>
+                    <th>账户状态</th>
+                    <th>审核状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <td>@item.DisplayName</td>
+                                <td>@item.MobilePhone</td>
+                                <td>
+                                    @(item.State == 1 ? Html.Raw("<span class='red'>冻结</span>") : Html.Raw("<span class='green'>正常</span>"))
+                                </td>
+                                <td>@(item.AuditState == 0 ? Html.Raw("<span class='orange'>等待审核</span>") : item.AuditState == 1 ? Html.Raw("<span class='green'>通过</span>") : Html.Raw("<span class='red'>未通过</span>"))</td>
+                                <td>
+                                    <a href="javascript:" class="blue" onclick="selectxzAppUserAgent(@item.Id,'@item.DisplayName')">选择</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td align="center" colspan="5" class="nodata">暂无记录</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>

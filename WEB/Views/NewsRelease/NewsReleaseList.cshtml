@@ -1,0 +1,131 @@
+﻿@using WEB.Models
+@{
+    ViewBag.Title = "应用投诉管理";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.newsrelease>;
+    int pageCount = ViewBag.pageCount;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("NewsRelease/NewsRelease.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>新闻标题</option>
+                    <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>内容</option>
+                    <option value="3" @(ViewBag.type == 3 ? "selected='selected'" : "")>发布人</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </li>
+        @*<li>
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" value="@(string.IsNullOrEmpty(ViewBag.stime)? DateTime.Now.ToString("yyyy-MM-dd"):ViewBag.stime)" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}',minDate:'@DateTime.Now.ToString("yyyy-01-01")',dateFmt:'yyyy-MM-dd'})" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.ToString("yyyy-MM-dd")',dateFmt:'yyyy-MM-dd'})" value="@(string.IsNullOrEmpty(ViewBag.etime)? DateTime.Now.ToString("yyyy-MM-dd"):ViewBag.etime)" />
+        </li>*@
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                    <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="category" id="category">
+                    <option value="" @(ViewBag.category == "" ? "selected='selected'" : "")>新闻分类</option>
+                    <option value="0" @(ViewBag.category == "0" ? "selected='selected'" : "")>新闻列表</option>
+                    <option value="1" @(ViewBag.category == "1" ? "selected='selected'" : "")>行业动态</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlocuser()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th width="100">新闻类别</th>
+                    <th width="100">新闻标题</th>
+                    <th width="400">内容</th>
+                    <th width="90">发布人</th>
+                    <th width="120">发布时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr>
+
+                                <td>
+                                    @{
+                                    switch (Convert.ToInt32(item.n_category))
+                                    {
+                                        case 1:
+                                            <span>新闻列表</span>
+                                            break;
+                                        case 2:
+                                            <span>行业动态</span>
+                                            break;
+                                    }
+                                }
+                            </td>
+                            <td>@item.n_title</td>
+                            <td>
+                                @{
+                                    string res = "";
+                                    HtmlToText convert = new HtmlToText();
+                                    res = convert.xxHTML(item.n_info);
+                                    if (res.Length > 200)
+                                    {
+                                        res = res.Substring(0, 100).ToString() + "........";//从0开始,截取8位,后面省略号可不要
+                                    }
+
+                                }
+                                @res
+
+                            </td>
+                            <td>@item.n_user</td>
+                            <td>@item.n_time</td>
+
+
+                            <td>
+                                @{
+                                    bool getEdit = bll_limit.GetLocUserLimitVoids("/NewsRelease/InsertUpdateNewsRelease", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑按钮
+                                    if (getEdit)
+                                    {
+                                        <a href="javascript:" class='blue' onclick="UpdateComplaint(@item.n_id)">编辑</a>
+                                    }
+                                }
+                            </td>
+                        </tr>             }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td align="center" colspan="16" class="nodata"> 暂无记录 </td>
+                                        </tr>
+                                    }
+
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)
+</div>
+

@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "权限列表";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_limit>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+    bool getEdit = false;
+}
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrlHtml)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(string.IsNullOrEmpty(Request["type"]) == true ? "" : "selected=selected") @(Request["type"] == "1" ? "selected=selected" : "")>权限编号</option>
+                    <option value="2" @(Request["type"] == "2" ? "selected=selected" : "")>权限名称</option>
+                    <option value="3" @(Request["type"] == "3" ? "selected=selected" : "")>权限页面</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["name"]" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select mr10">
+                <select name="searchTopid" id="searchTopid">
+                    @Html.Raw(ViewBag.selectTopid)
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchState" id="searchState">
+                    <option value="-1" @(string.IsNullOrEmpty(Request["state"]) == true ? "" : "selected=selected") @(Request["state"] == "-1" ? "selected=selected" : "")>状态</option>
+                    <option value="1" @(Request["state"] == "1" ? "selected=selected" : "")>正常</option>
+                    <option value="0" @(Request["state"] == "0" ? "selected=selected" : "")>锁定</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="1" @(string.IsNullOrEmpty(Request["sort"]) == true ? "" : "selected=selected") @(Request["sort"] == "1" ? "selected=selected" : "")>降序</option>
+                    <option value="0" @(Request["sort"] == "0" ? "selected=selected" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlimit()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th width="100">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th width="100">编号</th>
+                    <th>权限名称</th>
+                    <th>权限页面</th>
+                    <th>权限值</th>
+                    <th>状态</th>
+                    <th width="200">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (list.Count > 0)
+                {
+                    foreach (var item in list)
+                    {
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="child" class="checkall" value="@item.l_id" />
+                            </td>
+                            <td>@item.l_id</td>
+                            <td>@(string.IsNullOrEmpty(item.l_name) == true ? "---" : item.l_name)</td>
+                            <td>@(string.IsNullOrEmpty(item.l_url) == true ? "---" : item.l_url)</td>
+                            <td>@item.l_sort</td>
+                            <td>@(item.l_state == 1 ? Html.Raw("<span class='green'>正常</span>") : Html.Raw("<span class='red'>锁定</span>"))</td>
+                            <td>
+                                @{
+                                    getEdit = bll_limit.GetLocUserLimitVoids("/LIMIT/AjaxUpdateLimit", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+
+                                    if (getEdit)
+                                    {
+                                        <a href='javascript:' class='blue' onclick='UpdateLimitDialog(@item.l_id)'>编辑</a>
+                                    }
+
+                                }
+                            </td>
+                        </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td align="center" colspan="7">暂无记录</td>
+                                        </tr>
+                                    }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+
+@JMP.TOOL.UserHelper.js("local/locals.js")
+<script type="text/javascript">
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/LIMIT/LimitList?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        var typeId = $("#searchType  option:selected").val();
+        var state = $("#searchState  option:selected").val();
+        var sort = $("#searchDesc  option:selected").val();
+        var name = $("#searchKey").val();
+        var topid = $("#searchTopid  option:selected").val();
+        url += "&name=" + name + "&type=" + typeId + "&state=" + state + "&sort=" + sort + "&topid=" + topid;
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //搜索权限列表
+    function serchlimit(pageIndex, pageSize) {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+</script>

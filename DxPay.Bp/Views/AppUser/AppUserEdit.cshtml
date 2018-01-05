@@ -1,0 +1,305 @@
+﻿@{
+    ViewBag.Title = "修改开发者";
+    Layout = "~/Views/UI/master.cshtml";
+    JMP.MDL.jmp_user UModel = (JMP.MDL.jmp_user)ViewBag.UserData;
+    string qt_url = (string)ViewBag.UploadUrl;
+}
+@JMP.TOOL.UserHelper.js("Authentication.js")
+@JMP.TOOL.UserHelper.js("AppUser/appuser.js")
+@JMP.TOOL.UserHelper.js("jquery.ajaxupload.js")
+<input name="u_id" id="u_id" type="hidden" value="@(UModel.u_id == null ? 0 : UModel.u_id)" />
+<input name="u_state" id="u_state" type="hidden" value="@(UModel.u_state == null ? 0 : UModel.u_state)" />
+<input name="u_topid" id="u_topid" type="hidden" value="@(UModel.u_topid == null ? 0 : UModel.u_topid)" />
+<input name="ServiceFeeRatioGradeId" id="ServiceFeeRatioGradeId" type="hidden" value="@UModel.ServiceFeeRatioGradeId" />
+<div id="frm-user-edit" method="post" enctype="multipart/form-data">
+    <div class="rnatn-cnt">
+        <ul class="rnatn-frm clearfix">
+            <li class="tit">
+                <p class="ptit">
+                    <i class="calr"></i>
+                    <span class="t">基本信息</span>
+                </p>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">类别</div>
+                    <div class="dipt">
+                        <div class="rule-singless-select">
+                            <select id="u_category" name="u_category" onchange="ChangeType(this)">
+                                <option value="0" @(UModel.u_category == 0 ? "selected='selected'" : "")>个人</option>
+                                <option value="1" @(UModel.u_category == 1 ? "selected='selected'" : "")>企业</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">登录邮件地址</div>
+                    <div class="dipt">
+                        <input name="u_email" type="text" id="u_email" onblur="CheckEmail()" class="txtipt" value="@(string.IsNullOrEmpty(UModel.u_email) ? "" : UModel.u_email)" />
+                    </div>
+                    <span class="error" id="u_email_tip"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">登录密码</div>
+                    <div class="dipt">
+                        <input name="u_password" type="password" id="u_password" class="txtipt" onblur="CheckPwd()" value="@(JMP.TOOL.DESEncrypt.Decrypt(string.IsNullOrEmpty(UModel.u_password) ? "" : UModel.u_password))" />
+                    </div>
+                    <span class="error" id="u_password_tip"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">真实姓名/公司名称</div>
+                    <div class="dipt">
+                        <input name="u_realname" type="text" id="u_realname" class="txtipt" onblur="CheckRName()" value="@(string.IsNullOrEmpty(UModel.u_realname) ? "" : UModel.u_realname)" />
+                    </div>
+                    <span id="u_realname_tip" class="error"> </span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt">
+                    <div class="dtit">联系电话</div>
+                    <div class="dipt dipt-fa">
+                        <input name="u_phone" type="text" id="u_phone" class="txtipt" onblur="CheckPhone()" value="@(string.IsNullOrEmpty(UModel.u_phone) ? "" : UModel.u_phone)" />
+                    </div>
+                    <span id="u_phone_tip" class="error"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt">
+                    <div class="dtit">QQ号码</div>
+                    <div class="dipt">
+                        <input name="u_qq" type="text" id="u_qq" class="txtipt" onblur="CheckQQ()" value="@(string.IsNullOrEmpty(UModel.u_qq) ? "" : UModel.u_qq)" />
+                    </div>
+                    <span class="error" id="u_qq_tip"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt">
+                    <div class="dtit">联系地址</div>
+                    <div class="dipt">
+                        <input name="u_address" type="text" id="u_address" class="txtipt" onblur="CheckAddRess()" value="@(string.IsNullOrEmpty(UModel.u_address) ? "" : UModel.u_address)" />
+                    </div>
+                    <span class="error" id="u_address_tip"></span>
+                </div>
+            </li>
+        </ul>
+        <ul class="rnatn-frm clearfix">
+            <li class="tit">
+                <p class="ptit">
+                    <i class="calr"></i>
+                    <span class="t">财务信息</span>
+                </p>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dpt" id="bank_zhanghu">
+                        <div class="dtit">银行账号</div>
+                        <div class="dipt dipt-fa">
+                            <input name="u_account" type="text" id="u_account" class="txtipt" onblur="CheckAccount()" value="@(string.IsNullOrEmpty(UModel.u_account) ? "" : UModel.u_account)" />
+                        </div>
+                        <span class="error" id="u_account_tip"></span>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="dpt" id="bank_kaihuren">
+                    <i class="star fl">*</i>
+                    <div class="dpt fl">
+                        <div class="dtit">开户名称</div>
+                        <div class="dipt dipt-fa">
+                            <input name="u_name" type="text" id="u_name" class="txtipt" onblur="CheckName()" value="@(string.IsNullOrEmpty(UModel.u_name) ? "" : UModel.u_name)" />
+                        </div>
+                        <span class="error" id="u_name_tip"></span>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="dpt" id="bank_fenhang">
+                    <i class="star fl">*</i>
+                    <div class="dpt fl">
+                        <div class="dtit">开户行全称</div>
+                        <div class="dipt dipt-fa">
+                            <input name="u_bankname" type="text" id="u_bankname" class="txtipt" onblur="CheckBankName()" value="@(string.IsNullOrEmpty(UModel.u_bankname) ? "" : UModel.u_bankname)" />
+                        </div>
+                        <span class="error" id="u_bankname_tip"></span>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="dpt" style="display:none">
+                    <div class="dtit">审核状态</div>
+                    <div class="dipt dipt-rdi">
+                        <div class="checkbox radio">
+                            <input value="-1" name="u_auditstate" type="radio" id="u_stat1" @(UModel.u_auditstate == -1 ? "checked='checked'" : "") /><label for="u_stat1">未通过</label>
+                        </div>
+                        <div class="checkbox radio">
+                            <input value="0" name="u_auditstate" type="radio" id="u_stat2" @(UModel.u_auditstate == 0 ? "checked='checked'" : "") /><label for="u_stat2">等待审核</label>
+                        </div>
+                        <div class="checkbox radio">
+                            <input value="1" name="u_auditstate" type="radio" id="u_stat3" @(UModel.u_auditstate == 1 ? "checked='checked'" : "") /><label for="u_stat3">通过</label>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul class="rnatn-frm clearfix">
+            <li class="tit">
+                <p class="ptit">
+                    <i class="calr"></i>
+                    <span class="t">身份信息</span>
+                </p>
+            </li>
+            <li id="user_idno">
+                <i class="star fl">*</i>
+                <div class="dpt">
+                    <div class="dtit">身份证号码</div>
+                    <div class="dipt">
+                        <input name="u_idnumber" type="text" id="u_idnumber" class="txtipt" maxlength="18" onblur="CheckIdno()" value="@(string.IsNullOrEmpty(UModel.u_idnumber) ? "" : UModel.u_idnumber)" />
+                    </div>
+                    <span class="error" id="u_idnumber_tip"></span>
+                </div>
+            </li>
+            <li id="user_yyzz" style="@(UModel.u_category == 1 ? "display:;" : "display:none;")">
+                <i class="star fl">*</i>
+                <div class="dpt">
+                    <div class="dtit">营业执照</div>
+                    <div class="dipt">
+                        <input name="u_blicensenumber" type="text" id="u_blicensenumber" class="txtipt" maxlength="18" onblur="CheckYYZZ()" value="@(string.IsNullOrEmpty(UModel.u_blicensenumber) ? "" : UModel.u_blicensenumber)" />
+                    </div>
+                    <span class="error" id="u_blicensenumber_tip"></span>
+                </div>
+            </li>
+
+            <li id="user_qyfr" style="@(UModel.u_category == 1 ? "display:;" : "display:none;")">
+                <i class="star fl">*</i>
+                <div class="dpt">
+                    <div class="dtit">企业法人</div>
+                    <div class="dipt">
+                        <input name="BusinessEntity" type="text" id="BusinessEntity" class="txtipt" maxlength="18" onblur="Checkqyfr()" value="@(string.IsNullOrEmpty(UModel.BusinessEntity) ? "" : UModel.BusinessEntity)" />
+                    </div>
+                    <span class="error" id="BusinessEntity_tip"></span>
+                </div>
+            </li>
+            <li id="user_qyzcaddress" style="@(UModel.u_category == 1 ? "display:;" : "display:none;")">
+                <i class="star fl">*</i>
+                <div class="dpt">
+                    <div class="dtit">企业注册地址</div>
+                    <div class="dipt">
+                        <input name="RegisteredAddress" type="text" id="RegisteredAddress" maxlength="18" class="txtipt" onblur="Checkqyzcaddress()" value="@(string.IsNullOrEmpty(UModel.RegisteredAddress) ? "" : UModel.RegisteredAddress)" />
+                    </div>
+                    <span class="error" id="RegisteredAddress_tip"></span>
+                </div>
+            </li>
+        </ul>
+        <ul class="rnatn-frm rnatn-frm-pic clearfix">
+            <li class="tit">
+                <p class="ptit">
+                    <i class="calr"></i>
+                    <span class="t">上传证件</span>
+                </p>
+            </li>
+            <li>
+                <div class="fl clearfix">
+                    <div class="rnatn-pic">
+                        <p class="bor" id="u_idno_img">
+                            @{
+                                var urlsfz = string.IsNullOrEmpty(UModel.u_photo) ? "" : qt_url + UModel.u_photo;
+                            }
+                            @if (urlsfz == "")
+                            {
+                                <i id="add" class="fa fa-plus"></i>
+                            }
+
+                            <img src="@urlsfz" id="certificate" width="145" height="145" />
+                            <input name="certificatefile" type="file" id="certificatefile" onchange="FileChange()" class="txtfile" />
+                            <input type="hidden" name="u_photo" id="u_photo" value="@(!string.IsNullOrEmpty(UModel.u_photo) ? UModel.u_photo : "")" />
+
+                        </p>
+                        <p class="txt">身份证正面照片</p>
+                        <span class="error" id="u_photo_tip"></span>
+                    </div>
+                </div>
+                <div class="fl clearfix">
+                    <div class="rnatn-pic">
+                        <div class="bor" id="u_idno_img">
+                            @{
+                                var urlsff = string.IsNullOrEmpty(UModel.u_photof) ? "" : qt_url + UModel.u_photof;
+                            }
+                            @if (urlsff == "")
+                            {
+                                <i id="add1" class="fa fa-plus"></i>
+                            }
+                            <img src="@urlsff" id="certificatef" width="145" height="145" />
+                            <input name="certificatefilef" type="file" id="certificatefilef" onchange="FileChangef()" class="txtfile" />
+                            <input type="hidden" name="u_photof" id="u_photof" value="@(!string.IsNullOrEmpty(UModel.u_photof) ? UModel.u_photof : "")"/>
+                        </div>
+                        <p class="txt">身份证反面照片</p>
+                        <span class="error" id="u_photo_tipf"></span>
+                    </div>
+                </div>
+
+                <div class="fl clearfix">
+                    <div class="rnatn-pic">
+                        <div class="bor" id="u_idno_img">
+                            @{
+                                var urllicence = string.IsNullOrEmpty(UModel.u_licence) ? "" : qt_url + UModel.u_licence;
+                            }
+                            @if (urllicence == "")
+                            {
+                                <i id="add2" class="fa fa-plus"></i>
+                            }
+                            
+                            <img src="@urllicence" id="licencef" width="145" height="145" />
+                            <input name="licencefilef" type="file" id="licencefilef" onchange="FileChangexkz()" class="txtfile" />
+                            <input type="hidden" name="u_licence" id="u_licence" value="@(!string.IsNullOrEmpty(UModel.u_licence) ? UModel.u_licence : "")" />
+                        </div>
+                        @if (UModel.u_category == 0)
+                        {
+                            <p class="txt" id="u_licencehtml">银行卡正面照片</p>
+                        }
+                        else
+                        {
+                            <p class="txt" id="u_licencehtml">开户许可证照片</p>
+                        }
+
+                        <span class="error" id="u_licence_tip"></span>
+                    </div>
+                </div>
+                <div class="fl clearfix" id="qysfz" style="@(UModel.u_category == 1 ? "display:;" : "display:none;")">
+                    <div class="rnatn-pic">
+                        <p class="bor" id="u_idno_img">
+                            @{
+                                var urlyyzz = string.IsNullOrEmpty(UModel.u_blicense) ? "" : qt_url + UModel.u_blicense;
+                            }
+                            @if (urlyyzz == "")
+                            {
+                                <i id="adds" class="fa fa-plus"></i>
+                            }
+                            <img src="@urlyyzz" id="sfzficate" width="145" height="145" />
+                            <input name="sfzcertificatefile" type="file" id="sfzcertificatefile" onchange="FileChangeSfz()" class="txtfile" />
+                            <input type="hidden" name="u_blicense" id="u_blicense" value="@(!string.IsNullOrEmpty(UModel.u_blicense) ? UModel.u_blicense : "")" />
+                        </p>
+                        <p class="txt">营业执照照片</p>
+                        <span class="error" id="sfzficateyy"></span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="div-btn">
+            <input type="button" value="提交审核" onclick="SaveUpdateUser()" id="btn-save-edit" class="btn btn-primary" />
+        </div>
+    </div>
+</div> 

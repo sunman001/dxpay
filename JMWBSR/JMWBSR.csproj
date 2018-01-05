@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{11599DB9-2116-46D6-BB06-B41898AE97E5}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JMWBSR</RootNamespace>
+    <AssemblyName>JMWBSR</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="cashdesk\h5\checkout.aspx" />
+    <Content Include="cashdesk\h5\css\style.css" />
+    <Content Include="error.aspx" />
+    <Content Include="Error.html" />
+    <Content Include="cashdesk\h5\img\bg.jpg" />
+    <Content Include="cashdesk\h5\img\bj1_02.jpg" />
+    <Content Include="cashdesk\h5\img\icon_07.png" />
+    <Content Include="cashdesk\h5\img\icon_payment.png" />
+    <Content Include="cashdesk\h5\img\payway.png" />
+    <Content Include="cashdesk\h5\js\BigInt.js" />
+    <Content Include="cashdesk\h5\js\fastclick-1.0.5.js" />
+    <Content Include="cashdesk\h5\js\global.js" />
+    <Content Include="cashdesk\h5\js\home.js" />
+    <Content Include="cashdesk\h5\js\ipay-common.js" />
+    <Content Include="cashdesk\h5\js\iscroll-4.2.5.js" />
+    <Content Include="cashdesk\h5\js\jquery-2.2.4.js" />
+    <Content Include="cashdesk\h5\js\password.js" />
+    <Content Include="cashdesk\h5\js\pay.js" />
+    <Content Include="cashdesk\h5\js\RSA_Stripped.js" />
+    <Content Include="UnionPay.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="cashdesk\h5\checkout.aspx.cs">
+      <DependentUpon>checkout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="cashdesk\h5\checkout.aspx.designer.cs">
+      <DependentUpon>checkout.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="error.aspx.cs">
+      <DependentUpon>error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="error.aspx.designer.cs">
+      <DependentUpon>error.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\WeiChatDetectorExtension.cs" />
+    <Compile Include="Info.ashx.cs">
+      <DependentUpon>Info.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CheckoutPostBackJsonModel.cs" />
+    <Compile Include="Models\H5ViewModel.cs" />
+    <Compile Include="ModelZd.cs" />
+    <Compile Include="ModelZfJk.cs" />
+    <Compile Include="Models\CheckoutJsonModel.cs" />
+    <Compile Include="OrderCode.cs" />
+    <Compile Include="Pay.ashx.cs">
+      <DependentUpon>Pay.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PayBank.ashx.cs">
+      <DependentUpon>PayBank.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="PayType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="query.ashx.cs">
+      <DependentUpon>query.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="UnionPay.aspx.cs">
+      <DependentUpon>UnionPay.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UnionPay.aspx.designer.cs">
+      <DependentUpon>UnionPay.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Info.ashx" />
+    <Content Include="Pay.ashx" />
+    <Content Include="PayBank.ashx" />
+    <None Include="Properties\PublishProfiles\JMWBSR.pubxml" />
+    <None Include="Properties\PublishProfiles\wbsr.pubxml" />
+    <Content Include="query.ashx" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ALIPAY\ALIPAY.csproj">
+      <Project>{97f47ba4-cc80-48db-9680-759f33931104}</Project>
+      <Name>ALIPAY</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{38d7aa58-c95b-449b-86c6-a8073a56e11f}</Project>
+      <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HbtPay\HbtPay.csproj">
+      <Project>{593df720-dab3-4fff-9e38-58dea370890d}</Project>
+      <Name>HbtPay</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MDL\MDL.csproj">
+      <Project>{53995dbb-9836-4647-ad22-865884fdeb9e}</Project>
+      <Name>MDL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pay.DinPay\Pay.DinPay.csproj">
+      <Project>{7e441973-6d11-4861-ab2b-1f1a7b0a9dc9}</Project>
+      <Name>Pay.DinPay</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOOL\TOOL.csproj">
+      <Project>{b6b4bf6d-e1d9-4585-abe0-c0a28fde0477}</Project>
+      <Name>TOOL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WFTPAY\WFTPAY.csproj">
+      <Project>{df53e03a-0a1d-4e1f-a8b3-11b4342afa79}</Project>
+      <Name>WFTPAY</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WXPAY\WXPAY.csproj">
+      <Project>{ecb24008-50fe-4c11-a3ef-545a4a811fc7}</Project>
+      <Name>WXPAY</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>17745</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:12815/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,224 @@
+﻿@{
+    ViewBag.Title = "添加代理商";
+    Layout = "~/Views/UI/master.cshtml";
+
+}
+@JMP.TOOL.UserHelper.js("Authentication.js")
+@JMP.TOOL.UserHelper.js("Agent/Agent.js")
+@JMP.TOOL.UserHelper.js("jquery.ajaxupload.js")
+<div id="frm-agent-add" method="post" enctype="multipart/form-data">
+    <div class="rnatn-cnt">
+        <ul class="rnatn-frm clearfix">
+            <li class="tit">
+                <p class="ptit">
+                    <i class="calr"></i>
+                    <span class="t">基本信息</span>
+                </p>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">类别</div>
+                    <div class="dipt">
+                        <div class="rule-singless-select">
+                            <select id="Classify" onchange="ChangeType(this)">
+                                <option value="0">个人</option>
+                                <option value="1">企业</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">登录名</div>
+                    <div class="dipt">
+                        <input type="text" name="LoginName" id="LoginName" class="txtipt" onblur="yzLoginName()" value="" placeholder="请填写登录名" />
+                    </div>
+                    <span class="error" id="yzLoginName"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">真实姓名或者公司名称</div>
+                    <div class="dipt">
+                        <input type="text" name="DisplayName" id="DisplayName" class="txtipt" onblur="yzDisplayName()" value="" placeholder="请填写真实姓名或者公司名称" />
+                    </div>
+                    <span class="error" id="yzDisplayName"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">登录密码</div>
+                    <div class="dipt dipt-fa">
+                        <input name="Password" type="password" id="Password" class="txtipt" onblur="yzPassword()" value="" placeholder="请输入登录密码" />
+
+                    </div>
+                    <span class="error" id="yzPassword"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">手机号码</div>
+                    <div class="dipt">
+                        <input type="text" name="MobilePhone" id="MobilePhone" class="txtipt" onblur="yzMobilePhone()" value="" placeholder="请输入手机号码" />
+                    </div>
+                    <span class="error" id="yzMobilePhone"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">QQ</div>
+                    <div class="dipt">
+                        <input type="text" name="QQ" id="QQ" class="txtipt" onblur="yzQQ()" value="" placeholder="请输入QQ" />
+                    </div>
+                    <span class="error" id="yzQQ"></span>
+                </div>
+            </li>
+
+            <li>
+                <div class="dpt fl">
+                    <div class="dtit">邮箱地址</div>
+                    <div class="dipt">
+                        <input type="text" name="EmailAddress" id="EmailAddress" class="txtipt" value="" placeholder="请输入邮箱地址" />
+                    </div>
+                    <span class="error" id="yzEmailAddress"></span>
+                </div>
+            </li>
+            <li id="Websiteinput">
+                <div class="dpt fl">
+                    <div class="dtit">网址</div>
+                    <div class="dipt">
+                        <input type="text" name="Website" id="Website" class="txtipt" value="" placeholder="请输入网址" />
+                    </div>
+                    <span class="error" id="yzWebsite"></span>
+                </div>
+            </li>
+        </ul>
+        <ul class="rnatn-frm clearfix">
+            <li class="tit">
+                <p class="ptit">
+                    <i class="calr"></i>
+                    <span class="t">详细信息</span>
+                </p>
+            </li>
+            <li id="user_idno">
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">身份证</div>
+                    <div class="dipt">
+                        <input type="text" name="IDCardNumber" id="IDCardNumber" class="txtipt" onblur="yzIDCardNumber()" value="" placeholder="请输入身份证" />
+                    </div>
+                    <span id="yzIDCardNumber" class="error"></span>
+                </div>
+            </li>
+            <li id="user_yyzz" style="display: none;">
+                <div class="dpt fl">
+                    <i class="star fl">*</i>
+                    <div class="dtit">营业执照编号</div>
+                    <div class="dipt">
+                        <input type="text" name="BusinessLicenseNumber" id="BusinessLicenseNumber" class="txtipt" onblur="yzBusinessLicenseNumber()" value="" placeholder="请填写营业执照编号" />
+                    </div>
+                    <span class="error" id="yzBusinessLicenseNumber"></span>
+                </div>
+            </li>
+
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">开户行全称</div>
+                    <div class="dipt">
+                        <input type="text" name="BankFullName" id="BankFullName" class="txtipt" onblur="yzBankFullName()" value="" placeholder="请填写开户银行全称" />
+                    </div>
+                    <span class="error" id="yzBankFullName"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">开户名</div>
+                    <div class="dipt">
+                        <input type="text" name="BankAccountName" id="BankAccountName" class="txtipt" onblur="yzBankAccountName()" value="" placeholder="请填写开户名" />
+                    </div>
+                    <span class="error" id="yzBankAccountName"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">开户账号</div>
+                    <div class="dipt">
+                        <input type="text" name="BankAccount" id="BankAccount" class="txtipt" onblur="yzBankAccount()" value="" placeholder="请填写开户账号" />
+                    </div>
+                    <span class="error" id="yzBankAccount"></span>
+                </div>
+            </li>
+            <li>
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">联系地址</div>
+                    <div class="dipt">
+                        <input type="text" name="ContactAddress" id="ContactAddress" class="txtipt" onblur="yzContactAddress()" value="" placeholder="请填写联系地址" />
+                    </div>
+                    <span class="error" id="yzContactAddress"></span>
+                </div>
+            </li>
+        </ul>
+        <ul class="rnatn-frm rnatn-frm-pic clearfix">
+            <li class="tit">
+                <p class="ptit">
+                    <i class="calr"></i>
+                    <span class="t">证件认证</span>
+                </p>
+
+            </li>
+            <li>
+                <div class="fl clearfix">
+                    <div class="rnatn-pic">
+                        <div class="bor" id="u_idno_img">
+                            <i id="addphoto" class="fa fa-plus"></i>
+                            <img src="" id="certificate" width="145" height="145" />
+                            <input name="certificatefile" type="file" id="certificatefile" onchange="FileChange()" class="txtfile" />
+                            <input type="hidden" name="u_photo" id="u_photo" />
+                            
+                        </div>
+                        <p class="txt">身份证照片</p>
+                        <span class="error" id="u_photo_tip"></span>
+                    </div>
+                </div>
+                <div class="fl clearfix" id="qysfz" style="display: none;">
+                    <div class="rnatn-pic">
+                        <p class="bor" id="u_idno_img">
+                            <i id="add" class="fa fa-plus"></i>
+                            <img src="" id="sfzficate" width="145" height="145" />
+                            <input name="sfzcertificatefile" type="file" id="sfzcertificatefile" onchange="FileChangeSfz()" class="txtfile" />
+                            <input type="hidden" name="u_blicense" id="u_blicense" />
+                        </p>
+                        <p class="txt">营业执照照片</p>
+                        <span class="error" id="sfzficateyy"></span>
+                    </div>
+                </div>
+                <div class="rnatn-pic-ifo fr">
+                    <i class="bor"></i>
+                    <p>1.证件照片需最新年份</p>
+                    <p>2.照片大小须在2M以内</p>
+                    <p>3.三证合一的可只上传新证</p>
+                    <p>4.所有的证件照均上传复印件，必须加盖公章</p>
+                    <p>5.结算账户为基本户，可不用提交开户回执单</p>
+                    <p>6.证件照格式为：jpg,png,gif,jpeg</p>
+                </div>
+            </li>
+
+        </ul>
+        <div class="div-btn">
+            <input type="button"  onclick="SaveAgent()" value="提交审核" id="btn_submit" class="btn btn-primary" />
+        </div>
+
+
+    </div>
+  </div>

@@ -1,0 +1,199 @@
+﻿@{
+    ViewBag.Title = "RespondList";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.CsCustomerServiceSroceReprot>;
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.searchType == 1 ? "selected='selected'" : "")>处理人</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="Type" id="Type" onchange="get()">
+                    <option value="0" @(ViewBag.Type == 0 ? "selected='selected'" : "")>日</option>
+                    <option value="1" @(ViewBag.Type == 1 ? "selected='selected'" : "")>月</option>
+                </select>
+            </div>
+        </li>
+        <li id="year" style="display:none ">
+            <div class="rule-single-select">
+                <select name="YearDate" id="YearDate">
+                    <option value="0" @(ViewBag.YearDate == 0 ? "selected='selected'" : "")>请选择年份</option>
+                    <option value="2017" @(ViewBag.YearDate == 2017 ? "selected='selected'" : "")>2017</option>
+                    <option value="2018" @(ViewBag.YearDate == 2018 ? "selected='selected'" : "")>2018</option>
+                    <option value="2019" @(ViewBag.YearDate == 2018 ? "selected='selected'" : "")>2019</option>
+                    <option value="2020" @(ViewBag.YearDate == 2018 ? "selected='selected'" : "")>2020</option>
+                </select>
+            </div>
+        </li>
+        <li id="month" style="display:none ">
+            <div class="rule-single-select">
+                <select name="MonthDate" id="MonthDate">
+                    <option value="0" @(ViewBag.MonthDate == 0 ? "selected='selected'" : "")>请选择月份</option>
+                    <option value="1" @(ViewBag.MonthDate == 1 ? "selected='selected'" : "")>1</option>
+                    <option value="2" @(ViewBag.MonthDate == 2 ? "selected='selected'" : "")>2</option>
+                    <option value="3" @(ViewBag.MonthDate == 3 ? "selected='selected'" : "")>3</option>
+                    <option value="4" @(ViewBag.MonthDate == 4 ? "selected='selected'" : "")>4</option>
+                    <option value="5" @(ViewBag.MonthDate == 5 ? "selected='selected'" : "")>5</option>
+                    <option value="6" @(ViewBag.MonthDate == 6 ? "selected='selected'" : "")>6</option>
+                    <option value="7" @(ViewBag.MonthDate == 7 ? "selected='selected'" : "")>7</option>
+                    <option value="8" @(ViewBag.MonthDate == 8 ? "selected='selected'" : "")>8</option>
+                    <option value="9" @(ViewBag.MonthDate == 9 ? "selected='selected'" : "")>9</option>
+                    <option value="10" @(ViewBag.MonthDate == 10 ? "selected='selected'" : "")>10</option>
+                    <option value="11" @(ViewBag.MonthDate == 11 ? "selected='selected'" : "")>11</option>
+                    <option value="12" @(ViewBag.MonthDate == 12 ? "selected='selected'" : "")>12</option>
+                </select>
+            </div>
+        </li>
+        <li id="date">
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" value="@(string.IsNullOrEmpty(ViewBag.end) ? DateTime.Now.ToString("yyyy-MM-dd") : ViewBag.begin)" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}',minDate:'@DateTime.Now.ToString("yyyy-01-01")',dateFmt:'yyyy-MM-dd'})" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.ToString("yyyy-MM-dd")',dateFmt:'yyyy-MM-dd'})" value="@(string.IsNullOrEmpty(ViewBag.end) ? DateTime.Now.ToString("yyyy-MM-dd") :  ViewBag.end)" />
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlocuser()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    @if (ViewBag.Type == 0)
+                    {
+                        <th>日期</th>
+                    }
+                    else
+                    {
+                        <th>年份</th>
+                        <th>月份</th>
+                    }
+                    <th>处理人</th>
+                    <th>评级</th>
+                    <th>数量</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                @if (ViewBag.Type == 0)
+                                {
+                                    <td>@item.CreatedOn</td>
+                                }
+                                else
+                                {
+                                    <td>@item.yyear</td>
+                                    <td>@item.cmonth</td>
+                                }
+
+                                <td>@item.HandlerName</td>
+                                <td>
+                                
+                                    @{switch (item.Grade)
+                                        {
+                                            case 0:
+                                                <span style="color:blueviolet">未评级</span>
+                                                break;
+                                            case 1:
+                                                <span style="color:darkorange">优秀</span>
+                                                break;
+                                            case 2:
+                                                <span style="color:burlywood">良好</span>
+                                                break;
+                                            case 3:
+                                                <span style="color:chartreuse">合格</span>
+                                                break;
+                                            case 4:
+                                                <span style="color:brown">不合格</span>
+                                                break;
+                                        }}
+                                </td>
+
+                                <td>@item.Count</td>
+                            </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                @if (ViewBag.Type == 0)
+                                                {
+                                                    <td align="center" colspan="4" class="nodata">暂无记录</td>
+                                                }
+                                                else
+                                                {
+                                                    <td align="center" colspan="5" class="nodata">暂无记录</td>
+                                                }
+
+                                            </tr>
+                                        }
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+<script type="text/javascript">
+    var type =@ViewBag.Type;
+    if(type==0)
+    {
+        document.getElementById("date").style = "display:block";
+        document.getElementById("year").style = "display:none ";
+        document.getElementById("month").style = "display:none ";
+    }
+    else
+    {
+        document.getElementById("year").style = "display:block";
+        document.getElementById("date").style = "display:none";
+        document.getElementById("month").style = "display:block ";
+    }
+    function ArticleManage(pageIndex, pageSize) {
+        var searchType = $("#searchType").val();
+        var sea_name = $("#sea_name").val();
+        var stime = $("#stime").val();
+        var etime = $("#etime").val();
+        var Type = $("#Type").val();
+        var YearDate = $("#YearDate").val();
+        var MonthDate = $("#MonthDate").val();
+        var url = "/Workorder/SroceReport?pageIndexs=" + pageIndex + "&psize=" + pageSize + "&searchType=" + searchType + "&sea_name=" + sea_name + "&stime=" + stime + "&etime=" + etime + "&Type=" + Type + "&YearDate=" + YearDate + "&MonthDate=" + MonthDate;
+        location.href = encodeURI(url);
+    }
+
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+    //查询
+    function serchlocuser() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+    function get() {
+        var Type = $("#Type").val();
+        if (Type == 0) {
+            document.getElementById("date").style = "display:block"
+            document.getElementById("year").style = "display:none "
+            document.getElementById("month").style = "display:none "
+        }
+        else {
+            document.getElementById("year").style = "display:block"
+            document.getElementById("date").style = "display:none"
+            document.getElementById("month").style = "display:block "
+        }
+    }
+</script>

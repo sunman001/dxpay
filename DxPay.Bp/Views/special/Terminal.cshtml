@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "终端属性报表";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_app>;
+}
+@JMP.TOOL.UserHelper.js("plugin/fusionchart/fusioncharts.js")
+@JMP.TOOL.UserHelper.js("plugin/my97datepicker/WdatePicker.js")
+<div class="box_container">
+    <div class="terminal clearfix">
+
+        <ul class="frm-ul fl">
+            <li>
+                <div class="rule-single-select">
+                    <select name="s_applist" id="s_applist">
+                        <option value="0" @(ViewBag.aid == 0 ? "selected='selected'" : "")>所有应用</option>
+                        @{
+                            if (list != null)
+                            {
+                                foreach (var item in list)
+                                {
+                                <option value="@item.a_id" @(ViewBag.aid == item.a_id ? "selected='selected'" : "")>@item.a_name</option>
+                                    }
+                                }
+                            }
+                    </select>
+                </div>
+            </li>
+            <li>
+                <input name="stime" type="text" id="stime" onFocus="WdatePicker({minDate:'@ViewBag.ksrq',maxDate:'#F{$dp.$D(\'etime\')||\'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")\'}'})" readonly="readonly" class="dataipt txtipt" value="@ViewBag.stime" />
+                <i class="fg">~</i>
+                <input name="etime" type="text" id="etime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")'})" readonly="readonly" class="dataipt txtipt time" value="@ViewBag.etime" />
+            </li>
+            <li>
+                <a class="btn btn-primary" id="btn_search">查询</a>
+            </li>
+        </ul>
+        <ul class="terminal-nav fr clearfix">
+            <li name="xzk" class="active" onclick="dialogTabJson(this,'statistics');">品牌</li>
+            <li name="xzk" onclick="dialogTabJson(this,'modelnumber');">型号</li>
+            <li name="xzk" onclick="dialogTabJson(this,'operatingsystem');">操作系统</li>
+            <li name="xzk" onclick="dialogTabJson(this,'resolution');">分辨率</li>
+            <li name="xzk" onclick="dialogTabJson(this,'network');">网络</li>
+            <li name="xzk" onclick="dialogTabJson(this,'operator');">运营商</li>
+            <li name="xzk" onclick="dialogTabJson(this,'province');">省份</li>
+        </ul>
+    </div>
+    <div id="chart" class="box_container" style="margin: 30px 0 0 10px"></div>
+</div>
+<script type="text/javascript">
+    function FusionChart(type) {
+        var winHeight = document.body.clientHeight - 200;
+        var stime = $.trim($("#stime").val());
+        var etime = $.trim($("#etime").val());
+        var a_name = $.trim($("#s_applist option:selected").text());
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/special/TerminalCount?type=" + type + "&stime=" + stime + "&etime=" + etime + "&a_name=" + $.trim(a_name),
+            success: function (retJson) {
+                if (retJson == "0") {
+                    $("#chart").html("<div style='font-size:14px;color:#5e788a; font-weight:lighter; text-align:center; width:100%;'>未查询到符合条件的数据</div>");
+                } else {
+                    var data = eval('(' + retJson + ')');
+                    var chart = new FusionCharts({
+                        type: "bar2d",
+                        renderAt: "chart",
+                        width: "100%",
+                        height: "400px",
+                        dataSource: data,
+                        dataFormat: "json"
+                    }).render();
+                }
+            }
+        });
+    }
+    //Tab控制函数用于终端属性报表
+    function dialogTabJson(tabObj, type) {
+        //设置点击后的切换样式
+        $("a[name='xzk']").removeClass("active");
+        $(tabObj).addClass("active");
+        FusionChart(type);
+    }
+    $(function () {
+        FusionChart("statistics");
+        $("#btn_search").click(function () {
+            var type = $("li[name='xzk']").html();
+            switch (type) {
+                case "品牌":
+                    FusionChart("statistics");
+                    break;
+                case "型号":
+                    FusionChart("modelnumber");
+                    break;
+                case "操作系统":
+                    FusionChart("operatingsystem");
+                    break;
+                case "分辨率":
+                    FusionChart("resolution");
+                    break;
+                case "网络":
+                    FusionChart("network");
+                    break;
+                case "运营商":
+                    FusionChart("operator");
+                    break;
+                case "省份":
+                    FusionChart("province");
+                    break;
+            }
+        })
+    });
+</script>

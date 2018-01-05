@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "发布消息";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var mo = ViewBag.mo as JMP.MDL.jmp_message;
+}
+@JMP.TOOL.UserHelper.js("MessageManagement/message.js")
+<div class="main">
+    <div class="clear10"></div>
+    <div class="plate-form">
+        <dl>
+            <dt>接收人：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="a_user_id" type="text" id="a_user_id" readonly="readonly" onclick="selectUser( '@ViewBag.type' )" value="@(string.IsNullOrEmpty(mo.m_receiver) ? "" : mo.m_receiver)" />
+                    <input type="hidden" id="m_id" name="m_id" value="@(mo.m_id == 0 ? 0 : mo.m_id)" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="yzkfz">*接收人</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>消息内容：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <textarea id="contentname" name="contentname" onblur="yzcontentname()" class="txt1">@(string.IsNullOrEmpty(mo.m_content) ? "" : mo.m_content)</textarea>
+                </div>
+                <div class="Validform_checktip" id="contentnameyy">*消息内容</div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="发布" id="btnSaveAddmessage" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>

@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "盾行支付平台-重置密码";
+    Layout = "~/Views/UI/Account.cshtml";
+
+}
+@JMP.TOOL.UserHelper.js("user/changepwd.js")
+<div class="reg-frm">
+    <ul class="lgn-frm-dc reg-frm-dc clearfix">
+        <li>
+            <span class="lgn-tit">手机号码</span>
+            <input type="text" name="u_phone" id="u_phone" class="form-ctrl form-ctl-vlte" placeholder="请输入手机号码" onblur="yzphone()" />
+            <a id="btn_get_verify_code_disabled" class="lgn-code lgn-code-txt on">重新获取 <span>60</span>秒</a>
+            <a id="btn_get_verify_code" class="lgn-code lgn-code-txt on">发送验证码</a>
+            <div id="yzphone" class="lgn-error lgn-ervlt">请输入手机号码</div>
+        </li>
+        <li>
+            <span class="lgn-tit">手机验证码</span>
+            <input type="text" name="verified_code" id="verified_code" class="form-ctrl form-ctl-vlte" onblur="yzcode()" />
+            <div id="yztelcode" class="lgn-error lgn-ervlt">验证码不能为空</div>
+        </li>
+    </ul>
+    <div class="dbtn chgepwd-dbtn">
+        <button id="btn_ResetPwd" class="lgn-btn on" title="" value=""><i class="icon-sj"></i></button>
+    </div>
+</div>

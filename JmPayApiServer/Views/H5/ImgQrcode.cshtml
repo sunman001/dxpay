@@ -1,0 +1,191 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+    <style type="text/css">
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        body, nav, dl, dt, dd, p, h1, h2, h3, h4, ul, ol, li, input, button, textarea, footer {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 62.5%;
+        }
+
+        body {
+            position: relative;
+            font-family: "Microsoft Yahei","Helvetica Neue","Hiragino Sans GB", /*"Segoe UI",*/ Tahoma,Arial,STHeiti,sans-serif;
+            font-size: 12px;
+            line-height: 1.5;
+            margin: 0 auto;
+            background: #e1b740;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: normal;
+        }
+
+        form {
+            display: inline;
+        }
+
+        ul, ol {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+            color: #666;
+        }
+
+        img {
+            vertical-align: middle;
+            border: 0;
+            -ms-interpolation-mode: bicubic;
+        }
+
+        button, input, select, textarea {
+            border: 1px solid #ccc;
+            font-size: 100%;
+            vertical-align: middle;
+            outline: none;
+        }
+
+        button {
+            box-shadow: none;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        button, input[type="button"], input[type="reset"], input[type="submit"] {
+            cursor: pointer;
+            -webkit-appearance: button;
+            -moz-appearance: button;
+        }
+
+        input:focus:-moz-placeholder, input:focus::-webkit-input-placeholder {
+            color: transparent;
+        }
+
+        button::-moz-focus-inner, input::-moz-focus-inner {
+            padding: 0;
+            border: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        i {
+            font-style: normal;
+        }
+
+        em {
+            font-style: normal;
+        }
+
+        header, footer, article, section, nav, menu, hgroup {
+            display: block;
+            clear: all;
+        }
+
+        .clearfix:after {
+            clear: both;
+            content: "";
+            display: block;
+            height: 0;
+        }
+
+        .by-orang {
+            background: #e8bc65;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .by-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+            z-index: -2;
+        }
+
+        .by-e {
+            background: #eeeeee;
+        }
+
+
+        /*二维码*/
+        .erweima {
+            padding: 31px 52px;
+        }
+
+        .erweima-cnt {
+            background: #fff;
+        }
+
+            .erweima-cnt .tit {
+                border-bottom: 1px dashed #9f9f9f;
+                line-height: 24px;
+                padding: 10px 15px;
+                color: #333;
+                font-size: 12px;
+            }
+
+            .erweima-cnt .pimg {
+                padding: 30px;
+            }
+
+                .erweima-cnt .pimg img {
+                    width: 100%;
+                    text-align: center;
+                }
+
+        .btn-back {
+            height: 40px;
+            line-height: 40px;
+            display: block;
+            margin-top: 31px;
+            background: #cdcdcd;
+            color: #cb4a49;
+            border-radius: 6px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <section class="erweima ">
+        <div class="erweima-cnt">
+            <h1 class="tit">请保存二维码到相册返回<span style="font-weight:bold;">@ViewBag.Name</span>主界面，扫一扫进行支付或者用另一台手机进行扫描支付!</h1>
+            <p class="pimg">
+                @Html.Raw(ViewBag.message)
+            </p>
+        </div>
+    </section>
+</body>
+</html>

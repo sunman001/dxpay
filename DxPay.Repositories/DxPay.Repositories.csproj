@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{94FBB3C1-B5BC-4131-9967-9BBF0B74D2F8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DxPay.Repositories</RootNamespace>
+    <AssemblyName>DxPay.Repositories</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DbHelperExtension.cs" />
+    <Compile Include="IModelnumbersRepository.cs" />
+    <Compile Include="AppCountRepository.cs" />
+    <Compile Include="IAppCountRepository.cs" />
+    <Compile Include="INetworkRepository.cs" />
+    <Compile Include="IProvinceRepository.cs" />
+    <Compile Include="IOperatorRepository.cs" />
+    <Compile Include="IResolutionRepository.cs" />
+    <Compile Include="IOperatingsystemRepository.cs" />
+    <Compile Include="ModelnumbersRepository.cs" />
+    <Compile Include="NetworkRepository.cs" />
+    <Compile Include="ProvinceRepository.cs" />
+    <Compile Include="OperatorRepository.cs" />
+    <Compile Include="ResolutionRepository.cs" />
+    <Compile Include="OperatingsystemRepository.cs" />
+    <Compile Include="StatisticsRepository.cs" />
+    <Compile Include="IStatisticsRepository.cs" />
+    <Compile Include="ITrendsRepository.cs" />
+    <Compile Include="IUserReportRepository.cs" />
+    <Compile Include="TrendsRepository.cs" />
+    <Compile Include="UserReportRepository.cs" />
+    <Compile Include="OrderRepository.cs" />
+    <Compile Include="CoBusinessPersonnelRepository.cs" />
+    <Compile Include="CoSettlementChannelCostRepository.cs" />
+    <Compile Include="Impl\CoSettlementDeveloperAppDetailsRepository.cs" />
+    <Compile Include="Impl\CoSettlementDeveloperOverviewRepository.cs" />
+    <Compile Include="DbHelperForReportTableExtension.cs" />
+    <Compile Include="IOrderRepository.cs" />
+    <Compile Include="ICoBusinessPersonnelRepository.cs" />
+    <Compile Include="ICoSettlementChannelCostRepository.cs" />
+    <Compile Include="Inter\ICoSettlementDeveloperAppDetailsRepository.cs" />
+    <Compile Include="Inter\ICoSettlementDeveloperOverviewRepository.cs" />
+    <Compile Include="ReportRepositoryBase.cs" />
+    <Compile Include="UserRepository.cs" />
+    <Compile Include="AppRepository.cs" />
+    <Compile Include="CoAgentRepository.cs" />
+    <Compile Include="CoCooperationApplicationRepository.cs" />
+    <Compile Include="GenericRepository.cs" />
+    <Compile Include="IUserRepository.cs" />
+    <Compile Include="IAppRepository.cs" />
+    <Compile Include="ICoAgentRepository.cs" />
+    <Compile Include="ICoCooperationApplicationRepository.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DBA\DBA.csproj">
+      <Project>{0988C62E-247F-471F-A183-DB509C7A3839}</Project>
+      <Name>DBA</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DbName\DbName.csproj">
+      <Project>{c189a46c-7582-4b85-a110-d211f3cbdd36}</Project>
+      <Name>DbName</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DxPay.Dba\DxPay.Dba.csproj">
+      <Project>{0F6EDE1E-C970-4AFE-9220-CEAD19398027}</Project>
+      <Name>DxPay.Dba</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DxPay.Domain\DxPay.Domain.csproj">
+      <Project>{63a9c164-93ec-4524-81fc-ea2b9ed219d6}</Project>
+      <Name>DxPay.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DxPay.Infrastructure\DxPay.Infrastructure.csproj">
+      <Project>{392032E6-FB40-426D-8C77-103C8FA2464C}</Project>
+      <Name>DxPay.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MDL\MDL.csproj">
+      <Project>{53995DBB-9836-4647-AD22-865884FDEB9E}</Project>
+      <Name>MDL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOOL\TOOL.csproj">
+      <Project>{b6b4bf6d-e1d9-4585-abe0-c0a28fde0477}</Project>
+      <Name>TOOL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

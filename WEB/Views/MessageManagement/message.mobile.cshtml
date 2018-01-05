@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "发布消息";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var mo = ViewBag.mo as JMP.MDL.jmp_message;
+}
+@JMP.TOOL.UserHelper.js("mobile/MessageManagement/message.js")
+<div class="mobile-popup mobile-container bg-white">
+    <div class="ui form ">
+        <input type="hidden" id="m_id" name="m_id" value="@(mo.m_id == 0 ? 0 : mo.m_id)" />
+        <div class="field">
+            <label>接收人</label>
+            <input name="a_user_id" type="text" id="a_user_id" readonly="readonly" onclick="selectUser('@ViewBag.type')" value="@(string.IsNullOrEmpty(mo.m_receiver) ? "" : mo.m_receiver)"/>
+            <div class="Validform_checktip" id="yzkfz">*接收人</div>
+        </div>
+        <div class="field">
+            <label>消息内容</label>
+            <textarea id="contentname" name="contentname" onblur="yzcontentname()">@(string.IsNullOrEmpty(mo.m_content) ? "" : mo.m_content)</textarea>
+            <div class="Validform_checktip" id="contentnameyy">*消息内容</div>
+        </div>
+    </div>
+    <div class="page-footer">
+        <div class="btn-listbtn">
+            <button class="ui primary button" type="button" name="btnSave" value="发布" id="btnSaveAddmessage">
+                发布
+            </button>
+            <a href="~/MessageManagement/messagelist" class="ui default button">取消</a>
+        </div>
+    </div>
+</div>

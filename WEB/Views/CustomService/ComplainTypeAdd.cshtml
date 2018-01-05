@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "添加投诉类型";
+    Layout = "~/Views/UI/dialog.cshtml";
+
+    var mo = ViewBag.mo as JMP.MDL.CsComplainType;
+
+}
+@JMP.TOOL.UserHelper.js("CustomService/ComplainTypeAdd.js")
+@*@JMP.TOOL.UserHelper.js("jquery-validation/dist/jquery.validate.min.js")
+    @JMP.TOOL.UserHelper.js("jquery-validation/dist/localization/messages_zh.js")
+    @JMP.TOOL.UserHelper.js("form-validation-common.js")*@
+
+<div class="main">
+    <input type="hidden" id="Id" value="@(mo.Id > 0 ? mo.Id : 0)" />
+    <div class="plate-form">
+        <dl>
+            <dt>投诉类型名称：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="Name" type="text" id="Name" onblur="yzname()" value="@(string.IsNullOrEmpty(mo.Name)?"":mo.Name)" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="nameyz">* 投诉类型名称</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>投诉类型描述：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <textarea id="Description" name="Description" onblur="yzDescription()" style="width: 400px; height: 100px;"></textarea>
+                    @{
+                        if (!string.IsNullOrEmpty(mo.Description))
+                        {
+                            <script type="text/javascript">
+                                document.getElementById("Description").innerText = ' @mo.Description';
+
+                            </script>
+                        }
+                    }
+                </div>
+                <div class="Validform_checktip" id="Descriptionyz">*投诉类型描述</div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnSaveAddorUpdateCustomType" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>

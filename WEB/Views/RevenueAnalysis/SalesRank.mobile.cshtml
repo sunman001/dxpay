@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "销售排行";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+
+}
+@JMP.TOOL.UserHelper.js("fusionchart/fusioncharts.js")
+@JMP.TOOL.UserHelper.js("fusionchart/fusioncharts.theme.zune.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="mobile-container">
+        <div id="ToolBar" class="report-toolbar">
+            <ul class="report-toolbarul">
+                <li>交易额排行TOP10</li>
+            </ul>
+            
+        </div>
+    <div class="searchdiv">
+        <p id="btn-show-search" class="searchbtton" onclick="pop.showSearch('search-container')">查询条件</p>
+    </div>
+    <br />
+    <div class="plate-tab-ul-wrap">
+            <ul>
+                <li><a id="type_0" href="javascript:;" class="selected">应用</a></li>
+                <li><a id="type_1" href="javascript:;">商户</a></li>
+                <li><a id="type_2" href="javascript:;">渠道</a></li>
+            </ul>
+        </div>
+    <div class="search-container ui form">
+        <select name="sType" id="sType" class="ui dropdown fluid fluid-block">
+            <option value="0" @(Request["sType"] == "0" ? "selected=selected" : "")>应用名称</option>
+            <option value="1" @(Request["sType"] == "1" ? "selected=selected" : "")>开发者邮箱</option>
+        </select>
+        
+        <div class="ui input fluid fluid-block field">
+            <input name="sKeys" type="text" id="sKeys" placeholder="请输入关键字" value="@Request["sKeys"]" />
+        </div>
+        交易日期
+        <div class="ui input fluid fluid-block field">
+            <input name="stime" type="text" id="stime" value="@(string.IsNullOrEmpty(Request["begin"]) ? DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd") : "")" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}',minDate:'@DateTime.Now.ToString("yyyy-01-01")',dateFmt:'yyyy-MM-dd'})" />
+        </div>
+        至
+        <div class="ui input fluid fluid-block field">
+            <input name="etime" type="text" id="etime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")',dateFmt:'yyyy-MM-dd'})" value="@(string.IsNullOrEmpty(Request["end"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : "")" />
+        </div>
+        <a id="btn_search" class="ui button fluid big primary fluid-block" href="javascript:">查询</a>
+    </div>
+    <div class="table-container table-responsive">
+        <div id="chartObj" class="chart-main">
+            <div id="chart"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var sumTypes = 0;
+
+        //top10
+        function ChartTopTen(type) {
+            var winHeight = $(window).height() - 280;
+            var stime = $("#stime").val();
+            var etime = $("#etime").val();
+            var sFields = $("#sType").val();
+            var sFvalue = $("#sKeys").val();
+            var queryStr = "begin=" + stime + "&end=" + etime + "&sumType=" + sumTypes + "&sType=" + sFields + "&sKeys=" + sFvalue;
+            $.ajax({
+                type: "post",
+                contentType: "application/json; charset=utf-8",
+                url: "/RevenueAnalysis/SalesTopTen?" + queryStr,
+                success: function (retJson) {
+                    if (retJson == "0") {
+                        var childHtm = "<div style='font-size:18px;color:#cccccc; font-weight:lighter; text-align:center; width:100%;  margin-top:20px;'>未查询到符合条件的数据</div>";
+                        $("#chart").html(childHtm);
+                    } else {
+                        var data = eval('(' + retJson + ')');
+                        var chart = new FusionCharts({
+                            type: "bar2d",
+                            renderAt: "chart",
+                            width: "100%",
+                            height: winHeight + "px",
+                            dataSource: data,
+                            dataFormat: "json"
+                        }).render();
+                    }
+                    layer.closeAll();
+                }
+            });
+        }
+
+        $(function () {
+            //点击卡片切换样式
+            $(".plate-tab-ul-wrap a").each(function (index) {
+                $(this).click(function () {
+                    $(".plate-tab-ul-wrap a").removeClass("selected");
+                    $(this).addClass("selected");
+                    sumTypes = this.id.substr(this.id.lastIndexOf("_") + 1, 1);
+                    ChartTopTen();
+                });
+            });
+
+            //查询按钮
+            $("#btn_search").click(function () {
+                ChartTopTen();
+            });
+
+            ChartTopTen();
+        });
+
+     
+    </script>
+</div>

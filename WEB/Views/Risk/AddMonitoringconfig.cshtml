@@ -1,0 +1,150 @@
+﻿
+@{
+    ViewBag.Title = "监控配置表";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var mo = ViewBag.mo as WEB.ViewModel.Monitoringconfig.MonitoringconfigViewModel;
+
+}
+@JMP.TOOL.UserHelper.js("Risk/Monitoringconfig.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <input type="hidden" id="id" value="@mo.Id" />
+    <div class="clear10"></div>
+    <div class="plate-form">
+        <dl>
+            <dt>过滤类型：</dt>
+            <dd>
+                <div class="rule-single-select mr10">
+                    <select name="TypeId" id="TypeId" sucmsg="请选择类型" nullmsg="请选择类型" errormsg="请选择类型" onchange="selectRemarks()">
+                        <option value="0" @(mo.TypeId == 0 ? "selected='selected'" : "")>成功率</option>
+                        <option value="1" @(mo.TypeId == 1 ? "selected='selected'" : "")>请求率</option>
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <dl id="divTargetId">
+            <dt>过滤对象：</dt>
+            <dd>
+                <div class="rule-single-select mr10" onclick="getRelate()">
+                    <select name="TargetId" id="TargetId" sucmsg="请选择过滤对象" nullmsg="请选择过滤对象" errormsg="请选择过滤对象">
+                        <option value="0" @(mo.TargetId == 0 ? "selected='selected'" : "")>全局通道</option>
+                        <option value="1" @(mo.TargetId == 1 ? "selected='selected'" : "")>支付通道</option>
+                        <option value="2" @(mo.TargetId == 2 ? "selected='selected'" : "")>通道池</option>
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <dl id="divRelatedId">
+            <dt id="Relatedhtml">关联ID：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input name="c_payname" id="c_payname" readonly="readonly" type="hidden" />
+                    @if (mo.Id > 0)
+                    {
+                        <input type="text" name="c_payid" id="c_payid" value="@mo.RelatedId" disabled />
+                    }
+                    else
+                    {
+                        <input type="text" name="c_payid" id="c_payid" onclick="shyy()" />
+                    }
+
+                </div>
+                <div class="Validform_checktip" id="yzkfz1">*必选！</div>
+            </dd>
+        </dl>
+        <dl id="IntervalOfRecoverth">
+            <dt>时间间隔：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input type="text" name="IntervalOfRecover" id="IntervalOfRecover" value="@mo.IntervalOfRecover" onblur="yzIntervalOfRecover()" />
+                </div>
+            </dd>
+        </dl>
+
+    </div>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="apptable" class="table-cnt lay-table-cnt">
+            <thead>
+                <tr>
+                    <th width="100">小时</th>
+                    <th id="sztitle">成功率</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="3" style="color:red;" id="Remarks">备注 成功率（10%，请填写0.1 ，只能是1位整数或者保留四位小数） </td>
+                </tr>
+            </tbody>
+            <tbody id="fileList">
+
+
+                @foreach (var h in mo.WhichHourLists.OrderBy(x => x.WhichHour))
+                {
+                    <tr>
+                        <td>@h.WhichHour</td>
+                        @if (mo.TypeId == 0)
+                        {
+                        <td>
+                            <input type="text" name="Threshold" id="Threshold_@h.WhichHour" value="@h.Threshold" onblur="yzThreshold('Threshold_@h.WhichHour')" class="lay-usersx" />
+                        </td>
+
+                        }
+                        else
+                        {
+                            <td>
+                                <input type="text" name="Threshold" id="Threshold_@h.WhichHour" value="@h.Threshold.ToString("f0")" onblur="yzThreshold('Threshold_@h.WhichHour')" class="lay-usersx" />
+                                </td>
+                                }
+
+</tr>
+                }
+
+            </tbody>
+
+
+        </table>
+        <div class="page-footer" style="width: 100%;">
+            <div class="btn-listbtn">
+                <input type="button" name="btnSave" value="保存" class="btn btn-primary" id="btnSave" />
+                <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function selectRemarks() {
+        var TypeId = $.trim($("#TypeId").val());
+        if (TypeId == "0") {
+            $("#sztitle").html("成功率");
+            $("#Remarks").html("备注 成功（10%，请填写0.1 ，只能是1位整数或者保留四位小数");
+        } else {
+            $("#Remarks").html("备注 请求频率为整数！");
+            $("#sztitle").html("请求频率");
+        }
+    }
+    var TargetId = $.trim($("#TargetId").val());
+    if (TargetId == 0) {
+        document.getElementById("divRelatedId").style = " display:none";
+        document.getElementById("IntervalOfRecoverth").style = " display:none";
+
+
+    }
+    else if (TargetId == 1) {
+        document.getElementById("divRelatedId").style = " display:block";
+        document.getElementById("Relatedhtml").innerHTML = "请选择通道";
+        document.getElementById("IntervalOfRecoverth").style = " display:block";
+
+
+    }
+    else if (TargetId == 2) {
+        document.getElementById("divRelatedId").style = " display:block";
+        document.getElementById("Relatedhtml").innerHTML = "请选择通道池";
+        document.getElementById("IntervalOfRecoverth").style = " display:none";
+
+
+    }
+
+</script>

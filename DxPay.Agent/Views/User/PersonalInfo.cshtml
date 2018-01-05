@@ -1,0 +1,174 @@
+﻿
+@{
+    ViewBag.Title = "个人中心";
+    Layout = "~/Views/UI/master.cshtml";
+
+    var coagent = ViewBag.coagent as JMP.MDL.CoAgent;
+    string ht_url = (string)ViewBag.UploadUrl;
+}
+
+<div class="rnatn-cnt">
+
+    <ul class="rnatn-frm clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">基本信息</span>
+            </p>
+        </li>
+        <li>
+            <div class="dpt fl">
+                <div class="dtit">登录名称</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" value="@(string.IsNullOrEmpty(coagent.LoginName) ? "" : coagent.LoginName)" disabled="disabled" />
+
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="dpt fl">
+                <div class="dtit">登录邮箱</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" value="@(string.IsNullOrEmpty(coagent.EmailAddress) ? "" : coagent.EmailAddress)" disabled="disabled" />
+
+                </div>
+
+            </div>
+        </li>
+        <li>
+            <div class="dpt fl">
+                <div class="dtit">真实姓名或者公司名称</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(coagent.DisplayName) ? coagent.DisplayName : "")" disabled="disabled" />
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="dpt fl">
+                <div class="dtit">开户账号</div>
+                <div class="dipt dipt-fa">
+                    <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(coagent.BankAccount) ? coagent.BankAccount : "")" disabled="disabled" />
+
+                </div>
+
+            </div>
+        </li>
+        <li>
+
+            <div class="dpt fl">
+                <div class="dtit">开户名称</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(coagent.BankAccountName) ? coagent.BankAccountName : "")" disabled="disabled" />
+                </div>
+
+            </div>
+        </li>
+        <li>
+
+            <div class="dpt fl">
+                <div class="dtit">开户银行全称</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(coagent.BankFullName) ? coagent.BankFullName : "")" disabled="disabled" />
+                </div>
+
+            </div>
+        </li>
+        @if (coagent.Classify == 1)
+            {
+            <li>
+                <div class="dpt fl">
+                    <div class="dtit">营业执照编号</div>
+                    <div class="dipt">
+                        <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(coagent.BusinessLicenseNumber) ? coagent.BusinessLicenseNumber : "")" disabled="disabled" />
+                    </div>
+
+                </div>
+            </li>
+        }
+
+    </ul>
+    <ul class="rnatn-frm clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">联系方式</span>
+            </p>
+        </li>
+        <li>
+            <div class="dpt fl">
+                <div class="dtit">联系电话</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" disabled="disabled" value="@(!string.IsNullOrEmpty(coagent.MobilePhone) ? coagent.MobilePhone : "")" />
+                </div>
+            </div>
+        </li>
+        <li>
+
+            <div class="dpt fl">
+                <div class="dtit">联系QQ</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(coagent.QQ) ? coagent.QQ : "")" disabled="disabled" />
+                </div>
+
+            </div>
+        </li>
+        <li>
+
+            <div class="dpt fl">
+                <div class="dtit">联系地址</div>
+                <div class="dipt">
+                    <input type="text" class="txtipt" value="@(!string.IsNullOrEmpty(coagent.ContactAddress) ? coagent.ContactAddress : "")" disabled="disabled" />
+                </div>
+
+            </div>
+        </li>
+
+    </ul>
+    <ul class="rnatn-frm rnatn-frm-pic clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">证件认证</span>
+            </p>
+
+        </li>
+        <li>
+            <div class="fl clearfix">
+
+                <div class="rnatn-pic">
+                    <div class="bor" id="u_idno_img">
+
+                        @{
+                            var urlsfz = string.IsNullOrEmpty(coagent.PersonalPhotoPath) ? "" : ht_url + coagent.PersonalPhotoPath;
+                        }
+
+                        <a href="@urlsfz" target="_blank">  <img class="personal_img" src="@urlsfz" style="width:145px;height:145px;" /></a>
+                    </div>
+                    <p class="txt">身份证照片</p>
+
+                </div>
+                @if (coagent.Classify == 1)
+                {
+                    <div class="rnatn-pic">
+                        <div class="bor" id="u_yyzz_img">
+                            @{
+                                var urlyyzz = string.IsNullOrEmpty(coagent.BusinessLicensePhotoPath) ? "" : ht_url + coagent.BusinessLicensePhotoPath;
+                            }
+
+                            <a href="@urlyyzz" target="_blank"> <img class="personal_img" src="@urlyyzz" style="width:145px;height:145px;" /></a>
+                        </div>
+                        <p class="txt">营业执照</p>
+
+                    </div>
+                                }
+
+            </div>
+
+
+        </li>
+
+    </ul>
+
+</div>
+
+

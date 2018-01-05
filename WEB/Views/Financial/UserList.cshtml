@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "查询用户";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var userList = ViewBag.list as List<JMP.MDL.jmp_user>;
+}
+
+<div class="main">
+    <div class="date-tool">
+        <div class="rule-single-select mr10">
+            <select name="s_type" id="s_type">
+                <option value="0" @(ViewBag.stype == "0" ? "selected='selected'" : "")>邮箱</option>
+                <option value="1" @(ViewBag.stype == "1" ? "selected='selected'" : "")>联系电话</option>
+                <option value="3" @(ViewBag.stype == "3" ? "selected='selected'" : "")>身份证号</option>
+                <option value="6" @(ViewBag.stype == "6" ? "selected='selected'" : "")>营业执照</option>
+            </select>
+        </div>
+        <div class="date-tool-input mr10">
+            <div class="date-tool-input-text">
+                <input name="s_keys" id="s_keys" type="text" placeholder="请输入关键字" value="@(!string.IsNullOrEmpty(ViewBag.skeys) ? ViewBag.skeys : "")" />
+            </div>
+        </div>
+        <div class="rule-single-select mr10">
+            <select name="s_category" id="s_category">
+                <option value="" @(ViewBag.scategory == "" ? "selected='selected'" : "")>认证类型</option>
+                <option value="0" @(ViewBag.scategory == "0" ? "selected='selected'" : "")>个人</option>
+                <option value="1" @(ViewBag.scategory == "1" ? "selected='selected'" : "")>企业</option>
+            </select>
+        </div>
+        <div class="rule-single-select ml10">
+            <select name="s_sort" id="s_sort">
+
+                <option value="1" @(ViewBag.s_sort == 1 ? "selected='selected'" : "")>降序</option>
+                <option value="0" @(ViewBag.s_sort == 0 ? "selected='selected'" : "")>升序</option>
+            </select>
+        </div>
+        <a id="btn_user_query" class="btn-search ml10" href="javascript:" onclick="selectUserLiset()">查询</a>
+    </div>
+    <div class="clear10"></div>
+    <div class="data-table-2">
+        <table border="0" cellpadding="0" cellspacing="0" id="table">
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>登录邮件地址</th>
+                    <th>真实姓名</th>
+                    <th>联系电话</th>
+                    <th>账户状态</th>
+                    <th>审核状态</th>
+                    <th>选择</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (userList.Count > 0)
+                    {
+                        foreach (var item in userList)
+                        {
+                    <tr>
+                        <td>@item.u_id</td>
+                        <td>@(string.IsNullOrEmpty(item.u_email) ? "---" : item.u_email)</td>
+                        <td>@(string.IsNullOrEmpty(item.u_realname) ? "---" : item.u_realname)</td>
+                        <td>@(string.IsNullOrEmpty(item.u_phone) ? "---" : item.u_phone)</td>
+                        <td>@(item.u_state == 0 ? Html.Raw("<font color='red'>冻结</font>") : Html.Raw("<font color='green'>正常</font>"))
+                        <td>@(item.u_auditstate == 0 ? Html.Raw("<font color='orange'>等待审核</font>") : item.u_auditstate == 1 ? Html.Raw("<font color='green'>通过</font>") : Html.Raw("<font color='red'>未通过</font>"))</td>
+                        <td>
+                            <a style="cursor:pointer" onclick="yxuzyhuser(@item.u_id,'@item.u_email')">选择</a>
+                             @*<a style="cursor:pointer" href="/Financial/ManualList?userid=@item.u_id&username=@item.u_email" >选择</a>*@
+                        </td>
+                    </tr>
+                        }
+                    }
+                    else
+                    {
+                    <tr>
+                        <td align="center" colspan="7">暂无记录</td>
+                    </tr>}
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("LoadData", ViewBag.CurrPage, ViewBag.PageSize, ViewBag.PageCount)
+    <input id="curr_page" type="hidden" value="@ViewBag.CurrPage" />
+</div>
+@JMP.TOOL.UserHelper.js("Financial/ManualList.js")
+<script type="text/javascript">
+    //选择每页显示数量
+    function pagexz() {
+        //每页记录数
+        var PageSize = $("#pagexz").val();
+        LoadData(1, PageSize);
+    }
+</script>

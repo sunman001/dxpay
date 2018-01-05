@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "consultation";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+}
+<script src="~/mobile/js/CooperationApplication.js"></script>
+<div class="cons2">
+    <form >
+        <div class="ul">
+            <div class="li">
+                <div class="inp">
+                    <i><img src="~/mobile/img/cons1.jpg" alt="用户图标" title="用户图标" /> </i>
+                    <input class="inputbox" type="text" id="Name" placeholder="请输入姓名" required maxLength="4" min="0" max="4" />
+                </div>
+                <div class="error"></div>
+            </div>
+            <div class="li">
+                <div class="inp">
+                    <i><img src="~/mobile/img/cons2.jpg" alt="手机图标" title="手机图标" /> </i>
+                    <input class="inputbox" placeholder="请输入手机" id="MobilePhone"  name="phone" type="text" required pattern="1[34578]\d{9}$" />
+                </div>
+                <div class="error"></div>
+            </div>
+            <div class="li">
+                <div class="inp">
+                    <i><img src="~/mobile/img/cons3.jpg" alt="QQ图标" title="QQ图标" /> </i>
+                    <input class="inputbox" name="qq" id="QQ" placeholder="请输入QQ" required pattern="[0-9]{6,12}" type="text" />
+                </div>
+                <div class="error"></div>
+            </div>
+            <div class="li">
+                <div class="inp">
+                    <i><img src="~/mobile/img/cons4.jpg" alt="邮箱图标" title="邮箱图标" /> </i>
+                    <input class="inputbox" name="email" id="EmailAddress" placeholder="请输入邮箱" required type="email" />
+                </div>
+                <div class="error"></div>
+            </div>
+            <div class="lis">
+                <div class="inp">
+                    <label for="Website_0"><input class="radiobox" name="sum" type="radio" value="" checked="checked" />小于5万 </label>
+                    <label for="Website_1"><input class="radiobox" name="sum" type="radio" value="" />大于5万到10万</label>
+                    <label for="Website_1"><input class="radiobox" name="sum" type="radio" value="" />15万以上 </label>
+                </div>
+            </div>
+            <div class="li">
+                <div class="inp inptar inp_area">
+                  <!-- <i><img src="~/mobile/img/cons5.jpg" /> </i> -->  
+                    <textarea class="inputbox inputbox_area" name="subject"  id="RequestContent"  placeholder="请描述您的产品需要的支付需求" required="" tabindex="2" type="text"></textarea>
+                </div>
+                <div class="error"></div>
+            </div>
+            <div class="lis">
+                <input type="button" id="send"  class="sub"  value="发送" />
+            </div>
+        </div>
+    </form>
+</div>

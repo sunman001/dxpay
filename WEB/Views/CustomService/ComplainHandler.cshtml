@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "处理投诉";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var mo = ViewBag.cscomod as JMP.MDL.CsComplainOrder;
+}
+@JMP.TOOL.UserHelper.js("CustomService/ComplainOrderList.js")
+<div class="main">
+    <input type="hidden" id="Id" value="@(mo.Id > 0 ? mo.Id : 0)" />
+    <div class="plate-form">
+        <dl>
+            <dt>处理结果：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <textarea id="HandleResult" name="HandleResult" style="width: 400px; height: 100px;"></textarea>
+                    @{
+                        if (!string.IsNullOrEmpty(mo.HandleResult))
+                        {
+                            <script type="text/javascript">
+                                document.getElementById("HandleResult").innerText = ' @mo.HandleResult';
+                            </script>
+                        }
+                    }
+                </div>
+                <div class="Validform_checktip" id="HandleResultyz">*处理结果</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>退款状态：</dt>
+            <dd>
+                <div>
+                    <label>
+                        <input type="radio" name="IsRefund" @(!mo.IsRefund ? "checked='checked'" : "") value="0" />未退款
+                    </label>
+                    <label>
+                        <input type="radio" name="IsRefund" @(mo.IsRefund ? "checked='checked'" : "") value="1" />已退款
+                    </label>
+                </div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnCustomHandler" onclick="btnSaveCustomHandler()" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>

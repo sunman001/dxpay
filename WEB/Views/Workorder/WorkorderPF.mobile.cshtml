@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "评价工单页面";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+}
+@JMP.TOOL.UserHelper.js("mobile/Workorder/scheduling.mobile.js")
+<div class="mobile-popup mobile-container">
+    <div class="ui form">
+        <dl>
+            <dt>评分：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <div class="rule-single-select">
+                        <select name="Score" id="Score" onblur="yzScore()">
+                            <option value='-1'>--请选择--</option>
+                            <option value='5'>5分</option>
+                            <option value='4'>4分</option>
+                            <option value='3'>3分</option>
+                            <option value='2'>2分</option>
+                            <option value='1'>1分</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="Validform_checktip" id="yyScore">* 评分</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>评分内容：</dt>
+            <dd>
+                <textarea name="scorereason" type="text" id="scorereason"> </textarea>
+            </dd>
+        </dl>
+        <dl>
+            <dt></dt>
+            <dd><input type="hidden" id="r_id" value="@(ViewBag.id)" /></dd>
+        </dl>
+    </div>
+    <div class="page-footer">
+        <input type="button" name="btnWorkorderGB" value="保存" id="btnWorkordeScore" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+</div>

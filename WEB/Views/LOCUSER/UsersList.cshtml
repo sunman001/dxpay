@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "本地管理员列表";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_locuser>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+    bool getEdit = false;
+    bool getUidT = false;
+}
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(string.IsNullOrEmpty(Request["type"]) == true ? "" : "") @(Request["type"] == "1" ? "selected=selected" : "")>管理员编号</option>
+                    <option value="2" @(Request["type"] == "2" ? "selected=selected" : "")>管理员账号</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["name"]" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchState" id="searchState">
+                    <option value="-1" @(string.IsNullOrEmpty(Request["state"]) == true ? "" : "")>状态</option>
+                    <option value="1" @(Request["state"] == "1" ? "selected=selected" : "")>正常</option>
+                    <option value="0" @(Request["state"] == "0" ? "selected=selected" : "")>锁定</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="1" @(string.IsNullOrEmpty(Request["sort"]) == true ? "" : "") @(Request["sort"] == "1" ? "selected=selected" : "")>降序</option>
+                    <option value="0" @(Request["sort"] == "0" ? "selected=selected" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlocuser()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th>编号</th>
+                    <th>登录名</th>
+                    <th>真实姓名</th>
+                    <th>部门</th>
+                    <th>职位</th>
+                    <th>手机号码</th>
+                    <th>邮箱</th>
+                    <th>qq</th>
+                    <th>状态</th>
+                    <th>登陆次数</th>
+                    <th width="80">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (list.Count > 0)
+                {
+                    foreach (var item in list)
+                    {
+                        <tr>
+                            <td>
+                                @{
+                                    getUidT = bll_limit.GetLocUserLimitVoids("/LOCUSER/AjaxUpdateLcoUserState", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                    if (getUidT)
+                                    {
+                                        <input type="checkbox" name="child" class="checkall" value="@item.u_id" />
+                                    }
+                                }
+                            </td>
+                            <td>@item.u_id</td>
+                            <td>@item.u_loginname</td>
+                            <td>@item.u_realname</td>
+                            <td>@item.u_department</td>
+                            <td>@item.u_position</td>
+                            <td>@item.u_mobilenumber</td>
+                            <td>@item.u_emailaddress</td>
+                            <td>@item.u_qq</td>
+                            <td>@(item.u_state == 1 ? Html.Raw("<span class='green'>正常</font>") : Html.Raw("<span class='red'>锁定</font>"))</td>
+                            <td>@item.u_count</td>
+                            <td>
+                                @{
+                                    getEdit = bll_limit.GetLocUserLimitVoids("/LOCUSER/AjaxUpdateUser", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                    if (getEdit)
+                                    {
+                                        <a href='javascript:' class='blue' onclick='UpdateUser(@item.u_id)'>编辑</a>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td align="center" colspan="8" class="nodata">暂无记录</td>
+                                        </tr>
+                                    }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+@JMP.TOOL.UserHelper.js("local/locals.js")
+<script type="text/javascript">
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/LOCUSER/UsersList?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        var typeId = $("#searchType  option:selected").val();
+        var state = $("#searchState  option:selected").val();
+        var sort = $("#searchDesc  option:selected").val();
+        var name = $("#searchKey").val();
+        url += "&name=" + name + "&type=" + typeId + "&state=" + state + "&sort=" + sort;
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+    //搜索管理员列表
+    function serchlocuser() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+</script>

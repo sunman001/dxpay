@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "流量走势报表";
+    Layout = "~/Views/UI/master.cshtml";
+}
+
+<!--曲线图js-->
+@JMP.TOOL.UserHelper.js("highcharts/highcharts.js")
+@JMP.TOOL.UserHelper.js("special/tremds.js")
+@JMP.TOOL.UserHelper.js("plugin/my97datepicker/WdatePicker.js")
+
+
+<div class="box_container">
+    <ul class="frm-ul clearfix">
+        <li>
+            @{Html.RenderAction("UserAppList", "Home");}
+        </li>
+        <li>
+            <input name="stime" type="text" id="stime" onFocus="WdatePicker({minDate:'@ViewBag.ksrq',maxDate:'#F{$dp.$D(\'etime\')||\'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")\'}'})" readonly="readonly" class="dataipt txtipt" value="@ViewBag.stime" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")'})" readonly="readonly" class="dataipt txtipt time" value="@ViewBag.etime" />
+        </li>
+        <li>
+            <a class="btn btn-primary" id="btn_search">查询</a>
+        </li>
+    </ul>
+    <div id="chart" class="box_container"></div>
+</div>
+

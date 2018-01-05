@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "提交人工单申诉";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+}
+@JMP.TOOL.UserHelper.js("mobile/Workorder/scheduling.mobile.js")
+<div class="mobile-popup mobile-container">
+    <div class="ui form">
+        <dl>
+            <dt>是否关闭：</dt>
+            <dd>
+                <input type="radio" name="ty " id="syes" checked="checked" value="1" /> 是
+                <input type="radio" name="ty " id="sno" value="2" /> 否
+            </dd>
+        </dl>
+        <dl>
+            <dt>原因：</dt>
+            <dd>
+                <textarea name="handleResultDescription" type="text" id="handleResultDescription" onblur="yzhandleResultDescription()"> </textarea>
+                <div class="Validform_checktip" id="yyhandleResultDescription">*原因</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt></dt>
+            <dd><input type="hidden" id="id" value="@(ViewBag.id)" /></dd>
+        </dl>
+    </div>
+    <div class="page-footer">
+        <input type="button" name="btnWorkordershs" value="保存" id="btnWorkordershs" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+</div>

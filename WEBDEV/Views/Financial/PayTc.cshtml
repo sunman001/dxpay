@@ -1,0 +1,94 @@
+﻿@{
+    Layout = null;
+    Layout = "~/Views/UI/master.cshtml";
+    var userBankList = ViewBag.ubklist as List<JMP.MDL.jmp_userbank>;
+    var WithdrawalsMinimum = System.Configuration.ConfigurationManager.AppSettings["WithdrawalsMinimum"];
+}
+@JMP.TOOL.UserHelper.js("financial/pays.js")
+<div class="box_container" style="padding-bottom: 50px;">
+    <input type="hidden" id="WithdrawalsMinimum" value="@WithdrawalsMinimum" />
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.searchType == "1" ? "selected=selected" : "")>银行卡号</option>
+                    <option value="2" @(ViewBag.searchType == "2" ? "selected=selected" : "")>银行名称</option>
+                    <option value="3" @(ViewBag.searchType == "3" ? "selected=selected" : "")>持卡人姓名</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="banknumber" id="banknumber" type="text" placeholder="请输入关键字" value="@ViewBag.banknumber" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="flag" id="flag">
+                    <option value="" @( ViewBag.flag == "" ? "selected=selected" : "")>付款标识</option>
+                    <option value="00" @( ViewBag.flag == "00" ? "selected=selected" : "")>对私</option>
+                    <option value="01" @( ViewBag.flag == "01" ? "selected=selected" : "")>对公</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btn_search" class="btn btn-primary" href="javascript:" onclick="btnUserBank()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table class="table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="all" onclick="checkAll(this)" value="0" />
+                    </th>
+                    <th>银行卡号</th>
+                    <th>银行名称</th>
+                    <th>持卡人姓名</th>
+                    <th>付款标识</th>
+                    <th>单卡限额</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (userBankList.Count > 0)
+                    {
+                        foreach (var item in userBankList)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="child" class="checkall" value="@item.u_id" />
+                                </td>
+                                <td>@item.u_banknumber</td>
+                                <td>@item.u_bankname</td>
+                                <td>@item.u_name</td>
+                                <td>@(item.u_flag == "00" ? Html.Raw("<span class='green'>对私</span>") : Html.Raw("<span class='red'>对公</span>"))</td>
+                                <td>
+                                    <input type="text" name="maxMoney" id="maxMoney-@item.u_id" value="@System.Configuration.ConfigurationManager.AppSettings["Quota"].ToString()" style="text-align:center" maxlength="8" />
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="nodata">暂无信息</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="6" style="text-align:left;color:red">温馨提示：单卡限额不得低于 @WithdrawalsMinimum 元!</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="clear10"></div>
+        @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div style="width: 100%; text-align:center;position:fixed;bottom:0px; background-color: #fff; border-top: 1px solid #f7f7f7; height: 60px; line-height: 50px;">
+        <div class="page-footer" style="margin-bottom:10px;">
+            <input type="button" name="btnSave" value="保存" onclick="btnPay()" class="btn btn-primary" id="btn-save-edit" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>

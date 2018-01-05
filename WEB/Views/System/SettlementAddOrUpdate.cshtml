@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "添加或修改结算";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var mode = ViewBag.mode as JMP.MDL.jmp_poundage;
+}
+@JMP.TOOL.UserHelper.js("System/Settlement.js")
+<div class="main">
+    <div class="clear10"></div>
+    <div class="plate-form">
+        <dl>
+            <dt>开始区间价格：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="poundagesprice" type="text" id="poundagesprice" onblur="yzpoundagesprice()"  value="@(mode.p_sprice>=0 ? mode.p_sprice.ToString():"" )" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="poundagespriceYz">*开始区间价格</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>结束区间价格:</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="poundageeprice" type="text" id="poundageeprice" onblur="yzpoundageeprice()"  value="@(mode.p_eprice>=0 ? mode.p_eprice.ToString():"" )" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="poundageepriceYz">*结束区间价格</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>手续费</dt>
+            <dd>
+               <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="poundagerate" type="text" id="poundagerate" onblur="yzpoundagerate()" maxlength="7" value="@(mode.p_rate>0 ? String.Format("{0:N4}", mode.p_rate) :"" )" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="poundagerateYz">*手续费</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <input type="hidden" id="poundageid" value="@(mode.p_id == 0 ? 0 : mode.p_id)" /></dt>
+            <dd>
+                <div style="color: red;">手续费请换算比例后填写（如：10%，换算后就是0.1,不要直接写10）</div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnSaveAddorUpdatpoundage" class="btn mr10" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>

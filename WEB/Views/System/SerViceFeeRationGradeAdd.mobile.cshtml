@@ -1,0 +1,82 @@
+﻿@{
+    ViewBag.Title = "添加服务费等级信息";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+    var mode = ViewBag.model as JMP.MDL.CoServiceFeeRatioGrade;
+}
+@JMP.TOOL.UserHelper.js("mobile/System/CoServiceFeeRatioGrade.mobile.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="mobile-popup mobile-container">
+    <div class="plate-form ui form">
+        <dl>
+            <dt>服务费等级名称：</dt>
+            <dd>
+                <div class="field">
+                    <input name="Name" type="text" id="Name" onblur="yzName()" value="@(!string.IsNullOrEmpty(mode.Name) ? mode.Name : "")" />
+                </div>
+                <div id="yzName" class="Validform_checktip">*请输入服务费等级名称！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>开发者的服务费比例：</dt>
+            <dd>
+                <div class="field">
+                    <input name="ServiceFeeRatio" type="text" id="ServiceFeeRatio" onblur="YZServiceFeeRatio()" value="@(mode.ServiceFeeRatio>0 ? mode.ServiceFeeRatio.ToString() : "")" />
+                </div>
+                <div id="YZServiceFeeRatio" class="Validform_checktip">*请输入开发者的服务费比例！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>直客提成比例：</dt>
+            <dd>
+                <div class="field">
+                    <input name="CustomerWithoutAgentRatio" type="text" id="CustomerWithoutAgentRatio" onblur="YZCustomerWithoutAgentRatio()" value="@(mode.CustomerWithoutAgentRatio > 0 ? mode.CustomerWithoutAgentRatio.ToString() : "")" />
+                </div>
+                <div id="YZCustomerWithoutAgentRatio" class="Validform_checktip">*直客提成比例！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>商务对代理商的提成比例：</dt>
+            <dd>
+                <div class="field">
+                    <input name="BusinessPersonnelAgentRatio" type="text" id="BusinessPersonnelAgentRatio" onblur="YZBusinessPersonnelAgentRatio()" value="@(mode.BusinessPersonnelAgentRatio > 0 ? mode.BusinessPersonnelAgentRatio.ToString() : "")" />
+                </div>
+                <div id="YZBusinessPersonnelAgentRatio" class="Validform_checktip">*请输入商务对代理商的提成比例！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>代理商提成比例：</dt>
+            <dd>
+                <div class="field">
+                    <input name="AgentPushMoneyRatio" type="text" id="AgentPushMoneyRatio" onblur="YZAgentPushMoneyRatio()" value="@(mode.AgentPushMoneyRatio > 0 ? mode.AgentPushMoneyRatio.ToString() : "")" />
+                </div>
+                <div id="YZAgentPushMoneyRatio" class="Validform_checktip">*请输入代理商提成比例！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>描述信息：</dt>
+            <dd>
+                <div class="single-input normal">
+
+                    <textarea name="Description" type="text" id="Description"> </textarea>
+                    @{
+                        if (!string.IsNullOrEmpty(mode.Description))
+                        {
+                            <script type="text/javascript">
+                                document.getElementById("Description").innerText = ' @mode.Description';
+
+                            </script>
+                        }
+                    }
+                    <input type="hidden" id="id" value="@(mode.Id > 0 ? mode.Id : 0)" />
+                </div>
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSaveAdd" value="保存" id="btnSaveAdd" class="btn btn-primary" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn" />
+        </div>
+    </div>
+</div>
+

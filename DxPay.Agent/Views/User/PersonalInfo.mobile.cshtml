@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewBag.Title = "个人中心";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+
+    var coagent = ViewBag.coagent as JMP.MDL.CoAgent;
+    string ht_url = (string)ViewBag.UploadUrl;
+}
+
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">个人信息</span>
+</header>
+
+<section class="real">
+    <ul class="frm-ul">
+        <li>
+            <div class="dbor">
+                <p class="ptit">登录名称</p>
+                @(string.IsNullOrEmpty(coagent.LoginName) ? "" : coagent.LoginName)
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">登录邮箱</p>
+                @(string.IsNullOrEmpty(coagent.EmailAddress) ? "" : coagent.EmailAddress)
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">真实姓名或者公司名称</p>
+                @(string.IsNullOrEmpty(coagent.DisplayName) ? "" : coagent.DisplayName)
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">开户账号</p>
+                @(!string.IsNullOrEmpty(coagent.BankAccount) ? coagent.BankAccount : "")
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">开户名称</p>
+                @(!string.IsNullOrEmpty(coagent.BankAccountName) ? coagent.BankAccountName : "")
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">开户银行全称</p>
+                @(!string.IsNullOrEmpty(coagent.BankFullName) ? coagent.BankFullName : "")
+            </div>
+        </li>
+        @if (coagent.Classify == 1)
+            {
+            <li>
+                <div class="dbor">
+                    <p class="ptit">营业执照编号</p>
+                    @(!string.IsNullOrEmpty(coagent.BusinessLicenseNumber) ? coagent.BusinessLicenseNumber : "")
+                </div>
+            </li>
+        }
+        <li>
+            <div class="dbor">
+                <p class="ptit">联系电话</p>
+                @(!string.IsNullOrEmpty(coagent.MobilePhone) ? coagent.MobilePhone : "")
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">联系QQ</p>
+                @(!string.IsNullOrEmpty(coagent.QQ) ? coagent.QQ : "")
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">联系地址</p>
+                @(!string.IsNullOrEmpty(coagent.ContactAddress) ? coagent.ContactAddress : "")
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">身份证照片</p>
+                @{
+                    var urlsfz = string.IsNullOrEmpty(coagent.PersonalPhotoPath) ? "" : ht_url + coagent.PersonalPhotoPath;
+                }
+                <img class="personal_img" src="@urlsfz" style="width:200px;height:145px;" />
+            </div>
+            <div class="dbor">
+                @if (coagent.Classify == 1)
+                {
+                    <p class="ptit">营业执照</p>
+                    var urlyyzz = string.IsNullOrEmpty(coagent.BusinessLicensePhotoPath) ? "" : ht_url + coagent.BusinessLicensePhotoPath;
+                    <img class="personal_img" src="@urlyyzz" style="width:200px;height:145px;" />
+                }
+
+            </div>
+        </li>
+    </ul>
+</section>
+

@@ -1,0 +1,94 @@
+﻿@{
+    ViewBag.Title = "盾行平台管理系统[移动版]";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+}
+@JMP.TOOL.UserHelper.css("/plugin/font-awesome/css/font-awesome.min.css")
+@JMP.TOOL.UserHelper.js("fusionchart/fusioncharts.js")
+@JMP.TOOL.UserHelper.js("fusionchart/fusioncharts.theme.zune.js")
+<div class="mobile-container">
+    <div style="margin-bottom: 15px;display:none;">
+        <p href="javascript:" class="txt">最近五分钟成交：<span id="OrderNum" class="num">加载中...</span>  成功/订单数</p>
+        <p href="javascript:" class="txt">最后一笔订单交易时间：<span id="TimeOrder" class="num">加载中...</span></p>
+    </div>
+    <div class="plate-tab-ul-wrap">
+        <h3 style="display:none;">24小时交易走势图</h3>
+        <ul>
+            <li><a id="date_0" class="selected" href="javascript:FusionChart(0)">今天(@ViewBag.moneycount/交易金额)</a></li>
+            <li><a id="date_1" href="javascript:FusionChart(1)">昨天</a></li>
+            <li><a id="date_2" href="javascript:FusionChart(2)">前天</a></li>
+            <li><a id="date_3" href="javascript:FusionChart(3)">支付量走势图</a></li>
+        </ul>
+    </div>
+    <div class="table-container table-responsive">
+        <div id="chartObj" class="chart-main">
+            <div id="chart"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function FusionChart(thatDay) {
+            var winHeight = $(window).height() - 160;
+            $.ajax({
+                type: "post",
+                contentType: "application/json; charset=utf-8",
+                url: "/REPORT/DeviceTrend?days=" + thatDay,
+                success: function (retJson) {
+                    if (retJson === "0") {
+                        var childHtm = '<div style="font-size:14px;color:#5e788a;font-weight:lighter;text-align:center;width:100%;">未查询到符合条件的数据</div>';
+                        $("#chart").html(childHtm);
+                    } else {
+                        var data = eval('(' + retJson + ')');
+                        var chart = new FusionCharts({
+                            type: "msline",
+                            renderAt: "chart",
+                            width: "100%",
+                            height: winHeight + "px",
+                            dataSource: data,
+                            dataFormat: "json"
+                        }).render();
+                    }
+                }
+            });
+            //移除所有的样式
+            $("#date_0").removeClass("selected");
+            $("#date_1").removeClass("selected");
+            $("#date_2").removeClass("selected");
+            $("#date_3").removeClass("selected");
+            //为当前选中添加样式
+            if (thatDay === 0) {
+                $("#date_0").addClass("selected");
+            }
+            else if (thatDay === 1) {
+                $("#date_1").addClass("selected");
+            }
+            else if (thatDay === 2) {
+                $("#date_2").addClass("selected");
+            }
+            else if (thatDay === 3) {
+                $("#date_3").addClass("selected");
+            }
+        }
+
+        function OrderCount() {
+            $.post("/Login/SelectOrderList",
+                function (order) {
+                    $("#OrderNum").html(order);
+                });
+            $.post("/Login/SelectOrderTimes",
+                function (order) {
+                    $("#TimeOrder").html(order);
+                });
+
+        }
+
+        $(window).resize(function () {
+            mainHeightAuto();
+        });
+
+        $(function () {
+            mainHeightAuto();
+            FusionChart(0);
+            OrderCount();
+            setInterval("OrderCount()", 10000);
+        });
+    </script>
+</div>

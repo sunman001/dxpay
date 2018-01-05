@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "设置支付密码";
+    Layout = "~/Views/UI/master.cshtml";
+    JMP.MDL.jmp_user UModel = (JMP.MDL.jmp_user)ViewBag.jmpUser;
+}
+
+@JMP.TOOL.UserHelper.js("/user/PayPwd.js")
+@JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+
+<div class="rnatn-cnt">
+    <input type="hidden" id="u_id" value="@UModel.u_id" />
+    <input type="hidden" id="ypwd" value="@UModel.u_paypwd" />
+    <ul class="rnatn-frm rnatn-adre clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">设置支付密码</span>
+            </p>
+        </li>
+        <li>
+            <div class="dpt">
+                <div class="dtit">用户账号</div>
+                <div class="dipt dipt-fa">
+                    @(UModel != null ? !string.IsNullOrEmpty(UModel.u_email) ? UModel.u_email : "" : "")
+                </div>
+
+            </div>
+        </li>
+        @if (!string.IsNullOrEmpty(UModel.u_paypwd))
+        {
+            <li>
+                <div class="dpt">
+                    <div class="dtit">原支付密码</div>
+                    <div class="dipt dipt-fa">
+                        <input type="password" name="old_paypwd" id="old_paypwd" class="txtipt" onblur="CheckOldpaypwd()" maxlength="18" placeholder="请输入原支付密码" />
+                    </div>
+                    <span class="error" id="yz_old_paypwd"></span>
+                </div>
+            </li>
+        }
+        <li>
+            <div class="dpt">
+                <div class="dtit">支付密码</div>
+                <div class="dipt dipt-fa">
+                    <input type="password" name="u_paypwd" id="u_paypwd" class="txtipt" onblur="CheckPayPwd()" maxlength="18" placeholder="请输入支付密码" />
+                </div>
+                <span class="error" id="yz_u_paypwd"></span>
+            </div>
+        </li>
+        <li>
+            <div class="dpt">
+                <div class="dtit">确认支付密码</div>
+                <div class="dipt dipt-fa">
+                    <input type="password" name="u_qrpaypwd" id="u_qrpaypwd" class="txtipt" onblur="CheckQrPayPwd()" maxlength="18" placeholder="请输入支付密码" />
+                </div>
+                <span class="error" id="yz_u_qrpaypwd"></span>
+            </div>
+        </li>
+      
+    </ul>
+    <div class="div-btn">
+        <a class="btn btn-primary" id="btn_PayPwd">确认提交</a>
+    </div>
+</div>

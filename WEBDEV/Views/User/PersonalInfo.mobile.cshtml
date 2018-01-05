@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "个人信息";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+
+    var j_user = ViewBag.jmpUser as JMP.MDL.jmp_user;
+    string ht_url = (string)ViewBag.UploadUrl;
+
+}
+
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">个人信息</span>
+</header>
+
+<section class="real">
+    <ul class="frm-ul">
+        <li>
+            <div class="dbor">
+                <p class="ptit">登录邮箱</p>
+                @(string.IsNullOrEmpty(j_user.u_email) ? "" : j_user.u_email)
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">身份证号码</p>
+                @(string.IsNullOrEmpty(j_user.u_idnumber) ? "" : j_user.u_idnumber)
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">真实姓名或者公司名称</p>
+                @(!string.IsNullOrEmpty(j_user.u_realname) ? j_user.u_realname : "")
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">开户账号</p>
+                @(!string.IsNullOrEmpty(j_user.u_account) ? j_user.u_account : "")
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">开户名称</p>
+                @(!string.IsNullOrEmpty(j_user.u_name) ? j_user.u_name : "")
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">开户银行全称</p>
+                @(!string.IsNullOrEmpty(j_user.u_bankname) ? j_user.u_bankname : "")
+            </div>
+        </li>
+        @if (j_user.u_category == 1)
+            {
+            <li>
+                <div class="dbor">
+                    <p class="ptit">营业执照编号</p>
+                    @(!string.IsNullOrEmpty(j_user.u_blicensenumber) ? j_user.u_blicensenumber : "")
+                </div>
+            </li>
+            <li>
+
+                <div class="dbor">
+                    <p class="ptit">企业法人</p>
+                    @(!string.IsNullOrEmpty(j_user.BusinessEntity) ? j_user.BusinessEntity : "")
+                </div>
+            </li>
+            <li>
+
+                <div class="dbor">
+                    <p class="ptit">企业注册地址</p>
+                    @(!string.IsNullOrEmpty(j_user.RegisteredAddress) ? j_user.RegisteredAddress : "")
+                </div>
+            </li>
+        }
+        <li>
+            <div class="dbor">
+                <p class="ptit">联系电话</p>
+                @(!string.IsNullOrEmpty(j_user.u_phone) ? j_user.u_phone : "")
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">联系QQ</p>
+                @(!string.IsNullOrEmpty(j_user.u_qq) ? j_user.u_qq : "")
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">联系地址</p>
+                @(!string.IsNullOrEmpty(j_user.u_address) ? j_user.u_address : "")
+            </div>
+        </li>
+        <li>
+            <div class="dbor">
+                <p class="ptit">身份证正面照片</p>
+                @{
+                    var urlsfz = string.IsNullOrEmpty(j_user.u_photo) ? "" : ht_url + j_user.u_photo;
+                }
+                <img class="personal_img" src="@urlsfz" style="width:200px;height:145px;" />
+            </div>
+            <div class="dbor">
+                <p class="ptit">身份证反面照片</p>
+                @{
+                    var urlsfzf = string.IsNullOrEmpty(j_user.u_photof) ? "" : ht_url + j_user.u_photof;
+                }
+                <img class="personal_img" src="@urlsfzf" style="width:200px;height:145px;" />
+            </div>
+            <div class="dbor">
+                <p class="ptit">开户许可证照片</p>
+                @{
+                    var urlxkz = string.IsNullOrEmpty(j_user.u_licence) ? "" : ht_url + j_user.u_licence;
+                }
+                <img class="personal_img" src="@urlxkz" style="width:200px;height:145px;" />
+            </div>
+            <div class="dbor">
+                @if (j_user.u_category == 1)
+                {
+                    <p class="ptit">营业执照</p>
+                    var urlyyzz = string.IsNullOrEmpty(j_user.u_blicense) ? "" : ht_url + j_user.u_blicense;
+                    <img class="personal_img" src="@urlyyzz" style="width:200px;height:145px;" />
+                }
+
+            </div>
+        </li>
+    </ul>
+</section>

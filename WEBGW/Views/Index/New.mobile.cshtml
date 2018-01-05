@@ -1,0 +1,116 @@
+﻿@using WEBGW.Models;
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.newsrelease>;
+    int pageCount = ViewBag.pageCount;
+    string qt_url = (string)ViewBag.UploadUrl;
+}
+
+<script type="text/javascript">
+    //$(document).ready(function(){
+    //	$(".div-box").each(function(i){
+    //		var bw = $(this).find(".lleft").width();
+    //		var bh = $(this).find(".lright").height();
+
+    //		var f_1 = $(this).find("figure").css("font-size");
+    //		var lnh_1 = $(this).find("figure").css("line-height");
+
+    //		var f_2 = $(this).find("figcaption").css("font-size");
+    //		var lnh_2 = $(this).find("figcaption").css("line-height");
+
+    //		var fn_1 = parseInt(parseInt(bw)/parseInt(f_1))*2;
+    //		var fn_2 = parseInt(bw)/parseInt(f_2);
+
+    //		var txt_1 = $(this).find("figure").text();
+    //		var txt_2 = $(this).find("figcaption").text();
+
+    //		txt_1 = txt_1.substr(0,fn_1);
+    //		txt_2 = txt_2.substr(0,fn_2 * (parseInt(bh) - parseInt(lnh_1) * 1.5) / parseInt(lnh_2)-5);
+
+    //		$(this).find("figure").html(txt_1+" ...<figcaption>"+txt_2+" ...</figcaption>");
+    //	});
+    //});
+    //			$(window).resize(function(){
+    //				$(window).refresh();
+    //			});
+</script>
+
+<header>
+    <section class="banner">
+        <img src="~/mobile/upload/2017/05/21/n_banner_2.png" width="100%" />
+    </section>
+</header>
+<section class="center-box news-list-box">
+    @{
+
+        if (list.Count > 0)
+        {
+            foreach (var item in list)
+            {
+
+                var urla = "";
+                string url = "NewDetil/" + item.n_id + ".html";
+                if (!string.IsNullOrEmpty(item.n_picture))
+                {
+                    if (item.n_picture.StartsWith("A"))
+                    {
+                        urla = qt_url + item.n_picture.TrimStart('A');
+                    }
+                    else
+                    {
+                        urla = qt_url + item.n_picture.TrimStart('B');
+                    }
+                }
+                <div class="div-box">
+                    <div class="lleft">
+                        <a href="@url" title="@item.n_title">
+                            <figure>
+                                <b>@(!string.IsNullOrEmpty(item.n_title) && item.n_title.Length > 10 ? item.n_title.Substring(0, 10).ToString() + "........" : item.n_title)</b>
+                        
+                            <figcaption>
+                                @{
+                                    string res = "";
+                                    HtmlToText convert = new HtmlToText();
+                                    res = convert.xxHTML(item.n_info);
+                                    if (res.Length > 50)
+                                    {
+                                        res = res.Substring(0,34 ).ToString() + "........";//从0开始,截取8位,后面省略号可不要
+                                    }
+
+                                }
+                                @res
+                            </figcaption>
+                        </figure>
+                            </a>
+                    </div>
+                    <div class="lright">
+                        <img src="@urla" alt="@item.n_title" title="@item.n_title" />
+                    </div>
+                </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div>暂无新闻</div>
+                                    }
+    }
+
+    <div class="pagelist">
+        @*<a href="#" class="active">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <span>...</span>
+            <a href="#">10</a>*@
+        @JMP.TOOL.HtmlPage.HtmlPagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)
+    </div>
+
+</section>
+<script>
+    function ArticleManage(pageIndex, pageSize) {
+        var count = 1
+        var url = "/Index/new?pageIndexs=" + pageIndex + "&PageSize=" + pageSize + "&count=" + count;
+        location.href = encodeURI(url);
+    }
+</script>

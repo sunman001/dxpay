@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "母版页";
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>代理商后台</title>
+    <link rel="shortcut icon" href="~/images/favicon.ico">
+    <!-- css -->
+    @JMP.TOOL.UserHelper.css("base.css")
+    @JMP.TOOL.UserHelper.css("main.css")
+    @JMP.TOOL.UserHelper.js("jquery-1.8.1.min.js")
+    @JMP.TOOL.UserHelper.js("base.js")
+    @JMP.TOOL.UserHelper.js("layout.js")
+    @JMP.TOOL.UserHelper.js("plugin/layer/layer.js")
+    @JMP.TOOL.UserHelper.js("JValidator.js")
+    @JMP.TOOL.UserHelper.js("mian.js")
+    <script src="~/asste/jquery.nicescroll.js"></script>
+    <link rel="stylesheet" href="../asste/fa-awesome/css/font-awesome.css">
+</head>
+<body class="mettts">
+    @RenderBody()
+    <script type="text/javascript">
+    $(function () {
+        $(".mettts").niceScroll({
+            cursorcolor: "#000", //滚动条颜色
+            cursoropacitymax: 0.5,//滚动条透明度
+            touchbehavior: false,
+            cursorwidth: "5px",  //滚动条大小
+            cursorborder: "0",
+            cursorborderradius: "10px"
+        });
+    });
+    </script>
+</body>
+</html>
+

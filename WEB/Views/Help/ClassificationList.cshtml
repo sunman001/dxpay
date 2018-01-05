@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "值班列表";
+    Layout = "~/Views/UI/master.cshtml";
+    var parentlist = ViewBag.parentlist as List<JMP.MDL.jmp_Help_Classification>;
+    var list = ViewBag.list as List<JMP.MDL.jmp_Help_Classification>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("Help/help.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+        <li><a href="http://developer.dunxingpay.com/help/refreshcache" target="_blank">刷新帮助分类缓存</a></li>
+        <li><a href="http://developer.dunxingpay.com/doc/refreshcache" target="_blank">刷新开发者分类缓存</a></li>
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <input name="ClassName" type="text" id="ClassName" placeholder="请输入分类名称" class="txtipt" value="@(string.IsNullOrEmpty(ViewBag.ClassName)?"":ViewBag.ClassName)" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="Type" id="Type">
+                    <option value="-1" @(ViewBag.Type == -1 ? "selected='selected'" : "")>请选择状态</option>
+                    <option value="0" @(ViewBag.Type == 0 ? "selected='selected'" : "")>正常</option>
+                    <option value="1" @(ViewBag.Type == 1 ? "selected='selected'" : "")>锁定</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <div class="rule-single-select">
+                    <select name="sType" id="sType">
+                        <option value="-1" @(ViewBag.sType == -1 ? "selected='selected'" : "")>请选择类型</option>
+                        <option value='0' @(ViewBag.sType == 0 ? "selected='selected'" : "")>帮助中心</option>
+                        <option value='1' @(ViewBag.sType == 1 ? "selected='selected'" : "")>开发中心</option>
+                    </select>
+                </div>
+            </div>
+
+        </li>
+<li>
+    <div class="rule-single-select">
+        <select name="PrentID" id="PrentID">
+            <option value="0" @(ViewBag.PrentID == 0 ? "selected='selected'" : "")>请选择父类</option>
+            @foreach (var item in parentlist)
+            {
+                <option value='@item.ID' @(ViewBag.PrentID == item.ID ? "selected='selected" : "")>@item.ClassName</option>
+            }
+        </select>
+    </div>
+</li>
+<li>
+    <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="selectScheduling()">查询</a>
+</li>
+    </ul>
+<div class="tab-dcnt">
+    <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+        <thead>
+            <tr>
+                <th width="40">
+                    <input type="checkbox" name="all" onclick="checkAll(this)" />
+                </th>
+                <th>编号</th>
+                <th>分类名称</th>
+                <th>类型</th>
+                <th>状态</th>
+                <th>创建时间</th>
+                <th>创建人</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (list.Count > 0)
+                {
+                    foreach (var item in list)
+                    {
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="child" class="checkall" value="@item.ID" />
+                            </td>
+                            <td>@item.ID</td>
+                            <td>@item.ClassName</td>
+                            <td>
+                                @{switch (item.Type)
+                                    {
+                                        case 0:
+                                            <span style="color:green">帮助文档</span>
+                                            break;
+                                        case 1:
+                                            <span style="color:aqua">开发者中心</span>
+                                            break;
+
+                                    }}
+                            </td>
+                            <td>
+                                @{switch (item.State)
+                                    {
+                                        case 0:
+                                            <span style="color:green">正常</span>
+                                            break;
+                                        case 1:
+                                            <span style="color:red">锁定</span>
+                                            break;
+
+                                    }}
+                            </td>
+
+                            <td>
+                                @item.CreateOn
+                            </td>
+                            <td>
+                                @item.CreateByName
+                            </td>
+                            <td>
+                                @{
+                                    bool getEdit = bll_limit.GetLocUserLimitVoids("/Help/AddorEidt", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                    if (getEdit)
+                                    {
+                                        <a href="javascript:" class="blue" onclick="UpdateSdl(@item.ID)">修改</a>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td align="center" colspan="8" class="nodata">暂无记录</td>
+                                        </tr>
+                                    }
+            }
+        </tbody>
+    </table>
+</div>
+<div class="clear10"></div>
+@JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>

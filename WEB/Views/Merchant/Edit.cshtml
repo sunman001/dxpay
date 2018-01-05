@@ -1,0 +1,51 @@
+﻿@model JMP.MDL.jmp_merchant
+@{
+    ViewBag.Title = "编辑商户";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+@JMP.TOOL.UserHelper.js("merchant/main.js")
+<form id="frm_edit_merchant">
+    <div class="main">
+        <div class="clear10"></div>
+        <div class="plate-form">
+            <dl>
+                <dt>登录名：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <span class="ie7-input-bug-start"></span>
+                        <input name="m_loginname" type="text" id="m_loginname" onblur="checkLoginName()" readonly="readonly" maxlength="20" sucmsg="验证成功" nullmsg="应用名称长度不超过20" errormsg="应用名称长度不超过20" value="@Model.m_loginname" />
+                        <span class="ie7-input-bug-end"></span>
+                    </div>
+                    <div class="Validform_checktip" id="y_m_loginname">*应用名长度不超过20</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>密码：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <span class="ie7-input-bug-start"></span>
+                        <input name="m_pwd" type="password" id="m_pwd" onblur="checkPassword()" value="@Model.m_pwd" /><span class="ie7-input-bug-end"></span>
+                    </div>
+                    <div class="Validform_checktip" id="yz_m_pwd">* </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>真实姓名：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <span class="ie7-input-bug-start"></span>
+                        <input name="m_realname" type="text" id="m_realname" onblur="checkRealName()" value="@Model.m_realname" /><span class="ie7-input-bug-end"></span>
+                    </div>
+                    <div class="Validform_checktip" id="yz_m_realname">*</div>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</form>
+<div class="page-footer" style="width:100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnEditMerchant" onclick="ModifyMerchant()" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>

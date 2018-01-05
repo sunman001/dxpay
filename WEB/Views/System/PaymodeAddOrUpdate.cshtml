@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "添加或修改支付类型";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var mode = ViewBag.mode as JMP.MDL.jmp_paymode;
+}
+@JMP.TOOL.UserHelper.js("System/Paymode.js")
+<div class="main">
+    <div class="clear10"></div>
+    <div class="plate-form">
+        <dl>
+            <dt>支付类型名称：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="PaymodeName" type="text" id="PaymodeName" onblur="yzPaymodeName()" readonly="readonly" maxlength="20" value="@(string.IsNullOrEmpty(mode.p_name) ? "" : mode.p_name)" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="PaymodeNameYz">*支付类型名称长度不超过20</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <input type="hidden" id="paymodeid" value="@(mode.p_id == 0 ? 0 : mode.p_id)" /></dt>
+        </dl>
+        @*        <dl>
+            <dt>支付类型配置：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="interface" type="text" id="interface"   onclick="xzzfpz()" readonly="readonly" value="@(string.IsNullOrEmpty(mode.p_interface) ? "" : mode.p_interface)" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="interfaceYz">*支付类型配置</div>
+            </dd>
+        </dl>*@
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnSaveAddorUpdatepaymode" class="btn mr10" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>

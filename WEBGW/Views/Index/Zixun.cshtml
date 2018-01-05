@@ -1,0 +1,146 @@
+﻿@using WEBGW.Models;
+@{
+    ViewBag.Title = "聚合支付最新资讯_行业新闻_行业动态-盾行云计费";
+    Layout = "~/Views/UI/masters.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.newsrelease>;
+    int pageCount = ViewBag.pageCount;
+    string qt_url = (string)ViewBag.UploadUrl;
+}
+<section class="about">
+    <div class="about-bg">
+        <p class="tit">convenient</p>
+        <p class="subt">致力于成为定制化支付方案服务方</p>
+        <p class="ifo">主要服务于第三方支付机构和大、中型的企业客户</p>
+        <p class="ifo">业务范围涵盖移动支付接入服务以及各种行业的移动应用解决方案</p>
+    </div>
+    <div class="about-tit">
+        <ul class="about-ul clearfix">
+            <li>
+                <h2><span class="txt"><a href="/index/News.html" title="行业新闻">行业新闻</a><i class="icon-sj"></i></span></h2>
+            </li>
+            <li class="on">
+                <h2><span class="txt"> <a href="/index/zixun.html" title="公司资讯">公司资讯</a> <i class="icon-sj"></i></span></h2>
+            </li>
+        </ul>
+    </div>
+    <div class="about-tab">
+
+        <section class="about-news about-tab1" style="display: block;">
+            <div class="news-cnt">
+                <ul class="news-lst">
+                    @{
+                        if (list.Count > 0)
+                        {
+                            foreach (var item in list)
+                            {
+
+                                var urla = "";
+                                string url = "/Index/zixun/" + item.n_id + ".html";
+                                if (!string.IsNullOrEmpty(item.n_picture))
+                                {
+                                    if (item.n_picture.StartsWith("A"))
+                                    {
+                                        urla = qt_url + item.n_picture.TrimStart('A');
+                                    }
+                                    else
+                                    {
+                                        urla = qt_url + item.n_picture.TrimStart('B');
+                                    }
+                                }
+                                <li>
+                                    <a href="@url" title="@item.n_title">
+                                        <div class="fl data">
+                                            <span class="t">@item.n_time.ToString("MM-dd")</span>
+                                            <span class="d">@item.n_time.ToString("yyyy")</span>
+                                        </div>
+                                        <span class="fl simg"><img src="@urla" alt="@item.n_title" title="@item.n_title" /></span>
+                                        <div class="fl difo">
+                                            <h3 class="tit">@item.n_title</h3>
+                                            <span class="ifo">
+                                                @{
+                                                    string res = "";
+                                                    HtmlToText convert = new HtmlToText();
+                                                    res = convert.xxHTML(item.n_info);
+                                                    if (res.Length > 200)
+                                                    {
+                                                        res = res.Substring(0, 100).ToString() + "........";//从0开始,截取8位,后面省略号可不要
+                                                    }
+
+                                                }
+                                                @res
+                                            </span>
+                                        </div>
+                                    </a>
+                                </li>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <li><div>暂无新闻</div></li>
+                                                    }
+                    }
+                </ul>
+                <div class="pagelist">
+                    @*@JMP.TOOL.HtmlPage.HtmlPagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)*@
+                    @JMP.TOOL.HtmlPage.HtmlPagers("/Index/News", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)
+                </div>
+            </div>
+
+        </section>
+    </div>
+</section>
+<!--内容 end-->
+<footer class="idx-five-pst idx-ftr-pst">
+    <div class="idx-five-top clearfix">
+        <div class="dfl fl">
+            <span class="icon icon1">电话：+86-0755-26910992</span>
+            <span class="icon icon3">地址：深圳市南山区科技工业园大厦12层</span>
+            <span class="icon icon2">
+                COPYRIGHT 2016-2018 DUNXING TIANXIA .ALL RIGHTS RESERVED.盾行天下版权所有
+                <script src="https://s4.cnzz.com/z_stat.php?id=1261185001&web_id=1261185001" language="JavaScript"></script>
+            </span>
+        </div>
+        <div class="dfr fr">
+            <p class="perwe clearfix">
+                <span class="fl erweima">
+                    <img src="../images/erweima.png" alt="关注微信公众号" title="关注微信公众号" />
+                    <i>关注微信公众号</i>
+                </span>
+                <span class="fr erweima">
+                    <img src="../images/erweima1.png" alt="关注盾行云计费" title="关注盾行云计费" />
+                    <i>关注盾行云计费</i>
+                </span>
+
+            </p>
+
+            <p class="pbto">致力成为全球领先的一站式移动支付服务商 </p>
+
+        </div>
+    </div>
+
+</footer>
+<!--底部 end-->
+<script type="text/javascript">
+    function ArticleManage(pageIndex, pageSize) {
+        var count = 1
+        var url = "/Index/Zixun?pageIndexs=" + pageIndex + "&PageSize=" + pageSize + "&count=" + count;
+        location.href = encodeURI(url);
+    }
+    $(function () {
+        var count = 0;
+        if (count >= 1) {
+            $(".about-ul li").removeClass("on");
+            $("#new").attr("class", "on")
+            $(".about-tab section").hide();
+            $(".about-tab" + $('#new').index()).show();
+        }
+
+        $(".about-ul li").click(function () {
+            $(".about-ul li").removeClass("on");
+            $(this).addClass("on");
+            $(".about-tab section").hide();
+            $(".about-tab" + $(this).index()).show();
+        });
+    })
+</script>
+

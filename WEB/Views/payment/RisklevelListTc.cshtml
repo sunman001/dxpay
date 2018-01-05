@@ -1,0 +1,152 @@
+﻿@{
+    ViewBag.Title = "风控配置弹窗";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_risklevelallocation>;
+    var rilist = ViewBag.rilist as List<JMP.MDL.jmp_risklevel>;
+    var applist = ViewBag.applist as List<JMP.MDL.jmp_apptype>;
+    var yxlist = ViewBag.yxlist as List<JMP.MDL.jmp_risklevelallocation>;
+    string appstr = "," + ViewBag.appstr + ",";
+}
+@JMP.TOOL.UserHelper.js("payment/Interface.js")
+<div class="main">
+    <div class="layer-mt15">
+        <ul class="frm-ul clearfix">
+            <li>
+                <div class="rule-single-select">
+                    <select id="apptypeid">
+                        <option value="0" @(ViewBag.apptypeid == 0 ? "selected='selected'" : "")>--应用类型--</option>
+                        @{
+                            foreach (var im in applist)
+                            {
+                                <option value="@im.t_id" @(ViewBag.apptypeid == im.t_id ? "selected='selected'" : "")>@im.t_name</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </li>
+            <li>
+                <div class="rule-single-select">
+                    <select id="risklevelid">
+                        <option value="0" @(ViewBag.risklevelid == 0 ? "selected='selected'" : "")>--风险等级--</option>
+                        @{
+                            foreach (var item in rilist)
+                            {
+                                <option value="@item.r_id" @(ViewBag.risklevelid == item.r_id ? "selected='selected'" : "")>@item.r_name</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </li>
+            @*<li>
+                    <div class="rule-single-select">
+                        <select id="state">
+                            <option value="-1" @(ViewBag.state == -1 ? "selected='selected'" : "")>--状态--</option>
+                            <option value="0" @(ViewBag.state == 0 ? "selected='selected'" : "")>正常</option>
+                            <option value="1" @(ViewBag.state == 1 ? "selected='selected'" : "")>冻结</option>
+                        </select>
+                    </div>
+                </li>*@
+            <li>
+                <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlocuser()">查询</a>
+            </li>
+            <li>
+                <a id="btn_user_select" class="btn btn-primary" href="javascript:" onclick="selectxzuser()">确认选择</a>
+            </li>
+        </ul>
+    </div>
+    <div class="clear10"></div>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="apptable" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th>编号</th>
+                    <th>应用类型</th>
+                    <th>风险等级</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (yxlist.Count > 0)
+                    {
+                        foreach (var em in yxlist)
+                        {
+                            <tr>
+                                <td><input type="checkbox" name="child" class="checkall" value="@em.r_id" @((!string.IsNullOrEmpty(appstr) && appstr.Contains("," + em.r_id.ToString() + ",")) ? " checked=\"checked\"" : "") /></td>
+                                <td>@em.r_id</td>
+                                <td>@em.t_name</td>
+                                <td>@em.r_name</td>
+                                <td>
+                                    @{
+                                        if (em.r_state == 0)
+                                        {
+                                            <span class='green'>正常</span>
+                                        }
+                                        else
+                                        {
+                                            <span class='red'>冻结</span>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                                            }
+                                        }
+                                        foreach (var item in list)
+                                        {
+                                            <tr>
+                                                <td><input type="checkbox" name="child" class="checkall" value="@item.r_id" /></td>
+                                                <td>@item.r_id</td>
+                                                <td>@item.t_name</td>
+                                                <td>@item.r_name</td>
+                                                <td>
+                                                    @{
+                                                        if (item.r_state == 0)
+                                                        {
+                                                            <span class='green'>正常</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class='red'>冻结</span>
+                                                        }
+                                                    }
+                                                </td>
+                                            </tr>
+                                                        }
+
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("RisArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+<script>
+    //分页
+    function RisArticleManage(pageIndex, pageSize) {
+        var url = "/payment/RisklevelListTc?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        var apptypeid = $.trim($("#apptypeid").val());
+        var risklevelid = $.trim($("#risklevelid").val());
+        var state = $.trim($("#state").val());
+        var valArr = new Array;
+        $("#apptable :checkbox[checked]").each(function (i) {
+            valArr[i] = $(this).val();
+        });
+        var vals = $.trim((valArr.join(',')).replace("on,", ""));
+        var appstr = vals;
+        url += "&apptypeid=" + apptypeid + "&risklevelid=" + risklevelid + "&state=" + state + "&appstr=" + appstr;
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        RisArticleManage(1, PageSize);
+    }
+    //列表查询
+    function serchlocuser() {//查询
+        var PageSize = $("#pagexz").val();
+        RisArticleManage(1, PageSize);
+    }
+</script>

@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "投诉类型管理";
+    Layout = "~/Views/UI/master.cshtml";
+
+    var list = ViewBag.list as List<JMP.MDL.CsComplainType>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("CustomService/ComplainType.js")
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.type == "1" ? "selected='selected'" : "")>投诉类型名称</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="SelectState" id="SelectState">
+                    <option value="-1" @(ViewBag.SelectState == -1 ? "selected='selected'" : "")>状态</option>
+                    <option value="0" @(ViewBag.SelectState == 0 ? "selected='selected'" : "")>正常</option>
+                    <option value="1" @(ViewBag.SelectState == 1 ? "selected='selected'" : "")>冻结</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                    <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlocuser()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th width="50">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th width="100">编号</th>
+                    <th>投诉类型名称</th>
+                    <th>投诉类型描述</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>创建者</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+
+                        bool getEdit = bll_limit.GetLocUserLimitVoids("/CustomService/InsertOrUpdateAddType", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑
+
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <td><input type="checkbox" name="child" class="checkall" value="@item.Id" /></td>
+                                <td>@item.Id</td>
+                                <td>@item.Name</td>
+                                <td>@item.Description</td>
+                                <td>
+                                    @{
+                                        if (item.state == 0)
+                                        {
+                                            <span class="green">正常</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="red">冻结</span>
+                                        }
+                                    }
+                                </td>
+                                <td>@item.CreatedOn</td>
+                                <td>@item.u_realname</td>
+                                <td>
+                                    @if (getEdit)
+                                    {
+                                        <a href="javascript:" class="blue" onclick="UpdateCustom(@item.Id)">编辑</a>
+                                    }
+                                </td>
+                            </tr>
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="8" class="nodata">暂无记录</td>
+                                            </tr>
+                                        }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>

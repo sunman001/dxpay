@@ -1,0 +1,239 @@
+﻿@{
+    ViewBag.Title = "值班列表";
+    Layout = "~/Views/UI/master.cshtml";
+    var parentlist = ViewBag.parentlist as List<JMP.MDL.jmp_Help_Classification>;
+    var list = ViewBag.list as List<JMP.MDL.jmp_Help_Content>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.type == "1" ? "selected='selected'" : "")>编号</option>
+                    <option value="2" @(ViewBag.type == "2" ? "selected='selected'" : "")>标题</option>
+                    <option value="3" @(ViewBag.type == "3" ? "selected='selected'" : "")>创建人</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="State" id="State">
+                    <option value="-1" @(ViewBag.State == -1 ? "selected='selected'" : "")>请选择状态</option>
+                    <option value="0" @(ViewBag.State == 0 ? "selected='selected'" : "")>正常</option>
+                    <option value="1" @(ViewBag.State == 1 ? "selected='selected'" : "")>锁定</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="sType" id="sType">
+                    <option value="-1" @(ViewBag.sType == -1 ? "selected='selected'" : "")>请选择类型</option>
+                    <option value='0' @(ViewBag.sType == 0 ? "selected='selected'" : "")>帮助中心</option>
+                    <option value='1' @(ViewBag.sType == 1 ? "selected='selected'" : "")>开发中心</option>
+                </select>
+            </div>
+
+        </li>
+        <li>
+            <div class="rule-single-select" onclick="getPrent()">
+                <select name="PrentID" id="PrentID">
+                    <option value="0" @(ViewBag.PrentID == 0 ? "selected='selected'" : "")>请选择父类</option>
+                    @foreach (var item in parentlist)
+                    {
+                        <option value='@item.ID' @(ViewBag.PrentID == item.ID ? "selected='selected" : "")>@item.ClassName</option>
+                    }
+                </select>
+            </div>
+        </li>
+        <li>
+            <input type="text" id="ClassIdHID" hidden value="@(ViewBag.ClassId>0?ViewBag.ClassId:-1)" />
+            <div class="rule-single-select">
+                <select name="ClassId" id="ClassId">
+                    <option value='0'>--请选择--</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="selectScheduling()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th width="40">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th>编号</th>
+                    <th>标题</th>
+                    <th>大类</th>
+                    <th>小类</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>创建人</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="child" class="checkall" value="@item.ID" />
+                                </td>
+                                <td>@item.ID</td>
+                                <td>@item.Title</td>
+                                <td>@item.PrentClassName</td>
+                                <td>@item.ClassName</td>
+                                <td>
+                                    @{switch (item.State)
+                                        {
+                                            case 0:
+                                                <span style="color:green">正常</span>
+                                                break;
+                                            case 1:
+                                                <span style="color:red">锁定</span>
+                                                break;
+
+                                        }}
+                                </td>
+
+                                <td>
+                                    @item.CreateOn
+                                </td>
+                                <td>
+                                    @item.CreateByName
+                                </td>
+                                <td>
+                                    @{
+                                        bool getEdit = bll_limit.GetLocUserLimitVoids("/Help/AddorEidt", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        if (getEdit)
+                                        {
+                                            <a href="javascript:" class="blue" onclick="UpdateContent(@item.ID)">修改</a>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="9" class="nodata">暂无记录</td>
+                                            </tr>
+                                        }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+<script >
+    var PrentID = $("#PrentID").val();
+    var ClassID = $("#ClassIdHID").val();
+    if (PrentID > 0) {
+
+        var data = { PrentID: $.trim(PrentID), ClassID: ClassID };
+        var url = "/Help/SelectClassId";
+        $.post(url, data, function (msg) {
+            $("#ClassId").html(msg);
+            $(".rule-single-select").ruleSingleSelect();
+        })
+    }
+    //分页
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/Help/ContentList?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        var Type = $("#searchType").val();
+        var sea_name = $("#sea_name").val();
+        var State = $("#State").val();
+        var PrentID = $("#PrentID").val();
+        var ClassId = $("#ClassId").val();
+        var sType= $("#sType").val();
+        url += "&Type=" + Type + "&sea_name=" + sea_name + "&State=" + State + "&PrentID=" + PrentID + "&ClassId=" + ClassId+ "&sType=" + sType
+        location.href = encodeURI(url);
+    }
+
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //查询
+    function selectScheduling() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+    function AddContent() {
+        window.parent.ShouwDiaLogWan("添加内容", 1000, 800, "/Help/AddContent");
+    }
+    //修改分类弹窗
+    function UpdateContent(id) {
+        if (id == "") {
+            window.parent.ShowMsg("请选择内容！", "error", "");
+            return;
+        }
+        window.parent.ShouwDiaLogWan("修改内容", 1000, 800, "/Help/AddContent?Id=" + id);
+    }
+    function getPrent() {
+        var PrentID = $("#PrentID").val();
+        var ClassID = $("#ClassIdHID").val();
+        if (PrentID > 0) {
+
+            var data = { PrentID: $.trim(PrentID), ClassID: ClassID };
+            var url = "/Help/SelectClassId";
+            $.post(url, data, function (msg) {
+                $("#ClassId").html(msg);
+                $(".rule-single-select").ruleSingleSelect();
+            })
+        }
+    }
+
+    function UpdatestateContent(state) {
+        var valArr = new Array;
+        $("#table :checkbox[checked]").each(function (i) {
+            valArr[i] = $(this).val();
+        });
+        var vals = valArr.join(',');
+        if (vals == "") {
+            window.parent.ShowMsg("请选择信息！", "error", "");
+            return;
+        }
+        var url = "/Help/UpdateStateContent";
+        var data = { state: state, ids: vals };
+        $.post(url, data, function (retJson) {
+            if (retJson.success == 1) {
+                //window.parent.frames[window.top.global.currentTabId].location.reload();
+                window.parent.global.reload();
+                window.parent.ShowMsg(retJson.msg, "ok", function () { });
+            }
+            else if (retJson.success == 9998) {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            } else if (retJson.success == 9999) {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                window.top.location.href = retJson.Redirect;
+                return false;
+            } else if (retJson.success == 9997) {
+                window.top.location.href = retJson.Redirect;
+                return false;
+            }
+            else {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            }
+        });
+    }
+</script>

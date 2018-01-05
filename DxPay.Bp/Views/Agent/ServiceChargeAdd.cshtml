@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "设置服务费";
+    Layout = "~/Views/UI/master.cshtml";
+    var yylist = ViewBag.glptdt as List<JMP.MDL.CoServiceFeeRatioGrade>;
+    JMP.MDL.CoAgent UModel = (JMP.MDL.CoAgent)ViewBag.user;
+
+}
+
+<div class="rnatn-cnt">
+    <ul class="rnatn-frm clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">设置费率</span>
+            </p>
+        </li>
+        <li>
+            <div class="dpt" id="bank_kaihuren">
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">费率</div>
+                    <div class="dipt">
+                        <input type="hidden" id="id" value="@ViewBag.id" />
+                        <div class="rule-singless-select">
+                            <select id="ServiceFeeRatioGradeId">
+                                <option value=""> -费率等级-代理商费率比例-商务费率比例 </option>
+                                @{
+                                    foreach (var pt in yylist)
+                                    {
+                                        var AgentPushMoneyRatio = (pt.AgentPushMoneyRatio * 100).ToString("f2") + "%";
+                                        var BusinessPersonnelAgentRatio = (pt.BusinessPersonnelAgentRatio * 100).ToString("f2") + "%";
+                                        <option value="@pt.Id" @(UModel.ServiceFeeRatioGradeId == pt.Id ? "selected=selected" : "")>@pt.Name,@AgentPushMoneyRatio,@BusinessPersonnelAgentRatio</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div class="div-btn">
+        <input type="button" name="btnSave" value="保存" id="btnServiceFeeRatioGradeAdd" class="btn btn-primary" />
+    </div>
+</div>
+@JMP.TOOL.UserHelper.js("Agent/AgentList.js")
+
+
+

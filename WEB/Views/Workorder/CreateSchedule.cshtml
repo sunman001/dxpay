@@ -1,0 +1,82 @@
+﻿@model WEB.ViewModel.Scheduler.CreateScheduleViewModel
+@{
+    ViewBag.Title = "批量排班";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <div class="plate-form">
+        <dl>
+            <dt>值班人：</dt>
+            <dd>
+                <div>
+                    @foreach (var item in Model.CreateScheduleUserViewModel)
+                    {
+                        <label><input type="checkbox" value='@item.Id' name="SelectedUserIds" /> @item.RealName</label>
+                    }
+                </div>
+            </dd>
+        </dl>
+
+        <dl>
+            <dt>值班开始日期：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="ScheduleMonth" type="text" id="ScheduleMonth"  onFocus="WdatePicker({dateFmt: 'yyyy-MM',minDate:'#F{\'@DateTime.Now.ToString("yyyy-MM")\'}'})"class="dataipt txtipt" value="@(Model.ScheduleMonth)" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="yyTime">*请选择值班开始日期</div>
+            </dd>
+
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" onclick="btnBatchCreateSchedule()" id="btnScheduling" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>
+<script type="text/javascript">
+    function btnBatchCreateSchedule() {
+        var ids = [];
+        $("input[name='SelectedUserIds']:checked").each(function() {
+            ids.push($(this).val());
+        });
+        if (ids.length<=0)
+        {
+            window.parent.ShowMsg("请选择排班人员", "error", "");
+            return;
+        }
+        var data= {
+            SelectedUserIds: ids.join(","),
+            ScheduleMonth: $("#ScheduleMonth").val()
+        }
+        var url="/workorder/batchcreateschedule"
+        $.post(url, data, function (retJson) {
+            if (retJson.success == 1) {
+                window.parent.global.reload();
+                window.parent.ShowMsg(retJson.msg, "ok", function () { window.parent.layer.closeAll(); });
+            }
+            else if (retJson.success == 9998) {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            } else if (retJson.success == 9999) {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                window.top.location.href = retJson.Redirect;
+                return false;
+            } else if (retJson.success == 9997) {
+                window.top.location.href = retJson.Redirect;
+                return false;
+            }
+            else {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            }
+
+        })
+      
+    }
+</script>

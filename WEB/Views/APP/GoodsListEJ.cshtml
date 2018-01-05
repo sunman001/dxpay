@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "商品列表";
+    var list = ViewBag.list as List<JMP.MDL.jmp_goods>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@{
+    if (list.Count > 0)
+    {
+        <table border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>商品编号</th>
+                    <th>商品名称</th>
+                    <th>销售类型</th>
+                    <th>所属应用</th>
+                    <th>商品价格</th>
+                    <th>状态</th>
+                    <th width="200">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var item in list)
+                    {
+                        <tr>
+                            <td>@item.g_id</td>
+                            <td>@item.g_name</td>
+                            <td>@item.s_name</td>
+                            <td>@item.a_name</td>
+                            <td>@String.Format("{0:N2}", item.g_price)</td>
+                            <td>
+                                @{
+                                if (item.g_state == 1)
+                                {
+                                    <font color='green'>正常</font>
+                                }
+                                else
+                                {
+                                    <font color='red'>冻结</font>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                bool getEdit = bll_limit.GetLocUserLimitVoids("/APP/InsertOrUpdateAddGOODS", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                if (getEdit)
+                                {
+                                    <a href="javascript:" class='icon icon-edit' onclick="UpdateUserGoods(@item.g_id)">编辑</a>
+                                }
+                                bool getUidT = bll_limit.GetLocUserLimitVoids("/APP/UpdateStateSp", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                if (getUidT)
+                                {
+                                    if (item.g_state == 1)
+                                    {
+                                        <a href="javascript:" class='icon icon-edit' onclick="UpdateStateGoods(0,@item.g_id)">冻结</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:" class='icon icon-edit' onclick="UpdateStateGoods(1,@item.g_id)">解冻</a>
+                                    }
+                                }
+                            }
+                        </td>
+                    </tr>
+                                }
+                }
+            </tbody>
+        </table>
+                                }
+}

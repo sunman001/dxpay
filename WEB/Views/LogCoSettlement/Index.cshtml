@@ -1,0 +1,127 @@
+﻿@using WEB.Extensions
+@model List<JMP.MDL.LogCoSettlement>
+@{
+    ViewBag.Title = "结算日志管理";
+    Layout = "~/Views/UI/master.cshtml";
+    var types = new Dictionary<int, string> { { -1, "错误" }, { 0, "未知" }, { 1, "成功" } };
+    var typeId = Request["typeId"] ?? "100";
+}
+
+<div class="main">
+    <ul class="frm-ul clearfix">
+        <li>
+            <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["searchKey"]" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="typeId" id="typeId">
+                    <option value="100" @(typeId == "100" ? "selected=selected" : "")>错误类型</option>
+                    @foreach (var type in types)
+                    {
+                        <option value="@type.Key.ToString()" @(Request["typeId"] == type.Key.ToString() ? "selected=selected" : "")>@type.Value</option>
+                    }
+
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="1" @(string.IsNullOrEmpty(Request["sort"]) ? "" : "") @(Request["sort"] == "1" ? "selected=selected" : "")>降序</option>
+                    <option value="0" @(Request["sort"] == "0" ? "selected=selected" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlocuserlog()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th style="text-align: left;">ID</th>
+                    <th style="text-align: left;">执行结果</th>
+                    <th style="text-align: left;">简短说明</th>
+                    <th style="text-align: left;">消息</th>
+                    <th style="text-align: left;">日志时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count > 0)
+            {
+                var id = 0;
+
+                foreach (var item in Model)
+                {
+                    id = id + 1;
+                    var icon = "Icon_" + id;
+                    var open = "Open_" + id;
+
+                        <tr onclick="clickOpen(@id)">
+                            <td><i class="fa fa-plus-circle blue" name="Icon" id="@icon"></i>&nbsp;&nbsp;</td>
+                            <td style="text-align: left;">@item.Id</td>
+                            <td style="text-align: left;">@Html.Raw(item.TypeId.ConvertSettlementTypeToHtmlString())</td>
+                            <td style="text-align: left;">@item.Summary</td>
+                            <td style="text-align: left;">@JMP.TOOL.RequestHelper.cutString(item.Message, 150)</td>
+                            <td style="text-align: left;">@item.CreatedOn</td>
+                        </tr>
+                    <!--展开-->
+                        <tr>
+                            <td colspan="6" style="display:none;" name="Open" id="@open">
+                                <div class="dcnt-tab">
+                                    <table class="table-lst">
+                                        <tr>
+                                            <td>IP地址:@item.IpAddress</td>
+                                            <td>报错位置:@item.Location</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" title="@item.Message">
+                                                附加信息:@JMP.TOOL.RequestHelper.cutString(item.Message, 150) <a class="popup-message-details" href="javascript:;" title='@item.Message'>详情</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td align="center" colspan="6" class="nodata">暂无记录</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+<script type="text/javascript">
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/logcosettlement/index?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        var searchKey = $("#searchKey").val();
+        var sort = $("#searchDesc  option:selected").val();
+        var typeId = $("#typeId  option:selected").val();
+        url += "&searchKey=" + searchKey + "&sort=" + sort + "&typeId=" + typeId;
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+    //搜索管理员列表
+    function serchlocuserlog() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    $('.popup-message-details').click(function() {
+        var message = $(this).attr('title');
+        window.top.PopupMessage(message);
+    });
+
+</script>

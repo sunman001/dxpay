@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "设置服务费";
+    Layout = "~/Views/UI/master.cshtml";
+    var yylist = ViewBag.glptdt as List<JMP.MDL.CoServiceFeeRatioGrade>;
+    JMP.MDL.jmp_user UModel = (JMP.MDL.jmp_user)ViewBag.user;
+   
+}
+
+<div class="rnatn-cnt">
+    <ul class="rnatn-frm clearfix">
+        <li class="tit">
+            <p class="ptit">
+                <i class="calr"></i>
+                <span class="t">设置费率</span>
+            </p>
+        </li>
+        <li>
+            <div class="dpt" id="bank_kaihuren">
+                <i class="star fl">*</i>
+                <div class="dpt fl">
+                    <div class="dtit">费率</div>
+                    <div class="dipt">
+                        <input type="hidden" id="id" value="@ViewBag.id" />
+                        <div class="rule-singless-select">
+                            <select id="ServiceFeeRatioGradeId">
+                                <option value=""> -费率等级-开发费率比例-商务费率比例 </option>
+                                @{
+                                    foreach (var pt in yylist)
+                                    {
+                                        var ServiceFeeRatio = (pt.ServiceFeeRatio * 100).ToString("f2") + "%";
+                                        var CustomerWithoutAgentRatio = (pt.CustomerWithoutAgentRatio * 100).ToString("f2") + "%";
+                                        <option value="@pt.Id" @(UModel.ServiceFeeRatioGradeId == pt.Id ? "selected=selected" : "")>@pt.Name,@ServiceFeeRatio,@CustomerWithoutAgentRatio</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                      
+                    </div>
+                   
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div class="div-btn">
+        <input type="button" name="btnSave" value="保存" id="btnServiceFeeRatioGradeAdd" class="btn btn-primary" />
+    </div>
+   </div>
+@JMP.TOOL.UserHelper.js("AppUser/appuser.js")
+
+ 
+   

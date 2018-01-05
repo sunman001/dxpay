@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "UserAppList";
+    var list = ViewBag.list as List<JMP.MDL.jmp_app>;
+}
+<div class="rule-single-select">
+    <select name="s_applist" id="s_applist">
+        <option value="0" @(ViewBag.aid == 0 ? "selected='selected'" : "")>所有应用</option>
+        @{
+            foreach (var item in list)
+            {
+                <option value="@item.a_id" @(ViewBag.aid == item.a_id ? "selected='selected'" : "")>@item.a_name</option>
+            }
+        }
+    </select>
+</div>

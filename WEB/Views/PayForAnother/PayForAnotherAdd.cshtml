@@ -1,0 +1,295 @@
+﻿@{
+    ViewBag.Title = "添加代付通道";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var mode = ViewBag.mode as JMP.MDL.PayForAnotherInfo;
+    var list = ViewBag.list as List<JMP.MDL.PayChannel>;
+}
+<div class="main">
+    <input type="hidden" id="p_id" value="@mode.p_Id" />
+    <div class="plate-form">
+        <dl>
+            <dt>代付接口名称：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input type="text" id="p_InterfaceName" value="@(string.IsNullOrEmpty(mode.p_InterfaceName) ? "" : mode.p_InterfaceName)" onblur="ValidateName()" />
+                </div>
+                <div id="InterfaceNameValidate" class="Validform_checktip">请输入代付接口名称！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>接口类型：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <div class="rule-single-select">
+                        <select id="p_InterfaceType" name="p_InterfaceType" onblur="ValidateType()">
+                            @{
+                                <option value="0" @(mode.p_KeyType == 0 ? "selected=selected" : "")>--接口类型--</option>
+                                foreach (var item in list)
+                                {
+                                    <option value="@item.Id" @(item.Id == mode.p_InterfaceType ? "selected=selected" : "")>@item.ChannelName</option>
+                                }
+                            }
+
+                        </select>
+                    </div>
+                </div>
+                <div id="InterfaceTypeValidate" class="Validform_checktip">请选择接口类型！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>商户号：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input type="text" id="p_MerchantNumber" value="@(string.IsNullOrEmpty(mode.p_MerchantNumber)?"":mode.p_MerchantNumber)" onblur="ValidateNumber()" />
+                </div>
+                <div id="MerchantNumberValidate" class="Validform_checktip">请输入商户号！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>秘钥类型：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <div class="rule-single-select">
+                        <select id="p_KeyType" name="p_KeyType" onblur="ValidateKeyType()">
+                            <option value="0" @(mode.p_KeyType == 0 ? "selected=selected" : "")>--秘钥类型--</option>
+                            <option value="1" @(mode.p_KeyType == 1 ? "selected=selected" : "")>字符串类型</option>
+                            <option value="2" @(mode.p_KeyType == 2 ? "selected=selected" : "")>路径地址</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="KeyTypeValidate" class="Validform_checktip">请选择秘钥类型！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>公钥：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input type="text" id="p_PublicKey" value="@(string.IsNullOrEmpty(mode.p_PublicKey)?"":mode.p_PublicKey)" onblur="ValidatePublic()" />
+                </div>
+                <div id="PublicKeyValidate" class="Validform_checktip">请输入公钥！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>私钥：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input type="text" id="p_PrivateKey" value="@(string.IsNullOrEmpty(mode.p_PrivateKey)?"":mode.p_PrivateKey)" onblur="ValidatePrivate()" />
+                </div>
+                <div id="PrivateKeyValidate" class="Validform_checktip">请输入私钥！</div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="提交" id="PayForAnother" onclick="btnPayForAnother()" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn" />
+    </div>
+    <div class="clear"></div>
+</div>
+<script type="text/javascript">
+
+    //添加代付通道
+    function btnPayForAnother() {
+
+        var p_id = $("#p_id").val();
+
+        //接口名称
+        var p_InterfaceName = $("#p_InterfaceName").val();
+        if (isRequestNotNull(p_InterfaceName)) {
+
+            $("#InterfaceNameValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#InterfaceNameValidate").html("请填写代付通道名称!");
+            return false;
+        }
+        else {
+            $("#InterfaceNameValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#InterfaceNameValidate").html("验证通过");
+        }
+
+        //接口类型
+        var p_InterfaceType = $("#p_InterfaceType").val();
+        if (p_InterfaceType == 0) {
+
+            $("#InterfaceTypeValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#InterfaceTypeValidate").html("请填写代付接口类型!");
+            return false;
+        }
+        else {
+            $("#InterfaceTypeValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#InterfaceTypeValidate").html("验证通过");
+        }
+
+        //商户号
+        var p_MerchantNumber = $("#p_MerchantNumber").val();
+        if (isRequestNotNull(p_MerchantNumber)) {
+
+            $("#MerchantNumberValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#MerchantNumberValidate").html("请填写商户号!");
+            return false;
+        }
+        else {
+            $("#MerchantNumberValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#MerchantNumberValidate").html("验证通过");
+        }
+
+        //秘钥类型
+        var p_KeyType = $("#p_KeyType").val();
+        if (p_KeyType == 0) {
+
+            $("#KeyTypeValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#KeyTypeValidate").html("请选择秘钥类型!");
+            return false;
+        }
+        else {
+            $("#KeyTypeValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#KeyTypeValidate").html("验证通过");
+        }
+
+        //公钥
+        var p_PublicKey = $("#p_PublicKey").val();
+        if (isRequestNotNull(p_PublicKey)) {
+
+            $("#PublicKeyValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#PublicKeyValidate").html("请输入公钥!");
+            return false;
+        }
+        else {
+            $("#PublicKeyValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#PublicKeyValidate").html("验证通过");
+        }
+
+        //私钥
+        var p_PrivateKey = $("#p_PrivateKey").val();
+        if (isRequestNotNull(p_PrivateKey)) {
+
+            $("#PrivateKeyValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#PrivateKeyValidate").html("请输入私钥!");
+            return false;
+        }
+        else {
+            $("#PrivateKeyValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#PrivateKeyValidate").html("验证通过");
+        }
+
+        var url = "/PayForAnother/PayForAnother_PayChannelAdd";
+        var data = { p_InterfaceName: $.trim(p_InterfaceName), p_InterfaceType: $.trim(p_InterfaceType), p_MerchantNumber: $.trim(p_MerchantNumber), p_KeyType: $.trim(p_KeyType), p_PublicKey: $.trim(p_PublicKey), p_PrivateKey: $.trim(p_PrivateKey), p_id: $.trim(p_id) };
+
+        $("#PayForAnother").attr("disabled", "disabled");
+        $.post(url, data, function (retJson) {
+            if (retJson.success == 1) {
+                window.parent.ShowMsg(retJson.msg, "ok", function () { window.parent.global.reload(); window.parent.layer.closeAll(); });
+            }
+            else {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            }
+            $("#PayForAnother").attr("disabled", false);
+        });
+    }
+
+    //验证接口名称
+    function ValidateName()
+    {
+        //接口名称
+        var p_InterfaceName = $("#p_InterfaceName").val();
+        if (isRequestNotNull(p_InterfaceName)) {
+
+            $("#InterfaceNameValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#InterfaceNameValidate").html("请填写代付通道名称!");
+            return false;
+        }
+        else {
+            $("#InterfaceNameValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#InterfaceNameValidate").html("验证通过");
+        }
+    }
+
+    //验证接口类型
+    function ValidateType()
+    {
+        //接口类型
+        var p_InterfaceType = $("#p_InterfaceType").val();
+        if (p_InterfaceType == 0) {
+
+            $("#InterfaceTypeValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#InterfaceTypeValidate").html("请填写代付接口类型!");
+            return false;
+        }
+        else {
+            $("#InterfaceTypeValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#InterfaceTypeValidate").html("验证通过");
+        }
+
+    }
+
+    //验证商户号
+    function ValidateNumber()
+    {
+        //商户号
+        var p_MerchantNumber = $("#p_MerchantNumber").val();
+        if (isRequestNotNull(p_MerchantNumber)) {
+
+            $("#MerchantNumberValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#MerchantNumberValidate").html("请填写商户号!");
+            return false;
+        }
+        else {
+            $("#MerchantNumberValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#MerchantNumberValidate").html("验证通过");
+        }
+    }
+
+    //验证秘钥类型
+    function ValidateKeyType()
+    {
+        //秘钥类型
+        var p_KeyType = $("#p_KeyType").val();
+        if (p_KeyType == 0) {
+
+            $("#KeyTypeValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#KeyTypeValidate").html("请选择秘钥类型!");
+            return false;
+        }
+        else {
+            $("#KeyTypeValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#KeyTypeValidate").html("验证通过");
+        }
+    }
+
+    //验证公钥
+    function ValidatePublic()
+    {
+        //公钥
+        var p_PublicKey = $("#p_PublicKey").val();
+        if (isRequestNotNull(p_PublicKey)) {
+
+            $("#PublicKeyValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#PublicKeyValidate").html("请输入公钥!");
+            return false;
+        }
+        else {
+            $("#PublicKeyValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#PublicKeyValidate").html("验证通过");
+        }
+
+    }
+
+    //验证私钥
+    function ValidatePrivate()
+    {
+        //私钥
+        var p_PrivateKey = $("#p_PrivateKey").val();
+        if (isRequestNotNull(p_PrivateKey)) {
+
+            $("#PrivateKeyValidate").attr("class", "Validform_checktip Validform_wrong");
+            $("#PrivateKeyValidate").html("请输入私钥!");
+            return false;
+        }
+        else {
+            $("#PrivateKeyValidate").attr("class", "Validform_checktip  Validform_right");
+            $("#PrivateKeyValidate").html("验证通过");
+        }
+    }
+
+</script>

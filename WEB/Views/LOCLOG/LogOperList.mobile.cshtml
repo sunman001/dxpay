@@ -1,0 +1,149 @@
+﻿@{
+    ViewBag.Title = "日志管理";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_locuserlog>;
+
+}
+<div class="mobile-container">
+    <div class="toolbar-container">
+        <section class="sct-btn-tit">
+            <a id="btn-show-search" class="btn btn-primary" onclick="pop.showSearch('search-container')">查询</a>
+        </section>
+    </div>
+    <div class="search-container">
+        <div class="ui input fluid fluid-block">
+            <select name="searchType" id="searchType" class="ui dropdown fluid fluid-block">
+                <option value="1" @(string.IsNullOrEmpty(Request["types"]) == true ? "" : "") @(Request["types"] == "1" ? "selected=selected" : "")>管理员编号</option>
+                <option value="2" @(Request["types"] == "2" ? "selected=selected" : "")>管理员账号</option>
+                <option value="3" @(Request["types"] == "3" ? "selected=selected" : "")>IP地址</option>
+            </select>
+        </div>
+        <div class="ui input fluid fluid-block">
+            <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["searchKey"]" />
+        </div>
+        <div class="ui input fluid fluid-block">
+            <select name="searchlogtype" id="searchlogtype" class="ui dropdown fluid fluid-block">
+                <option value="3" selected="selected">操作</option>
+             
+            </select>
+        </div>
+        <div class="ui input fluid fluid-block">
+            <select name="searchDesc" id="searchDesc" class="ui dropdown fluid fluid-block">
+                <option value="1" @(string.IsNullOrEmpty(Request["sort"]) == true ? "" : "") @(Request["sort"] == "1" ? "selected=selected" : "")>降序</option>
+                <option value="0" @(Request["sort"] == "0" ? "selected=selected" : "")>升序</option>
+            </select>
+        </div>
+        <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="serchlocuserlog()">查 询</a>
+    </div>
+    <div class="table-container table-responsive">
+        <table class="ui celled striped table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th>用户ID</th>
+                    <th>用户名称</th>
+                    <th>类型</th>
+                    <th>简短说明</th>
+                    <th>日志时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (list.Count > 0)
+                {
+                    int id = 0;
+                    string Icon = "Icon_";
+                    string Open = "Open_";
+
+                    foreach (var item in list)
+                    {
+                        id = id + 1;
+                        Icon = "Icon_" + id;
+                        Open = "Open_" + id;
+
+                        <tr onclick="clickOpen(@id)">
+                            <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                            <td>@item.l_id</td>
+                            <td>@item.u_loginname</td>
+                            @{
+                                string str = "";
+                                if (item.l_logtype_id == 1)
+                                {
+                                    str = "注册";
+                                }
+                                else if (item.l_logtype_id == 2)
+                                {
+                                    str = "登录";
+                                }
+                                else if (item.l_logtype_id == 3)
+                                {
+                                    str = "操作";
+                                }
+                                else if (item.l_logtype_id == 5)
+                                {
+                                    str = "数据库错误日志";
+                                }
+                                else
+                                {
+                                    str = "错误日志";
+                                }
+                            }
+                            <td>@str</td>
+                            <td>@item.l_sms</td>
+                            <td>@item.l_time</td>
+                        </tr>
+
+                        <!--展开-->
+                                <tr>
+                                    <td colspan="6" style="display:none;" name="Open" id="@Open">
+                                        <div class="dcnt-tab">
+                                            <table class="table-lst">
+                                                <tr>
+                                                    <td>IP地址:@item.l_ip</td>
+                                                    <td>位置:@item.l_location</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" title="@item.l_info">
+                                                        附加信息:@JMP.TOOL.RequestHelper.cutString(item.l_info, 100)
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td align="center" colspan="6" class="nodata">暂无记录</td>
+                                    </tr>
+                                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+<script type="text/javascript">
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/LOCLOG/LogOperList?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        var types = $("#searchType  option:selected").val();
+        var searchKey = $("#searchKey").val();
+        var sort = $("#searchDesc  option:selected").val();
+        var logtype =3;
+        url += "&types=" + types + "&searchKey=" + searchKey + "&sort=" + sort + "&logtype=" + logtype;
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+    //搜索管理员列表
+    function serchlocuserlog() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+</script>

@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "公共发布";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+    var mo = ViewBag.mo as JMP.MDL.jmp_notice;
+}
+@JMP.TOOL.UserHelper.js("mobile/MessageManagement/notice.mobile.js")
+<div class="mobile-popup mobile-container">
+    <div class="ui form">
+        <dl>
+            <dt>公告标题：</dt>
+            <dd>
+                <div class="field">
+                    <input name="titleName" type="text" id="titleName" onblur="yztitleName()" maxlength="20" value="@(string.IsNullOrEmpty(mo.n_title) ? "" : mo.n_title)" />
+                    <div class="Validform_checktip" id="titleNameyy">*公告标题长度不超过20</div>
+                </div>
+                
+            </dd>
+        </dl>
+        <dl>
+            <dd>
+                <div class="field">
+                    <label>置顶：<input type="checkbox" id="topname" name="topname" @(mo.n_top == 1 ? "checked='checked'" : "") value="1"/></label>
+                    <input type="hidden" id="n_id" name="n_id" value="@(mo.n_id == 0 ? 0 : mo.n_id)"/>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>公告内容：</dt>
+            <dd>
+                <div class="field">
+                    <textarea id="contentname" name="contentname" onblur="yzcontentname()">@(string.IsNullOrEmpty(mo.n_content) ? "" : mo.n_content)</textarea>
+                </div>
+                <div class="Validform_checktip" id="contentnameyy">*公告内容</div>
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer">
+            <input type="button" name="btnSave" value="发布" id="btnSaveAddApp" class="ui button primary" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="ui button" />
+    </div>
+</div>

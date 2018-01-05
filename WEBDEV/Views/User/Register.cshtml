@@ -1,0 +1,101 @@
+﻿@{
+    ViewBag.Title = "聚米支付平台-登录";
+    Layout = "~/Views/UI/Account.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.CoBusinessPersonnel>;
+    var model = ViewBag.model as JMP.MDL.CoBusinessPersonnel;
+} 
+@JMP.TOOL.UserHelper.js("user/register.js")
+    <form class="reg-frm">
+        <ul class="lgn-frm-dc reg-frm-dc clearfix">
+            
+            <li>
+                <span class="lgn-tit">用户类型</span>
+                <select class="reg-selc" id="u_category">
+                    <option value="1">企业用户</option>
+                    @*<option value="0">个人用户</option>*@
+                    </select>
+            </li>
+            <li>
+                <span class="lgn-tit">用户名</span>
+                <input type="text" title="邮箱不能为空" name="u_id" id="u_id" placeholder="请输入邮箱" class="form-ctrl" onblur="yzemial()" />
+                <div id="yzemial" class="lgn-error ">用户名不能为空</div>
+            </li>
+           
+            <li>
+                <span class="lgn-tit">密码</span>
+                <input type="password" name="u_pass" id="u_pass" class="form-ctrl" placeholder="请输入密码" onblur="yzma()" />
+                
+                <div id="yzma" class="lgn-error">密码不能为空</div>
+            </li>
+            <li>
+                <span class="lgn-tit">确认密码</span>
+                <input type="password" name="u_repass" id="u_repass" class="form-ctrl" placeholder="请输入密码"  onblur="yzqrma()"/>
+               
+                <div id="yzqrma" class="lgn-error">密码不能为空</div>
+            </li>
+            <li>
+                <span class="lgn-tit">验证码</span>
+                <input id="code" type="text" name="vc" class="form-ctrl form-ctl-vlte" placeholder="请输入验证码" onblur="yzcode()" />
+                <div id="code" class="lgn-code" onclick="document.getElementById('verify').src = '/user/getvalidatecode?vh=38&vt=3&k='+new Date().toString();">
+                    <img id="verify" src="/user/getvalidatecode?vh=38&vt=3" alt="看不清？换一张" title="看不清？换一张" />
+                </div>
+                <div id="yzcode" class="lgn-error lgn-ervlt">验证码不能为空</div>
+            </li>
+            <li>
+                <span class="lgn-tit">手机号码</span>
+                <input type="text" name="u_phone" id="u_phone" class="form-ctrl form-ctl-vlte" placeholder="请输入手机号码" onblur="yzphone()" />
+                <a id="btn_get_verify_code_disabled" class="lgn-code lgn-code-txt on" >重新获取 <span >60</span>秒</a>
+                <a id="btn_get_verify_code" class="lgn-code lgn-code-txt on">发送验证码</a>
+                <div id="yzphone" class="lgn-error lgn-ervlt">请输入手机号码</div>
+            </li>
+           
+            <li>
+                <span class="lgn-tit">商务</span>
+                <select class="reg-selc" id="relation_person_id">
+
+                    @if (model != null)
+                    {
+                        foreach (var item in list)
+                        {
+                            <option value="@item.Id" @(item.DisplayName == model.DisplayName ? "selected='selected'" : "")>@item.DisplayName</option>
+                        }
+                    }
+                    else
+                    {
+                        foreach (var item in list)
+                        {
+                            <option value="@item.Id">@item.DisplayName</option>
+                        }
+                    }
+                </select>
+                <div id="yzbp" class="lgn-error lgn-ervlt"></div>
+            </li>
+            <li>
+                <span class="lgn-tit">手机验证码</span>
+                <input type="text" name="verified_code" id="verified_code" class="form-ctrl form-ctl-vlte" />
+                <div id="yztelcode" class="lgn-error lgn-ervlt">验证码不能为空</div>
+            </li>
+        </ul>
+        <div class="dbtn">
+            <a id="btn_sub" class="lgn-btn on" title="注册" value="注册"><i class="icon-sj"></i></a>
+            <a href="/Home/Login" class="rgt">马上登录</a>
+        </div>
+    </form>
+    <script type="text/javascript">
+        //忘记密码
+        $(".forget-pwd-content").hover(function(){
+            $(".forget-pwd-hover").show(200);
+        },function(){
+            $(".forget-pwd-hover").hide(200);
+        });
+        $(".reg-selc .stxt").click(function(){
+            $(".reg-selc-lst").show(200);
+        })
+        $(".reg-selc-lst dd").click(function(){
+            $(".reg-selc-lst dd").removeClass("on");
+            $(this).addClass("on");
+            var txt=$(this).text();
+            $(".reg-selc .stxt").text(txt);
+            $(".reg-selc-lst").hide(200);
+        })
+    </script>

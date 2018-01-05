@@ -1,0 +1,227 @@
+﻿@{
+    ViewBag.Title = "应用列表";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_user_report>;
+}
+@JMP.TOOL.UserHelper.js("plugin/fusionchart/fusioncharts.js")
+@JMP.TOOL.UserHelper.js("plugin/fusionchart/fusioncharts.theme.zune.js")
+@JMP.TOOL.UserHelper.js("plugin/my97datepicker/WdatePicker.js")
+<div class="box_container">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        <li class="ts">
+            *查询今日数据延迟10分钟,&nbsp;&nbsp;<a target="_blank" href="@ViewBag.helpUrl" class="red">详情查看帮助文档</a>
+        </li>
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(Request["s_type"] == "1" ? "selected=selected" : "")>应用名称</option>
+                    <option value="2" @(Request["s_type"] == "2" ? "selected=selected" : "")>所属商户</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="searchKey" type="text" id="searchKey" class="txtipt" placeholder="请输入关键字" value="@Request["s_key"]" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchTotal" id="searchTotal">
+                    <option value="" @(Request["s_field"] == "" ? "selected=selected" : "")>排序字段</option>
+                    <option value="5" @(Request["s_field"] == "5" ? "selected=selected" : "")>日期</option>
+                    <option value="6" @(Request["s_field"] == "6" ? "selected=selected" : "")>所属商户</option>
+                    <option value="1" @(Request["s_field"] == "1" ? "selected=selected" : "")>成功量</option>
+                    <option value="3" @(Request["s_field"] == "3" ? "selected=selected" : "")>合计收入</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="relationtype" id="relationtype">
+                    <option value="0" @( ViewBag.relationtype == 0 ? "selected=selected" : "")>商户类型</option>
+                    <option value="2" @( ViewBag.relationtype == 2 ? "selected=selected" : "")>代理商</option>
+                    <option value="1" @( ViewBag.relationtype == 1 ? "selected=selected" : "")>开发者</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="1" @(Request["s_sort"] == "1" ? "selected=selected" : "")>降序</option>
+                    <option value="0" @(Request["s_sort"] == "0" ? "selected=selected" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="stime" type="text" id="stime" class="dataipt txtipt time" value="@(string.IsNullOrEmpty(ViewBag.stime) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : ViewBag.stime)" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')||\'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")\'}'})" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt time" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")'})" value="@(string.IsNullOrEmpty(ViewBag.etime) ? DateTime.Now.ToString("yyyy-MM-dd") : ViewBag.etime)" />
+        </li>
+        <li>
+            <a id="btn_search" class="btn btn-primary" onclick="SearchAppReport()">查询</a>
+            <a id="btn_today" class="btn btn-primary" href="javascript:" onclick="SearcgAppToday()">查询今日</a>
+        </li>
+    </ul>
+    <div class="box_container">
+        <table class="table-cnt">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th>日期</th>
+                    <th>应用名称</th>
+                    <th>商户类型</th>
+                    <th>商户名称</th>
+                    <th>请求量</th>
+                    <th>成功量</th>
+                    <th>请求率</th>
+                    <th>付费成功率</th>
+                    <th>合计收入</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (list.Count > 1)
+                {
+                    int id = 0;
+                    string Icon = "Icon_";
+                    string Open = "Open_";
+                    foreach (var item in list.Where(x => x.a_appname != "合计"))
+                    {
+                        id = id + 1;
+                        Icon = "Icon_" + id;
+                        Open = "Open_" + id;
+                        <tr onclick="clickOpen(@id)">
+                            <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                            <td>@(!string.IsNullOrEmpty(item.a_time.ToString()) ? DateTime.Parse(item.a_time.ToString()).ToString("yyyy-MM-dd") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(item.a_appname.ToString()) ? item.a_appname.ToString() : "---")</td>
+                            <td>
+                                @{
+                                    if (item.relation_type == 1)
+                                    {
+                                        <font>商务</font>
+                                    }
+                                    else if (item.relation_type == 2)
+                                    {
+                                        <font>代理商</font>
+                                    }
+                                    else
+                                    {
+                                        <font>未指定</font>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @{
+                                    if (item.relation_type == 1)
+                                    {
+                                        @(!string.IsNullOrEmpty(item.u_realname.ToString()) ? item.u_realname.ToString() : "---")
+
+                                    }
+                                    else if (item.relation_type == 2)
+                                    {
+                                        @(!string.IsNullOrEmpty(item.DisplayName.ToString()) ? item.DisplayName.ToString() : "---")
+                                    }
+                                }
+                            </td>
+                            <td>@(!string.IsNullOrEmpty(item.a_count.ToString()) ? decimal.Parse(item.a_count.ToString()).ToString("f0") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(item.a_success.ToString()) ? decimal.Parse(item.a_success.ToString()).ToString("f0") : "---")</td>
+                            <td>@(ViewBag.rtype == "total" && !string.IsNullOrEmpty(item.a_equipment.ToString()) ? decimal.Parse(item.a_equipment.ToString()) != 0 ? ((decimal.Parse(item.a_count.ToString()) / decimal.Parse(item.a_equipment.ToString())) * 100).ToString("f2") + "%" : "0.00%" : "--")</td>
+                            <td>@(!string.IsNullOrEmpty(item.a_count.ToString()) ? decimal.Parse(item.a_count.ToString()) != 0 ? ((decimal.Parse(item.a_success.ToString()) / decimal.Parse(item.a_count.ToString())) * 100).ToString("f2") + "%" : "0.00%" : "0.00%")</td>
+                            <td>@(!string.IsNullOrEmpty(item.a_curr.ToString()) ? decimal.Parse(item.a_curr.ToString()).ToString("f2") : "---")</td>
+
+                        </tr>
+
+                        <tr>
+                            <td colspan="10" style="display:none;" name="Open" id="@Open">
+                                <div class="dcnt-tab">
+                                    <table class="table-lst">
+                                        <tr>
+                                            <td>
+                                                设备量：@(ViewBag.rtype == "total" && !string.IsNullOrEmpty(item.a_equipment) ? decimal.Parse(item.a_equipment.ToString()).ToString("f0") : "--")
+                                            </td>
+                                            <td>
+                                                未支付量：@(!string.IsNullOrEmpty(item.a_notpay.ToString()) ? decimal.Parse(item.a_notpay.ToString()).ToString("f0") : "---")
+                                            </td>
+                                            <td>arpu值：@(!string.IsNullOrEmpty(item.a_equipment.ToString()) ? decimal.Parse(item.a_equipment.ToString()) != 0 ? (decimal.Parse(item.a_curr.ToString()) / decimal.Parse(item.a_equipment.ToString())).ToString("f2") : "0.00" : "0.00")</td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td>支付宝收入：@(!string.IsNullOrEmpty(item.a_alipay.ToString()) ? decimal.Parse(item.a_alipay.ToString()).ToString("f2") : "---")</td>
+                                            <td>微信收入：@(!string.IsNullOrEmpty(item.a_wechat.ToString()) ? decimal.Parse(item.a_wechat.ToString()).ToString("f2") : "---")</td>
+                                            <td>银联收入：@(!string.IsNullOrEmpty(item.a_unionpay.ToString()) ? decimal.Parse(item.a_unionpay.ToString()).ToString("f2") : "---")</td>
+                                            <td>QQ钱包收入：@(!string.IsNullOrEmpty(item.a_qqwallet.ToString()) ? decimal.Parse(item.a_qqwallet.ToString()).ToString("f2") : "---")</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                                    }
+                                    if (ViewBag.total > 0)
+                                    {
+                                        var sum = list.FirstOrDefault(x => x.a_appname == "合计");
+                                        <tr>
+                                            <td>合计：</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>@(!string.IsNullOrEmpty(sum.a_count.ToString()) ? decimal.Parse(sum.a_count.ToString()).ToString("f0") : "---")</td>
+                                            <td>@(!string.IsNullOrEmpty(sum.a_success.ToString()) ? decimal.Parse(sum.a_success.ToString()).ToString("f0") : "---")</td>
+                                            <td>@(ViewBag.rtype == "total" && !string.IsNullOrEmpty(sum.a_equipment.ToString()) ? decimal.Parse(sum.a_equipment.ToString()) != 0 ? ((decimal.Parse(sum.a_count.ToString()) / decimal.Parse(sum.a_equipment.ToString())) * 100).ToString("f2") + "%" : "0.00%" : "--")</td>
+                                            <td>@(!string.IsNullOrEmpty(sum.a_count.ToString()) ? decimal.Parse(sum.a_count.ToString()) != 0 ? ((decimal.Parse(sum.a_success.ToString()) / decimal.Parse(sum.a_count.ToString())) * 100).ToString("f2") + "%" : "0.00%" : "0.00%")</td>
+                                            <td>@(!string.IsNullOrEmpty(sum.a_curr.ToString()) ? decimal.Parse(sum.a_curr.ToString()).ToString("f2") : "---")</td>
+                                        </tr>
+
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td align="center" colspan="10" class="nodata">暂无记录</td>
+                                        </tr>
+                                    }
+            </tbody>
+        </table>
+        @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+        <div style="height: 100px; width: 100%;">&nbsp;</div>
+    </div>
+</div>
+<script type="text/javascript">
+    function ArticleManage(pageIndex, pageSize, ptype) {
+        var rty = '@ViewBag.rtype';
+        if (ptype == null || ptype == "" || ptype == undefined) {
+            if (rty == "") {
+                ptype = "total";
+            } else {
+                ptype = rty;
+            }
+        }
+        var url = "/REPORT/AppReport?curr=" + pageIndex + "&psize=" + pageSize + "&rtype=" + ptype;
+        var types = $("#searchType option:selected").val();
+        var searchKey = $("#searchKey").val();
+        var stime = $("#stime").val();
+        var etime = $("#etime").val();
+        var sort = $("#searchDesc option:selected").val();
+        var searchTotal = $("#searchTotal option:selected").val();
+        var relationtype = $.trim($("#relationtype").val());
+        url += "&s_type=" + types + "&s_key=" + searchKey + "&s_sort=" + sort + "&s_field=" + searchTotal + "&s_begin=" + stime + "&s_end=" + etime + "&relationtype=" + $.trim(relationtype);
+        location.href = encodeURI(url);
+    }
+    function SearchAppReport() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize, "total");
+    }
+
+    function SearcgAppToday() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize, "today");
+    }
+
+    //选择每页显示数量
+    function pagexz() {
+        var rty = '@ViewBag.rtype';
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize, rty);
+    }
+</script>

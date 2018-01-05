@@ -1,0 +1,258 @@
+﻿@{
+    ViewBag.Title = "OrderList";
+    Layout = "~/Views/UI/master.cshtml";
+
+    var list = ViewBag.list as List<JMP.MDL.jmp_order>;
+    var paymodeList = ViewBag.paymodeList as List<JMP.MDL.jmp_paymode>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+@JMP.TOOL.UserHelper.js("CustomService/OrderList.js")
+<div class="main">
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.searchType == 1 ? "selected=selected" : "")>订单编号</option>
+                    <option value="5" @(ViewBag.searchType == 5 ? "selected=selected" : "")>支付流水号</option>
+                    <option value="6" @(ViewBag.searchType == 6 ? "selected=selected" : "")>商户订单号</option>
+                    <option value="2" @(ViewBag.searchType == 2 ? "selected=selected" : "")>应用名称</option>
+                    <option value="3" @(ViewBag.searchType == 3 ? "selected=selected" : "")>商品名称</option>
+                    <option value="4" @(ViewBag.searchType == 4 ? "selected=selected" : "")>所属商户</option>
+                    <option value="7" @(ViewBag.searchType == 7 ? "selected=selected" : "")>支付壳子名称</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="searchname" type="text" id="searchname" placeholder="请输入关键字" value="@ViewBag.searchname" class="txtipt" />
+        </li>
+        <li>
+            <input name="stime" type="text" id="stime" onFocus="WdatePicker({minDate:'2017-06-26',maxDate:'#F{$dp.$D(\'etime\')||\'@DateTime.Now.ToString("yyyy-MM-dd")\'}'})" readonly="readonly" class="dataipt txtipt" value="@ViewBag.stime" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.ToString("yyyy-MM-dd")'})" readonly="readonly" class="dataipt txtipt" value="@ViewBag.etime" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="paymode" id="paymode">
+                    <option value="0" @( ViewBag.paymode == 0 ? "selected=selected" : "")>支付类型</option>
+                    @{
+                        foreach (var em in paymodeList)
+                        {
+                            <option value="@em.p_id" @( ViewBag.paymode == em.p_id ? "selected=selected" : "")>@em.p_name</option>
+                        }
+                    }
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="relationtype" id="relationtype">
+                    <option value="-1" @( ViewBag.relationtype == -1 ? "selected=selected" : "")>商户类型</option>
+                    <option value="2" @( ViewBag.relationtype == 2 ? "selected=selected" : "")>代理商</option>
+                    <option value="1" @( ViewBag.relationtype == 1 ? "selected=selected" : "")>商务</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="auditstate" id="platformid">
+                    <option value="0" @(ViewBag.platformid == 0 ? "selected='selected'" : "")>关联平台</option>
+                    <option value="1" @(ViewBag.platformid == 1 ? "selected='selected'" : "")>安卓</option>
+                    <option value="2" @(ViewBag.platformid == 2 ? "selected='selected'" : "")>苹果</option>
+                    <option value="3" @(ViewBag.platformid == 3 ? "selected='selected'" : "")>H5</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="paymentstate" id="paymentstate">
+                    <option value="" @( ViewBag.paymentstate == "" ? "selected=selected" : "")>支付状态</option>
+                    <option value="0" @( ViewBag.paymentstate == "0" ? "selected=selected" : "")>等待支付</option>
+                    <option value="1" @( ViewBag.paymentstate == "1" ? "selected=selected" : "")>支付成功</option>
+                    <option value="-1" @( ViewBag.paymentstate == "-1" ? "selected=selected" : "")>支付失败</option>
+                    <option value="2" @( ViewBag.paymentstate == "2" ? "selected=selected" : "")>订单异常</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select" id="tztype" style="display: none;">
+                <select name="noticestate" id="noticestate">
+                    <option value="" @(ViewBag.noticestate == "" ? "selected=selected" : "")>通知状态</option>
+                    <option value="0" @(ViewBag.noticestate == "0" ? "selected=selected" : "")>等待通知</option>
+                    <option value="2" @(ViewBag.noticestate == "1" ? "selected=selected" : "")>正在通知</option>
+                    <option value="1" @(ViewBag.noticestate == "1" ? "selected=selected" : "")>通知成功</option>
+                    <option value="-1" @(ViewBag.noticestate == "-1" ? "selected=selected" : "")>通知失败</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btn_search" class="btn btn-primary btn-mgn" href="javascript:" onclick="selectorderlist()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt" id="dataTable">
+        <table border="0" cellpadding="0" cellspacing="0" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th>订单编号</th>
+                    <th>所属类型</th>
+                    <th>应用名称</th>
+                    <th>关联平台</th>
+                    <th>所属商户</th>
+                    <th>支付流水号</th>
+                    <th>支付类型</th>
+                    <th>支付金额</th>
+                    <th>支付状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (list.Count > 0)
+                {
+                    int id = 0;
+                    string Icon = "Icon_";
+                    string Open = "Open_";
+                    foreach (var item in list)
+                    {
+                        id = id + 1;
+                        Icon = "Icon_" + id;
+                        Open = "Open_" + id;
+                        <tr onclick="clickOpen(@id)">
+                            <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                            <td class="tdcode">
+                                @item.o_code
+                            </td>
+                            <td>
+                                @{
+                                    if (item.relation_type == 1)
+                                    {
+                                        <font>商务</font>
+                                    }
+                                    else if (item.relation_type == 2)
+                                    {
+                                        <font>代理商</font>
+                                    }
+                                    else
+                                    {
+                                        <font>未指定</font>
+                                    }
+                                }
+                            </td>
+                            <td>@item.a_name</td>
+                            <td>
+                                @{switch (item.a_platform_id)
+                                    {
+                                        case 1:
+                                            <span class="green">安卓</span>
+                                            break;
+                                        case 2:
+                                            <span class="green">苹果</span>
+                                            break;
+                                        case 3:
+                                            <span class="blue">H5</span>
+                                            break;
+                                    }
+                                }
+                            </td>
+                            <td>@item.u_realname</td>
+
+                            <td>@item.o_tradeno</td>
+                            <td>@item.p_name</td>
+                            <td>@String.Format("{0:N2}", item.o_price)</td>
+                            <td>
+                                @{
+                                    switch (item.o_state)
+                                    {
+                                        case 1:
+                                            <span class='green'>支付成功 </span>
+                                            break;
+                                        case -1:
+                                            <span class='red'>支付失败 </span>
+                                            break;
+                                        case 2:
+                                            <span class='red'>订单异常 </span>
+                                            break;
+                                        default:
+                                            <span class="blue">等待支付 </span>
+                                            break;
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @{
+                                    bool getlocuserAdd = bll_limit.GetLocUserLimitVoids("/CustomService/InsertOrUpdateAddType", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑
+
+                                    if (getlocuserAdd)
+                                    {
+                                        <a href="javascript:" class="blue" onclick="AddComplain('@item.o_code','@item.u_id','@item.o_app_id','@item.o_interface_id')">投诉</a>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="11" style="display:none;" name="Open" id="@Open">
+                                <div class="dcnt-tab">
+                                    <table class="table-lst">
+                                        <tr>
+                                            <td>商户订单号:@item.o_bizcode</td>
+                                            <td> 支付壳子名称:@item.l_corporatename</td>
+                                            <td>
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>商品名称:@item.o_goodsname</td>
+                                            <td>通知次数:@(item.o_noticestate == 0 ? "---" : item.o_times.ToString())</td>
+                                            <td>
+                                                通知状态:@{
+                                                    if (item.o_noticestate == 1)
+                                                    {
+                                                <span class='green'>通知成功 </span>
+                                                    }
+                                                    else if (item.o_noticestate == -1)
+                                                    {
+                                                <span class='red'>通知失败</span>
+                                                    }
+                                                    else if (item.o_noticestate == 0)
+                                                    {
+                                                        if (item.o_state == 1)
+                                                        {
+                                                <span class='green'>等待通知 </span>
+                                                        }
+                                                        else
+                                                        {
+                                                <span>---</span>
+                                                        }
+
+                                                    }
+                                                    else if (item.o_noticestate == 2)
+                                                    {
+                                                <span class='red'>正在通知 </span>
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>创建时间:@item.o_ctime</td>
+                                            <td>支付时间:@(item.o_state == 1 ? item.o_ptime.ToString() : "---")</td>
+                                            <td>通知时间:@(item.o_noticestate != 0 ? item.o_noticetimes.ToString() : "---")</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <tr>
+                                                            <td align="center" colspan="11" class="nodata">暂无记录</td>
+                                                        </tr>
+
+                                                    }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>

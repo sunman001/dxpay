@@ -1,0 +1,16 @@
+﻿1.请在Web.config文件的appSettings中添加节点:CHUANGLAN.SEND,如下:
+<add key="CHUANGLAN.SEND" value="http://sapi.253.com/msg/HttpBatchSendSM"/>
+2.使用代码示例:
+var chuangLanRequest = new ChuangLanRequest
+            {
+				//必填
+                Account = Txtaccount.Text,
+                //必填
+				Password = Txtpassword.Text,
+				//必填
+                Content = Txtcontent.Text,
+				//必填(多个手机号以英文逗号隔开)
+                Mobile = Txtmobile.Text
+            };
+            IMessageSender messageSender = new ChuangLanMessageSender(chuangLanRequest);
+            var success= messageSender.Send();

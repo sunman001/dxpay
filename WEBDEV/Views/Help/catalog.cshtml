@@ -1,0 +1,54 @@
+﻿@model List<WEBDEV.Models.Help.ArticleWithTotalCountViewModel>
+@using WEBDEV.Extensions
+@{
+    Layout = "~/views/shared/_layout_helper_center.cshtml";
+}
+<div class="container">
+    @Html.CreateBreadCrumb(ViewContext)
+    <div class="row">
+        <div class="col-lg-2 col-sm-2 col-md-2 hidden-xs sidebar">
+            @Html.CreateHelpMenu(ViewContext)
+        </div>
+        <div class="col-lg-10 col-sm-10 col-md-10">
+            <div class="row">
+                @if (Model.Count > 0)
+                {
+                    foreach (var g in Model.ToLookup(x => x.SubCatalogId))
+                    {
+                        var first = Model.FirstOrDefault(x => x.SubCatalogId == g.Key);
+                        if (first != null)
+                        {
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                <div class="article-items">
+                                    <h4>@first.SubCatalogName</h4>
+                                    <ul class="list-unstyled">
+                                        @foreach (var art in Model.Where(x => x.SubCatalogId == g.Key))
+                                        {
+                                            <li><a href="~/@art.Href"><h5>@art.Title</h5></a></li>
+                                        }
+                                        @if (first.SubCatalogArticleCount > 5)
+                                        {
+                                            <li class="view-all"><a href="~/help/list/@first.SubCatalogId">查看全部@(first.SubCatalogArticleCount)篇文档</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <p>还没有相关的帮助文档哦~~~</p>
+                        }
+                    }
+                }
+                else
+                {
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="article-items">
+                            <h4 class="gray">还没有相关的帮助文档哦~~~</h4>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

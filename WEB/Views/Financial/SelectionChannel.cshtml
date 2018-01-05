@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "代付接口信息";
+    Layout = "~/Views/UI/master.cshtml";
+
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+    var PayForAnotherInfoList = ViewBag.list as List<JMP.MDL.PayForAnotherInfo>;
+}
+
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix" style="font-size:12px;"></ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="PayType" id="PayType">
+                    <option value="1" @(Request["PayType"] == "1" ? "selected=selected" : "")>代付接口名称</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["searchKey"]" class="txtipt" />
+        </li>
+        <li>
+            <a id="btn_search" class="btn btn-primary" href="javascript:" onclick="PayForAnotherSelect()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>代付接口名称</th>
+                    <th>上游接口</th>
+                    <th>商户号</th>
+                    <th>是否启用</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (PayForAnotherInfoList.Count > 0)
+                    {
+                        foreach (var item in PayForAnotherInfoList)
+                        {
+                            <tr>
+                                <td>@item.p_InterfaceName</td>
+                                <td>@item.ChannelName</td>
+                                <td>@item.p_MerchantNumber</td>
+                                <td>@(item.IsEnabled == false ? Html.Raw("<span class='red'>未启用</span>") : Html.Raw("<span class='green'>已启用</span>"))</td>
+                                <td>
+                                    <a href="javascript:void(0)" class="blue" onclick="SelectionPayChannel(@item.p_Id,'@item.p_InterfaceName')">选择</a>
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td align="center" colspan="5" class="nodata">暂无记录</td>
+                        </tr>
+                    }
+
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+<script type="text/javascript">
+
+    //分页
+    function ArticleManage(pageIndex, pageSize) {
+
+        var PayType = $("#PayType").val();
+        var searchKey = $("#searchKey").val();
+
+        var url = "/Financial/SelectionChannel?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+
+        if (PayType) {
+            url += "&PayType=" + PayType;
+        }
+        if (searchKey) {
+            url += "&searchKey=" + searchKey;
+        }
+
+
+        location.href = encodeURI(url);
+    }
+
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //查询
+    function PayForAnotherSelect() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    function SelectionPayChannel(id, name, index) {
+
+        window.parent.layer.getChildFrame("#payId", index).val(id);
+        window.parent.layer.getChildFrame("#PayChannel", index).val(name);
+        window.parent.layer.getChildFrame("#yzPayChannel", index).attr("class", "Validform_checktip  Validform_right");
+        window.parent.layer.getChildFrame("#yzPayChannel", index).html("验证通过");
+        var indexs = parent.layer.getFrameIndex(window.name);
+        window.top.layer.close(indexs);
+    }
+
+</script>

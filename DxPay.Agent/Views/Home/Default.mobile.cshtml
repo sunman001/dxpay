@@ -1,0 +1,128 @@
+﻿@using JMP.TOOL;
+@{
+    ViewBag.Title = "首页";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var AppCount = ViewBag.AppCount as JMP.MDL.jmp_appcount;
+    var comodel_yesterday = ViewBag.comodel_yesterday as JMP.MDL.CoSettlementDeveloperAppDetails;
+    var comodel_month = ViewBag.comodel_month as JMP.MDL.CoSettlementDeveloperAppDetails;
+    var comodel_preceding_month = ViewBag.comodel_preceding_month as JMP.MDL.CoSettlementDeveloperAppDetails;
+}
+@JMP.TOOL.UserHelper.js("highcharts/highcharts.js")
+@JMP.TOOL.UserHelper.js("home/statistics.js")
+<header class="idx-logo">
+    <i class="logo" title="logo"></i>
+    <span class="icon-nav btn-nav" title="导航">
+        <i class="fa fa-bars"></i>
+    </span>
+    <ul class="idx-head-top clearfix">
+        <li>
+            <i class="icon icon2"></i>
+            <span class="name">@UserInfo.UserName</span>
+        </li>
+        <li>
+            <i class="icon icon3"></i>
+            <span class="name" onclick="eidt()">修改密码</span>
+        </li>
+    </ul>
+</header>
+<section class="idx-cnt">
+    <div class="idx-price">
+        <span class="tit">今日[营收]</span>
+        <span class="t">交易金额:</span>
+        <span class="num">@TOOL.DecimalDigit.DecimalPlacesToString(AppCount.a_curr)</span>
+        <span class="t">&nbsp;&nbsp;交易笔数:</span>
+        <span class="num">@AppCount.a_success</span>
+    </div>
+    <div class="flow-dvt">
+        <ul class="flow-con clearfix">
+            <li class="fl on">
+                <span class="txt">昨日收入</span>
+                <span class="bor"><i class="sbor"></i></span>
+                <p class="pb">
+                    <span class="rpri" onclick="zdList(1)">￥@TOOL.DecimalDigit.DecimalPlacesToString(comodel_yesterday.AgentPushMoney)</span>
+                    <span class="smd" onclick="ysList(1)">
+                        <i class="gr">流水金额:</i>
+                        <i class="red">@TOOL.DecimalDigit.DecimalPlacesToString(comodel_yesterday.TotalAmount)</i>
+                    </span>
+                    <span class="smd">
+                        <i class="gr">交易笔数:</i>
+                        <i class="red">@comodel_yesterday.OrderCount</i>
+                    </span>
+                </p>
+            </li>
+            <li class="md">
+                <span class="txt">本月收入</span>
+                <span class="bor"><i class="sbor"></i></span>
+                <p class="pb">
+                    <span class="rpri" onclick="zdList(2)">￥@TOOL.DecimalDigit.DecimalPlacesToString(comodel_month.AgentPushMoney)</span>
+                    <span class="smd" onclick="ysList(2)">
+                        <i class="gr">流水金额:</i>
+                        <i class="red">@TOOL.DecimalDigit.DecimalPlacesToString(comodel_month.TotalAmount)</i>
+                    </span>
+                    <span class="smd">
+                        <i class="gr">交易笔数:</i>
+                        <i class="red">@comodel_month.OrderCount</i>
+                    </span>
+                </p>
+            </li>
+            <li class="fr">
+                <span class="txt">上月收入</span>
+                <span class="bor"><i class="sbor"></i></span>
+                <p class="pb">
+                    <span class="rpri" onclick="zdList(3)">￥@TOOL.DecimalDigit.DecimalPlacesToString(comodel_preceding_month.AgentPushMoney)</span>
+                    <span class="smd" onclick="ysList(3)">
+                        <i class="gr">流水金额:</i>
+                        <i class="red">@TOOL.DecimalDigit.DecimalPlacesToString(comodel_preceding_month.TotalAmount)</i>
+                    </span>
+                    <span class="smd">
+                        <i class="gr">交易笔数:</i>
+                        <i class="red">@comodel_preceding_month.OrderCount</i>
+                    </span>
+                </p>
+            </li>
+        </ul>
+        <i class="bors"></i>
+    </div>
+
+    <div class="idx-pic">
+        <h2 class="tit">数据统计</h2>
+        <ul class="terminal-nav clearfix">
+            <li name="xzk" class="active" onclick="dialogTabJson(this,'0');">今天</li>
+            <li name="xzk" onclick="dialogTabJson(this,'1');">昨天</li>
+            <li name="xzk" onclick="dialogTabJson(this,'2');">前天</li>
+        </ul>
+
+        <div id="PriceChartAgent">
+        </div>
+
+    </div>
+
+    <script src="~/asste/jquery.countup/jquery.waypoints.min.js"></script>
+    <script src="~/asste/jquery.countup/jquery.countup.js"></script>
+
+    <script>
+        $(".terminal-nav li").click(function () {
+            $(".terminal-nav li").removeClass("active");
+            $(this).addClass("active");
+        });
+
+        function eidt()
+        {
+            window.location.href = "/user/ModifyInfo";
+        }
+
+        //统计跳转
+        function zdList(type) {
+            window.location.href = "/Financial/BillList?start=" + type;//链接
+
+        }
+
+        //统计跳转
+        function ysList(type) {
+            window.location.href = "/Report/AppReport?start=" + type;//链接
+
+        }
+    </script>
+
+</section>
+

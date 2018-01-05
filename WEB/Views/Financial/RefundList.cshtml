@@ -1,0 +1,177 @@
+﻿@{
+    ViewBag.Title = "退款申请";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_refund>;
+    int pageCount = ViewBag.pageCount;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("Financial/RefundList.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>申请退款人姓名</option>
+                    <option value="3" @(ViewBag.type == 3 ? "selected='selected'" : "")>所属商户</option>
+                    <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>所属应用</option>
+                    <option value="6" @(ViewBag.type == 6 ? "selected='selected'" : "")>渠道名称</option>
+                    <option value="4" @(ViewBag.type == 4 ? "selected='selected'" : "")>支付流水号</option>
+                    <option value="5" @(ViewBag.type == 5 ? "selected='selected'" : "")>订单编号</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </li>
+        <li>
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" value="@(string.IsNullOrEmpty(ViewBag.stime)? DateTime.Now.ToString("yyyy-MM-dd"):ViewBag.stime)" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}',minDate:'@DateTime.Now.ToString("yyyy-01-01")',dateFmt:'yyyy-MM-dd'})" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" style="width:80px;" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.ToString("yyyy-MM-dd")',dateFmt:'yyyy-MM-dd'})" value="@(string.IsNullOrEmpty(ViewBag.etime)? DateTime.Now.ToString("yyyy-MM-dd"):ViewBag.etime)" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                    <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="auditstate" id="auditstate">
+                    <option value="" @(ViewBag.auditstate == "" ? "selected='selected'" : "")>审核状态</option>
+                    <option value="0" @(ViewBag.auditstate == "0" ? "selected='selected'" : "")>等待审核</option>
+                    <option value="1" @(ViewBag.auditstate == "1" ? "selected='selected'" : "")>审核通过</option>
+                    <option value="-1" @(ViewBag.auditstate == "-1" ? "selected='selected'" : "")>审核未通过</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary btn-mgn" href="javascript:" onclick="serchlocuser()">查询</a>
+            <a id="btnSearchdc" class="btn btn-primary" href="javascript:" onclick="Searchdc()">导出</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th width="40">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th>展开</th>
+                    <th width="90">申请退款人姓名</th>
+                    <th>退款人联系电话</th>
+                    <th>所属应用</th>
+                    <th>所属商户</th>
+                    <th>渠道名称</th>
+                    <th>审核状态</th>
+                    <th>审核人</th>
+                    <th>备注</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+
+                        foreach (var item in list)
+                        {
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+
+                            <tr onclick="clickOpen(@id)">
+                                <td>
+                                    @if (item.r_static == 0 || item.r_static == -1)
+                                    {
+                                        <input type="checkbox" name="child" class="checkall" value="@item.r_id" />
+                                    }
+                                </td>
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp; </td>
+                                <td>@item.r_name</td>
+                                <td>@item.r_tel</td>
+                                <td>@item.a_name</td>
+                                <td>@item.u_realname</td>
+                                <td>@item.l_corporatename</td>
+                                <td>
+                                    @{
+                                        switch (item.r_static)
+                                        {
+                                            case 0:
+                                                <span class="red">等待审核</span>
+                                                break;
+                                            case 1:
+                                                <span class="green">审核通过</span>
+                                                break;
+                                            case -1:
+                                                <span class="red">审核通过</span>
+                                                break;
+                                        }
+                                    }
+                                </td>
+                                <td>@(!string.IsNullOrEmpty(item.r_auditor) ? item.r_auditor : "--")</td>
+                                <td>@(!string.IsNullOrEmpty(item.r_remark) ? item.r_remark : "--")</td>
+                                <td>
+                                    @{
+                                        bool getEdit = bll_limit.GetLocUserLimitVoids("/Financial/InsertUpdateRefund", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑按钮
+                                        if (getEdit)
+                                        {
+                                            <a href="javascript:" class='blue' onclick="UpdateRefund(@item.r_id)">编辑</a>
+                                            if (item.r_static == 0 || item.r_static == -1)
+                                            {
+                                                <a href="javascript:" class='blue' onclick="auditorRefund(@item.r_id)">审核</a>
+                                            }
+
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                            <!--展开部分-->
+                            <tr>
+                                <td colspan="11" style="display:none;" name="Open" id="@Open">
+                                    <div class="dcnt-tab">
+                                        <table class="table-lst">
+                                            <tr>
+                                                <td>支付流水号:@item.r_tradeno</td>
+                                                <td>订单编号:@item.r_code</td>
+                                                <td>退款金额:@item.r_price</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td>实际支付金额:@item.r_money</td>
+                                                <td>
+                                                    用户付费时间:@item.r_date.ToString("yyyy-MM-dd")
+                                                </td>
+                                                <td>
+                                                    提交时间:@item.r_time.ToString("yyyy-MM-dd")
+                                                </td>
+
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td align="center" colspan="11" class="nodata"> 暂无记录 </td>
+                                            </tr>
+                                        }
+
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, pageCount)
+</div>

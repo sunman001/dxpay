@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "添加通道池";
+    Layout = "~/Views/UI/dialog.cshtml";
+
+    var poolModel = ViewBag.poolModel as JMP.MDL.jmp_channel_pool;
+}
+@JMP.TOOL.UserHelper.js("Risk/pool.js")
+<div class="main">
+    <input type="hidden" id="poolid" value="@poolModel.Id" />
+    <div class="plate-form">
+        <dl>
+            <dt>通道池名称：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input type="text" id="PoolName" value="@(string.IsNullOrEmpty(poolModel.PoolName)?"":poolModel.PoolName)" onblur="PoolNameYz()" />
+                </div>
+                <div id="PoolNameYz" class="Validform_checktip">请输入通道池名称！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>描述信息：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <textarea id="Description">@(string.IsNullOrEmpty(poolModel.Description) ? "" : poolModel.Description)</textarea>
+                </div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+
+        <input type="button" name="btnSave" value="提交" id="AddChannelPool" onclick="onckPool()" class="btn btn-primary" />
+
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn" />
+    </div>
+    <div class="clear"></div>
+</div>

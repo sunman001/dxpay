@@ -1,0 +1,133 @@
+﻿@{
+    ViewBag.Title = "投诉统计";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.CsComplainArchive>;
+
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(Request["s_type"] == "1" ? "selected=selected" : "")>开发者名称</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["s_key"]" class="txtipt" />
+        </li>
+        <li>
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" value="@(string.IsNullOrEmpty(Request["s_begin"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : Request["s_begin"])" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}',minDate:'@DateTime.Now.ToString("yyyy-01-01")',dateFmt:'yyyy-MM-dd'})" />
+            <i class="fg">~</i>
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")',dateFmt:'yyyy-MM-dd'})" value="@(string.IsNullOrEmpty(Request["s_end"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : Request["s_end"])" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="searchDesc" id="searchDesc">
+                    <option value="1" @(Request["s_sort"] == "1" ? "selected=selected" : "")>降序</option>
+                    <option value="0" @(Request["s_sort"] == "0" ? "selected=selected" : "")>升序</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btn_search" class="btn btn-primary" href="javascript:" onclick="SerachUserReport()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table class="table-cnt">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th>日期</th>
+                    <th>开发者</th>
+                    <th>所属商务类型</th>
+                    <th>投诉总数</th>
+                    <th>投诉率</th>
+                    <th>平均响应时长（分钟）</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+
+                        foreach (var item in list)
+                        {
+                            decimal  Rate= item.sumcount>0?Convert.ToDecimal( item.Amount / item.sumcount) : 0;
+                            string   Ratecount = (Rate *100).ToString("f2") + "%";
+
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+
+                            <tr onclick="clickOpen(@id)">
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp; </td>
+                                <td>@item.ArchiveDay.ToString("yyyy-MM-dd")</td>
+                                <td>@item.u_realname</td>
+                                <td>@(item.relation_type == 1 ? "商务" : "代理商")</td>
+                                <td>@item.Amount</td>
+                                <td>@Ratecount</td>
+                                <td>@item.AvgHandleTime</td>
+                            </tr>
+                               <!--展开-->
+
+                            <tr>
+                                <td colspan="7" style="display:none;" name="Open" id="@Open">
+
+                                    <div class="dcnt-tab">
+                                        <table class="table-lst">
+                                            <tr>
+                                                <td>
+                                                    @{Html.RenderAction("ComplainArchiveList_details", "CustomService", new { userid = item.UserId, ArchiveDay = item.ArchiveDay.ToString("yyyy-MM-dd") });}
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                    </div>
+                                </td>
+
+                            </tr>
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr>
+                                                                <td align="center" colspan="7" class="nodata">暂无记录</td>
+                                                            </tr>
+                                                        }
+                }
+            </tbody>
+        </table>
+        @JMP.TOOL.HtmlPage.UserPagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+    </div>
+</div>
+<script type="text/javascript">
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/CustomService/ComplainArchiveList?curr=" + pageIndex + "&psize=" + pageSize;
+        var types = $("#searchType option:selected").val();
+        var searchKey = $("#searchKey").val();
+        var stime = $("#stime").val();
+        var etime = $("#etime").val();
+        var sort = $("#searchDesc option:selected").val();
+        var searchTotal = $("#searchTotal option:selected").val();
+        url += "&s_type=" + types + "&s_key=" + searchKey + "&s_sort=" + sort + "&s_begin=" + stime + "&s_end=" + etime;
+        location.href = encodeURI(url);
+    }
+
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //查询
+    function SerachUserReport() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+</script>

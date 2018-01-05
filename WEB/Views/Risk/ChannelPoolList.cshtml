@@ -1,0 +1,178 @@
+﻿@{
+    ViewBag.Title = "通道池管理";
+    Layout = "~/Views/UI/master.cshtml";
+
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+    var list = ViewBag.list as List<JMP.MDL.jmp_channel_pool>;
+    var appmapping = ViewBag.appmapinglist as List<JMP.MDL.jmp_channel_app_mapping>;
+    var PoolInterfacelist = ViewBag.PoolInterface as List<JMP.MDL.jmp_channel_pool>;
+}
+@JMP.TOOL.UserHelper.js("Risk/pool.js")
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="PoolName" id="PoolName">
+                    <option value="1" @(Request["PoolName"] == "1" ? "selected=selected" : "")>通道池名称</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["searchKey"]" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="IsEnabled" id="IsEnabled">
+                    <option value="-1">-启用状态-</option>
+                    <option value="1" @(ViewBag.IsEnabled == 1 ? "selected=selected" : "")>启用</option>
+                    <option value="0" @(ViewBag.IsEnabled == 0 ? "selected=selected" : "")>禁用</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btn_search" class="btn btn-primary" href="javascript:" onclick="poolCx()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th>通道名称</th>
+                    <th>是否启用</th>
+                    <th>创建时间</th>
+                    <th>创建者ID</th>
+                    <th>描述信息</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+
+                        foreach (var item in list)
+                        {
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+
+                            <tr onclick="clickOpen(@id)">
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp; </td>
+                                <td>@item.PoolName</td>
+                                <td>@(item.IsEnabled == false ? Html.Raw("<span class='red'>未启用</span>") : Html.Raw("<span class='green'>已启用</span>")) </td>
+                                <td>@item.CreatedOn</td>
+                                <td>@item.u_realname</td>
+                                <td>@item.Description</td>
+                                <td>
+                                    @{
+                                        //编辑
+                                        bool getPool = bll_limit.GetLocUserLimitVoids("/Risk/CPoolUpdate", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        //配置应用
+                                        bool getAppMapping = bll_limit.GetLocUserLimitVoids("/Risk/CPoolUpdate", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        //配置通道数量
+                                        bool getAmount = bll_limit.GetLocUserLimitVoids("/Risk/ChannelAmountAdd", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+
+                                        bool getpoolYes = bll_limit.GetLocUserLimitVoids("/Risk/ChannelPoolListYes", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//启用
+
+                                        bool getpoolNo = bll_limit.GetLocUserLimitVoids("/Risk/ChannelPoolListNo", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//禁用
+
+                                        if (getPool)
+                                        {
+                                            <a href="javascript:" class="blue" onclick="handleEdit(@item.Id)">编辑</a>
+                                        }
+                                        if (getAppMapping)
+                                        {
+                                            <a href="javascript:" class="green" onclick="handleAppMapping(@item.Id)">配置应用</a>
+                                        }
+                                        if (getAmount)
+                                        {
+                                            <a href="javascript:" class="green" onclick="handleAmount(@item.Id)">配置通道数</a>
+                                        }
+                                        if (item.IsEnabled == false)
+                                        {
+                                            if (getpoolYes)
+                                            {
+
+                                                <a href="javascript:" class="green" onclick="UpdatePoolState(1,@item.Id)">启用</a>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (getpoolNo)
+                                            {
+                                                <a href="javascript:" class="blue" onclick="UpdatePoolState(0,@item.Id)">禁用</a>
+                                            }
+                                        }
+
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="7" style="display: none;" name="Open" id="@Open">
+                                    <div class="dcnt-tab">
+                                        <table class="table-lst">
+                                            <tr>
+                                                <td>
+                                                    @{
+
+                                                        var appname = "";
+                                                        foreach (var items in appmapping.Where(x => x.ChannelId == item.Id))
+                                                        {
+                                                            if (!string.IsNullOrEmpty(items.a_name))
+                                                            {
+                                                                appname += items.a_name + ",";
+                                                            }
+                                                        }
+
+                                                    }
+                                                    应用名称：@appname
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @{
+
+                                                        var corporatename = "";
+                                                        foreach (var items in PoolInterfacelist.Where(x => x.Id == item.Id))
+                                                        {
+                                                            if (!string.IsNullOrEmpty(items.l_corporatename))
+                                                            {
+                                                                corporatename += items.l_corporatename + ",";
+                                                            }
+                                                        }
+
+                                                    }
+                                                    正常通道：@corporatename
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                </td>
+                            </tr>
+
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr>
+                                                                <td align="center" colspan="7" class="nodata">暂无记录</td>
+                                                            </tr>
+                                                        }
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>

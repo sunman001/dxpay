@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--[if lt IE 7 ]><html class="ie6 lti8"><![endif]-->
+<!--[if IE 7 ]><html class="ie7 lti8"><![endif]-->
+<!--[if IE 8 ]><html class="ie8 lti8"><![endif]-->
+<!--[if (gt IE 8)|!(IE)]><!-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!--<![endif]-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>登陆</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    @JMP.TOOL.UserHelper.css("base.css")
+    @JMP.TOOL.UserHelper.js("jquery.js")
+    @JMP.TOOL.UserHelper.js("plugin/layer/layer.js")
+    @JMP.TOOL.UserHelper.js("base.js")
+</head>
+<body>
+    <header>
+	<div class="header">
+    	<div class="top">
+        	<div class="w_1000">
+            <div class="userinfo">
+            	<a class="msg" href="../msg/index.htm">12</a><span class="user">xxxx@163.com</span> <a class="quit" href="javascript:void">退出</a>
+            </div>
+        	<div class="contactus">
+            	<div class="text">联系我们</div>
+                <div class="dropdown">
+                	<span class="arrow-up"></span>
+                    <div class="contactus_info">
+                    	<div>
+                        	联系QQ：<span>2546885543</span>
+                        </div>
+                        <div style="border:none">联系电话：<span>13454845487</span></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    	<div class="w_1000">
+        	<div class="logo"><a href="#" title="logo"></a></div>
+            <nav>
+                <div class="nav">
+                    <ul>                         
+                        @{Html.RenderAction("topmenu", "Home");}        
+                    </ul>
+                </div>
+            </nav>            
+        </div>
+    </div>
+</header>
+    <section>
+	<div class="body">
+    	<div class="w_1000">        	
+            <div class="box">
+            	<div id="menu_left" class="box_left"></div>
+                <div class="box_center">
+                     @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    <address>
+        <div class="address">  All rights reserved.</div>
+    </address>
+</body>
+</html>

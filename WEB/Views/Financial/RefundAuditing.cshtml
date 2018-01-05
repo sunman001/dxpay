@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "退款处理";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+<div class="main">
+    <input type="hidden" id="id" value="@ViewBag.batchnumber" />
+    <div class="plate-form">
+        <dl>
+            <dt>备注：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <textarea style="width: 200px; height:50px;" id="b_remark"></textarea>
+                </div>
+                <div class="Validform_checktip" id="yzRemark"></div>
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" onclick="RFAuditstate()" class="btn btn-primary" id="btn-save-add" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    function RFAuditstate() {
+        var id = $("#id").val();
+        var b_remark = $("#b_remark").val();
+        if (b_remark == "") {
+            $("#yzRemark").attr("class", "Validform_checktip Validform_wrong");
+            $("#yzRemark").html("请填写备注！")
+            return false;
+        }
+
+        var url = "/Financial/CheckRefundAuditing";
+        var data = { ids: id, b_remark: $.trim(b_remark) };
+
+        $("#btn-save-add").attr("disabled", "disabled");
+
+        $.post(url, data, function (result) {
+            $("#btn-save-add").attr("disabled", false);
+            if (result.success == 1) {
+                window.parent.ShowMsg(result.msg, "ok", function () {
+                    window.parent.global.reload();
+                    window.parent.layer.closeAll();
+                });
+            }
+            else {
+                window.parent.ShowMsg(result.msg, "error", "");
+                window.parent.layer.closeAll();
+            }
+
+
+        })
+
+    }
+
+</script>

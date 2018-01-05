@@ -1,0 +1,185 @@
+﻿@{
+    ViewBag.Title = "应用列表";
+    Layout = "~/Views/UI/master.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_app>;
+    var glptdt = ViewBag.glptdt as List<JMP.MDL.jmp_platform>;
+}
+<div class="box_container">
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option>应用名称</option>
+                </select>
+            </div>
+        </li>
+        <li>
+
+            <input name="searchname" type="text" id="searchname" class="txtipt" placeholder="请输入关键字" value="@ViewBag.searchname" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select id="terrace">
+                    <option value="0">--请选择--</option>
+                    @{
+                        foreach (var pt in glptdt)
+                        {
+                            <option value="@pt.p_id" @(ViewBag.terrace == pt.p_id ? "selected=selected" : "")>@pt.p_name</option>
+                        }
+                    }
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btn_search" class="btn btn-primary" onclick="selectApplist()">查询</a>
+        </li>
+    </ul>
+
+    <div class="tab-dcnt">
+        <table class="table-cnt">
+            <thead>
+                <tr>
+                    <th>应用编号</th>
+                    <th>应用名称</th>
+                    <th>运行平台</th>
+                    <th>所属商户</th>
+                    <th>应用类型</th>
+                    <th>创建时间</th>
+                    <th>审核状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <td>@item.a_id</td>
+                                <td>@item.a_name </td>
+                                <td>@item.p_name</td>
+                                <td>@item.u_realname</td>
+                                <td>@item.t_name</td>
+                                <td>@item.a_time.ToString("yyyy-MM-dd")</td>
+                                <td>
+                                    <div class="green">
+                                        @*    @(item.a_state == 1 ? "开启" : "关闭")*@
+                                        @{
+                                            switch (item.a_auditstate)
+                                            {
+                                                case 0:
+                                                    <span class="blue">等待审核</span>
+                                                    break;
+                                                case 1:
+                                                    <span class="green">审核通过</span>
+                                                    break;
+                                                case 2:
+                                                    <span class="red">审核未通过</span>
+                                                    break;
+                                            }
+                                        }
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="javascript:void(0)" data-id="@item.a_id" class='blue selc'>查看</a>
+                                    <a href="javascript:void(0)" data-id="@item.a_id" class='blue edit'>编辑</a>
+                                    @if (item.a_auditstate != 1)
+                                    {
+                                        <a href="javascript:void(0)" onclick="DeleteApp(@item.a_id)" class="red">删除</a>
+                                    }
+                                </td>
+                            </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="9" class="nodata">暂无应用</td>
+                                                </tr>
+                                            }
+                }
+            </tbody>
+        </table>
+        @JMP.TOOL.HtmlPage.UserPagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+
+    </div>
+</div>
+<script type="text/javascript">
+
+    //分页
+    function ArticleManage(pageIndex, pageSize) {
+
+        var searchname = $("#searchname").val();
+        var terrace = $("#terrace").val();
+
+        var url = "/App/AppList?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+
+        if (searchname) {
+            url += "&searchname=" + $.trim(searchname);
+        }
+        if (terrace > 0) {
+            url += "&terrace=" + $.trim(terrace);
+        }
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    function selectApplist() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //删除
+    function DeleteApp(typeappid) {
+        var data = { a_id: $.trim(typeappid) };
+        var url = "/App/DeleteApp";
+        $.post(url, data, function (retJson) {
+            //判断是否登录、报错、有权限
+            //CheckJsonData(retJson);
+            if (retJson.success == 1) {
+
+                window.parent.ShowMsg(retJson.msg, "ok", function () {window.parent.frames["id_1148"].location.reload();});
+                return false;
+            }
+            else if (retJson.success == 9998) {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            } else if (retJson.success == 9999) {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                window.top.location.href = retJson.Redirect;
+                return false;
+            } else if (retJson.success == 9997) {
+                window.top.location.href = retJson.Redirect;
+                return false;
+            }
+            else {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                //location.href = encodeURI("/App/GoodsList?appid=" + retJson.success + "&appname=" + $.trim(appname));
+            }
+        })
+    }
+
+    //tab套用-查看
+    $('.table-cnt .selc').click(function () {
+        var name = "应用详情";
+        var isLeaf = true;//是否套用
+        var id = $(this).attr("data-id");//id
+        var href = "/App/down?appid=" + id;//链接
+        AddTab(name, isLeaf, href, 'appdown' + id, 'child');
+    })
+
+    //tab套用-编辑
+    $('.table-cnt .edit').click(function () {
+        var name = "应用编辑";
+        var isLeaf = true;//是否套用
+        var id = $(this).attr("data-id");//id
+        var href = "/App/UpdateApp?appid=" + id;//链接
+        AddTab(name, isLeaf, href, 'appupdate' + id, 'child');
+    })
+
+</script>

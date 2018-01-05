@@ -1,0 +1,96 @@
+﻿@{
+    ViewBag.Title = "AgentAddBpTc.mobile";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+
+    var bll_list = ViewBag.list as List<JMP.MDL.CoBusinessPersonnel>;
+}
+@JMP.TOOL.UserHelper.js("mobile/Agent/AgentList.mobile.js")
+
+<div class="mobile-popup mobile-container">
+    <div class="">
+        <div class="ui input fluid fluid-block">
+            <select name="s_type" id="s_type" class="ui dropdown fluid fluid-block">
+                <option value="1" @(ViewBag.stype == "1" ? "selected='selected'" : "")>真实姓名</option>
+            </select>
+        </div>
+        <div class="ui input fluid fluid-block">
+            <input name="s_keys" id="s_keys" type="text" placeholder="请输入关键字" value="@(!string.IsNullOrEmpty(ViewBag.skeys) ? ViewBag.skeys : "")" class="txtipt" />
+        </div>
+        <div class="ui input fluid fluid-block">
+            <select name="status" id="status" class="ui dropdown fluid fluid-block">
+                <option value="" @(ViewBag.state == "" ? "selected='selected'" : "")>账户状态</option>
+                <option value="0" @(ViewBag.state == "0" ? "selected='selected'" : "")>正常</option>
+                <option value="1" @(ViewBag.state == "1" ? "selected='selected'" : "")>冻结</option>
+            </select>
+        </div>
+        <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="selectAppUserBpTc()">查询</a>
+    </div>
+    <div class="table-container table-responsive">
+        <table class="ui celled striped table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th>选择</th>
+                    <th>信息</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (bll_list.Count > 0)
+                    {
+                        foreach (var item in bll_list)
+                        {
+                            <tr>
+
+                                <td>
+                                    <a href="javascript:" class="blue" onclick="selectxzBpAgent(@item.Id,'@item.DisplayName')">选择</a>
+                                </td>
+                                <td>
+                                    <b>商务姓名:</b>@item.DisplayName<br />
+                                    <b>联系电话:</b>@item.MobilePhone<br />
+                                    <b>账户状态:</b>@(item.State == 1 ? Html.Raw("<span class='red'>冻结</span>") : Html.Raw("<span class='green'>正常</span>"))<br />
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td align="center" colspan="2" class="nodata">暂无记录</td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+
+<script type="text/javascript">
+    //分页
+    function ArticleManage(pageIndex, pageSize) {
+
+        var url = "/Agent/AgentAddBpTc?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+
+        var s_type = $("#s_type").val();
+        var status = $("#status").val();
+        var s_keys = $("#s_keys").val();
+
+        url += "&s_type=" + s_type + "&s_keys=" + s_keys + "&s_state=" + status + "";
+
+        location.href = encodeURI(url);
+    }
+
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //查询
+    function selectAppUserBpTc() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+</script>

@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "UpdateRoleLimit";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+@JMP.TOOL.UserHelper.js("local/locals.js")
+<div class="main">
+    @Html.Raw(ViewBag.htmls)
+    <input type="hidden" id="rid" value="@ViewBag.rid" />
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnSave" class="btn btn-primary" onclick="updaterolevalue()" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+</div>
+<script type="text/javascript">
+    function childChecked(obj) {
+        var childs = $(obj).parent().parent().parent().find("input[type='checkbox']");
+        //alert(obj.name);
+        if (obj.checked == false) {
+            for (var i = 0; i < childs.length; i++) {
+
+                if (childs[0].checked == false) {
+                    childs[i].checked = false;
+                }
+                if (childs[i].name == "checkAll") {
+                    childs[i].checked = false;
+                }
+            }
+        } else {
+            var chindcheckedlength = $(obj).parent().parent().parent().find("input:checked").length;
+            childs[0].checked = true;
+            if (childs.length - 1 == chindcheckedlength) {
+                for (var i = 0; i < childs.length; i++) {
+                    childs[i].checked = true;
+                }
+            }
+        }
+    }
+    $(function () {
+        $(".data-table-3").find("tr").each(function () {
+            var childs = $(this).find("input[type='checkbox']");
+            var chindcheckedlength = $(this).find("input:checked").length;
+            if (childs.length - 1 == chindcheckedlength) {
+                for (var i = 0; i < childs.length; i++) {
+                    if (i < childs.length - 1) {
+                        childs[i].checked = true;
+                    }
+                }
+            }
+        });
+
+        $(".data-table-3").find("input[name='checkAll']").each(function () {
+            $(this).bind("click", function () {
+                _this = this;
+                var childs = $(_this).parent().parent().find("input[type='checkbox']");
+                if (_this.checked) {
+                    for (var i = 0; i < childs.length; i++) {
+                        childs[i].checked = true;
+                    }
+                } else {
+                    for (var i = 0; i < childs.length; i++) {
+                        childs[i].checked = false;
+                    }
+                }
+            });
+
+        });
+    });
+</script>

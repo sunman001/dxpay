@@ -1,0 +1,123 @@
+﻿@*@model DxPay.Bp.Models.DataSource<JMP.MDL.CoCooperationApplication>*@
+@{
+    Layout = "~/Views/UI/master.cshtml";
+    var AppCount = ViewBag.AppCount as JMP.MDL.jmp_appcount;
+    var comodel_yesterday = ViewBag.comodel_yesterday as JMP.MDL.CoSettlementDeveloperAppDetails;
+    var comodel_month = ViewBag.comodel_month as JMP.MDL.CoSettlementDeveloperAppDetails;
+    var comodel_preceding_month = ViewBag.comodel_preceding_month as JMP.MDL.CoSettlementDeveloperAppDetails;
+}
+<!--曲线图js-->
+@JMP.TOOL.UserHelper.js("highcharts/highcharts.js")
+@JMP.TOOL.UserHelper.js("home/statistics.js")
+<section class="content">
+    <div class="idx-tit">
+        <span class="lnk" onclick="ysList(0)">今日[营收]</span>
+        <span class="txt">交易金额：@TOOL.DecimalDigit.DecimalPlacesToString(AppCount.a_curr)</span>
+        <span class="txt">交易笔数：@AppCount.a_success</span>
+    </div>
+    <div class="idx-nav">
+        <ul class="idx-nav-num clearfix">
+            <li class="red">
+                <div class="price clearfix">
+                    <i class="icon icon1 fl" onclick="zdList(1)"></i>
+                    <span class="num fl">￥<i class="idx-num">@TOOL.DecimalDigit.DecimalPlacesToString(comodel_yesterday.AgentPushMoney)</i></span>
+                    <span class="tpc fr">收入金额</span>
+                </div>
+                <div class="bar">
+                    <span class="bar-bg" title="进度条背景">
+                        <span class="bar-lk" title="进度条显示" style="width: 20%;"></span>
+                    </span>
+                </div>
+                <div class="bot">
+                    <span class="botf">流水金额</span>
+                    <span class="botr">交易笔数</span>
+                </div>
+                <div class="bot-num">
+                    <span class="botf"><a href="#" onclick="ysList(1)">@TOOL.DecimalDigit.DecimalPlacesToString(comodel_yesterday.TotalAmount)</a></span>
+                    <span class="botr">@comodel_yesterday.OrderCount</span>
+                </div>
+            </li>
+            <li class="green">
+                <div class="price clearfix">
+                    <i class="icon icon1 fl" onclick="zdList(2)"></i>
+                    <span class="num fl">￥<i class="idx-num">@TOOL.DecimalDigit.DecimalPlacesToString(comodel_month.AgentPushMoney)</i></span>
+                    <span class="tpc fr">收入金额</span>
+                </div>
+                <div class="bar">
+                    <span class="bar-bg" title="进度条背景">
+                        <span class="bar-lk" title="进度条显示" style="width: 20%;"></span>
+                    </span>
+                </div>
+                <div class="bot">
+                    <span class="botf">流水金额</span>
+                    <span class="botr">交易笔数</span>
+                </div>
+                <div class="bot-num">
+                    <span class="botf"><a href="#" onclick="ysList(2)">@TOOL.DecimalDigit.DecimalPlacesToString(comodel_month.TotalAmount)</a></span>
+                    <span class="botr">@comodel_month.OrderCount</span>
+                </div>
+            </li>
+            <li class="org">
+                <div class="price clearfix">
+                    <i class="icon icon1 fl" onclick="zdList(3)"></i>
+                    <span class="num fl">￥<i class="idx-num">@TOOL.DecimalDigit.DecimalPlacesToString(comodel_preceding_month.AgentPushMoney)</i></span>
+                    <span class="tpc fr">收入金额</span>
+                </div>
+                <div class="bar">
+                    <span class="bar-bg" title="进度条背景">
+                        <span class="bar-lk" title="进度条显示" style="width: 20%;"></span>
+                    </span>
+                </div>
+                <div class="bot">
+                    <span class="botf">流水金额</span>
+                    <span class="botr">交易笔数</span>
+                </div>
+                <div class="bot-num">
+                    <span class="botf"><a href="#" onclick="ysList(3)">@TOOL.DecimalDigit.DecimalPlacesToString(comodel_preceding_month.TotalAmount)</a></span>
+                    <span class="botr">@comodel_preceding_month.OrderCount</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="idx-pic">
+        <h2 class="tit">
+            <i class="calr"></i>
+            <span class="t">数据统计</span>
+        </h2>
+        <div class="terminal clearfix">
+            <ul class="terminal-nav terminal-nav-idx clearfix">
+                <li name="xzk" class="active" onclick="dialogTabJson(this,'0');">今天</li>
+                <li name="xzk" onclick="dialogTabJson(this,'1');">昨天</li>
+                <li name="xzk" onclick="dialogTabJson(this,'2');">前天</li>
+            </ul>
+        </div>
+        <div id="PriceChartAgent">
+        </div>
+    </div>
+</section>
+<script src="~/asste/jquery.countup/jquery.waypoints.min.js"></script>
+<script src="~/asste/jquery.countup/jquery.countup.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.idx-num').countUp();
+    })
+
+    //统计跳转
+    function ysList(type) {
+        var name = "营收列表";
+        var isLeaf = true;//是否套用
+        var id = $(this).attr("data-id");//id
+        var href = "/Report/AppReport?start=" + type;//链接
+        AddTab(name, isLeaf, href, 'AppReport' + id, 'child');
+    }
+
+    //统计跳转
+    function zdList(type) {
+        var name = "账单管理";
+        var isLeaf = true;//是否套用
+        var id = $(this).attr("data-id");//id
+        var href = "/Financial/BillList?start=" + type;//链接
+        AddTab(name, isLeaf, href, 'AppReport' + id, 'child');
+    }
+
+</script>

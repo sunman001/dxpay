@@ -1,0 +1,57 @@
+﻿@model IEnumerable<DxPay.Agent.Models.Login.MenuViewModel>
+<ul class="nav" id="jm_menu_items">
+    @foreach (var menu in Model)
+    {
+        if (menu.Children.Count > 0)
+        {
+            <li>
+                <a href="javascript:;">
+                    <i class="fa @(menu.Icon)"></i>
+                    <span class="name">@menu.Title</span>
+                    <i class="fa-add"></i>
+                </a>
+               
+                <ul class="submenu">
+                    @foreach (var children in menu.Children)
+                    {
+                        <li>
+                            <a href="javascript:;"data-href="@children.Href" data-is-leaf="true" data-id="@children.Id">
+                                <span id="@children.Id" class="ne">@children.Title</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+        else
+        {
+            <li onclick="homerefresh()">
+
+                <a href="javascript:;" data-href="@menu.Href" data-is-leaf="true" data-id="@menu.Id">
+                    <i class="fa fa-home  @menu.Icon"></i>
+                    <span class="name">@menu.Title</span>
+                </a>
+            </li>
+        }
+    }
+</ul>
+<script type="text/javascript">
+   
+    $(function () {
+        height();
+        $("#jm_menu_items a").click(function () {//左侧菜单点击事件
+            var name = $(this).text();
+            var isLeaf = $(this).attr("data-is-leaf");
+            var href = $(this).attr("data-href");
+            var id = $(this).attr("data-id");
+            AddTab(name, isLeaf, href, id, 'parent');
+        });
+        $(window).resize(function () {//窗口变化
+            height();
+        });
+    });
+   
+   
+   
+
+</script>

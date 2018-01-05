@@ -1,0 +1,180 @@
+﻿@{
+    ViewBag.Title = "应用列表";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_app>;
+    var glptdt = ViewBag.glptdt as List<JMP.MDL.jmp_platform>;
+}
+<script src="~/mobile/js/App/APP.js"></script>
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">应用管理</span>
+</header>
+<!--头部 end-->
+<section>
+    <ul class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+        <li>
+            <a id="btn-show-search" onclick="pop.showSearch('search-container')" class="sle-btn">查询</a>
+        </li>
+    </ul>
+    <div class="search-container" style="display:none">
+        <div class="rule-single-select">
+            <select name="searchType" id="searchType">
+                <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>应用编号</option>
+                <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>应用名称</option>
+                <option value="3" @(ViewBag.type == 3 ? "selected='selected'" : "")>所属商户</option>
+                <option value="4" @(ViewBag.type == 4 ? "selected='selected'" : "")>应用KEY</option>
+            </select>
+        </div>
+        <div class="srch-dipt">
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" onblur="yznumber()" />
+        </div>
+        <div class="rule-single-select">
+            <select name="SelectState" id="SelectState">
+                <option value="-1" @(ViewBag.SelectState == -1 ? "selected='selected'" : "")>状态</option>
+                <option value="1" @(ViewBag.SelectState == 1 ? "selected='selected'" : "")>正常</option>
+                <option value="0" @(ViewBag.SelectState == 0 ? "selected='selected'" : "")>冻结</option>
+            </select>
+        </div>
+        <div class="rule-single-select">
+            <select name="searchDesc" id="searchDesc">
+                <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+            </select>
+        </div>
+        <div class="rule-single-select">
+            <select name="auditstate" id="auditstate">
+                <option value="-1" @(ViewBag.auditstate == -1 ? "selected='selected'" : "")>审核状态</option>
+                <option value="0" @(ViewBag.auditstate == 0 ? "selected='selected'" : "")>等待审核</option>
+                <option value="1" @(ViewBag.auditstate == 1 ? "selected='selected'" : "")>审核通过</option>
+                <option value="2" @(ViewBag.auditstate == 2 ? "selected='selected'" : "")>审核未通过</option>
+            </select>
+        </div>
+        <div class="rule-single-select">
+            <select name="auditstate" id="platformid">
+                <option value="0" @(ViewBag.platformid == 0 ? "selected='selected'" : "")>关联平台</option>
+                <option value="1" @(ViewBag.platformid == 1 ? "selected='selected'" : "")>安卓</option>
+                <option value="2" @(ViewBag.platformid == 2 ? "selected='selected'" : "")>苹果</option>
+                <option value="3" @(ViewBag.platformid == 3 ? "selected='selected'" : "")>H5</option>
+            </select>
+        </div>
+
+        <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="serchlocuser()">查询</a>
+    </div>
+    <div class="table-dcnt">
+        <div class="table-container">
+            <table class="table-cnt">
+                <thead>
+                    <tr>
+                        <th>应用编号</th>
+                        <th>应用名称</th>
+                        <th>运行平台</th>
+                        <th>所属商户</th>
+                        <th>应用类型</th>
+                        <th>创建时间</th>
+                        <th>审核状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (list.Count > 0)
+                        {
+                            foreach (var item in list)
+                            {
+                                <tr>
+                                    <td>@item.a_id</td>
+                                    <td>@item.a_name </td>
+                                    <td>@item.p_name</td>
+                                    <td>@item.u_realname</td>
+                                    <td>@item.t_name</td>
+                                    <td>@item.a_time.ToString("yyyy-MM-dd")</td>
+                                    <td>
+                                        <div class="green">
+                                            @*    @(item.a_state == 1 ? "开启" : "关闭")*@
+                                            @{
+                                                switch (item.a_auditstate)
+                                                {
+                                                    case 0:
+                                                        <span class="blue">等待审核</span>
+                                                        break;
+                                                    case 1:
+                                                        <span class="green">审核通过</span>
+                                                        break;
+                                                    case 2:
+                                                        <span class="red">审核未通过</span>
+                                                        break;
+                                                }
+                                            }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a onclick="info(@item.a_id)" class='blue selc'>查看</a>
+                                        <a onclick="UpdateApp(@item.a_id)" class='blue edit'>编辑</a>
+                                        @if (item.a_auditstate != 1)
+                                        {
+                                            <a href="javascript:void(0)" onclick="DeleteApp(@item.a_id)" class="red">删除</a>
+                                        }
+                                    </td>
+                                </tr>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <tr>
+                                                        <td colspan="9" class="nodata">暂无应用</td>
+                                                    </tr>
+                                                }
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+        @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+
+    </div>
+</section>
+<!--内容 end-->
+<script>
+   
+    //修改应用弹窗
+    function UpdateApp(a_id) {
+        window.location.href = "/APP/UpdateAPP?appid=" + a_id;
+
+    }
+
+    function info(a_id)
+    {
+        window.location.href = "/App/Appinfo?appid=" + a_id;
+    }
+    function DeleteApp(typeappid) {
+        var data = { a_id: $.trim(typeappid) };
+        var url = "/App/DeleteApp";
+        $.post(url, data, function (retJson) {
+            //判断是否登录、报错、有权限
+            //CheckJsonData(retJson);
+            if (retJson.success == 1) {
+                window.parent.location.reload();
+                window.parent.ShowMsg(retJson.msg, "ok", function () {
+                });
+                return false;
+            }
+            else if (retJson.success == 9998) {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                return false;
+            } else if (retJson.success == 9999) {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                window.top.location.href = retJson.Redirect;
+                return false;
+            } else if (retJson.success == 9997) {
+                window.top.location.href = retJson.Redirect;
+                return false;
+            }
+            else {
+                window.parent.ShowMsg(retJson.msg, "error", "");
+                //location.href = encodeURI("/App/GoodsList?appid=" + retJson.success + "&appname=" + $.trim(appname));
+            }
+        })
+    }
+</script>

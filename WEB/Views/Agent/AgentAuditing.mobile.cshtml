@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "审核代理商";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+
+    var model = ViewBag.model as JMP.MDL.jmp_app;
+}
+@JMP.TOOL.UserHelper.js("mobile/Agent/AgentList.mobile.js")
+<div class="mobile-popup mobile-container">
+
+    <input type="hidden" id="userid" value="@ViewBag.userid" />
+    <dl>
+        <dt>审核状态：</dt>
+        <dd>
+            <input value="-1" name="u_auditstate" type="radio" id="u_stat1" @(ViewBag.start == -1 ? "checked='checked'" : "") /><label for="u_stat1">未通过</label>
+            <input value="0" name="u_auditstate" type="radio" id="u_stat2" @(ViewBag.start == 0 ? "checked='checked'" : "") /><label for="u_stat2">等待审核</label>
+            <input value="1" name="u_auditstate" type="radio" id="u_stat3" @(ViewBag.start == 1 ? "checked='checked'" : "") /><label for="u_stat3">通过</label>
+        </dd>
+    </dl>
+
+    <div class="page-footer">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" onclick="AgentAuditState()" class="btn btn-primary" id="btn-save-add" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+.header{background:url(../img/reg/head.png) center center repeat-x;height:64px;min-width:1000px;border:none; position:relative;}
+.body{font-family:'microsoft yahei','Arial',"simsun";color:#666666;background:url(../img/reg/bg.jpg) center center no-repeat;min-width:1000px;padding:0;top:0;}
+.address{background:#1b6db8; font:14px/90px 'microsoft yahei','Arial','simsun';color:#ffffff;min-width:1000px;height:90px;margin-top:0;top:0}
+
+.logo{position:relative;left:0;top:4px;display:inline-block;width:267px;height:55px;background:url(../img/reg/logo.png) center center no-repeat;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/reg/logo.png');float:left}
+.loginAndreg{display:inline-block;position:relative;right:0;float:right;color:#ffffff;font:16px/32px 'microsoft yahei','Arial';padding-top:30px;}
+.loginAndreg a{color:#ffffff;display:inline-block;margin:0 2px;}
+
+/*******登录*********/
+.login{width:480px;height:368px;padding:0 12px;overflow:hidden; background:#e9f7fd;position:absolute;left:50%;top:50%;margin:-184px -252px;border-radius:3px;}
+.login h1{ border-bottom:1px solid #e0e7ec;color:#575d61; font:24px/73px 'simsun','Arial'; text-indent:0.6em; margin:0}
+.submit{display:inline-block;background:url(../img/reg/btn.png) 0 0 no-repeat;width:273px;height:52px; text-align:center;font:18px/50px 'simsun','Arial';color:#ffffff;border-radius:3px;}
+
+.form{width:420px; margin:30px auto;}
+.control-group .control-label{font:18px/40px 'simsun','Arial';color:#575d61; width:100px; text-align:right}
+.register .control-group .control-label{width:120px;}
+.form input[type=text],.form input[type=password]{width:268px;padding:5px 0;}
+
+.reg{background:#ffffff;height:424px;margin:-212px -252px}
+.success{text-align:center;margin:60px 0 40px;}
+.msg{font-size:25px;color:#2bb800; text-align:center}
+.jihuo{color:#979797;font:20px/40px 'simsun','Arial'; text-align:center;margin-top:65px}
+.jihuo a{color:#e58c00; text-decoration:underline;}

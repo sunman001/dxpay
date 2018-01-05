@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "盾行支付平台-登录";
+    var list = ViewBag.list as List<JMP.MDL.CoBusinessPersonnel>;
+    var model = ViewBag.model as JMP.MDL.CoBusinessPersonnel;
+
+} 
+
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1" />
+      <title>盾行支付平台-注册</title>
+      <link rel="stylesheet" href="../mobile/asste/fa-awesome/css/font-awesome.min.css">
+      <link rel="stylesheet" href="../mobile/asste/fa-awesome/css/font-awesome-ie7.min.css">
+      <link href="../mobile/css/logrit.css" rel="stylesheet" type="text/css">
+      @JMP.TOOL.UserHelper.js("jquery.js")
+      @JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+      @JMP.TOOL.UserHelper.js("plugin/layer/layer.js")
+
+      <script src="~/mobile/js/user/register.js"></script>
+   </head>
+  <body class="body-rig">
+      
+      <section class="rigt-logo">
+          <i class="logo"></i>
+      </section>
+      <section class="log-cnt">
+          <ul class="log-frm rigt-frm">
+              <li>
+                  <i class="icon icon-user fl"></i>
+                  <div class="d-cnt d-cnts">
+                      <select class="reg-selc" id="u_category">
+                          <option value="">请选择用户类型</option>
+                          <option value="1">企业用户</option>
+                          @*<option value="0">个人用户</option>*@
+                      </select>
+                  </div>
+              </li>
+              <li>
+                  <i class="icon icon-email fl"></i>
+                  <div class="d-cnt">
+                      <input type="text"   id="u_id" class="txtipt txtipt-user" placeholder="请输入邮箱" />
+                      <i class="fa fa-times-circle"></i>
+                  </div>
+              </li>
+              <li>
+                  <i class="icon icon-pwd fl"></i>
+                  <div class="d-cnt">
+                      <input type="password" id="u_pass"  class="txtipt txtipt-pwdp" placeholder="请输入密码" />
+                      <input type="text" class="txtipt txtipt-pwdt" placeholder="请输入密码" />
+                      <i class="fa fa-eye-slash"></i>
+                      <i class="fa fa-eye"></i>
+                  </div>
+              </li>
+              <li>
+                  <i class="icon icon-pwdq fl"></i>
+                  <div class="d-cnt">
+                      <input type="text" id="u_repass" class="txtipt" placeholder="请确认密码" />
+                  </div>
+              </li>
+              <li>
+                  <i class="icon icon-sw fl"></i>
+                  <div class="d-cnt d-cnts">
+                      <select class="reg-selc" id="relation_person_id">
+                          <option value="">请选择商务类型</option>
+                          @if (model != null)
+                          {
+                              foreach (var item in list)
+                              {
+                                  <option value="@item.Id" @(item.DisplayName == model.DisplayName ? "selected='selected'" : "")>@item.DisplayName</option>
+                              }
+                          }
+                          else
+                          {
+                              foreach (var item in list)
+                              {
+                                  <option value="@item.Id">@item.DisplayName</option>
+                              }
+                          }
+                      </select>
+                  </div>
+              </li>
+              <li>
+                  <i class="icon icon-d fl"></i>
+                  <div class="d-cnt d-cnt-ta">
+                      <input id="code" type="text" name="vc" placeholder="请输入验证码" class="txtipt" />
+                      <div id="code" class="lgn-code" onclick="document.getElementById('verify').src = '/user/getvalidatecode?vh=38&vt=3&k='+new Date().toString();">
+                          <img id="verify" src="/user/getvalidatecode?vh=38&vt=3" alt="看不清？换一张" title="看不清？换一张" />
+                      </div>
+                  </div>
+              </li>
+              <li>
+                  <i class="icon icon-phone fl"></i>
+                  <div class="d-cnt d-valt">
+                      <input type="text" id="u_phone" class="txtipt" placeholder="请输入手机号码" />
+                      <span id="btn_get_verify_code_disabled" class="yzm" style="display:none">重新获取 还剩<i>60</i>S</span>
+                      <a id="btn_get_verify_code" class="txtipt yzm">发送验证码</a>
+                  </div>
+              </li>
+              <li>
+                  <i class="icon icon-key fl"></i>
+                  <div class="d-cnt">
+                      <input type="text" class="txtipt" id="verified_code" placeholder="手机验证码" />
+                   
+                  </div>
+              </li>
+              <li>
+                  <a  id="btn_sub" class="btn">注册</a>
+                  <a  href="/Home/Login" class="btxt">您是否有账号，立即登录<i class="fa fa-question-circle"></i></a>
+              </li>
+          </ul>
+      </section>
+      <script type="text/javascript" src="../mobile/js/logrit.js"></script>
+      <script src="~/mobile/js/user/register.js"></script>
+      </body>
+</html>

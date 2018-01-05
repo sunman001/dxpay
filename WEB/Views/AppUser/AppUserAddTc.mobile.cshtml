@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "代理商管理";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.CoAgent>;
+}
+@JMP.TOOL.UserHelper.js("mobile/AppUser/AppUserAddTc.mobile.js")
+@JMP.TOOL.UserHelper.js("mobile/AppUser/appuser.mobile.js")
+
+<div class="mobile-popup mobile-container">
+    <div>
+        <div class="ui input fluid fluid-block">
+            <select name="s_type" id="s_type" class="ui dropdown fluid fluid-block">
+                <option value="2" @(ViewBag.stype == 2 ? "selected='selected'" : "")>真实姓名</option>
+                <option value="3" @(ViewBag.stype == 3 ? "selected='selected'" : "")>手机号码</option>
+            </select>
+        </div>
+        <div class="ui input fluid fluid-block">
+            <input name="s_keys" id="s_keys" type="text" placeholder="请输入关键字" value="@(!string.IsNullOrEmpty(ViewBag.skeys) ? ViewBag.skeys : "")" />
+        </div>
+        <div class="ui input fluid fluid-block">
+            <select name="status" id="status" class="ui dropdown fluid fluid-block">
+                <option value="" @(ViewBag.status == "" ? "selected='selected'" : "")>账户状态</option>
+                <option value="0" @(ViewBag.status == "0" ? "selected='selected'" : "")>正常</option>
+                <option value="1" @(ViewBag.status == "1" ? "selected='selected'" : "")>冻结</option>
+            </select>
+        </div>
+        <div class="ui input fluid fluid-block">
+            <select name="AuditState" id="AuditState" class="ui dropdown fluid fluid-block">
+                <option value="" @(ViewBag.AuditState == "" ? "selected='selected'" : "")>审核状态</option>
+                <option value="0" @(ViewBag.AuditState == "0" ? "selected='selected'" : "")>等待审核</option>
+                <option value="1" @(ViewBag.AuditState == "1" ? "selected='selected'" : "")>通过</option>
+                <option value="-1" @(ViewBag.AuditState == "-1" ? "selected='selected'" : "")>未通过</option>
+            </select>
+        </div>
+        <div class="ui input fluid fluid-block">
+            <select name="searchDesc" id="searchDesc" class="ui dropdown fluid fluid-block">
+                <option value="-1" @(ViewBag.searchDesc == -1 ? "selected='selected'" : "")>排序</option>
+                <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>倒序</option>
+                <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>正序</option>
+            </select>
+        </div>
+        <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="AppUserSelect()">查询</a>
+    </div>
+
+    <div class="table-container table-responsive">
+        <table class="ui celled striped table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th>选择</th>
+                    <th>信息</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="javascript:" class="blue" onclick="selectxzAppUserAgent(@item.Id,'@item.DisplayName')">选择</a>
+                                </td>
+                                <td>
+                                    <b>代理商姓名：</b>@item.DisplayName<br />
+                                    <b>手机号码：</b>@item.MobilePhone<br />
+                                    <b>账户状态：</b>@(item.State == 1 ? Html.Raw("<span class='red'>冻结</span>") : Html.Raw("<span class='green'>正常</span>"))<br />
+                                    <b>审核状态：</b>@(item.AuditState == 0 ? Html.Raw("<span class='orange'>等待审核</span>") : item.AuditState == 1 ? Html.Raw("<span class='green'>通过</span>") : Html.Raw("<span class='red'>未通过</span>"))<br />
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td align="center" colspan="2" class="nodata">暂无记录</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.MobilePagers("LoadData", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>

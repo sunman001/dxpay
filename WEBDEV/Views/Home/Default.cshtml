@@ -1,0 +1,226 @@
+﻿@using JMP.TOOL;
+@{
+    ViewBag.Title = "Default";
+    Layout = "~/Views/UI/master.cshtml";
+}
+@JMP.TOOL.UserHelper.js("home/default.js")
+<i class="bg"></i>
+<section class="idx-fl">
+    <div class="navbar-collapse">
+        <dl class="idx-menu-logo">
+            <dt><i class="logo" title="logo"></i></dt>
+        </dl>
+        <dl class="idx-menu-head">
+            <dd class="sm">
+                <span class="cler"></span>
+                @if (ViewBag.auditstate == 0)
+                {
+                    <span class="bsm idx-smb">立即认证</span>
+                    <p class="ifo">您还未完成实名认证，无法正常使用，请尽快完成实名认证！</p>
+                }
+                else if (ViewBag.auditstate == -1)
+                {
+                    <span class="bsm idx-smb">未通过</span>
+                    <p class="ifo">您还未通过实名认证，无法正常使用，请尽快联系运营方！</p>
+                }
+                else
+                {
+                    <span class="bsm bsmy">已认证</span>
+                    <p class="qq">@ViewBag.linkEmail</p>
+                }
+            </dd>
+        </dl>
+        @{
+            try
+            {
+                Html.RenderAction("Menu", "Partial");
+            }
+            catch
+            {
+            }
+        }
+    </div>
+    <div class="idx-fl-bg"></div>
+</section>
+<!--左侧 end-->
+<section class="cont-wrapper">
+    <header class="header-wrap clearfix">
+        <div class="dcnt fl">极速、便捷、可靠的第三方支付平台</div>
+        <ul class="header-nav fr clearfix">
+            <li id="UpdatePwd">
+                <i class="fa fa-lock"></i>
+                <div class="header-sts header-sts-q">
+                    <p class="scnt">
+                        <i class="icon-sj"></i>
+                        修改密码
+                    </p>
+                </div>
+            </li>
+            <li onclick="loginOut()">
+                <i class="fa fa-power-off"></i>
+                <div class="header-sts">
+                    <p class="scnt">
+                        <i class="icon-sj"></i>
+                        退出
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </header>
+    <!--顶部 end-->
+    <section class="content">
+        <div class="cont-wrapper-pren">
+            <div class="cont-wrapper-min">
+                <div class="tab-dvrep">
+                    <i class="fa fa-caret-left faicon" id="fa-caret-left"></i>
+                    <i class="fa fa-caret-right faicon" id="fa-caret-right"></i>
+                    <ul id="tab-panel-menu-list" class="tab-panel">
+                        <li class="active">
+                            <span onclick="tabmenu(this)">首页</span>
+                        </li>
+                    </ul>
+                </div>
+                <div id="tab-panel-content-wrapper" class="tab-panel-content">
+                    <div class="cont active">
+                        <iframe src="/Home/Index" scrolling="no"></iframe>
+                    </div>
+                </div>
+            </div>
+            @*<div class="cont-wrapper-min">
+                    <ul id="tab-panel-menu-list" class="tab-panel">
+
+                    </ul>
+                    <div id="tab-panel-content-wrapper" class="tab-panel-content"></div>
+                </div>*@
+        </div>
+    </section>
+    <!--内容 end-->
+</section>
+<!--弹出框-->
+<div id="layer-fixed" class="layer-fixed" style="display:none;"></div>
+<div id="wp-layer" class="wp-layer" style="display:none;">
+    <div class="wp-layer-cont wp-idx-cont">
+        <i class="wp-close" title="关闭"></i>
+        <div class="cont">
+            <p class="blue">实名认证</p>
+            <p class="ifo">您还未实名认证，是否前往认证？</p>
+            <a id="edit" class="wp-idx-btn">确定</a>
+        </div>
+    </div>
+</div>
+
+<script src="../asste/jquery.countup/jquery.waypoints.min.js"></script>
+<script src="../asste/jquery.countup/jquery.countup.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        //退出、忘记密码
+        $(".header-nav li").hover(function () {
+            $(this).addClass("on");
+            $(this).css("overflow", "inherit");
+        }, function () {
+            $(this).removeClass("on");
+            $(this).css("overflow", "hidden");
+        })
+
+        //弹出框
+        var auditstate=@ViewBag.auditstate;
+        if(auditstate<=0){
+            $("#layer-fixed").show(200);
+            $("#wp-layer").show(200);
+        }
+        $('.idx-num').countUp();
+        $(".wp-close").click(function(){
+            $("#layer-fixed").hide(200);
+            $("#wp-layer").hide(200);
+        })
+        $(".idx-smb").click(function(){
+            $("#layer-fixed").show(200);
+            $("#wp-layer").show(200);
+        })
+
+        //tab套用-实名认证
+        $('#edit').click(function () {
+            var name = "实名认证";
+            var isLeaf = true;//是否套用
+            var id =  "1284";//id
+            var href = "/User/DevVerify";//链接
+            AddTab(name, isLeaf, href, 'DevVerify'+id,'parent');
+            $(".layer-fixed").hide(200);
+            $(".wp-layer").hide(200);
+        })
+
+        $("#UpdatePwd").click(function()
+        {
+            var name = "修改密码";
+            var isLeaf = true;//是否套用
+            var id =  "1284";//id
+            var href = "/User/ModifyInfo";//链接
+            AddTab(name, isLeaf, href, 'ModifyInfo'+id,'parent');
+
+        })
+
+        //tab选项卡-向左
+        var prd = $(".tab-dvrep").innerWidth() - 80;//tab-ul父级宽度；
+        var tab = $("#tab-panel-menu-list");//tab标题
+        var tnswh = 0;
+        var tnswhb = 0;
+        $("#fa-caret-left").click(function () {
+            var tns = 0;
+            var bigb = tab.innerWidth() - prd;//滑动最大的像素
+            var pageli = tab.find("li");
+            if (tab.innerWidth() > prd) {
+                for (var i = 0; i < 3; i++) {
+                    tns += $(pageli[i]).outerWidth();
+                }
+                if (tnswh == 0) {
+                    tns = bigb - tns;
+                } else {
+                    tns = tnswh - tns;
+                }
+                tnswh = tns;
+
+                var nums = parseInt(tab.css("transform").substr(20, 5));
+                if (tnswh < 64) {
+                    tab.css("transition", "all 2s ease-out 0s");
+                    tab.css("transform", "translate3d(0px, 0px, 0px)");
+                    window.parent.ShowMsg("已经到第一页了！", "", "提示");
+                    tnswh = 0;
+                    return;
+                } else {
+                    tab.css("transform", "translate3d(-" + tns + "px, 0px, 0px)");
+                }
+                //debugger;
+            }
+        });
+        //tab选项卡-向右
+        $("#fa-caret-right").click(function () {
+            var tns = 0;
+            var bigb = tab.innerWidth() - prd;//滑动最大的像素
+            var pageli = tab.find("li");
+            if (tab.innerWidth() > prd) {
+                for (var i = 0; i < 3; i++) {
+                    tns += $(pageli[i]).outerWidth();
+                }
+                if (tnswhb == 0) {
+                    tns = tns;
+                } else {
+                    tns = tnswhb + tns;
+                }
+                tnswhb = tns;
+                if (tnswhb < bigb) {
+                    tab.css("transition", "all 2s ease-out 0s");
+                    tab.css("transform", "translate3d(-" + tns + "px, 0px, 0px)");
+                } else {
+                    tab.css("transition", "all 2s ease-out 0s");
+                    tab.css("transform", "translate3d(-" + (bigb - 1) + "px, 0px, 0px)");
+                    tnswhb = 0;
+                    window.parent.ShowMsg("已经到最后一页了！", "", "提示");
+                    return;
+                }
+            }
+        });
+
+
+    })
+</script>

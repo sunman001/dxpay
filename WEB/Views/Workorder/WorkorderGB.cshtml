@@ -1,0 +1,34 @@
+﻿@model WEB.Models.AppUser.MerchantListViewModel
+@{
+    ViewBag.Title = "工单关闭页面";
+    Layout = "~/Views/UI/dialog.cshtml";
+
+}
+@JMP.TOOL.UserHelper.js("Workorder/Workorder.js")
+
+<div class="main">
+    <input type="hidden" id="r_id" value="@(ViewBag.id)" />
+    <div class="clear10"></div>
+    <div class="plate-form">
+        <dl>
+            <dt>关闭原因：</dt>
+            <dd>
+                <textarea name="closeReason" type="text" id="closeReason" onblur="yzcloseReason()"> </textarea>
+                <div class="Validform_checktip" id="yzcloseReason">*请填写关闭原因</div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnWorkorderGB" value="保存" id="btnWorkorderGB" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+
+    })
+</script>

@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "处理页面";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+}
+@JMP.TOOL.UserHelper.js("mobile/REPORT/AppRequestAuditList.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="mobile-container mobile-popup">
+    <input type="hidden" id="r_id" value="@(ViewBag.uids)" />
+    <div class="plate-form  ui form ">
+        <div class="field">
+            <label>处理结果：</label>
+            <textarea name="c_result" type="text" id="c_result" style="width:350px; height:100px;"> </textarea><br />
+             <div class="Validform_checktip" id="c_result_p">*请填写处理结果</div>
+
+        </div>
+
+
+
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" class="large ui primary button" name="btnComplaintCL" value="处理" id="btnComplaintCL" />
+            <a href="~/REPORT/OrderAuditList" class="large ui primary button"> 取消</a>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+
+    })
+</script>

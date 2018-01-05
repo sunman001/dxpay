@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "盾行支付平台-注册成功";
+    Layout = "~/Views/UI/Account.cshtml";
+}
+<div class="reg login">
+    <div class="success">
+        <img src="/img/success.png" width="95" height="102" />
+    </div>
+    <div class="msg">恭喜 您已注册成功！</div>
+    <div class="jihuo">现在去<a id="btn_active">激活</a></div>
+    <input id="u_email"  type="hidden" value="@ViewBag.UserEmail" />
+</div>
+@JMP.TOOL.UserHelper.css("login.css")
+@JMP.TOOL.UserHelper.js("user/register.js")

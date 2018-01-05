@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "母版页";
+    string UserRegister = (string)ViewBag.UserRegister;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>盾行云计费-支持微信_支付宝_银联支付接口等的聚合支付平台</title>
+    <meta name="author" content="聚合支付平台" />
+    <META NAME="Subject" CONTENT="盾行聚合支付平台提供,一站式聚合支付  SDK, API  接口,移动支付更便捷!">
+    <meta name="Copyright" content="Copyright (c) 2016 盾行云计费 | V2" />
+    <meta name="description" content="盾行聚合支付平台 -凭借前沿支付理念和雄厚研发实力,作为第四方支付聚合平台,聚合微信,支付宝等众多第三方支付接口,为商户提供聚合支付 SDK, API  接口,带来更流畅的支付体验!" />
+    <meta name="keywords" content="聚合支付,聚合支付平台,支付接口,支付API,支付宝接口,微信支付接口,银联支付接口,支付接入,app支付,游戏支付,扫码支付 " />
+  
+    <link href="~/mobile/css/stlye.css" rel="stylesheet" type="text/css">
+    <link href="~/mobile/css/base.css" rel="stylesheet" type="text/css">
+    <link href="~/mobile/css//main.css" rel="stylesheet" type="text/css">
+    <script src="~/mobile/js/jquery-3.2.1.min.js"></script>
+    <script src="~/js/plugin/layer/layer.js"></script>
+   
+</head>
+<body >
+    <div class="bodys"></div>
+    <div id="nav">
+        <div class="top">
+            <div class="logo"> <a href="Index/Index " title="logo"> <img src="~/mobile/img/nav_03.png" alt="logo" title="logo" />  </a></div>
+            <div class="menu"><img src="~/mobile/img/nav_05.png" alt="菜单" title="菜单" /></div>
+        </div>
+        <div class="submenu">
+            <div class="payment">
+                <a href="~/index/product" title="产品支付"><i><img src="~/mobile/img/nav_10.png" alt="产品支付" title="产品支付" /></i><span>产品支付</span></a>
+                <ul>
+                    <li><a href="~/index/product?str=1" title="微信支付">微信支付</a></li>
+                    <li><a href="~/index/product?str=2" title="支付宝支付">支付宝支付</a></li>
+                    <li><a href="~/index/product?str=3" title="银联支付">银联支付</a></li>
+                    <li><a href="~/index/product?str=4" title="其它支付">其它支付</a></li>
+                </ul>
+            </div>
+            <div class="payment about">
+                <a href="~/index/about" title="关于我们"><i><img src="~/mobile/img/nav_13.png" alt="关于我们" title="关于我们" /></i><span>关于我们</span></a>
+                <ul>
+                    <li><a  href="~/index/about" title="盾行简介">盾行简介</a></li>
+                    <li><a  href="~/index/new" title="公司咨询">公司咨询</a></li>
+                    <li><a  href="~/index/contact" title="联系我们">联系我们</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>		
+    @RenderBody()
+    <div id="bot">
+        <a  href="@UserRegister" title="开发者注册">开发者注册</a>
+        <a href="~/index/consultation" title="产品咨询">产品咨询</a>
+    </div>
+    <script type="text/javascript" src="~/mobile/js/client_slide.js"></script>
+   
+</body>
+</html>

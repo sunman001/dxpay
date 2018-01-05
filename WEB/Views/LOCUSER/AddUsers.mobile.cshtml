@@ -1,0 +1,124 @@
+﻿@{
+    ViewBag.Title = "添加本地管理员";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+}
+@JMP.TOOL.UserHelper.js("mobile/local/locals.mobile.js")
+@JMP.TOOL.UserHelper.js("Authentication.js")
+<div class="mobile-popup mobile-container">
+    <div class="plate-form  ui form">
+        <dl>
+            <dt>用户角色：</dt>
+            <dd>
+                <div class="field">
+                    <select name="selrole_id" id="selrole_id" class="ui dropdown fluid">
+                        @Html.Raw(ViewBag.strHtml)
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>登录名：</dt>
+            <dd>
+                <div class="field">
+                    <input name="inputName" type="text" id="inputName" maxlength="20" value="" onblur="inputCheckName()" /><span class="ie7-input-bug-end"></span>
+                    <div class="Validform_checktip" id="checkName">* 登录名不能重复</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>密码：</dt>
+            <dd>
+                <div class="field">
+                    <input name="inputPwd" type="password" id="inputPwd" maxlength="20" value="" onblur="inputPwdChange()" />
+                    <div class="Validform_checktip" id="inputPwdtext">* 密码不能为空</div>
+                </div>
+                
+            </dd>
+        </dl>
+        <dl>
+            <dt>确认密码：</dt>
+            <dd>
+                <div class="field">
+                    <input name="inputPwdTrue" type="password" id="inputPwdTrue" maxlength="20" onblur="inputPwdChange2()" />
+                    <div class="Validform_checktip" id="inputPwd2text">* 确认密码不能为空</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>真实姓名：</dt>
+            <dd>
+                <div class="field">
+                    <input name="inputRealname" type="text" id="inputRealname" value="" onblur="inputCheckRealName()" />
+                    <div class="Validform_checktip" id="checkRealName">* 真实姓名不能为空</div>
+                </div>  
+            </dd>
+        </dl>
+        <dl>
+            <dt>部门：</dt>
+            <dd>
+                <div class="field">
+                    <input name="inputDepartment" type="text" id="inputDepartment" value="" onblur="inputCheckDep()" />
+                    <div class="Validform_checktip" id="checkDep">* 部门不能为空</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>职位：</dt>
+            <dd>
+                <div class="field">
+                    <input name="inputPosition" type="text" id="inputPosition" value="" onblur="inputCheckPos()" />
+                    <div class="Validform_checktip" id="checkPos">* 职位不能为空</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>手机号码：</dt>
+            <dd>
+                <div class="field">
+                    <input name="mobilenumber" type="text" id="mobilenumber" maxlength="20" value="" onblur="Checkmobilenumber()" /><span class="ie7-input-bug-end"></span>
+                    <div class="Validform_checktip" id="Checkmobilenumber">* 手机号码不能为空</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>邮箱地址：</dt>
+            <dd>
+                <div class="field">
+                    <input name="emailaddress" type="text" id="emailaddress" maxlength="20" value="" onblur="Checkemailaddress()" /><span class="ie7-input-bug-end"></span>
+                    <div class="Validform_checktip" id="Checkemailaddress">* 邮箱地址不能为空</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>qq：</dt>
+            <dd>
+                <div class="field">
+                    <input name="qq" type="text" id="qq" maxlength="20" value="" onblur="Checkqq()" /><span class="ie7-input-bug-end"></span>
+                    <div class="Validform_checktip" id="Checkqq">* qq不能为空</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>状态：</dt>
+            <dd>
+                <table id="radOrvActnS">
+                    <tr>
+                        <td>
+                            <input id="radOrvActnS_0" type="radio" name="state" value="1" checked="checked" /><label for="radOrvActnS_0">开启</label>
+                        </td>
+                        <td>
+                            <span style="margin-left: 20px;">
+                                <input id="radOrvActnS_1" type="radio" name="state" value="0" /><label for="radOrvActnS_1">关闭</label>
+                            </span>
+                            <input name="inputUid" type="hidden" id="inputUid" value="0" />
+                        </td>
+                    </tr>
+                </table>
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer">
+        <input type="button" name="btnSave" value="保存" id="btnSave" class="ui button primary" onclick="addlcoaluser()" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="ui button" />
+    </div>
+</div>

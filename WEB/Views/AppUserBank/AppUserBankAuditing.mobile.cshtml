@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "开发者银行卡审核";
+    Layout = "~/Views/UI/dialog.cshtml";
+}
+<div class="mobile-container mobile-popup">
+    <input type="hidden" id="userid" value="@ViewBag.userid" />
+    <div class="plate-form  ui form ">
+        <dl >
+            <dt>审核状态：</dt>
+            <dd>
+               
+                    <input value="-1" name="u_auditstate" type="radio" id="u_stat1" @(ViewBag.start == -1 ? "checked='checked'" : "") /><label for="u_stat1">未通过</label>
+                    <input value="0" name="u_auditstate" type="radio" id="u_stat2" @(ViewBag.start == 0 ? "checked='checked'" : "") /><label for="u_stat2">等待审核</label>
+                    <input value="1" name="u_auditstate" type="radio" id="u_stat3" @(ViewBag.start == 1 ? "checked='checked'" : "") /><label for="u_stat3">通过</label>
+                
+            </dd>
+                
+            
+            </dl>
+        <div class="field">
+            <label>备注：</label>
+           
+                <div class="single-input normal">
+                    <textarea style="width: 200px; height:50px;" id="u_remarks" onblur="yzuemarks()"> @(ViewBag.reaks)</textarea>
+                </div>
+                <div class="Validform_checktip" id="yzu_remarks"></div>
+            
+            </div>
+        </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" onclick="UserAuditstate()" class="btn btn-primary" id="btn-save-add" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<script>
+
+    function yzuemarks()
+    {
+        var a_appsynopsis = $.trim($("#u_remarks").val());
+        var auditstate = $('input[name="u_auditstate"]:checked').val();
+        if (auditstate==-1)
+        {
+            if ($.trim(a_appsynopsis) != "") {
+                $("#yzu_remarks").attr("class", "Validform_checktip  Validform_right");
+                $("#yzu_remarks").html("验证通过");
+            } else {
+                $("#yzu_remarks").attr("class", "Validform_checktip Validform_wrong");
+                $("#yzu_remarks").html("备注信息不能为空");
+                return false;
+            }
+        }
+    }
+    function UserAuditstate() {
+
+        var auditstate = $('input[name="u_auditstate"]:checked').val();
+        var remarks = $.trim($("#u_remarks").val());
+        var id = $("#userid").val();
+
+        if (auditstate == -1) {
+            if ($.trim(remarks) != "") {
+                $("#yzu_remarks").attr("class", "Validform_checktip  Validform_right");
+                $("#yzu_remarks").html("验证通过");
+            } else {
+                $("#yzu_remarks").attr("class", "Validform_checktip Validform_wrong");
+                $("#yzu_remarks").html("备注信息不能为空");
+                return false;
+            }
+        }
+        var url = "/AppUserBank/CheckAuditing";
+        var data = { u_auditstate: auditstate, userid: id, u_remarks: remarks };
+
+
+        $.post(url, data, function (result) {
+
+            if (result.success == 1) {
+                window.parent.ShowMsg(result.msg, "ok", function () {
+                    window.location.href = "/AppUserBank/Index";
+                });
+            }
+            else {
+                window.parent.ShowMsg(result.msg, "error", "");
+            }
+
+        })
+    }
+</script>

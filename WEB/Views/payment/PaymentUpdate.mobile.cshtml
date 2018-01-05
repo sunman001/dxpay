@@ -1,0 +1,66 @@
+﻿@model JMP.MDL.jmp_paymenttype
+@{
+    ViewBag.Title = "编辑支付通道";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+}
+@JMP.TOOL.UserHelper.js("mobile/payment/Interface.mobile.js")
+<div class="mobile-popup mobile-container">
+    <div class="plate-form ui form">
+        @*<dl>
+                <dt>优先级：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <span class="ie7-input-bug-start"></span>
+                        <input type="text" maxlength="20" id="p_priority" name="p_priority" value="@(Model.p_priority)" />
+                        <span class="ie7-input-bug-end"></span>
+                    </div>
+                </dd>
+            </dl>*@
+        <dl>
+            <dt>关联平台：</dt>
+            <dd>
+                <div class="inline field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" class="hidden" name="p_platform" value="1" @(Model.p_platform.Contains("1") ? "checked='checked'" : "") />
+                        <label>安卓</label>
+                    </div>
+                    <div class="ui checkbox">
+                        <input type="checkbox" class="hidden" name="p_platform" value="2" @(Model.p_platform.Contains("2") ? "checked='checked'" : "") />
+                        <label>苹果</label>
+                    </div>
+                    <div class="ui checkbox">
+                        <input type="checkbox" class="hidden" name="p_platform" value="3" @(Model.p_platform.Contains("3") ? "checked='checked'" : "") />
+                        <label>H5</label>
+                    </div>
+                </div>
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer">
+        <input type="hidden" id="p_id" value="@Model.p_id" />
+        <input type="button" value="保存" id="btnSavePaymentType" class="ui button primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="ui button" />
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#btnSavePaymentType").click(function () {
+        var pid = $("#p_id").val();
+        //var p_priority = $("#p_priority").val();
+        var p_priority = 1;
+        var p_platform = $('input[name="p_platform"]:checked').map(function () { return this.value; }).get().join(',');
+        $.ajax({
+            url: "./paymentupdate",
+            type: "post",
+            data: { p_priority: p_priority, p_platform: p_platform, pid: pid },
+            success: function (response) {
+                if (response.success) {
+
+                    window.parent.location.reload();
+                    //parent.ShowMsg("操作成功", "ok", function () { parent.layer.closeAll(); location.reload(); });
+                    window.parent.ShowMsg("操作成功", "ok", function () { window.parent.layer.closeAll(); });
+                }
+            }
+        });
+    });
+</script>

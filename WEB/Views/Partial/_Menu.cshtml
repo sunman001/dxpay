@@ -1,0 +1,160 @@
+﻿@model IEnumerable<WEB.Models.Login.MenuViewModel>
+<ul class="nav" id="jm_menu_items">
+    @foreach (var menu in Model)
+    {
+        if (menu.Children.Count > 0)
+        {
+            <li class="menu-main" style="display:block;">
+                <a href="javascript:;">
+                    <img style="display: inline-block;" src="../images/@(menu.Icon).png" /><span class="name">@menu.Title</span>
+                </a>
+                <ul class="submenu">
+                    @foreach (var children in menu.Children)
+                    {
+                        <li>
+                            <a href="javascript:;" data-href="@children.Href" data-is-leaf="true" data-id="@children.Id">@children.Title</a><!--<i class="fa fa-dashboard @children.Icon"></i> -->
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a href="javascript:;" data-href="@menu.Href" data-is-leaf="true" data-id="@menu.Id">
+                    <i class="fa fa-dashboard @menu.Icon"></i>
+                    <span class="name">@menu.Title</span>
+                </a>
+            </li>
+        }
+    }
+</ul>
+<script type="text/javascript">
+    $(function () {
+        height();
+        $("#jm_menu_items a").click(function () {//左侧菜单点击事件
+            var name = $(this).text();
+            var tab = $("#tab-panel-menu-list");//tab标题
+            var tabcnt = $("#tab-panel-content-wrapper .cont");//tab内容
+            var prd = $(".tab-dvrep").innerWidth() - 80;//tab-ul父级宽度；
+            var pageli = tab.find("li");
+            var target = $(this);
+            var isLeaf = target.attr("data-is-leaf");
+            var href = target.attr("data-href");
+            var id = target.attr("data-id");
+            if (pageli.length > 0) {//判断是否有重复tab标签pageli[i].innerText.replace('×', '')
+                for (var i = 0; i < pageli.length; i++) {
+                    if ($.trim($(pageli[i]).text()) === $.trim(name)) {
+                        tab.find("li").removeClass("active");
+                        tabcnt.removeClass("active");
+                        $(pageli[i]).addClass("active");
+                        $(tabcnt[i]).addClass("active");
+
+                        //定位tab
+                        var lnums = tab.find("li.active");
+                        var tns = 0;
+                        var bigb = tab.innerWidth() - prd;//滑动最大的像素
+                        if (tab.innerWidth() > prd) {
+                            for (var i = 0; i < lnums.index() ; i++) {
+                                tns += $(pageli[i]).outerWidth();
+                            }
+                            if (bigb < tns) {
+                                tab.css("transform", "translate3d(-" + bigb + "px, 0px, 0px)");
+                            } else {
+                                tab.css("transform", "translate3d(-" + tns + "px, 0px, 0px)");
+                            }
+                        }
+                        window.location.hash = href;
+                        return;
+                    }
+                }
+            }
+            var baseUrl = '@Url.Content("~/")';
+            id = "id_" + id;
+            if (isLeaf !== undefined) {
+                var hei = document.documentElement.clientHeight;//浏览器高度
+                var wh = document.documentElement.clientWidth;//浏览器宽度
+                var ifrhei = hei - 195;//iframe可见高度
+                if (wh < 1450) {
+                    ifrhei = hei - 215;//iframe可见高度
+                }
+                tab.find("li").removeClass("active");
+                global.currentTabId = id;
+                window.location.hash = href;
+                $("#tab-panel-content-wrapper .cont").removeClass("active");
+                $("#tab-panel-menu-list").append('<li  data-id="' + id + '" data-closable="true" class="active"><span data-href="' + href + '" onclick="tabmenu(this,\'' + id + '\')">' + name + '</span> <i class="fa fa-times-circle" onclick="tabClose(this)"></i></li>');
+                $("#tab-panel-content-wrapper").append('<div data-id="'+id+'" class="cont active"><iframe name="' + id + '" src="' + href + '" height=' + ifrhei + ' ></iframe></div>');
+
+                //tab溢出隐藏
+                var prdwht = 0;
+                var lnum = tab.find("li");//li的数量
+                for (var i = 0; i < lnum.length; i++) {
+                    prdwht += $(lnum[i]).outerWidth();
+                    if (prdwht > prd) {
+                        tab.css("width", prdwht + 10 + 1);
+                        var tns = prdwht - prd - 1;
+                        tab.css("transform", "translate3d(-" + tns + "px, 0px, 0px)");
+                        tab.css("transition", "all 0.2s ease-out 0s");
+                    }
+                }
+
+
+            }
+        });
+        $(window).resize(function () {//窗口变化
+            height();
+        });
+    });
+
+    function height() {//计算iframe高度宽度
+        var hei = document.documentElement.clientHeight;//浏览器高度
+        var wh = document.documentElement.clientWidth;//浏览器宽度
+        var ifrhei = hei - 195;//iframe可见高度
+        if (wh < 1450) {
+            ifrhei = hei - 215;//iframe可见高度
+        }
+        $("#tab-panel-content-wrapper").find("iframe").css("height", ifrhei);
+    }
+    function tabmenu(th, id) {//tab选项卡点击事件
+        $("#tab-panel-menu-list li").removeClass("active");
+        $("#tab-panel-content-wrapper .cont").removeClass("active");
+        var target = $(th);
+        $(th).parents("li").addClass("active");
+        var idx = $(th).parents("li").index();
+        $($("#tab-panel-content-wrapper .cont").get(idx)).addClass("active");
+        global.currentTabId = id;
+        window.location.hash = target.attr("data-href");
+
+    }
+
+    function tabClose(th) {//tab选项卡关闭
+        var tabli = $("#tab-panel-menu-list li");
+        var idx = $(th).parents("li").index();
+        if (tabli.length > 1) {
+            $("#tab-panel-menu-list li").removeClass("active");
+            $("#tab-panel-content-wrapper .cont").removeClass("active");
+
+            $(th).parents("li").remove();
+            $($("#tab-panel-content-wrapper .cont").get(idx)).remove();
+
+            var tablis = $("#tab-panel-menu-list li").length;
+            $($("#tab-panel-menu-list li").get(tablis - 1)).addClass("active");
+            $($("#tab-panel-content-wrapper .cont").get(tablis - 1)).addClass("active");
+
+
+            //定位tab
+            var prd = $(".tab-dvrep").innerWidth() - 80;//tab-ul父级宽度；
+            var tab = $("#tab-panel-menu-list");//tab标题
+            var pageli = tab.find("li");
+            var prdwht = 0;
+            if (tab.innerWidth() > prd) {
+                for (var i = 0; i < pageli.length; i++) {
+                    prdwht += $(pageli[i]).outerWidth();
+                }
+                tab.css("width", prdwht +10 + 1);
+                tab.css("transform", "translate3d(-" + (prdwht - prd) + "px, 0px, 0px)");
+            }
+        }
+    }
+
+</script>

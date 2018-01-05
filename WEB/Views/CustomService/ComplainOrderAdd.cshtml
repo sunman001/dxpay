@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "添加投诉";
+    Layout = "~/Views/UI/dialog.cshtml";
+
+    var CustomModel = ViewBag.CustomModel as JMP.MDL.CsComplainOrder;
+}
+@JMP.TOOL.UserHelper.js("CustomService/OrderList.js")
+@JMP.TOOL.UserHelper.js("jquery.ajaxupload.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+
+<form id="frm-user-add" method="post" enctype="multipart/form-data">
+    <div class="main">
+        <input type="hidden" id="UserId" value="@ViewBag.u_id" />
+        <input type="hidden" id="AppId" value="@ViewBag.o_app_id" />
+        <input type="hidden" id="InterfaceId" value="@ViewBag.o_interface_id" />
+        <div class="plate-form">
+            <dl>
+                <dt>投诉订单：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="OrderNumber" type="text" id="OrderNumber" value="@ViewBag.o_code" disabled="disabled" />
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>投诉类型：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        @if (CustomModel != null)
+                        {
+                            <input name="ComplainTypeName" type="text" id="ComplainTypeName" value="@(string.IsNullOrEmpty(CustomModel.Name) ? "" : CustomModel.Name)" onclick="ComplainTypeNameaAdd()" />
+                        }
+                        else
+                        {
+                            <input name="ComplainTypeName" type="text" id="ComplainTypeName" onclick="ComplainTypeNameaAdd()" />
+                        }
+                        <input name="ComplainTypeId" type="hidden" id="ComplainTypeId" />
+                    </div>
+                    <div class="Validform_checktip" id="ComplainTypeyz">* 投诉类型</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>投诉时间：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="stime" type="text" id="stime" onFocus="WdatePicker({maxDate:'#F{\'@DateTime.Now.ToString("yyyy-MM-dd")\'}'})" readonly="readonly" class="dataipt txtipt" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="Validform_checktip" id="stimeyz">* 投诉时间</div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>下游接手时间：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="DownstreamStartTime" type="text" id="DownstreamStartTime" onFocus="WdatePicker({maxDate:'#F{\'@DateTime.Now.ToString("yyyy-MM-dd")\'}',dateFmt:'yyyy-MM-dd HH:mm'})" readonly="readonly" class="dataipt txtipt" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm")" />
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>下游处理完成时间：</dt>
+                <dd>
+                    <div class="single-input normal">
+                        <input name="DownstreamEndTime" type="text" id="DownstreamEndTime" onFocus="WdatePicker({maxDate:'#F{\'@DateTime.Now.ToString("yyyy-MM-dd")\'}',dateFmt:'yyyy-MM-dd HH:mm'})" readonly="readonly" class="dataipt txtipt" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm")" />
+                    </div>
+
+                </dd>
+            </dl>
+            <dl>
+                <dt>投诉证据：</dt>
+                <dd>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width:300px; height:200px;">
+                            <img src="" id="EnvidenceXS1" style="width:100%;" />
+                        </div>
+                        <input name="certificatefile1" type="file" id="certificatefile1" onchange="FileChange1()" />
+                        <input type="hidden" name="Envidence1" id="Envidence1" />
+                    </div>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width:300px; height:200px;">
+                            <img src="" id="EnvidenceXS2" style="width:100%;" />
+                        </div>
+                        <input name="certificatefile2" type="file" id="certificatefile2" onchange="FileChange2()" />
+                        <input type="hidden" name="Envidence2" id="Envidence2" />
+
+                    </div>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width:300px; height:200px;">
+                            <img src="" id="EnvidenceXS3" style="width:100%;" />
+                        </div>
+                        <input name="certificatefile3" type="file" id="certificatefile3" onchange="FileChange3()" />
+                        <input type="hidden" name="Envidence3" id="Envidence3" />
+
+                    </div>
+                    <div class="upload-certificate">
+                        <div class="upload-box" style="width:300px; height:200px;">
+                            <img src="" id="EnvidenceXS4" style="width:100%;" />
+                        </div>
+                        <input name="certificatefile4" type="file" id="certificatefile4" onchange="FileChange4()" />
+                        <input type="hidden" name="Envidence4" id="Envidence4" />
+                    </div>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" onclick="btnSaveAddCustom()" class="btn btn-primary" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</form>

@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>代理商后台登陆</title>
+    <!-- plugin -->
+    <link rel="shortcut icon" href="~/images/favicon.ico">
+    <link rel="stylesheet" href="../css/plugin/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/plugin/font-awesome/css/font-awesome-ie7.min.css">
+    @JMP.TOOL.UserHelper.css("logrgt.css")
+    @JMP.TOOL.UserHelper.js("jquery.js")
+    @JMP.TOOL.UserHelper.js("plugin/JValidator.js")
+    @JMP.TOOL.UserHelper.js("plugin/layer/layer.js")
+    @JMP.TOOL.UserHelper.js("mian.js")
+    @JMP.TOOL.UserHelper.js("login/login.js")
+</head>
+<body>
+    <i class="bg"></i>
+    <header class="lgn-head lgn-head-dl">
+        <h1 class="tit">极速、便捷、可靠的第三方支付平台</h1>
+        <div class="bor">
+            <span class="btxt">代理商</span>
+        </div>
+    </header>
+    <form class="lgn-frm">
+        <ul class="lgn-frm-dc clearfix">
+            <li>
+                <span class="lgn-tit">用户名</span>
+                <input type="text" title="请输入用户名" name="loginName" id="loginName" class="form-ctrl" value="dxjm" placeholder="请输入用户名" onblur="yzzh()" />
+                <div id="yzzh" class="lgn-error ">用户名不能为空</div>
+            </li>
+            <li>
+                <span class="lgn-tit">密码</span>
+                <input type="password" name="password" id="password" class="form-ctrl form-ctl-pwd" value="123456" placeholder="请输入密码" onblur="yzma()" />
+                <div id="yzma" class="lgn-error">密码不能为空</div>
+            </li>
+            <li>
+                <span class="lgn-tit">验证码</span>
+                <input type="text" id="code" class="form-ctrl form-ctl-vlte" placeholder="请输入验证码" value="11" onblur="yzcode()">
+                <span id="lgn-code" class="lgn-code" onclick="document.getElementById('verify').src = '/Login/GetValidateCode?height=58&k=' + new Date().toString();">
+                    <img id="verify" src="/Login/GetValidateCode?height=58" alt="看不清？换一张" title="看不清？换一张" />
+                </span>
+                <div id="yzcode" class="lgn-error lgn-ervlt">验证码不能为空</div>
+
+            </li>
+        </ul>
+        <div class="dbtn">
+            <a id="btn_sub" class="lgn-btn lgn-btn2 on" title="登录" value="登录"><i class="icon-sj"></i></a>
+        </div>
+    </form>
+    <script type="text/javascript">
+
+        //忘记密码
+        $(".forget-pwd-content").hover(function(){
+            $(".forget-pwd-hover").show(200);
+        },function(){
+            $(".forget-pwd-hover").hide(200);
+        });
+    </script>
+
+</body>
+</html>

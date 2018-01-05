@@ -1,0 +1,179 @@
+﻿@{
+    ViewBag.Title = "添加应用投诉";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+}
+@JMP.TOOL.UserHelper.js("mobile/REPORT/Appmonitor.js")
+@JMP.TOOL.UserHelper.js("mobile/payment/Interface.mobile.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="mobile-container mobile-popup">
+
+    <div class="plate-form  ui form ">
+        <div class="field">
+            <label>所属应用：</label>
+            <input name="appName" type="text" id="appName" readonly="readonly" onclick="shyy()" /><span class="ie7-input-bug-end"></span>
+            <div class="Validform_checktip" id="appNameyy">*请选择所属应用</div>
+        </div>
+        <div class="field">
+            <label>成功率：</label>
+            <input name="a_request" type="text" id="a_request" onblur="yzrequest()" /><font color='red'>%</font>
+            <div class="Validform_checktip" id="requestyy">*成功率只能为数字</div>
+        </div>
+
+        <div class="field">
+            <label>时间段一：</label>
+            从 <select name="StartDay " id="StartDay" class="ui dropdown fluid fluid-block">
+                <option value="">请选择</option>
+                <option value="1">01</option>
+                <option value="2">02</option>
+                <option value="3">03</option>
+                <option value="4">04</option>
+                <option value="5">05</option>
+                <option value="6">06</option>
+                <option value="7">07</option>
+                <option value="8">08</option>
+                <option value="9">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>到：</label>
+            <select name="EndDay" id="EndDay" class="ui dropdown fluid fluid-block">
+                <option value="">请选择</option>
+                <option value="1">01</option>
+                <option value="2">02</option>
+                <option value="3">03</option>
+                <option value="4">04</option>
+                <option value="5">05</option>
+                <option value="6">06</option>
+                <option value="7">07</option>
+                <option value="8">08</option>
+                <option value="9">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+            </select>
+
+        </div>
+        <div class="field">
+            <label> 分钟数 </label>
+            <input name="a_minute" type="text" id="a_minute" onblur="yzMinute()" value="5" />
+            <div class="Validform_checktip" id="OtherMinteyy">*分钟数只能为数字</div>
+        </div>
+
+        <div class="field">
+            <label>时间段二:从</label>
+            <select name="StartNight " id="StartNight" class="ui dropdown fluid fluid-block">
+                <option value="">请选择</option>
+                <option value="1">01</option>
+                <option value="2">02</option>
+                <option value="3">03</option>
+                <option value="4">04</option>
+                <option value="5">05</option>
+                <option value="6">06</option>
+                <option value="7">07</option>
+                <option value="8">08</option>
+                <option value="9">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>到 </label>
+            <select name="EndNight" id="EndNight" class="ui dropdown fluid fluid-block">
+                <option value="">请选择</option>
+                <option value="1">01</option>
+                <option value="2">02</option>
+                <option value="3">03</option>
+                <option value="4">04</option>
+                <option value="5">05</option>
+                <option value="6">06</option>
+                <option value="7">07</option>
+                <option value="8">08</option>
+                <option value="9">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label>
+                分钟数
+            </label>
+            <input name="NightMinute" type="text" id="NightMinute" onblur="yzNightMinute()" value="5" />
+            <div class="Validform_checktip" id="NightMinuteyy">*分钟数只能为数字</div>
+        </div>
+
+        <div class="field">
+            <label>其他时间段: 分钟数 </label>
+            <input name="OtherMinte" type="text" id="OtherMinte" onblur="yzOtherMinte()" value="5" />
+            <div class="Validform_checktip" id="OtherMinteyy">*分钟数只能为数字</div>
+        </div>
+
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" class="large ui primary button" name="btnSave" value="保存" id="btnSaveAddAppmonitor" class="btn mr10" />
+            <a href="~/REPORT/AppmonitorList" class="large ui primary button"> 取消</a>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+
+    })
+</script>

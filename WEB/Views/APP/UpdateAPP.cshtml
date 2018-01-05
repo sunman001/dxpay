@@ -1,0 +1,143 @@
+﻿@{
+    ViewBag.Title = "修改应用";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var model = ViewBag.model as JMP.MDL.jmp_app;
+    var rilist = ViewBag.rilist as List<JMP.MDL.jmp_risklevelallocation>;
+}
+@JMP.TOOL.UserHelper.js("APP/APP.js")
+<div class="main">
+    <div class="plate-form">
+        <dl>
+            <dt>应用名称：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="inputName" type="text" id="inputName" onblur="yzname()" maxlength="20" sucmsg="验证成功" nullmsg="应用名称长度不超过20" errormsg="应用名称长度不超过20" value="@(string.IsNullOrEmpty(model.a_name) ? "" : model.a_name)" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="nameyy">*应用名长度不超过20</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>关联平台：</dt>
+            <dd>
+                <div class="rule-single-select mr10">
+                    <select name="a_platform_id" id="a_platform_id" onchange="glpt()" sucmsg="请选择关联平台" nullmsg="请选择关联平台" errormsg="请选择关联平台">
+                        @Html.Raw(ViewBag.glpt)
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>支付类型：</dt>
+            <dd>
+                <div class="ejzldiv-nb">
+                    @Html.Raw(ViewBag.zf)
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>关联应用：</dt>
+            <dd>
+                <div style="margin-left: -10px;">
+                    @Html.Raw(ViewBag.yy)
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>应用子类型:</dt>
+            <dd>
+                <div class="ejzldiv" id="zlyy">
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>回调地址：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="aurl" type="text" id="aurl" onblur="dzyz()"  value="@(string.IsNullOrEmpty(model.a_notifyurl) ? "" : model.a_notifyurl)"  maxlength="200" /><span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="yzdz">* 回调地址(必须以http://或者https://开头)</div>
+            </dd>
+        </dl>
+         <dl id="tbhddz" style="display:none;">
+            <dt>同步回调地址：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="o_showaddress" type="text" id="o_showaddress" onblur="tbdzyz()" value="@(string.IsNullOrEmpty(model.a_showurl) ? "" : model.a_showurl)" maxlength="200" /><span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="yzo_showaddress">* 回调地址(必须以http://或者https://开头)</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>开发者ID：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                      <input name="a_user_idyx" type="text" id="a_user_idyx" readonly="readonly" onclick="xzuser()"  onblur="kfz()" value="@(string.IsNullOrEmpty(model.u_email.ToString()) ? "" : model.u_email.ToString())" /><span class="ie7-input-bug-end"></span>
+                    <input type="hidden" id="a_user_id" name="a_user_id"  value="@(string.IsNullOrEmpty(model.a_user_id.ToString()) ? "" : model.a_user_id.ToString())"/>
+                </div>
+                <div class="Validform_checktip" id="yzkfz">* 请选择开发者</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>应用Key：</dt>
+            <dd>
+                <div>
+                    <textarea  style="width: 400px; height:50px;" readonly="readonly" >@(model.a_key)</textarea>
+                    <div class="Validform_checktip">* 应用key客户端使用</div>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>应用秘钥：</dt>
+            <dd>
+                <div>
+                    <textarea  style="width: 400px; height:100px;" readonly="readonly" >@(model.a_secretkey)</textarea>
+                    <div class="Validform_checktip">* 应用秘钥服务端使用</div>
+                </div>
+            </dd>
+        </dl>
+
+        <dl>
+            <dt>应用地址：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="a_appurl" type="text" id="a_appurl" onblur="a_appurlyz()" value="@(string.IsNullOrEmpty(model.a_appurl) ? "" : model.a_appurl)" maxlength="200" /><span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="yz_a_appurl">* 应用地址(必须以http://或者https://开头)</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>应用简介：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <textarea style="width: 400px; height:50px;" id="a_appsynopsis" onblur="yza_appsynopsis()">@(model.a_appsynopsis)</textarea>
+                </div>
+                <div class="Validform_checktip" id="yz_a_appsynopsis">* 应用简介</div>
+            </dd>
+        </dl>
+        <input type="hidden" id="a_id" value="@(model.a_id == 0 ? 0 : model.a_id)" />
+    </div>
+</div>
+<div class="page-footer" style="width:100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnSaveUpdateApp" class="btn btn-primary" />
+        <input name="btnReturn" type="reset"  onclick="btnCodesc()"  value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+        var szmrdj = '@ViewBag.szmrdj';
+        var a_apptype_id = '@(model.a_apptype_id)';
+        xzyylx(szmrdj, a_apptype_id);
+        glpt()
+       
+    })
+
+</script>

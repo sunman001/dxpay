@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>注册</title>
+    <link rel="stylesheet" href="css/logrgt.css">
+</head>
+
+<body>
+    <i class="bg"></i>
+    <header class="lgn-head">
+        <h1 class="tit">极速、便捷、可靠的第三方支付平台</h1>
+    </header>
+    <form class="reg-frm"> 
+        <ul class="lgn-frm-dc reg-frm-dc clearfix">
+            <li>
+                <span class="lgn-tit">商务名称</span>
+                <div class="reg-selc">
+                    <span class="stxt">企业用户</span>
+                    <i class="icon-sj"></i>
+                    <dl class="reg-selc-lst">
+                        <dd class="on">企业用户</dd>
+                        <dd>个人用户</dd>
+                        <dd>代理商</dd>
+                        <dd>加盟商</dd>
+                    </dl>
+                </div>
+            </li>
+            <li>
+                <span class="lgn-tit">用户名</span>
+                <input type="text" class="form-ctrl" placeholder="请输入用户名">
+                <div class="lgn-error on">用户名不能为空</div>
+            </li>
+            <li>
+                <span class="lgn-tit">密码</span>
+                <input type="password" class="form-ctrl" placeholder="请输入密码">
+                <div class="lgn-error">密码不能为空</div>
+            </li>
+            <li>
+                <span class="lgn-tit">确认密码</span>
+                <input type="password" class="form-ctrl" placeholder="请输入密码">
+                <div class="lgn-error">密码不能为空</div>
+            </li>
+            <li>
+                <span class="lgn-tit">手机号码</span>
+                <input type="text" class="form-ctrl form-ctl-vlte" placeholder="请输入验证码">
+                <span class="lgn-code lgn-code-txt">60S</span>
+                <span class="lgn-code lgn-code-txt on">发送验证码</span>
+                <div class="lgn-error lgn-ervlt">验证码不能为空</div>
+            </li>
+            <li>
+                <span class="lgn-tit">验证码</span>
+                <input type="text" class="form-ctrl form-ctl-vlte" placeholder="请输入验证码">
+                <span class="lgn-code" title="看不清，点击更换" alt="看不清，点击更换"><img src="images/img1.jpg"></span>
+                <div class="lgn-error lgn-ervlt">验证码不能为空</div>
+            </li>
+        </ul>
+        <div class="dbtn">
+            <span class="lgn-btn" title="登录"><i class="icon-sj"></i></span><!--所有验证通过才能点击-->
+            <button class="lgn-btn on" title="登录" value="登录"><i class="icon-sj"></i></button>
+            <a href="#" class="rgt">马上登录</a>
+        </div>
+    </form>
+
+
+
+
+
+    <script src="js/jquery-1.8.1.min.js"></script>
+    <script type="text/javascript">
+        //忘记密码
+        $(".forget-pwd-content").hover(function(){
+            $(".forget-pwd-hover").show(200);
+        },function(){
+            $(".forget-pwd-hover").hide(200);
+        });
+        $(".reg-selc .stxt").click(function(){
+            $(".reg-selc-lst").show(200);
+        })
+        $(".reg-selc-lst dd").click(function(){
+            $(".reg-selc-lst dd").removeClass("on");
+            $(this).addClass("on");
+            var txt=$(this).text();
+            $(".reg-selc .stxt").text(txt);
+            $(".reg-selc-lst").hide(200);
+        })
+    </script>
+</body>
+</html>

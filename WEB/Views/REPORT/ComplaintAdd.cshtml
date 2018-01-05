@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "添加应用投诉";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var mode = ViewBag.model as JMP.MDL.jmp_complaint;
+
+}
+@JMP.TOOL.UserHelper.js("REPORT/Complaint.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <div class="plate-form">
+        <dl>
+            <dt>所属应用：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="c_appname" type="text" id="r_appname" readonly="readonly" value="@(!string.IsNullOrEmpty(mode.a_name) ? mode.a_name : "")" onclick="shyy()" /><span class="ie7-input-bug-end"></span>
+                    <input type="hidden" id="r_appid" name="r_appid" value="@(mode.c_appid > 0 ? mode.c_appid : 0)" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="yzkfz">*请选择所属应用</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>所属用户：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input name="a_user_idyx" type="text" id="a_user_idyx" readonly="readonly" value="@(!string.IsNullOrEmpty(mode.u_realname) ? mode.u_realname : "")" />
+                    <input type="hidden" name="a_user_id" id="a_user_id" readonly="readonly" value="@(mode.c_userid > 0 ? mode.c_userid : 0)" />
+
+                </div>
+
+            </dd>
+        </dl>
+
+        <dl>
+            <dt>支付渠道：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="c_payname" type="text" id="c_payname" readonly="readonly" onclick="zfqd()" onblur="yzpayname()" value="@(!string.IsNullOrEmpty(mode.l_corporatename) ? mode.l_corporatename : "")" /><span class="ie7-input-bug-end"></span>
+                    <input type="hidden" id="c_payid" name="c_payid"  value="@(mode.c_payid > 0 ? mode.c_payid : 0)" />
+                </div>
+                <div class="Validform_checktip" id="yzkfz1">* 请选择支付渠道</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>交易流水号：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input name="c_tradeno" type="text" id="c_tradeno" onblur="yztradeno()" value="@(!string.IsNullOrEmpty(mode.c_tradeno) ? mode.c_tradeno : "")" />
+                </div>
+                <div id="yztradeno" class="Validform_checktip">*请输入交易流水号！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>订单编号：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input name="c_code" type="text" id="c_code" onblur="CheckCode()" value="@(!string.IsNullOrEmpty(mode.c_code) ? mode.c_code : "")"/>
+                </div>
+                <div id="yztraCode" class="Validform_checktip">*请输入订单编号！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>付款金额：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input name="c_money" type="text" id="c_money" onblur="CheckPrice()"  value="@(mode.c_money > 0 ? mode.c_money.ToString() : "")"/>
+                </div>
+                <div id="yztrPriceMoney" class="Validform_checktip">*请输入付款金额！</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>付款时间：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <input name="c_times" type="text" id="c_times" value="@(mode.c_times.ToString("yyyy-MM-dd") != "0001-01-01" ? mode.c_times.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))" 
+                           onFocus="WdatePicker({maxDate:'@DateTime.Now.ToString("yyyy-MM-dd")'})" readonly="readonly" />
+                </div>
+
+            </dd>
+        </dl>
+        <dl>
+            <dt>投诉时间：</dt>
+            <dd>
+
+                <div class="single-input normal">
+                    <input name="c_datimes" type="text" id="c_datimes" value="@(mode.c_datimes.ToString("yyyy-MM-dd") != "0001-01-01" ? mode.c_datimes.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))" onFocus="WdatePicker({maxDate:'@DateTime.Now.ToString("yyyy-MM-dd")'})" readonly="readonly" />
+                </div>
+
+            </dd>
+        </dl>
+        <dl>
+            <dt>投诉原因：</dt>
+            <dd>
+                <div class="date-tool-input mr10">
+                    <div class="date-tool-input-text">
+                        <textarea name="c_reason" type="text" id="c_reason" class="txt1"> </textarea>
+                        @{ 
+                            if (!string.IsNullOrEmpty(mode.c_reason))
+                            {
+                            <script type="text/javascript">
+                                document.getElementById("c_reason").innerText = ' @mode.c_reason';
+
+                            </script>
+                            }
+                        }
+
+                        <input type="hidden" id="c_id" value="@(mode.c_id > 0 ? mode.c_id : 0)" />
+                        <input type="hidden" id="c_tjtimes"value="@(!string.IsNullOrEmpty(mode.c_tjtimes.ToString()) ? mode.c_tjtimes.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))" />
+                        <input type="hidden" id="c_state" value="@(!string.IsNullOrEmpty(mode.c_state) ? mode.c_state : "")" />
+                    </div>
+                </div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnSaveAddComplaint" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn" />
+    </div>
+    <div class="clear"></div>
+</div>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+
+    })
+</script>

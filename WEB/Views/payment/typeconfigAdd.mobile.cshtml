@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "支付参数管理添加";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var paylist = ViewBag.paylist as List<JMP.MDL.jmp_paymode>;
+    var mo = ViewBag.mo as JMP.MDL.jmp_payment_type_config;
+}
+@JMP.TOOL.UserHelper.js("/mobile/payment/typeconfig.mobile.js")
+
+<div class="mobile-container mobile-popup">
+
+    <div class="plate-form  ui form ">
+        <div class="field">
+            <label>支付类型：</label>
+
+            <select id="paymodeid" name="paymodeid" onchange="zflxtype()" class="ui dropdown fluid fluid-block" >
+                <option value="0">--请选择类型--</option>
+                @{
+                    foreach (var item in paylist)
+                    {
+                        <option value="@item.p_id" @(mo.paymodeId == item.p_id ? "selected='selected'" : "")>@item.p_name</option>
+                    }
+                }
+            </select>
+           
+            <div class="Validform_checktip" id="zftypeyy">*支付类型</div>
+        </div>
+        <div class="field">
+            <label>支付通道：</label>
+            <div  id="paymenttypeht">
+                <select name="paymenttype" id="paymenttype">
+                    <option value="0">--请选择类型--</option>
+                </select>
+            </div>
+            <div class="Validform_checktip" id="zftdyy">*支付通道</div>
+        </div>
+
+        <div class="field" >
+            <label>标签名称：</label>
+            <input name="Label" type="text" id="Label" onblur="yzLabel()" maxlength="20" value="@(string.IsNullOrEmpty(mo.Label) ? "" : mo.Label)" />
+            <div class="Validform_checktip" id="Labelyy">*标签名称</div>
+        </div>
+        <div class="field">
+            <label>字段名称：</label>
+            <input name="FieldName" type="text" id="FieldName" onblur="yzFieldName()" maxlength="20" value="@(string.IsNullOrEmpty(mo.FieldName) ? "" : mo.FieldName)" />
+            <div class="Validform_checktip" id="FieldNameyy">*字段名称</div>
+        </div>
+        <div class="field">
+            <label>文本类型</label>
+            <select name="InputType" id="InputType" class="ui dropdown fluid fluid-block"  >
+                <option value="">--请选择类型--</option>
+                <option @(mo.InputType == "text" ? "selected='selected'" : "") value="text">text</option>
+                <option @(mo.InputType == "textarea" ? "selected='selected'" : "") value="textarea">textarea</option>
+            </select>
+            <div class="Validform_checktip" id="InputTypeyy">*数据类型</div>
+        </div>
+        <div id="payconfig">
+        </div>
+        <div class="field">
+            <label>描述</label>
+            <textarea id="Description" name="Description" onblur="yzDescription()" style="width: 400px; height: 100px;"></textarea>
+            @{
+                if (!string.IsNullOrEmpty(mo.Description))
+                {
+                    <script type="text/javascript">
+                                document.getElementById("Description").innerText = ' @mo.Description';
+
+                    </script>
+                }
+            }
+            <div class="Validform_checktip" id="Descriptionyy">*数据类型</div>
+        </div>
+
+        <input type="hidden" id="Id" value="@(mo.Id > 0 ? mo.Id : 0)" />
+        <input type="hidden" id="zftdid" value="@(mo.PaymentTypeId > 0 ? mo.PaymentTypeId : 0)" />
+        <input type="hidden" id="CreatedOn" value="@(!string.IsNullOrEmpty(mo.CreatedOn.ToString()) ? mo.CreatedOn.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))" />
+        <input type="hidden" id="Status" value="@(mo.Status > 0 ? mo.Status : 0)" />
+    </div>
+    <div class="page-footer" style="width: 100%;">
+        <div class="btn-listbtn">
+            <input type="button" class="large ui primary button" name="btnSavezftdcs" value="保存" id="btnSavezftdcs" />
+            <a href="/payment/typeconfiglist" class="large ui primary button"> 取消</a>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        if(@mo.Id > 0){
+            zflxtype();
+        }
+    })
+</script>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>表单验证示例</title>
+    <script src="./js/jquery-1.8.1.min.js"></script>
+    <script src="./js/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="./js/jquery-validation/dist/localization/messages_zh.js"></script>
+    <script src="./js/form-validation-common.js"></script>
+    <style type="text/css">
+        body { font-size: 13px; }
+
+        label.error { color: red; background: url('./images/unchecked.gif') no-repeat; padding-left: 18px; }
+
+        label.valid { color: #333; background: url('./images/checked.gif') no-repeat; padding-left: 18px; }
+        .form-item input[type='text'], .form-item input[type='password'], .form-item select { margin-bottom: 8px; min-width: 250px; padding: 2px 3px; line-height: 24px; height: 24px; }
+            .form-item select {
+                height: 30px; min-width: 260px;    
+            } 
+            .form-item input[type='radio'] { margin-bottom: 8px; }
+            .btn{ padding: 8px 20px; cursor: pointer;}
+    </style>
+    <script type="text/javascript">
+       
+        //扩展方法,用于特殊情况下的验证
+        $.validator.addMethod('pwd', function (value, element) {
+            return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/i.test(value);
+        }, '请输入密码,密码为包含数字和字母的8-16个字符');
+
+        $(function () {
+            dxValidator.currentForm = "#formPerson";
+            dxValidator.validateForm({
+                rules: {
+                    FirstName: 'required',
+                    LastName: 'required',
+                    Password: 'required pwd',
+                    ConfirmPassword: {
+                        required: true,
+                        equalTo: '#Password',
+                        pwd:true
+                    },
+                    Gender: 'required',
+                    Browser: 'required'
+                },
+                messages:{
+                    FirstName: {
+                        required: '请输入你的氏姓'
+                    },
+                    LastName: {
+                        required: '请输入你的名字'
+                    },
+                    Gender: {
+                        required: '请选择性别'
+                    },
+                    Password: {
+                        required: '请输入密码'
+                    },
+                    ConfirmPassword: {
+                        required: '请输入确认密码'
+                    },
+                    Browser: {
+                        required: '请选择一种浏览器'
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                    //var data = $(dxValidator.currentForm).serialize();
+                    //$.post('./api/values/formvalidation', data, function(response) {
+                    //    alert(response);
+                    //});
+                    //return false;
+                }
+            });
+        });
+
+        //可选的第二种调用方式
+        function handleSubmit() {
+            //提交前重新验证表单
+            dxValidator.validator.form();
+            //判断表单是否验证通过
+            if (dxValidator.valid()) {
+                var data = $(dxValidator.validator.currentForm).serialize();
+                console.info(data);
+                $.post('./api/values/FormValidation', data, function (response) {
+
+                });
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <h1>表单验证示例</h1>
+    <form action="/api/values/formvalidation" id="formPerson" method="post" autocomplete="false">
+        <div class="form-item">
+            <input type="text" name="FirstName" value="" placeholder="姓氏">
+        </div>
+        <div class="form-item">
+            <input type="text" name="LastName" value="" placeholder="名字" autocomplete="new-password">
+        </div>
+        <div class="form-item">
+            <input name="Gender" value="0" type="radio">
+            <input name="Gender" value="1" type="radio">
+        </div>
+        <div class="form-item">
+            <input type="password" name="Password" id="Password" value="" placeholder="密码">
+        </div>
+        <div class="form-item">
+            <input type="password" name="ConfirmPassword" value="" placeholder="确认密码">
+        </div>
+        <div class="form-item">
+            <select name="Browser">
+                <option value="">Please select...</option>
+                <option value="0">Firefox</option>
+                <option value="1">Chrome</option>
+            </select>
+        </div>
+        <div>
+            <!--<button id="btnSubmit" type="button" class="btn btn-primary" onclick="handleSubmit()">Submit</button>-->
+            <button id="btnSubmit" type="submit" class="btn btn-primary">提 交</button>
+        </div>
+    </form>
+</body>
+
+</html>

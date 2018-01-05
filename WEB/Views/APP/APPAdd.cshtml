@@ -1,0 +1,167 @@
+﻿@{
+    ViewBag.Title = "添加应用";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var glptdt = ViewBag.glptdt as List<JMP.MDL.jmp_platform>;
+    int glptdtpd = 0;
+    var zflist = ViewBag.zflist as List<JMP.MDL.jmp_paymode>;
+    int zf = 0;
+    var yylist = ViewBag.yylist as List<JMP.MDL.jmp_apptype>;
+    int yy = 0;
+    string yyid = "";
+    string szmrdj = "";
+    var mo = ViewBag.mo as JMP.MDL.jmp_app;
+    var modelapptype = ViewBag.modelapptype as JMP.MDL.jmp_apptype;
+}
+@JMP.TOOL.UserHelper.js("APP/APP.js")
+<div class="main">
+    <div class="clear10"></div>
+    <div class="plate-form">
+        <dl>
+            <dt>应用名称：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="inputName" type="text" id="inputName" onblur="yzname()" maxlength="20" sucmsg="验证成功" nullmsg="应用名称长度不超过20" errormsg="应用名称长度不超过20" value="" />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="nameyy">*应用名长度不超过20</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>关联平台：</dt>
+            <dd>
+                <div class="rule-single-select mr10" onclick="glpt()">
+                    <select name="a_platform_id" id="a_platform_id" sucmsg="请选择关联平台" nullmsg="请选择关联平台" errormsg="请选择关联平台">
+                        @{
+                            foreach (var item in glptdt)
+                            {
+                                if (glptdtpd == 0)
+                                {
+                        <option value="@item.p_id" selected="selected">@item.p_name</option>
+                                }
+                                else
+                                {
+                        <option value="@item.p_id">@item.p_name</option>
+                                }
+                                glptdtpd = glptdtpd + 1;
+                            }
+                        }
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>支付类型：</dt>
+            <dd>
+                <div class="ejzldiv-nb">
+                    @{
+                        foreach (var im in zflist)
+                        {
+
+                            <input type="checkbox" name="zflx" class="inputChck"   id="paytype_@im.p_id"  data-stat="@im.p_islocked" value="@im.p_id" @(im.p_islocked == 0 ? "disabled=\"disabled\"" : "") />@im.p_name
+
+
+
+                        }
+
+                    }
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>关联应用：</dt>
+            <dd>
+                <div style="margin-left: -10px;">
+                    @{
+                        foreach (var yym in yylist)
+                        {
+                            yyid = "yy" + yym.t_id;
+                            if (yy == 0)
+                            {
+                                szmrdj = yyid;
+                    <input type="button" id="@yyid" name="yyname" onclick="xzyylx(this.id, 0)" class="xzinput" value="@yym.t_name" />
+                            }
+                            else
+                            {
+                    <input type="button" id="@yyid" name="yyname" class="inpuwxz" onclick="xzyylx(this.id, 0)" value="@yym.t_name" />
+                            }
+                            yy = yy + 1;
+                        }
+                    }
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>应用子类型:</dt>
+            <dd>
+                <div class="ejzldiv" id="zlyy">
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>回调地址：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="aurl" type="text" id="aurl" onblur="dzyz()" value="" maxlength="200" /><span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="yzdz">* 回调地址(必须以http://或者https://开头)</div>
+            </dd>
+        </dl>
+        <dl id="tbhddz" style="display:none;">
+            <dt>同步回调地址：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="o_showaddress" type="text" id="o_showaddress" onblur="tbdzyz()" maxlength="200" value="" /><span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="yzo_showaddress">* 回调地址(必须以http://或者https://开头)</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>开发者：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="a_user_idyx" type="text" id="a_user_idyx" readonly="readonly" onclick="xzuser()" onblur="kfz()" value="" /><span class="ie7-input-bug-end"></span>
+                    <input type="hidden" id="a_user_id" name="a_user_id" />
+                </div>
+                <div class="Validform_checktip" id="yzkfz">* 请选择开发者</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>应用地址：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="a_appurl" type="text" id="a_appurl" onblur="a_appurlyz()" maxlength="200" value="" /><span class="ie7-input-bug-end"></span>
+                </div>
+                <div class="Validform_checktip" id="yz_a_appurl">* 应用地址(必须以http://或者https://开头)</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>应用简介：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <textarea style="width: 400px; height:50px;" id="a_appsynopsis" onblur="yza_appsynopsis()" ></textarea>
+                </div>
+                <div class="Validform_checktip" id="yz_a_appsynopsis">* 应用简介</div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnSaveAddApp" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>
+<script type="text/javascript">
+    //界面加载完成之后执行
+    $(document).ready(function () {
+        var szmrdj = '@szmrdj';
+        xzyylx(szmrdj, 0);
+        glpt()
+    })
+</script>

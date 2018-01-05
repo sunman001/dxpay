@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "母版页";
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>盾行平台管理系统</title>
+    <!-- css -->
+    @JMP.TOOL.UserHelper.css("plugin/font-awesome/css/font-awesome-ie7.min.css")
+    @JMP.TOOL.UserHelper.css("plugin/font-awesome/css/font-awesome.min.css")
+    @JMP.TOOL.UserHelper.css("main.css")
+    @JMP.TOOL.UserHelper.js("jquery-1.7.2.min.js")
+    @JMP.TOOL.UserHelper.js("layout.js")
+    @JMP.TOOL.UserHelper.js("JValidator.js")
+    @JMP.TOOL.UserHelper.js("layer/layer.js")
+</head>
+<body>
+    @RenderBody()
+</body>
+</html>
+

@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "账单管理";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.CoSettlementDeveloperOverview>;
+    var model = ViewBag.model as JMP.MDL.CoSettlementDeveloperOverview;
+}
+
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main mobile-container">
+    <div class="toolbar-container">
+        <section class="sct-btn-tit">
+            <a id="btn-show-search" class="btn btn-primary" onclick="pop.showSearch('search-container')">查询</a>
+        </section>
+    </div>
+    <div class="search-container">
+        <select name="searchType" id="searchType" class="ui dropdown fluid fluid-block">
+            @*<option value="0" @(Request["s_type"] == "0" ? "selected=selected" : "")>用户编号</option>*@
+            <option value="1" @(Request["s_type"] == "1" ? "selected=selected" : "")>代理商名称</option>
+        </select>
+        <div class="ui input fluid fluid-block">
+            <input name="searchKey" type="text" id="searchKey" placeholder="请输入关键字" value="@Request["s_key"]" class="txtipt" />
+        </div>
+        <div class="date-tool-input-text">
+            <input name="stime" type="text" id="stime" class="dataipt txtipt" value="@(string.IsNullOrEmpty(Request["s_begin"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : Request["s_begin"])" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')}',minDate:'@DateTime.Now.ToString("yyyy-01-01")',dateFmt:'yyyy-MM-dd'})" />
+        </div>
+        <div class="date-tool-input-text">
+            <input name="etime" type="text" id="etime" class="dataipt txtipt" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")',dateFmt:'yyyy-MM-dd'})" value="@(string.IsNullOrEmpty(Request["s_end"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : Request["s_end"])" />
+        </div>
+        <select name="searchDesc" id="searchDesc" class="ui dropdown fluid fluid-block">
+            <option value="1" @(Request["s_sort"] == "1" ? "selected=selected" : "")>降序</option>
+            <option value="0" @(Request["s_sort"] == "0" ? "selected=selected" : "")>升序</option>
+        </select>
+        <a id="btn_search" class="ui button fluid big primary fluid-block" href="javascript:" onclick="SerachUserReport()">查询</a>
+    </div>
+    <div class="data-table-2 table-container table-responsive">
+        <table class="ui celled striped white table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th>代理商</th>
+                    <th>所属商务</th>
+                    <th>账单日期</th>
+                    <th>流水金额</th>
+                    <th>服务费</th>
+                    <th>提成金额</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+
+                        foreach (var item in list)
+                        {
+
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+
+                            <tr onclick="clickOpen(@id)">
+                                <td><i class="fa fa-plus-circle greenz" name="Icon" id="@Icon"></i>&nbsp;&nbsp; </td>
+                                <td>@item.DisplayName</td>
+                                <td>@item.bpname</td>
+                                <td>@item.SettlementDay.ToString("yyyy-MM-dd")</td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.TotalAmount)</td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.ServiceFee)</td>
+                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.AgentPushMoney)</td>
+                            </tr>
+                               <!--展开-->
+                            <tr>
+                                <td colspan="7" style="display:none;" name="Open" id="@Open">
+                                    <div class="dcnt-tab">
+                                        <table class="table-lst">
+                                            <tr>
+                                                <td>
+                                                    @{Html.RenderAction("BillAgentList_Details", "Financial", new { agentId = item.agentid, SettlementDay = item.SettlementDay.ToString("yyyy-MM-dd") });}
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                    </div>
+                                </td>
+                            </tr>
+                                                        }
+                                                        if (model != null)
+                                                        {
+                                                            <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td>合计：</td>
+                                                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(model.TotalAmount)</td>
+                                                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(model.ServiceFee)</td>
+                                                                <td>@TOOL.DecimalDigit.DecimalPlacesToString(model.AgentPushMoney)</td>
+                                                            </tr>
+                                                            }
+
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr>
+                                                                <td align="center" colspan="7" class="nodata">暂无记录</td>
+                                                            </tr>
+                                                        }
+                }
+            </tbody>
+        </table>
+        @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+    </div>
+</div>
+<script type="text/javascript">
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/Financial/BillAgentList?curr=" + pageIndex + "&psize=" + pageSize;
+        var types = $("#searchType option:selected").val();
+        var searchKey = $("#searchKey").val();
+        var stime = $("#stime").val();
+        var etime = $("#etime").val();
+        var sort = $("#searchDesc option:selected").val();
+        var searchTotal = $("#searchTotal option:selected").val();
+        url += "&s_type=" + types + "&s_key=" + searchKey + "&s_sort=" + sort + "&s_begin=" + stime + "&s_end=" + etime;
+        location.href = encodeURI(url);
+    }
+
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //查询
+    function SerachUserReport() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+</script>

@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "详情";
+    var colist = ViewBag.colist as List<JMP.MDL.CoSettlementDeveloperOverview>;
+}
+@{
+    <div class="table-hide-cnt">
+        <table border="0" cellpadding="0" cellspacing="0" class="table-hide">
+            <thead>
+                <tr>
+
+                    <th>用户名称</th>
+                    <td>类型</td>
+                    <th>流水金额</th>
+                    <th>服务费</th>
+                    <th>提成费率</th>
+                    <th>提成金额</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in colist)
+            {
+                if (item != null)
+                {
+                        <tr>
+                            <td>@(item.relation_type == 1 ? item.DeveloperName : item.DisplayName)</td>
+                            <td>@(item.relation_type == 1 ? "直客" : "代理商")</td>
+                            <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.TotalAmount)</td>
+                            <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.ServiceFee)</td>
+                            <td>@String.Format("{0:N2}", (item.BpPushMoneyRatio * 100)) % </td>
+                            <td>@TOOL.DecimalDigit.DecimalPlacesToString(item.BpPushMoney)</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}

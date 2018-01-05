@@ -1,0 +1,128 @@
+﻿@{
+    ViewBag.Title = "用户日志";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+}
+<div class="main mobile-container">
+    <section class="sct-btn-tit">
+        <a id="btn-show-search" class="btn btn-primary" onclick="pop.showSearch('search-container')">查询</a>
+    </section>
+    <div class="search-container">
+        <select name="search_Type" id="search_Type" class="ui dropdown fluid fluid-block">
+            <option value="1" @(ViewBag.stype == "1" ? "selected='selected'" : "")>IP地址</option>
+            <option value="2" @(ViewBag.stype == "2" ? "selected='selected'" : "")>真实姓名</option>
+            <option value="3" @(ViewBag.stype == "3" ? "selected='selected'" : "")>简短说明</option>
+            <option value="4" @(ViewBag.stype == "4" ? "selected='selected'" : "")>附加信息</option>
+        </select>
+        <div class="ui input fluid fluid-block">
+            <input name="search_Key" type="text" id="search_Key" placeholder="请输入关键字" value="@ViewBag.sname" />
+        </div>
+        <select name="search_logtype" id="search_logtype" class="ui dropdown fluid fluid-block">
+            <option value="" @(ViewBag.ltype == "" ? "selected='selected'" : "")>日志类型</option>
+            <option value="1" @(ViewBag.ltype == "1" ? "selected='selected'" : "")>注册</option>
+            <option value="2" @(ViewBag.ltype == "2" ? "selected='selected'" : "")>登录</option>
+            <option value="3" @(ViewBag.ltype == "3" ? "selected='selected'" : "")>操作</option>
+            <option value="4" @(ViewBag.ltype == "4" ? "selected='selected'" : "")>异常</option>
+            <option value="5" @(ViewBag.ltype == "5" ? "selected='selected'" : "")>通知</option>
+        </select>
+        <select name="search_Desc" id="search_Desc" class="ui dropdown fluid fluid-block">
+            <option value="1" @(ViewBag.sort == 1 ? "selected='selected'" : "")>降序</option>
+            <option value="0" @(ViewBag.sort == 0 ? "selected='selected'" : "")>升序</option>
+        </select>
+        <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="SearchUserLog()">查询</a>
+    </div>
+    <div class="table-container table-responsive">
+        <table class="ui celled striped white table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th>编号</th>
+                    <th>真实姓名</th>
+                    <th>日志类型</th>
+
+                    <th>简短说明</th>
+
+                    <th>日志时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.Rows.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+
+                        foreach (System.Data.DataRow dr in Model.Rows)
+                        {
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+                            <tr onclick="clickOpen(@id)">
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                                <td>@dr["l_id"]</td>
+                                <td>@dr["u_realname"]</td>
+                                <td>
+                                    @(!string.IsNullOrEmpty(dr["l_logtype_id"].ToString()) ?
+                        dr["l_logtype_id"].ToString() == "1" ? "注册" : dr["l_logtype_id"].ToString() == "2" ? "登录" : dr["l_logtype_id"].ToString() == "3" ? "操作" : dr["l_logtype_id"].ToString() == "4" ? "异常" : dr["l_logtype_id"].ToString() == "5" ? "通知" : "---" : "---")
+                                </td>
+                                <td>
+                                    @(string.IsNullOrEmpty(dr["l_sms"].ToString()) ? "---" : dr["l_sms"].ToString())
+                                </td>
+                                <td>@(string.IsNullOrEmpty(dr["l_time"].ToString()) ? "---" : DateTime.Parse(dr["l_time"].ToString()).ToString("yyyy-MM-dd HH:mm:ss"))</td>
+                            </tr>
+                            <!--展开-->
+                            <tr>
+                                <td colspan="6" style="display:none;" name="Open" id="@Open">
+                                    <div class="dcnt-tab">
+                                        <table class="table-lst">
+                                            <tr>
+                                                <td>IP地址:@(string.IsNullOrEmpty(dr["l_ip"].ToString()) ? "---" : dr["l_ip"].ToString())</td>
+                                                <td>位置:@(string.IsNullOrEmpty(dr["l_location"].ToString()) ? "---" : dr["l_location"].ToString())</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" title="@dr["l_info"].ToString()">附加信息:@JMP.TOOL.RequestHelper.cutString(dr["l_info"].ToString(), 100)</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td align="center" colspan="6" class="nodata">暂无记录</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+    <input name="log_curr_page" id="log_curr_page" type="hidden" value="@ViewBag.pageIndexs" />
+</div>
+<script type="text/javascript">
+    //用户日志列表分页
+    function ArticleManage(pageIndex, pageSize) {
+        var url = "/AppUser/AppUserLog?curr=" + pageIndex + "&psize=" + pageSize;
+        var types = $("#search_Type").val();
+        var searchKey = $("#search_Key").val();
+        var sort = $("#search_Desc").val();
+        var logtype = $("#search_logtype").val();
+        url += "&types=" + types + "&searchKey=" + searchKey + "&sort=" + sort + "&logtype=" + logtype;
+        location.href = encodeURI(url);
+    }
+
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        ArticleManage(1, PageSize);
+    }
+
+    //搜索用户日志列表
+    function SearchUserLog() {
+        var pagexz = $("#log_curr_page").val();
+        var PageSize = $("#pagexz").val();
+        ArticleManage(pagexz, PageSize);
+    }
+</script>

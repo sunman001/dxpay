@@ -1,0 +1,230 @@
+﻿@using WEB.Util
+@using WEB.Extensions
+@{
+    ViewBag.Title = "支付配置界面";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_interface>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+    var yylist = ViewBag.yylist as List<JMP.MDL.jmp_paymode>;
+}
+@JMP.TOOL.UserHelper.js("mobile/payment/Interface.mobile.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main mobile-container">
+    <div class="toolbar-container">
+        <div id="ToolBar" class="help button">
+            <span class="buttons primary">
+            </span>
+        </div>
+        <div id="ToolBar" class="frm-dcnt">
+            <ul class="frm-ul-tit clearfix">
+                @Html.Raw(ViewBag.locUrl)
+                <li>
+                    <a id="btn-show-search" class="btn" onclick="pop.showSearch('search-container')">查询</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="search-container">
+        <select name="searchType" id="searchType" class="ui dropdown fluid fluid-block">
+            <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>编号</option>
+            <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>支付通道</option>
+            <option value="3" @(ViewBag.type == 3 ? "selected='selected'" : "")>申请公司</option>
+            <option value="4" @(ViewBag.type == 4 ? "selected='selected'" : "")>优先级</option>
+        </select>
+        
+        <div class="ui input fluid fluid-block">
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </div>
+
+        <select name="SelectState" id="SelectState"  class="ui dropdown fluid fluid-block">
+            <option value="-1" @(ViewBag.SelectState == -1 ? "selected='selected'" : "")>状态</option>
+            <option value="1" @(ViewBag.SelectState == 1 ? "selected='selected'" : "")>正常</option>
+            <option value="0" @(ViewBag.SelectState == 0 ? "selected='selected'" : "")>冻结</option>
+            <option value="2" @(ViewBag.SelectState == 2 ? "selected='selected'" : "")>可用</option>
+            <option value="3" @(ViewBag.SelectState == 3 ? "selected='selected'" : "")>超出</option>
+            <option value="4" @(ViewBag.SelectState == 4 ? "selected='selected'" : "")>备用</option>
+        </select>
+        <select name="risk" id="risk" class="ui dropdown fluid fluid-block">
+            <option value="-1" @(ViewBag.risk == -1 ? "selected='selected'" : "")>--风控类型--</option>
+            <option value="0" @(ViewBag.risk == 0 ? "selected='selected'" : "")>风险等级</option>
+            <option value="1" @(ViewBag.risk == 1 ? "selected='selected'" : "")>应用ID</option>
+            <option value="2" @(ViewBag.risk == 2 ? "selected='selected'" : "")>通道池</option>
+        </select>
+        <select name="searchDesc" id="searchDesc" class="ui dropdown fluid fluid-block">
+            <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+            <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+        </select>
+        <select name="auditstate" id="auditstate" class="ui dropdown fluid fluid-block">
+            <option value="0" @(ViewBag.auditstate == 0 ? "selected='selected'" : "")>支付类型</option>
+            @foreach (var item in yylist)
+            {
+                <option value="@item.p_id" @(ViewBag.auditstate == item.p_id ? "selected='selected'" : "")>@item.p_name</option>
+            }
+        </select>
+        <a id="btnSearch"  class="ui button fluid big primary fluid-block" href="javascript:" onclick="serchlocuser()">查询</a>
+        
+    </div>
+    <div class="data-table-2 table-container table-responsive">
+        <table class="ui celled striped table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="all" onclick="checkAll(this)" />
+                    </th>
+                    <th>展开</th>
+                    <th width="60">编号</th>
+                    <th>支付通道</th>
+                    <th>支付类型</th>
+                    <th>关联平台</th>
+                    <th>成本费率</th>
+                    <th>优先级</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+                        bool getEdit = bll_limit.GetLocUserLimitVoids("/payment/InterfaceAddOrUpdate", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//编辑按钮
+                        bool getkyedit = bll_limit.GetLocUserLimitVoids("/payment/payUpdateSeate", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));//可用按钮
+                        bool getRatio = bll_limit.GetLocUserLimitVoids("/payment/PayMenttypeCostRatio", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                        foreach (var item in list)
+                        {
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+                            <tr onclick="clickOpen(@id)">
+                                <td>
+                                    <input type="checkbox" name="child" class="checkall" value="@item.l_id" />
+                                </td>
+                                <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp;</td>
+                                <td>@item.l_id</td>
+                                <td>@item.p_name</td>
+                                <td>
+                                    @item.zflxname
+                                </td>
+                                <td>@item.p_platform.ConvertRelatedPlatformToString()</td>
+                                <td>@String.Format("{0:N2}", (item.l_CostRatio * 100))%</td>
+                                <td>@item.l_sort</td>
+                                <td>
+                                    @{
+                                        switch (item.l_isenable)
+                                        {
+                                            case 1:
+                                                <span class='green'>正常</span>
+                                                break;
+                                            case 2:
+                                                <span style="color:#3B84ED">可用</span>
+                                                break;
+                                            case 0:
+                                                <span class='red'>冻结</span>
+                                                break;
+                                            case 3:
+                                                <span style="color:#e212ef">超额</span>
+                                                break;
+                                            case 4:
+                                                <span style="color:blue">备用</span>
+                                                break;
+
+                                        }
+
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        if (getEdit)
+                                        {
+                                            <a href="javascript:" class='blue' onclick="UpdateInterface(@item.l_id)">编辑</a>
+                                        }
+                                        if (getkyedit && item.l_isenable != 2)
+                                        {
+                                            <a href="javascript:" class='blue' onclick="UpdateSeate(@item.l_id)">设置为可用</a>
+                                        }
+                                        if (getRatio)
+                                        {
+                                            <a href="javascript:" class="blue" onclick="UpdatePayCR(@item.l_id)">设置成本费率</a>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                              <!--展开-->
+                                        <tr>
+                                            <td colspan="10" style="display:none;" name="Open" id="@Open">
+                                                <div class="dcnt-tab">
+                                                    <table class="table-lst">
+                                                        <tr>
+
+                                                            <td colspan="1">申请公司：@item.l_corporatename</td>
+                                                            <td colspan="1">日收入最大金额（元）：@item.l_daymoney.ToString("f2")</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                支付接口配置信息：@{
+                                                                    string str = item.l_jsonstr.JsonToString();
+                                                                    <label title="@str">@JMP.TOOL.RequestHelper.cutString(str, 60)</label>
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                支付应用类型：                                                                @{
+                                                                    switch (item.l_risk)
+                                                                    {
+                                                                        case 1:
+                                                                            <label>@WEB.Controllers.paymentController.SelectAppName(item.l_apptypeid.ToString());</label>
+                                                                            break;
+                                                                        case 0:
+                                                                            <label>@WEB.Controllers.paymentController.SelectAppTyep(item.l_apptypeid.ToString());</label>
+                                                                            break;
+                                                                        case 2:
+                                                                            <label>@WEB.Controllers.paymentController.SelectTdcName(item.l_apptypeid.ToString());</label>
+                                                                            break;
+                                                                    }
+
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                风控类型：@{
+                                                                    switch (item.l_risk)
+                                                                    {
+                                                                        case 0:
+                                                                            <label>风险等级</label>
+                                                                            break;
+                                                                        case 1:
+                                                                            <label>应用ID</label>
+                                                                            break;
+                                                                        case 2:
+                                                                            <label>通道池</label>
+                                                                            break;
+                                                                    }
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="1">单笔最小金额（元）：@item.l_minimum.ToString("f2")</td>
+                                                            <td colspan="1">单笔最大金额（元）：@item.l_maximum.ToString("f2")</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <tr>
+                                                                            <td align="center" colspan="10" class="nodata">暂无记录</td>
+                                                                        </tr>
+                                                                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+
+</div>

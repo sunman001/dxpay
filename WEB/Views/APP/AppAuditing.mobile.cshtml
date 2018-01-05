@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "AppAuditing";
+    Layout = "~/Views/UI/dialog.mobile.cshtml";
+    var model = ViewBag.model as JMP.MDL.jmp_app;
+    var rilist = ViewBag.rilist as List<JMP.MDL.jmp_risklevelallocation>;
+}
+@JMP.TOOL.UserHelper.js("mobile/APP/APP.mobile.js")
+@JMP.TOOL.UserHelper.js("Authentication.js")
+
+<div class="mobile-popup mobile-container">
+    <input type="hidden" id="aid" value="@(model.a_id)">
+    <div class="plate-form">
+        <dl>
+            <dt>风险等级：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <div class="rule-single-select">
+                        <select id="a_rid" name="a_rid" onchange="yza_rid()">
+                            <option value="0" @(model.a_rid == 0 ? "selected='selected'" : "")>--请选择风险等级--</option>
+                            @{
+                                foreach (var item in rilist)
+                                {
+                            <option value="@item.r_id" @(model.a_rid == item.r_id ? "selected='selected'" : "")>@item.r_name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="Validform_checktip" id="a_ridyy">*风险等级</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>审核状态：</dt>
+            <dd>
+                <div>
+                    <label>
+                        <input type="radio" name="a_auditstate" @(model.a_auditstate == 0 ? "checked='checked'" : "") value="0" />未审核
+                    </label>
+                    <label>
+                        <input type="radio" name="a_auditstate" @(model.a_auditstate == 1 ? "checked='checked'" : "") value="1" />审核通过
+                    </label>
+                    <label>
+                        <input type="radio" name="a_auditstate" @(model.a_auditstate == 2 ? "checked='checked'" : "") value="2" />审核未通过
+                    </label>
+                </div>
+            </dd>
+        </dl>
+    </div>
+    <div class="page-footer">
+        <div class="btn-listbtn">
+            <input type="button" name="btnSave" value="保存" id="SaveUpdateAppAuditing" onclick="SaveUpdateAppAuditing()" class="btn btn-primary" />
+            <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+        </div>
+        <div class="clear"></div>
+    </div>
+
+</div>

@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "收银台预览";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+}
+<header class="page-tit">
+    <i class="fa fa-bars btn-nav" title="导航"></i>
+    <span class="tit">收银台预览</span>
+</header>
+<div class="box_container">
+
+    <ul class="terminal-nav terminal-navs clearfix">
+        <li name="xzk" class="active" id="btn_h5">H5</li>
+        <li name="xzk" id="btn_ios">IOS模式</li>
+        <li name="xzk" id="btn_android">安卓模式</li>
+    </ul>
+    <div class="imgdiv">
+        <img src="../img/h5.png" class="img0" style="display:block"/>
+        <img src="../img/ios.png" class="img1" />
+        <img src="../img/android.jpg" class="img2" />
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $(".terminal-nav li").click(function () {
+            $(".terminal-nav li").removeClass("active");
+            $(this).addClass("active");
+            var idx = $(this).index();
+            $(".imgdiv img").hide(100);
+            $(".imgdiv .img" + idx).show(200);
+        })
+
+    });
+
+</script>

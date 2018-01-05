@@ -1,0 +1,180 @@
+﻿@{
+    ViewBag.Title = "用户报表管理";
+    Layout = "~/Views/UI/master.mobile.cshtml";
+    var ddt = ViewBag.ddt as System.Data.DataTable;
+}
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main mobile-container">
+    <section class="sct-btn-tit">
+        <a id="btn-show-search" class="btn btn-primary" onclick="pop.showSearch('search-container')">查询</a>
+    </section>
+    <div class="search-container">
+
+        <select name="searchType" id="searchType" class="ui dropdown fluid fluid-block">
+            @*<option value="0" @(Request["s_type"] == "0" ? "selected=selected" : "")>用户编号</option>*@
+            <option value="1" @(Request["s_type"] == "1" ? "selected=selected" : "")>用户名称</option>
+        </select>
+        <div class="ui input fluid fluid-block">
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" />
+        </div>
+        <div class="ui input fluid fluid-block field">
+            <input name="stime" type="text" id="stime" class="txt-date" value="@(string.IsNullOrEmpty(Request["s_begin"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : Request["s_begin"])" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'etime\')||\'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")\'}'})" />
+            ~
+            <input name="etime" type="text" id="etime" class="txt-date" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'stime\')}',maxDate:'@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")'})" value="@(string.IsNullOrEmpty(Request["s_end"]) ? DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd") : Request["s_end"])" />
+        </div>
+        <select name="searchDesc" id="searchDesc" class="ui dropdown fluid fluid-block">
+            <option value="1" @(Request["s_sort"] == "1" ? "selected=selected" : "")>降序</option>
+            <option value="0" @(Request["s_sort"] == "0" ? "selected=selected" : "")>升序</option>
+        </select>
+        <a id="btnSearch" class="ui button fluid big primary fluid-block" href="javascript:" onclick="SerachUserReport()">查询</a>
+    </div>
+    <div class="table-container table-responsive">
+        <table class="ui celled striped  table-cnt" id="table">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th>日期</th>
+                    <th>用户名</th>
+                    <th>设备量</th>
+                    <th>请求量</th>
+                    <th>成功量</th>
+                    <th>请求率</th>
+                    <th>付费成功率</th>
+                    <th>金额成功率</th>
+                    <th>合计收入</th>
+                    <th>arpu值</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model.Rows.Count > 0)
+                {
+                    int id = 0;
+                    string Icon = "Icon_";
+                    string Open = "Open_";
+
+                    foreach (System.Data.DataRow dr in Model.Rows)
+                    {
+                        id = id + 1;
+                        Icon = "Icon_" + id;
+                        Open = "Open_" + id;
+
+                        <tr onclick="clickOpen(@id)">
+                            <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i>&nbsp;&nbsp; </td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_time"].ToString()) ? DateTime.Parse(dr["a_time"].ToString()).ToString("yyyy-MM-dd") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["u_realname"].ToString()) ? dr["u_realname"].ToString() : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_equipment"].ToString()) ? decimal.Parse(dr["a_equipment"].ToString()).ToString("f0") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_count"].ToString()) ? decimal.Parse(dr["a_count"].ToString()).ToString("f0") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_success"].ToString()) ? decimal.Parse(dr["a_success"].ToString()).ToString("f0") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_equipment"].ToString()) && dr["a_equipment"].ToString() != "0" ? decimal.Parse(dr["a_equipment"].ToString()) != 0 ? ((decimal.Parse(dr["a_count"].ToString()) / decimal.Parse(dr["a_equipment"].ToString())) * 100).ToString("f2") + "%" : "0.00%" : "0.00%")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_count"].ToString()) && dr["a_count"].ToString() != "0" ? decimal.Parse(dr["a_count"].ToString()) != 0 ? ((decimal.Parse(dr["a_success"].ToString()) / decimal.Parse(dr["a_count"].ToString())) * 100).ToString("f2") + "%" : "0.00%" : "0.00%")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_money"].ToString()) ? decimal.Parse(dr["a_money"].ToString()) != 0 ? ((decimal.Parse(dr["a_curr"].ToString()) / decimal.Parse(dr["a_money"].ToString())) * 100).ToString("f2") + "%" : "0.00%" : "0.00%")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_curr"].ToString()) ? decimal.Parse(dr["a_curr"].ToString()).ToString("f2") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(dr["a_equipment"].ToString()) && dr["a_equipment"].ToString() != "0" ? decimal.Parse(dr["a_equipment"].ToString()) != 0 ? (decimal.Parse(dr["a_curr"].ToString()) / decimal.Parse(dr["a_equipment"].ToString())).ToString("f2") : "0.00" : "0.00")</td>
+                        </tr>
+                 <!--展开部分-->
+                        <tr>
+                            <td colspan="11" style="display:none;" name="Open" id="@Open">
+                                <div class="dcnt-tab">
+                                    <table class="table-lst">
+                                        <tr>
+                                            <td>支付宝收入:@(!string.IsNullOrEmpty(dr["a_alipay"].ToString()) ? decimal.Parse(dr["a_alipay"].ToString()).ToString("f2") : "---")</td>
+                                            <td>微信收入:@(!string.IsNullOrEmpty(dr["a_wechat"].ToString()) ? decimal.Parse(dr["a_wechat"].ToString()).ToString("f2") : "---")</td>
+                                            <td>银联收入:@(!string.IsNullOrEmpty(dr["a_unionpay"].ToString()) ? decimal.Parse(dr["a_unionpay"].ToString()).ToString("f2") : "---")</td>
+                                            <td>QQ钱包收入:@(!string.IsNullOrEmpty(dr["a_qqwallet"].ToString()) ? decimal.Parse(dr["a_qqwallet"].ToString()).ToString("f2") : "---")</td>
+                                            <td>未支付量:@(!string.IsNullOrEmpty(dr["a_notpay"].ToString()) ? decimal.Parse(dr["a_notpay"].ToString()).ToString("f0") : "---")</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    if (ddt.Rows.Count > 0)
+                    {
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>合计：</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_equipment"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_equipment"].ToString()).ToString("f0") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_count"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_count"].ToString()).ToString("f0") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_success"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_success"].ToString()).ToString("f0") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_equipment"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_equipment"].ToString()) != 0 ? ((decimal.Parse(ddt.Rows[0]["a_count"].ToString()) / decimal.Parse(ddt.Rows[0]["a_equipment"].ToString())) * 100).ToString("f2") + "%" : "0.00%" : "0.00%")</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_count"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_count"].ToString()) != 0 ? ((decimal.Parse(ddt.Rows[0]["a_success"].ToString()) / decimal.Parse(ddt.Rows[0]["a_count"].ToString())) * 100).ToString("f2") + "%" : "0.00%" : "0.00%")</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_money"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_money"].ToString()) != 0 ? ((decimal.Parse(ddt.Rows[0]["a_curr"].ToString()) / decimal.Parse(ddt.Rows[0]["a_money"].ToString())) * 100).ToString("f2") + "%" : "0.00%" : "0.00%")</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_curr"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_curr"].ToString()).ToString("f2") : "---")</td>
+                            <td>@(!string.IsNullOrEmpty(ddt.Rows[0]["a_equipment"].ToString()) ? decimal.Parse(ddt.Rows[0]["a_equipment"].ToString()) != 0 ? (decimal.Parse(ddt.Rows[0]["a_curr"].ToString()) / decimal.Parse(ddt.Rows[0]["a_equipment"].ToString())).ToString("f2") : "0.00" : "0.00")</td>
+                            </tr>
+
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>合计：</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td align="center" colspan="11" class="nodata"> 暂无记录 </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+        @JMP.TOOL.HtmlPage.MobilePagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+        <script type="text/javascript">
+
+            function ArticleManage(pageIndex, pageSize) {
+                var url = "/REPORT/UserReport?curr=" + pageIndex + "&psize=" + pageSize;
+                var types = $("#searchType option:selected").val();
+                var searchKey = $("#searchKey").val();
+                var stime = $("#stime").val();
+                var etime = $("#etime").val();
+                var sort = $("#searchDesc option:selected").val();
+                url += "&s_type=" + types + "&s_key=" + searchKey + "&s_sort=" + sort + "&s_begin=" + stime + "&s_end=" + etime;
+                location.href = encodeURI(url);
+            }
+            //选择每页显示数量
+            function pagexz() {
+                var PageSize = $("#pagexz").val();
+                ArticleManage(1, PageSize);
+            }
+            //查询
+            function SerachUserReport() {
+                var PageSize = $("#pagexz").val();
+                ArticleManage(1, PageSize);
+            }
+            //查询当天
+            function SearchUserToday() {
+                var PageSize = $("#pagexz").val();
+                ArticleManage(1, PageSize);
+            }
+            //$("#btn-show-search").click(function() {
+            //    layer.open({
+            //        type: 1,
+            //        title: '查询选项',
+            //        closeBtn: 1,
+            //        area: ['100%', '100%'],
+            //        //skin: 'layui-layer-nobg',
+            //        shadeClose: true,
+            //        maxmin: false,
+            //        anim: 1,
+            //        content: $('.search-container')
+            //    });
+            //});
+
+        </script>
+    </div>

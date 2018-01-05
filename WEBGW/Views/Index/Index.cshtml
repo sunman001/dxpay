@@ -1,0 +1,303 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/UI/master.cshtml";
+    string UserRegister = (string)ViewBag.UserRegister;
+    string Userpassword = (string)ViewBag.Userpassword;
+    var list = ViewBag.list as List<JMP.MDL.newsrelease>;
+}
+<link href="~/asste/jquery.fullPage/jquery.fullPage.css" rel="stylesheet" />
+
+<script src="~/js/index.js"></script>
+<section class="full-page-bg">
+    <div id="fullpage" class="full-cont">
+        <div class="section section1" data-anchor="page1">
+            <section class="content">
+                <div class="login-body">
+                    <h1 class="login-title">聚合支付 </h1>
+                    <p class="login-subTitle">极速、便捷、可靠的第三方支付平台，让支付更便捷，轻松畅游云世界</p>
+                    <form class="idx-frm">
+                        <div class="idx-frm-dc clearfix">
+                            <div class="idx-log">
+                                <label class="login-label login-label-user"></label>
+                                <input type="text" id="logName" name="logName" class="form-control" placeholder="请输入登录邮箱或手机号码" onblur="logNameYz()">
+                                <div id="logNames" class="login-error ">登录邮箱或手机号码不能为空</div>
+                            </div>
+                            <div class="idx-log">
+                                <label class="login-label login-label-pwd"></label>
+                                <input type="password" id="logPwd" name="logPwd" class="form-control form-ctl-pwd" placeholder="请输入密码" onblur="logPwdYz()">
+                                <div id="passwords" class="login-error ">密码不能为空</div>
+                                <a href="@Userpassword" class="forget-pwd-content" title="找回密码">
+                                    <div class="forget-pwd-hover">找回密码</div>
+                                </a>
+                            </div>
+                            <div class="idx-log">
+                                <input type="text" id="yzm" class="form-control form-ctl-vlte" placeholder="请输入验证码" onblur="yzmYz()">
+                                <img id="verify" class="login-code" style="font-size:12px;" src="/Index/GetValidateCode?height=40" alt="看不清？换一张" title="看不清？换一张" onclick="document.getElementById('verify').src = '/Index/GetValidateCode?height=40&k=' + new Date().toString();" />
+                                <div id="yzmts" class="login-error ">验证码不能为空</div>
+                            </div>
+                        </div>
+                        <input type="button" id="login-btn1" class="login-btn1" onclick="logs()" />
+                        <input type="button" id="login-btn" class="login-btn" value="LOGIN" onclick="logs()" />
+                    </form>
+                </div>
+                <div class="section-footer1">
+                    <ul class="idx-fot-num clearfix">
+                        <li class="fl">
+                            <span class="txt txt1">今日接口访问次数：</span>
+                            <span class="num idx-num">13,578,067</span>
+                            <span class="sct">次</span>
+                        </li>
+                        <li class="ml">
+                            <span class="txt txt2">今日订单成交量：</span>
+                            <span class="num idx-num">8,982,236</span>
+                            <span class="sct">次</span>
+                        </li>
+                        <li class="fr">
+                            <span class="txt txt3">今日服务设备数量：</span>
+                            <span class="num idx-num">686,563</span>
+                            <span class="sct">次</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+        <!--计费平台 end-->
+        <div class="section section2" data-anchor="page2">
+            <section class="content">
+                <div class="idx-cnt idx-cnt2">
+                    <div class="idx-tit">
+                        <p class="tit">三大产品打造定制化、全方位计费服务</p>
+                        <p class="subtit">以用户为导向，一对一贴心服务，一站式解决所有支付问题。</p>
+                    </div>
+                    <div class="idx-prdct">
+                        <div id="main">
+                            <div class="roll_left">
+                                <ul>
+                                    <li class="fadeInUp">
+                                        <h2>微信支付</h2>
+                                        <p>微信支付是集成在微信客户端的支付功能<br />我们支持微信 H5网页支付、微信wap支付、<br />微信app支付、微信公众号支付、微信扫码支付。</p>
+                                        <a href="/index/product#0" title="微信支付">查看产品方案 →</a>
+                                    </li>
+                                    <li>
+                                        <h2>支付宝支付</h2>
+                                        <p>利用支付宝完成付款的支付功能<br />现阶段我们支持支付宝H5支付<br />支付宝App支付、支付宝扫码支付。</p>
+                                        <a href="/index/product#1" title="支付宝支付">查看产品方案 →</a>
+                                    </li>
+                                    <li>
+                                        <h2>银联支付</h2>
+                                        <p>银联在线支付全面支持各类型银联卡<br />涵盖银联卡支付、网银支付等多种支付方式<br />我们更进一步支持快捷支付。</p>
+                                        <a href="/index/product#2" title="银联支付">查看产品方案 →</a>
+                                    </li>
+                                    <li>
+                                        <h2>其他支付</h2>
+                                        <p>我们将陆续开通<br />QQ钱包支付、百度钱包支付、京东支付<br />PayPal支付、Apple Pay等支付方式。</p>
+                                        <a href="/index/product#3" title="其他支付">查看产品方案 →</a>
+                                    </li>
+                                    <li>
+                                        <h2>微信支付</h2>
+                                        <p>微信支付是集成在微信客户端的支付功能<br />我们支持微信 H5网页支付、微信wap支付、<br />微信app支付、微信公众号支付、微信扫码支付。</p>
+                                        <a href="/index/product#0" title="微信支付">查看产品方案 →</a>
+                                    </li>
+                                    <li>
+                                        <h2>支付宝支付</h2>
+                                        <p>利用支付宝完成付款的支付功能<br />现阶段我们支持支付宝H5支付<br />支付宝App支付、支付宝扫码支付。</p>
+                                        <a href="/index/product#1" title="支付宝支付">查看产品方案 →</a>
+                                    </li>
+                                    <li>
+                                        <h2>银联支付</h2>
+                                        <p>银联在线支付全面支持各类型银联卡<br />涵盖银联卡支付、网银支付等多种支付方式<br />我们更进一步支持快捷支付。</p>
+                                        <a href="/index/product#2" title="银联支付">查看产品方案 →</a>
+                                    </li>
+                                    <li>
+                                        <h2>其他支付</h2>
+                                        <p>我们将陆续开通<br />QQ钱包支付、百度钱包支付、京东支付<br />PayPal支付、Apple Pay等支付方式。</p>
+                                        <a href="/index/product#3" title="其他支付">查看产品方案 →</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="slider-bg">
+                                <div class="rigth">
+                                    <div class="colour">
+                                        <div class="phone"><img src="../images/device-frame-iphone.png" alt="手机" title="手机" /></div>
+                                        <div class="cont">
+                                            <ul>
+                                                <li><img src="../images/icon-img1.jpg" alt="微信支付" title="微信支付" /></li>
+                                                <li><img src="../images/icon-img2.jpg" alt="支付宝支付" title="支付宝支付" /></li>
+                                                <li><img src="../images/icon-img3.jpg" alt="银联支付" title="银联支付" /></li>
+                                                <li><img src="../images/icon-img4.jpg" alt="其他支付" title="其他支付" /></li>
+                                                <li><img src="../images/icon-img1.jpg" alt="微信支付" title="微信支付" /></li>
+                                                <li><img src="../images/icon-img2.jpg" alt="支付宝支付" title="支付宝支付" /></li>
+                                                <li><img src="../images/icon-img3.jpg" alt="银联支付" title="银联支付" /></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="gray">
+                                        <ul>
+                                            <li><img src="../images/icon-bg1.png" alt="微信支付" title="微信支付" /></li>
+                                            <li><img src="../images/icon-bg2.png" alt="支付宝支付" title="支付宝支付" /></li>
+                                            <li><img src="../images/icon-bg3.png" alt="银联支付" title="银联支付" /></li>
+                                            <li><img src="../images/icon-bg4.png" alt="其他支付" title="其他支付" /></li>
+                                            <li><img src="../images/icon-bg1.png" alt="微信支付" title="微信支付" /></li>
+                                            <li><img src="../images/icon-bg2.png" alt="支付宝支付" title="支付宝支付" /></li>
+                                            <li><img src="../images/icon-bg3.png" alt="银联支付" title="银联支付" /></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <i class="bor-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!--计费服务 end-->
+        <div class="section section3" data-anchor="page3">
+            <section class="content">
+                <div class="idx-cnt idx-cnt3">
+                    <div class="idx-tit">
+                        <p class="tit">为各类商户提供移动支付落地全案服务</p>
+                        <p class="subtit">致力成为全球领先的一站式移动支付服务商</p>
+                    </div>
+                    <div class="idx-shop">
+                        <ul class="idx-shop-lst clearfix">
+                            <li>
+                                <span class="sicon"><i class="icon icon2"></i></span>
+                                <span class="tit">数字文化娱乐</span>
+                                <div class="ifo">基于用户的付费行为，提供最优的主流支付解决方案，满足商户的快捷安全收付需求。</div>
+                            </li>
+                            <li>
+                                <span class="sicon"><i class="icon icon1"></i></span>
+                                <span class="tit">互联网金融</span>
+                                <div class="ifo">为金融行业用户量身打造支付解决方案，提供合规、便捷、稳定的支付解决方案。</div>
+                            </li>
+                            <li>
+                                <span class="sicon"><i class="icon icon3"></i></span>
+                                <span class="tit">网络电商平台</span>
+                                <div class="ifo">全面覆盖电商平台定制化支付需求，便捷、稳定、高效，让你能充分挖掘用户的潜力。</div>
+                            </li>
+                            <li>
+                                <span class="sicon"><i class="icon icon4"></i></span>
+                                <span class="tit">其他新兴行业</span>
+                                <div class="ifo">盾行云计费平台，全面覆盖主流支付渠道及分期渠道，满足丰富的交易场景需求。</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="idx-cnt3-fot">
+                    one-stop Mobile payment services
+                </div>
+            </section>
+        </div>
+        <!--全案服务 end-->
+        <div class="section section4" data-anchor="page4">
+            <section class="content">
+                <div class="idx-cnt idx-cnt4">
+                    <div class="idx-tit">
+                        <p class="tit">三大产品打造定制化、全方位计费服务</p>
+                        <p class="subtit">以用户为导向，一对一贴心服务，一站式解决所有支付问题。</p>
+                    </div>
+                    <div class="poster-main A_Demo">
+                        <div class="poster-btn poster-prev-btn"></div>
+                        <ul class="poster-list">
+                            <li class="poster-item"><img src="../images/img2.jpg" alt="商务系统-首页" title="商务系统-首页" /></li>
+                            <li class="poster-item"><img src="../images/img6.jpg" alt="商务系统-收银预览" title="商务系统-收银预览" /></li>
+                            <li class="poster-item"><img src="../images/img7.jpg" alt="商务系统-操作管理" title="商务系统-操作管理" /></li>
+                        </ul>
+                        <div class="poster-btn poster-next-btn"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!--计费服务 end-->
+
+        <div class="section section5" data-anchor="page5">
+            <section class="content">
+                <div class="idx-cnt idx-cnt5">
+                    <div class="idx-tit">
+                        <h2 class="tit">新闻资讯</h2>
+                        <p class="subtit">提供本行业最新的新闻资讯信息</p>
+                    </div>
+                    <div class="idx-bank-cnt">
+                        <div class="idx-bank-slider">
+                            <ul>
+                                @foreach (var item in list.Skip(0).Take(5))
+                                {
+
+                                    string url = "/Index/News/" + item.n_id + ".html";
+                                    <li><a href="@url">@(!string.IsNullOrEmpty(item.n_title) && item.n_title.Length > 15 ? item.n_title.Substring(0, 15).ToString() + "........" : item.n_title)</a></li>
+                                }
+                            </ul>
+                            <ul>
+                                @foreach (var item in list.Skip(5).Take(5))
+                                {
+                                    var type = item.n_category == 2 ? 0 : 1;
+                                    string url = "/Index/News/" + item.n_id + ".html";
+                                    <li><a href="@url">@(!string.IsNullOrEmpty(item.n_title) && item.n_title.Length > 15 ? item.n_title.Substring(0, 15).ToString() + "........" : item.n_title)</a></li>
+                                }
+                            </ul>
+                            <ul >
+                                @foreach (var item in list.Skip(10).Take(5))
+                                {
+                                    var type = item.n_category == 2 ? 0 : 1;
+                                    string url = "/Index/News/" + item.n_id + ".html";
+                                    <li><a href="@url">@(!string.IsNullOrEmpty(item.n_title) && item.n_title.Length > 15 ? item.n_title.Substring(0, 15).ToString() + "........" : item.n_title)</a></li>
+                                }
+                            </ul>
+                            <ul>
+                                @foreach (var item in list.Skip(15).Take(5))
+                                {
+                                    var type = item.n_category == 2 ? 0 : 1;
+                                    string url = "/Index/News/" + item.n_id + ".html";
+                                    <li><a href="@url">@(!string.IsNullOrEmpty(item.n_title) && item.n_title.Length > 15 ? item.n_title.Substring(0, 15).ToString() + "........" : item.n_title)</a></li>
+                                }
+                            </ul>
+                            <div style="clear: both;"></div>
+                        </div>
+                        <footer class="idx-five-pst" style="margin-top: 20px;">
+                            <div class="idx-five-top clearfix">
+                                <div class="dfl fl">
+                                    <span class="icon icon1">电话：+86-0755-26910992</span>
+                                    <span class="icon icon3">地址：深圳市南山区沙河西路3151号健兴科技大厦C座602</span>
+                                    <span class="icon icon2">
+                                        COPYRIGHT 2016-2018 DUNXING TIANXIA .ALL RIGHTS RESERVED.盾行天下版权所有 粤ICP备16077218号-1
+                                        <script src="https://s4.cnzz.com/z_stat.php?id=1261185001&web_id=1261185001" language="JavaScript"></script>
+                                    </span>
+                                </div>
+                                <div class="dfr fr">
+                                    <p class="perwe clearfix">
+                                        <span class="fl erweima">
+                                            <img src="../images/erweima.png" />
+                                            <i>关注微信公众号</i>
+                                        </span>
+                                        <span class="fr erweima">
+                                            <img src="../images/erweima1.png" />
+                                            <i>关注盾行云计费</i>
+                                        </span>
+                                    </p>
+                                    <p class="pbto">致力成为全球领先的一站式移动支付服务商</p>
+                                </div>
+                                <div class="blogroll clearfix" style="clear:both;">
+                                    <ul class="clearfix">
+                                        <li>友情链接:</li>
+                                        <li><a href="http://www.dunxingpay.com">盾行云计费</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </footer>
+                        <div style="clear:both;"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    
+                </div>
+                
+            </section>
+        </div>
+
+        <!--支付服务 end-->
+    </div>
+
+</section>
+<script src="~/js/login.js"></script>
+
+<!--内容 end-->

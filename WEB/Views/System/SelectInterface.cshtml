@@ -1,0 +1,144 @@
+﻿@{
+    ViewBag.Title = "SelectInterface";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var list = ViewBag.list as List<JMP.MDL.jmp_interface>;
+}
+@JMP.TOOL.UserHelper.js("System/Paymode.js")
+<div class="main">
+    <div class="clear10"></div>
+    <div class="date-tool">
+        <div class="rule-single-select mr10">
+            <select name="searchType" id="searchType">
+                <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>编号</option>
+                <option value="2" @(ViewBag.type == 2 ? "selected='selected'" : "")>支付名称</option>
+            </select>
+        </div>
+        <div class="date-tool-input mr10">
+            <div class="date-tool-input-text">
+                <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" />
+            </div>
+        </div>
+        <div class="rule-single-select ml10">
+            <select name="searchDesc" id="searchDesc">
+                <option value="0" @(ViewBag.searchDesc == 0 ? "selected='selected'" : "")>降序</option>
+                <option value="1" @(ViewBag.searchDesc == 1 ? "selected='selected'" : "")>升序</option>
+            </select>
+        </div>
+        <a id="btnSearch" class="btn-search ml10" href="javascript:" onclick="serchlocuser()">查询</a>
+    </div>
+    <div class="clear10"></div>
+    <div class="date-tool">
+        <a id="btn_user_select" class="btn-search ml10" href="javascript:" onclick="selectzfpz()">确认选择</a>
+    </div>
+    <div class="clear10"></div>
+    <div class="data-table-2">
+        <table border="0" cellpadding="0" cellspacing="0" id="tablezfpz">
+            <thead>
+                <tr>
+                    <th width="100">
+                        <input type="checkbox" name="all" onclick="checkAll(this)" /></th>
+                    <th width="100">编号</th>
+                    <th>支付名称</th>
+                    <th>支付类型</th>
+                    <th>支付接口配置信息</th>
+                    <th>优先级</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="child" class="checkall" value="@item.l_id" /></td>
+                        <td>@item.l_id</td>
+                        <td>@item.p_name</td>
+                        <td>
+                            @{
+                            switch (item.p_type)
+                            {
+                                case 0:
+                                <label>支付宝</label>
+                                    break;
+                                case 1:
+                                <label>微信</label>
+                                    break;
+                                case 2:
+                                <label>网银</label>
+                                    break;
+                            }
+                            }
+                        </td>
+                        <td>
+                            @{
+                            string str = "";
+                            switch (item.p_type)
+                            {
+                                case 0:
+                                    str = "支付宝账号：" + item.l_str.Split(',')[0] + ",支付宝私钥：" + item.l_str.Split(',')[1];
+                                <label title="@str">@JMP.TOOL.RequestHelper.cutString(str, 60) </label>
+                                    break;
+                                case 1:
+                                    str = "微信账号：" + item.l_str.Split(',')[0] + ",微信私钥：" + item.l_str.Split(',')[1] + "，微信应用key：" + item.l_str.Split(',')[2];
+                                <label title="@str">@JMP.TOOL.RequestHelper.cutString(str, 60) </label>
+                                    break;
+                                case 2:
+                                <label>网银</label>
+                                    break;
+                            }
+                            }
+                        </td>
+                        <td>@item.l_sort</td>
+                        <td>
+                            @{
+                            if (item.l_isenable == 1)
+                            {
+                                <font color='green'>正常</font>
+                            }
+                            else
+                            {
+                                <font color='red'>冻结</font>
+                            }
+                                
+                            }
+                        </td>
+                    </tr>
+                        }
+                    }
+                    else
+                    {
+                    <tr>
+                        <td align="center" colspan="8">暂无记录</td>
+                    </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("selecparg", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
+<script type="text/javascript">
+    function selecparg(pageIndex, pageSize) {
+        var url = "/System/SelectInterface?pageIndexs=" + pageIndex + "&PageSize=" + pageSize;
+        var searchType = $("#searchType").val();
+        var sea_name = $("#sea_name").val();
+        var searchDesc = $("#searchDesc").val();
+        var auditstate = '@ViewBag.auditstate'; 
+        url += "&type=" + searchType + "&sea_name=" + sea_name +"&searchDesc=" + searchDesc + "&auditstate=" + auditstate;
+        location.href = encodeURI(url);
+    }
+    //选择每页显示数量
+    function pagexz() {
+        var PageSize = $("#pagexz").val();
+        selecparg(0, PageSize);
+    }
+    //列表查询
+    function serchlocuser() {//查询
+        var PageSize = $("#pagexz").val();
+        selecparg(0, PageSize);
+    }
+</script>

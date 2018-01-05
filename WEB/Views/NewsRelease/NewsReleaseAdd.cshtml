@@ -1,0 +1,150 @@
+﻿@{
+    ViewBag.Title = "添加新闻";
+    Layout = "~/Views/UI/dialog.cshtml";
+    var mode = ViewBag.model as JMP.MDL.newsrelease;
+    var aa = mode.n_info;
+    string qt_url = (string)ViewBag.UploadUrl;
+}
+@JMP.TOOL.UserHelper.js("NewsRelease/NewsRelease.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+@JMP.TOOL.UserHelper.js("jquery.ajaxupload.js")
+<script src="~/ueditor/ueditor.config.js"></script>
+<script src="~/ueditor/ueditor.all.js"></script>
+<link href="~/ueditor/themes/iframe.css" rel="stylesheet" />
+<script src="~/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+   // 界面加载完成之后执行
+    var editor = new baidu.editor.ui.Editor({
+        UEDITOR_HOME_URL: '/ueditor/',//配置编辑器路径
+        iframeCssUrl: '/ueditor/themes/iframe.css',//样式路径
+        initialContent: '',//初始化编辑器内容
+        autoHeightEnabled: true,//高度自动增长
+        minFrameHeight: 800//最小高度
+    });
+    editor.render('editor');
+
+    //editor.setContent("<p>asdfasdfasdf</p>");
+  
+
+
+</script>
+
+<div class="main">
+    <div class="clear10"></div>
+    <div class="plate-form">
+        <dl>
+            <dt>新闻标题：</dt>
+            <dd>
+                
+                <div class="single-input normal">
+                    <div class="date-tool-input-text">
+                        <textarea name="n_title" type="text" id="n_title" onblur="yztitle()" class="txt2"> </textarea>
+                        @{
+                            if (!string.IsNullOrEmpty(mode.n_title))
+                            {
+                                <script type="text/javascript">
+                                    document.getElementById("n_title").innerText = ' @mode.n_title';
+                                </script>
+                            }
+                        }
+                        <input type="hidden" id="n_id" value="@(mode.n_id > 0 ? mode.n_id : 0)" />
+                    </div>
+                </div>
+                <div class="Validform_checktip" id="titleyy">*请填写标题</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>新闻类别：</dt>
+            <dd>
+                <div class="rule-single-select">
+                    <select name="n_category" id="n_category">
+                        <option value="1" @(mode.n_category == 1 ? "selected='selected'" : "")>公司资讯</option>
+                        <option value="2" @(mode.n_category == 2 ? "selected='selected'" : "")>行业动态</option>
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>keywords：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="keywords" type="text" id="keywords"  value="@(string.IsNullOrEmpty(mode.keywords ) ? " ":mode.keywords )" />
+                    <spa />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>description：</dt>
+            <dd>
+                <div class="single-input normal">
+                    <span class="ie7-input-bug-start"></span>
+                    <input name="description" type="text" id="description" value="@(string.IsNullOrEmpty(mode. description ) ? " ":mode. description )" />
+                    <spa />
+                    <span class="ie7-input-bug-end"></span>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>图片：</dt>
+            <dd>
+                @{
+                    var urla = "";
+                    if (!string.IsNullOrEmpty(mode.n_picture))
+                    {
+                        if (mode.n_picture.StartsWith("A"))
+                        {
+                            urla = qt_url + mode.n_picture.TrimStart('A');
+                        }
+                        else
+                        {
+                            urla = mode.n_picture.TrimStart('B');
+                        }
+                    }
+
+
+                }
+
+                <div class="upload-certificate">
+                    <div class="upload-box">
+                        <img src="@urla" id="certificate" />
+                    </div>
+                    <input name="certificatefile" type="file" id="certificatefile" onchange="FileChange()" />
+                    <input type="hidden" name="u_photo" id="u_photo" value="@(!string.IsNullOrEmpty(mode.n_picture) ? mode.n_picture : "")" />
+                </div>
+                <div class="Validform_checktip" id="u_photo_tip">*请选择新闻图片（.jpg.png.bmp.jpeg）！</div>
+            </dd>
+        </dl>
+        <dl style="height:300px; z-index:-9999; overflow-y:hidden" >
+            <dt>内容：</dt>
+            <dd>
+                <textarea id="editor" name="editor" onblur="yzeditor()" style="height:180px;" ></textarea>
+                <div class="Validform_checktip" id="editoryy">*请填写内容</div>
+                     
+            </dd>
+        </dl>
+
+    </div>
+</div>
+<div class="page-footer" style="width: 100%;">
+    <div class="btn-listbtn">
+        <input type="button" name="btnSave" value="保存" id="btnSaveAdd" class="btn btn-primary" />
+        <input name="btnReturn" type="reset" onclick="btnCodesc()" value="取消" class="btn yellow" />
+    </div>
+    <div class="clear"></div>
+</div>
+
+@{
+    if (!string.IsNullOrEmpty(mode.n_info))
+    {
+        <script type="text/javascript">
+           editor.ready(function () {
+            var content =@(mode.n_id)>0?'@Html.Raw(mode.n_info.Replace("\n", ""))':"";
+            UE.getEditor('editor').execCommand('insertHtml',content )
+
+
+    })
+ </script>
+    }
+    }

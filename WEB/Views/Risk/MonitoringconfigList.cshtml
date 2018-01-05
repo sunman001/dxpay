@@ -1,0 +1,174 @@
+﻿@{
+    ViewBag.Title = "监控配置";
+    Layout = "~/Views/UI/master.cshtml";
+
+    var list = ViewBag.list as List<JMP.MDL.jmp_channel_filter_config>;
+
+    var listall = ViewBag.listall as List<JMP.MDL.jmp_channel_filter_config>;
+    JMP.BLL.jmp_limit bll_limit = new JMP.BLL.jmp_limit();
+}
+@JMP.TOOL.UserHelper.js("Risk/Monitoringconfig.js")
+@JMP.TOOL.UserHelper.js("my97datepicker/WdatePicker.js")
+<div class="main">
+    <ul id="ToolBar" class="frm-ul-tit clearfix">
+        @Html.Raw(ViewBag.locUrl)
+    </ul>
+    <ul class="frm-ul clearfix">
+        <li>
+            <div class="rule-single-select">
+                <select name="searchType" id="searchType">
+                    <option value="1" @(ViewBag.type == 1 ? "selected='selected'" : "")>通道名称</option>
+                   
+                </select>
+            </div>
+        </li>
+        <li>
+            <input name="sea_name" type="text" id="sea_name" placeholder="请输入关键字" value="@(string.IsNullOrEmpty(ViewBag.sea_name) ? "" : ViewBag.sea_name)" class="txtipt" />
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="TypeId" id="TypeId">
+                    <option value="-1" @(ViewBag.TypeId == -1 ? "selected='selected'" : "")>请选择类型</option>
+                    <option value="0" @(ViewBag.TypeId == 0 ? "selected='selected'" : "")>成功率</option>
+                    <option value="1" @(ViewBag.TypeId == 1 ? "selected='selected'" : "")>请求率</option>
+                    
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="rule-single-select">
+                <select name="TargetId" id="TargetId">
+                    <option value="-1" @(ViewBag.TargetId == -1 ? "selected='selected'" : "")>请选择过滤对象</option>
+                    <option value="0" @(ViewBag.TargetId == 0 ? "selected='selected'" : "")>全局通道</option>
+                    <option value="1" @(ViewBag.TargetId == 1 ? "selected='selected'" : "")>支付通道</option>
+                    <option value="2" @(ViewBag.TargetId == 2 ? "selected='selected'" : "")>通道池</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <a id="btnSearch" class="btn btn-primary" href="javascript:" onclick="selectScheduling()">查询</a>
+        </li>
+    </ul>
+    <div class="tab-dcnt">
+        <table border="0" cellpadding="0" cellspacing="0" id="table" class="table-cnt">
+            <thead>
+                <tr>
+                    <th>展开</th>
+                    <th>类型</th>
+                    <th>过滤对象</th>
+                    <th>通道/通道池</th>
+                    <th>创建人</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (list.Count > 0)
+                    {
+                        int id = 0;
+                        string Icon = "Icon_";
+                        string Open = "Open_";
+                        foreach (var item in list)
+                        {
+                            id = id + 1;
+                            Icon = "Icon_" + id;
+                            Open = "Open_" + id;
+                            <tr onclick="clickOpen(@id)">
+                               <td><i class="fa fa-plus-circle blue" name="Icon" id="@Icon"></i></td>
+                                <td>
+                                    @{switch (item.TypeId)
+                                        {
+                                            case 0:
+                                                <span>成功率</span>
+                                                break;
+                                            case 1:
+                                                <span >请求率</span>
+                                                break;
+                                           
+                                        }}
+                                </td>
+                                <td>
+                                    @{switch (item.TargetId)
+                                    {
+                                    case 0:
+                                    <span>全局通道</span>
+                                    break;
+                                    case 1:
+                                    <span>支付通道</span>
+                                    break;
+                                    case 2:
+                                    <span>通道池</span>
+                                    break;
+                                        }}
+                                </td>
+                                <td>@item.RelatedName</td>
+                                <td>
+                                    @item.CreatedByUserName
+                                </td>
+                                <td>
+                                    @{
+                                        bool getEdit = bll_limit.GetLocUserLimitVoids("/Risk/AddorEidt", JMP.TOOL.UserInfo.UserId.ToString(), int.Parse(JMP.TOOL.UserInfo.UserRoleId.ToString()));
+                                        if (getEdit)
+                                        {
+                                            <a href="javascript:" class="blue" onclick="UpdateSdl(@item.TypeId,@item.TargetId,@item.RelatedId)">修改</a>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="8" style="display:none;" name="Open" id="@Open">
+                                    <div class="table-hide-cnt">
+                                        <table border="0" cellpadding="0" cellspacing="0" class="table-hide">
+                                            <thead>
+                                                <tr>
+                                                    
+                                                    <td>小时</td>
+                                                    <td>请求率/成功率</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                              
+                                                @foreach (var items in listall.Where(x => x.TypeId == item.TypeId &&x.RelatedId==item.RelatedId &&x.TargetId==item.TargetId))
+                                                {
+                                                    var Threshold = "";
+                                                    if (item.TypeId==0)
+                                                    {
+                                                        Threshold = (items.Threshold * 100).ToString("f2") + "%";
+                                                    }
+                                                    else
+                                                    {
+                                                        Threshold = (items.Threshold).ToString("f2");
+                                                    }
+                                                    if (item != null)
+                                                    {
+                                                        <tr>
+
+
+                                                            <td>@items.WhichHour</td>
+                                                            <td>@Threshold</td>
+
+
+                                                        </tr>
+                                                         }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                 </td>
+                                  </tr> 
+                                }
+                                }
+                                else
+                                {
+<tr>
+                                                <td align="center" colspan="8" class="nodata">暂无记录</td>
+                                            </tr>
+                                        }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clear10"></div>
+    @JMP.TOOL.HtmlPage.Pagers("ArticleManage", ViewBag.pageIndexs, ViewBag.PageSize, ViewBag.pageCount)
+</div>
